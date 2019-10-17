@@ -53,6 +53,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\48 Particle Effect Pack\Script\csDestroyEffect.cs" />
+     <Compile Include="Assets\48 Particle Effect Pack\Script\csMouseOrbit.cs" />
+     <Compile Include="Assets\48 Particle Effect Pack\Script\csParticleEffectPackLightControl.cs" />
+     <Compile Include="Assets\48 Particle Effect Pack\Script\csParticleMove.cs" />
+     <Compile Include="Assets\48 Particle Effect Pack\Script\csShowAllEffect.cs" />
+     <Compile Include="Assets\48 Particle Effect Pack\ShurikenEffectEditor\csShurikenEffectChanger.cs" />
+     <Compile Include="Assets\48 Particle Effect Pack\ShurikenEffectEditor\csShurikenEffectEditor.cs" />
+     <Compile Include="Assets\Fantasy Skybox FREE\Demo\Scripts\GE_FantasySkyboxFREE_Demo.cs" />
+     <Compile Include="Assets\Fantasy Skybox FREE\Demo\Scripts\GE_FantasySkyboxFREE_UIs.cs" />
+     <Compile Include="Assets\GE Common Assets\GE Toggle Full Screen\Scripts\GE_ToggleFullScreenUI.cs" />
+     <Compile Include="Assets\GE Common Assets\Scripts\GE_UIResponder.cs" />
      <Compile Include="Assets\Init\DamageModification\Critical\CriticalStrike.cs" />
      <Compile Include="Assets\System\DamageSystem\Critical\CriticalInfo.cs" />
      <Compile Include="Assets\System\DamageSystem\Critical\CriticalInfos.cs" />
@@ -72,17 +83,28 @@
      <Compile Include="Assets\System\DamageSystem\Reduce\ReductionInfo.cs" />
      <Compile Include="Assets\System\DamageSystem\Reduce\ReductionInfos.cs" />
      <Compile Include="Assets\System\DamageSystem\StackType.cs" />
+     <Compile Include="Assets\System\DamageSystem\TriggerType.cs" />
      <Compile Include="Assets\System\Formula\GameFormula.cs" />
+     <Compile Include="Assets\System\UnitSystem\Action.cs" />
+     <Compile Include="Assets\System\UnitSystem\AttachStatus.cs" />
      <Compile Include="Assets\System\UnitSystem\EventData\StateChangedEventArgs.cs" />
+     <Compile Include="Assets\System\UnitSystem\EventData\TakeDamageEventArgs.cs" />
      <Compile Include="Assets\System\UnitSystem\EventData\UnitDiedEventArgs.cs" />
      <Compile Include="Assets\System\UnitSystem\EventData\UnitDyingEventArgs.cs" />
+     <Compile Include="Assets\System\UnitSystem\IAttachable.cs" />
      <Compile Include="Assets\System\UnitSystem\IAttribute.cs" />
      <Compile Include="Assets\System\UnitSystem\IObject.cs" />
      <Compile Include="Assets\System\UnitSystem\IUnit.cs" />
      <Compile Include="Assets\System\UnitSystem\Unit.cs" />
+     <Compile Include="Assets\System\UnitSystem\UnitAttaction.cs" />
      <Compile Include="Assets\System\UnitSystem\UnitState.cs" />
      <Compile Include="Assets\Test\testbehaviour.cs" />
      <Compile Include="Assets\Test\testmain.cs" />
+     <None Include="Assets\Knight Files\Read Me.txt" />
+     <None Include="Assets\Fantasy Skybox FREE\Fog and Ambient references.txt" />
+     <None Include="Assets\GE Common Assets\Readme.txt" />
+     <None Include="Assets\Fantasy Skybox FREE\Readme.txt" />
+     <None Include="Assets\ErbGameArt\Procedural fire\Shaders\FireSphere.shader" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>D:/All Project/Unity/Base2D/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>

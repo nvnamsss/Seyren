@@ -15,8 +15,8 @@ namespace Crom.System.DamageSystem.Evasion
         public List<IDamageModification> Stacks { get; set; }
         public StackType StackType { get; set; }
         public bool CanEvade { get; set; }
-        public bool CanIgnoreArmor { get; set; }
-        public bool CanIgnoreBlock { get; set; }
+        public bool CanCritical { get; set; }
+        public bool CanReduce { get; set; }
 
         public void Evade(DamageInfo damageInfo)
         {

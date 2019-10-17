@@ -8,8 +8,8 @@ namespace Crom.System.DamageSystem
 {
     public interface IModifier
     {
+        bool CanCritical { get; set; }
         bool CanEvade { get; set; }
-        bool CanIgnoreArmor { get; set; }
-        bool CanIgnoreBlock { get; set; }
+        bool CanReduce { get; set; }
     }
 }

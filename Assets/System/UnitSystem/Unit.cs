@@ -3,6 +3,7 @@ using Crom.System.DamageSystem;
 using Crom.System.DamageSystem.Critical;
 using Crom.System.DamageSystem.Evasion;
 using Crom.System.UnitSystem.EventData;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -10,12 +11,14 @@ namespace Crom.System.UnitSystem
 {
     public class Unit : MonoBehaviour, IUnit, IObject, IAttribute
     {
-        public delegate void DyingHandler(object sender, UnitDyingEventArgs e);
-        public delegate void DiedHandler(object sender, UnitDiedEventArgs e);
+        public delegate void DyingHandler(Unit sender, UnitDyingEventArgs e);
+        public delegate void DiedHandler(Unit sender, UnitDiedEventArgs e);
         public delegate void StateChangedHandler(Unit sender, StateChangedEventArgs e);
+        public delegate void TakeDamageHandler(Unit sender, TakeDamageEventArgs e);
         public event StateChangedHandler StateChanged;
         public event DyingHandler Dying;
         public event DiedHandler Died;
+        public event TakeDamageHandler TakeDamage;
         public int CustomValue { get; set; }
         public bool Targetable { get; set; }
         public bool Invulnerable { get; set; }
@@ -52,6 +55,7 @@ namespace Crom.System.UnitSystem
 
         Unit IUnit.Owner { get; set; }
         public ModificationInfos Modification { get; set; }
+        public IAttachable Attach { get; set; }
 
         public Unit()
         {
@@ -65,7 +69,7 @@ namespace Crom.System.UnitSystem
 
         void Start()
         {
-            Debug.Log("Mana regen: " + MpRegen);
+            UnityEngine.Debug.Log("Mana regen: " + MpRegen);
         }
 
         void Update()
@@ -75,8 +79,12 @@ namespace Crom.System.UnitSystem
         public static GameObject CreateUnit()
         {
             GameObject go = new GameObject();
+            SpriteRenderer render = go.AddComponent(typeof(SpriteRenderer)) as SpriteRenderer;
             go.AddComponent(typeof(Unit));
-
+            Texture2D texture = new Texture2D(512, 256);
+            byte[] data = File.ReadAllBytes(Path.Combine(Application.dataPath, "Knight Files", "Knight PNG", "Knight_attack_01.png"));
+            texture.LoadImage(data);
+            render.sprite = Sprite.Create(texture, new Rect(new Vector2(0, 0), new Vector2(512, 256)), new Vector2(0, 0));
             return go;
         }
 
@@ -84,6 +92,7 @@ namespace Crom.System.UnitSystem
         {
             DamageInfo damageInfo = new DamageInfo(this, target);
 
+            damageInfo.TriggerType = TriggerType.All;
             damageInfo.PrePassive = Modification.PrePassive;
             damageInfo.Critical = Modification.Critical;
             damageInfo.Evasion = target.Modification.Evasion;
@@ -91,9 +100,8 @@ namespace Crom.System.UnitSystem
             damageInfo.PostPassive = Modification.PostPassive;
 
             damageInfo.DamageAmount = AttackDamage;
-            damageInfo.Type = type;
+            damageInfo.DamageType = type;
             damageInfo.CalculateDamage();
-
             /* Damage pipeline:
              * calculate raw damage target will receive
                apply effect, buff, modification, etc to raw damage
@@ -101,23 +109,20 @@ namespace Crom.System.UnitSystem
                checking shield
                steal life
              */
-            if (damageInfo.TriggerAttack)
-            {
 
-            }
-
+            UnityEngine.Debug.Log(damageInfo);
             if (Shield > 0 || PhysicalShield > 0 || MagicShield > 0)
             {
-                if (damageInfo.Type == DamageType.Physical)
+                if (damageInfo.DamageType == DamageType.Physical)
                 {
                     float min = Mathf.Min(PhysicalShield, damageInfo.DamageAmount);
                     PhysicalShield -= min;
                     damageInfo.DamageAmount -= min;
 
-                    Debug.Log("Physical shield prevent: " + min);
+                    UnityEngine.Debug.Log("Physical shield prevent: " + min);
                 }
 
-                if (damageInfo.Type == DamageType.Magical)
+                if (damageInfo.DamageType == DamageType.Magical)
                 {
                     float min = Mathf.Min(MagicShield, damageInfo.DamageAmount);
                     MagicShield -= min;
@@ -130,12 +135,13 @@ namespace Crom.System.UnitSystem
                     Shield -= min;
                     damageInfo.DamageAmount -= min;
 
-                    Debug.Log("Shield prevent: " + min);
+                    UnityEngine.Debug.Log("Shield prevent: " + min);
 
                 }
             }
 
             target.CurrentHp = target.CurrentHp - damageInfo.DamageAmount;
+            TakeDamage?.Invoke(this, new TakeDamageEventArgs(damageInfo));
         }
 
         public void Damage(Unit target, float damage, DamageType type)

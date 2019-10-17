@@ -21,8 +21,8 @@ namespace Crom.Init.DamageModification
             critical.StackType = System.DamageSystem.StackType.Diminishing;
             critical.Stacks = new List<System.DamageSystem.IDamageModification>();
             critical.CanEvade = true;
-            critical.CanIgnoreArmor = false;
-            critical.CanIgnoreBlock = false;
+            critical.CanCritical = false;
+            critical.CanReduce = false;
             
             return critical;
         }

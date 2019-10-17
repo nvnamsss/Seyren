@@ -14,6 +14,6 @@ namespace Crom.System.DamageSystem
         Evade = 2,
         Blocked = 4,
         Reduced = 8,
-
+        Parry = 16,
     }
 }

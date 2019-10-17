@@ -11,6 +11,7 @@ namespace Crom.System.UnitSystem
         bool Targetable { get; set; }
         bool Invulnerable { get; set; }
         Unit Owner { get; set; }
+        IAttachable Attach { get; set; }
         void Damage(Unit target, DamageType type);
         void Damage(Unit target, float damage, DamageType type);
     }
