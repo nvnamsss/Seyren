@@ -4,3 +4,7 @@ Packages
 Temp
 obj
 ProjectSettings
+.vs/Base2D/v15/Server/sqlite3/storage.ide-wal
+.vs/Base2D/v15/Server/sqlite3/storage.ide-shm
+.vs/Base2D/v15/Server/sqlite3/storage.ide
+.vs/Base2D/v15/Server/sqlite3/db.lock
