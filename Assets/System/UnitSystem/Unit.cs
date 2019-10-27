@@ -27,62 +27,45 @@ namespace Crom.System.UnitSystem
         public float AnimationSpeed { get; set; }
         public float TurnSpeed { get; set; }
         public Color VertexColor { get; set; }
-        public int DataType { get; set; }
-        public float Strength { get; set; }
-        public float Agility { get; set; }
-        public float Intelligent { get; set; }
-        public float AttackDamage { get; set; }
-        public float MDamageAmplified { get; set; }
-        public float MaxHp { get; set; }
-        public float MaxMp { get; set; }
-        public float CurrentHp { get; set; }
-        public float CurrentMp { get; set; }
-        public float HpRegen { get; set; }
-        public float MpRegen { get; set; }
-        public float HpRegenPercent { get; set; }
-        public float MpRegenPercent { get; set; }
-        public float Armor { get; set; }
-        public float MArmor { get; set; }
-        public float Shield { get; set; }
-        public float MagicShield { get; set; }
-        public float PhysicalShield { get; set; }
-        public float LifeSteal { get; set; }
-        public float MagicLifeSteal { get; set; }
-        public float AttackSpeed { get; set; }
-        public float CDReduction { get; set; }
-        public float AttackRange { get; set; }
-        public float CastRange { get; set; }
-
         Unit IUnit.Owner { get; set; }
         public ModificationInfos Modification { get; set; }
         public IAttachable Attach { get; set; }
 
+        public Attribute Attribute { get; set; }
+        public bool IsFly { get => throw new global::System.NotImplementedException(); set => throw new global::System.NotImplementedException(); }
+
         public Unit()
         {
+            Attribute = new Attribute();
+            Attribute.AttackDamage = 51;
+            Attribute.CurrentHp = Attribute.MaxHp = 100;
+            Attribute.HpRegen = 1;
+            Attribute.PhysicalShield = 52;
+            Attribute.Shield = 22;
             Modification = new ModificationInfos();
-            AttackDamage = 51;
-            CurrentHp = MaxHp = 100;
-            PhysicalShield = 52;
-            Shield = 22;
             Modification.Critical.AddModification(Critical.CriticalStrike());
         }
 
+
         void Start()
         {
-            UnityEngine.Debug.Log("Mana regen: " + MpRegen);
+            UnityEngine.Debug.Log("Mana regen: " + Attribute.MpRegen);
         }
 
         void Update()
         {
+            Attribute.Update();
         }
 
         public static GameObject CreateUnit()
         {
             GameObject go = new GameObject();
             SpriteRenderer render = go.AddComponent(typeof(SpriteRenderer)) as SpriteRenderer;
-            go.AddComponent(typeof(Unit));
             Texture2D texture = new Texture2D(512, 256);
             byte[] data = File.ReadAllBytes(Path.Combine(Application.dataPath, "Knight Files", "Knight PNG", "Knight_attack_01.png"));
+
+            go.AddComponent(typeof(Attribute));
+            go.AddComponent(typeof(Unit));
             texture.LoadImage(data);
             render.sprite = Sprite.Create(texture, new Rect(new Vector2(0, 0), new Vector2(512, 256)), new Vector2(0, 0));
             return go;
@@ -99,7 +82,7 @@ namespace Crom.System.UnitSystem
             damageInfo.Reduction = target.Modification.Reduction;
             damageInfo.PostPassive = Modification.PostPassive;
 
-            damageInfo.DamageAmount = AttackDamage;
+            damageInfo.DamageAmount = Attribute.AttackDamage;
             damageInfo.DamageType = type;
             damageInfo.CalculateDamage();
             /* Damage pipeline:
@@ -111,12 +94,12 @@ namespace Crom.System.UnitSystem
              */
 
             UnityEngine.Debug.Log(damageInfo);
-            if (Shield > 0 || PhysicalShield > 0 || MagicShield > 0)
+            if (Attribute.Shield > 0 || Attribute.PhysicalShield > 0 || Attribute.MagicShield > 0)
             {
                 if (damageInfo.DamageType == DamageType.Physical)
                 {
-                    float min = Mathf.Min(PhysicalShield, damageInfo.DamageAmount);
-                    PhysicalShield -= min;
+                    float min = Mathf.Min(Attribute.PhysicalShield, damageInfo.DamageAmount);
+                    Attribute.PhysicalShield -= min;
                     damageInfo.DamageAmount -= min;
 
                     UnityEngine.Debug.Log("Physical shield prevent: " + min);
@@ -124,15 +107,15 @@ namespace Crom.System.UnitSystem
 
                 if (damageInfo.DamageType == DamageType.Magical)
                 {
-                    float min = Mathf.Min(MagicShield, damageInfo.DamageAmount);
-                    MagicShield -= min;
+                    float min = Mathf.Min(Attribute.MagicShield, damageInfo.DamageAmount);
+                    Attribute.MagicShield -= min;
                     damageInfo.DamageAmount -= min;
                 }
 
                 if (damageInfo.DamageAmount > 0)
                 {
-                    float min = Mathf.Min(Shield, damageInfo.DamageAmount);
-                    Shield -= min;
+                    float min = Mathf.Min(Attribute.Shield, damageInfo.DamageAmount);
+                    Attribute.Shield -= min;
                     damageInfo.DamageAmount -= min;
 
                     UnityEngine.Debug.Log("Shield prevent: " + min);
@@ -140,7 +123,7 @@ namespace Crom.System.UnitSystem
                 }
             }
 
-            target.CurrentHp = target.CurrentHp - damageInfo.DamageAmount;
+            target.Attribute.CurrentHp = target.Attribute.CurrentHp - damageInfo.DamageAmount;
             TakeDamage?.Invoke(this, new TakeDamageEventArgs(damageInfo));
         }
 

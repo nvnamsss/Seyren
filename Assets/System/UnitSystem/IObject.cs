@@ -6,6 +6,7 @@ namespace Crom.System.UnitSystem
 {
     public interface IObject
     {
+        bool IsFly { get; set; }
         float Size { get; set; }
         float Height { get; set; }
         float AnimationSpeed { get; set; }
