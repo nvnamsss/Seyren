@@ -5,15 +5,15 @@ using UnityEngine;
 
 namespace Crom.System.UnitSystem
 {
-    public interface IUnit
+    public interface IUnit : IObject, IAttribute
     {
         int CustomValue { get; set; }
         bool Targetable { get; set; }
         bool Invulnerable { get; set; }
-        Unit Owner { get; set; }
+        IUnit Owner { get; set; }
         IAttachable Attach { get; set; }
-        void Damage(Unit target, DamageType type);
-        void Damage(Unit target, float damage, DamageType type);
+        void Damage(IUnit target, DamageType type);
+        void Damage(IUnit target, float damage, DamageType type);
     }
 }
 

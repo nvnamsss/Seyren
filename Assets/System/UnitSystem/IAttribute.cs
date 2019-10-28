@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Crom.System.UnitSystem
 {
-    interface IAttribute
+    public interface IAttribute
     {
         Attribute Attribute { get; set; }
         ModificationInfos Modification { get; set; }

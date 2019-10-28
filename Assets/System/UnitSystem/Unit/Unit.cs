@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 
 namespace Crom.System.UnitSystem
 {
-    public class Unit : MonoBehaviour, IUnit, IObject, IAttribute
+    public class Unit : MonoBehaviour, IUnit
     {
         public delegate void DyingHandler(Unit sender, UnitDyingEventArgs e);
         public delegate void DiedHandler(Unit sender, UnitDiedEventArgs e);
@@ -27,7 +27,7 @@ namespace Crom.System.UnitSystem
         public float AnimationSpeed { get; set; }
         public float TurnSpeed { get; set; }
         public Color VertexColor { get; set; }
-        Unit IUnit.Owner { get; set; }
+        public IUnit Owner { get; set; }
         public ModificationInfos Modification { get; set; }
         public IAttachable Attach { get; set; }
 
@@ -71,7 +71,7 @@ namespace Crom.System.UnitSystem
             return go;
         }
 
-        public void Damage(Unit target, DamageType type)
+        public void Damage(IUnit target, DamageType type)
         {
             DamageInfo damageInfo = new DamageInfo(this, target);
 
@@ -127,12 +127,12 @@ namespace Crom.System.UnitSystem
             TakeDamage?.Invoke(this, new TakeDamageEventArgs(damageInfo));
         }
 
-        public void Damage(Unit target, float damage, DamageType type)
+        public void Damage(IUnit target, float damage, DamageType type)
         {
 
         }
 
-        public void Damage(Unit target, DamageInfo damageInfo)
+        public void Damage(IUnit target, DamageInfo damageInfo)
         {
             
         }

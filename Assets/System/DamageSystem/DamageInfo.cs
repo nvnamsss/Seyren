@@ -15,8 +15,8 @@ namespace Crom.System.DamageSystem
 {
     public class DamageInfo: IModifier
     {
-        public Unit Source { get; set; }
-        public Unit Target { get; set; }
+        public IUnit Source { get; set; }
+        public IUnit Target { get; set; }
         public TriggerType TriggerType { get; set; }
         public DamageType DamageType { get; set; }
         public DamageStatus DamageStatus { get; set; }
@@ -34,7 +34,7 @@ namespace Crom.System.DamageSystem
         public float increasedDamage;
         public float reducedDamage;
 
-        public DamageInfo(Unit source, Unit target)
+        public DamageInfo(IUnit source, IUnit target)
         {
             Source = source;
             Target  = target;
@@ -105,8 +105,8 @@ namespace Crom.System.DamageSystem
 
         public override string ToString()
         {
-            string s = "Source: " + Source.name + Environment.NewLine +
-                "Target: " + Target.name + Environment.NewLine +
+            string s = "Source: " + (Source as Unit).name + Environment.NewLine +
+                "Target: " + (Target as Unit).name + Environment.NewLine +
                 "PrePassive: " + ((TriggerType | TriggerType.PrePassive) == TriggerType) + Environment.NewLine +
                 "Critical: " + ((TriggerType | TriggerType.Critical) == TriggerType) + Environment.NewLine +
                 "Evasion: " + ((TriggerType | TriggerType.Evasion) == TriggerType) + Environment.NewLine +
