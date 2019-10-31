@@ -32,7 +32,8 @@ namespace Crom.System.UnitSystem
         public IAttachable Attach { get; set; }
 
         public Attribute Attribute { get; set; }
-        public bool IsFly { get => throw new global::System.NotImplementedException(); set => throw new global::System.NotImplementedException(); }
+        public bool IsFly { get; set; }
+        public float TimeScale { get; set; }
 
         public Unit()
         {
@@ -64,7 +65,6 @@ namespace Crom.System.UnitSystem
             Texture2D texture = new Texture2D(512, 256);
             byte[] data = File.ReadAllBytes(Path.Combine(Application.dataPath, "Knight Files", "Knight PNG", "Knight_attack_01.png"));
 
-            go.AddComponent(typeof(Attribute));
             go.AddComponent(typeof(Unit));
             texture.LoadImage(data);
             render.sprite = Sprite.Create(texture, new Rect(new Vector2(0, 0), new Vector2(512, 256)), new Vector2(0, 0));

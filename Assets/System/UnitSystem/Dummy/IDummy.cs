@@ -1,12 +1,17 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.System.UnitSystem.Dummy
+namespace Crom.System.UnitSystem.Dummy
 {
-    interface IDummy
+    public interface IDummy : IAttribute
     {
+        float HitDelay { get; set; }
+        float TimeExpired { get; set; }
+        IUnit Owner { get; set; }
+        void Move();
+        void Hit();
     }
 }

@@ -54,8 +54,11 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Init\DamageModification\Critical\CriticalStrike.cs" />
+     <Compile Include="Assets\Init\Projectile\Fireball.cs" />
      <Compile Include="Assets\System\AbilitySystem\Ability.cs" />
      <Compile Include="Assets\System\AbilitySystem\IAbility.cs" />
+     <Compile Include="Assets\System\AbilitySystem\IActive.cs" />
+     <Compile Include="Assets\System\AbilitySystem\IPassive.cs" />
      <Compile Include="Assets\System\DamageSystem\Critical\CriticalInfo.cs" />
      <Compile Include="Assets\System\DamageSystem\Critical\CriticalInfos.cs" />
      <Compile Include="Assets\System\DamageSystem\DamageInfo.cs" />
@@ -79,7 +82,8 @@
      <Compile Include="Assets\System\UnitSystem\Action.cs" />
      <Compile Include="Assets\System\UnitSystem\AttachStatus.cs" />
      <Compile Include="Assets\System\UnitSystem\Attribute.cs" />
-     <Compile Include="Assets\System\UnitSystem\Dummy.cs" />
+     <Compile Include="Assets\System\UnitSystem\Dummy\Dummy.cs" />
+     <Compile Include="Assets\System\UnitSystem\Dummy\IDummy.cs" />
      <Compile Include="Assets\System\UnitSystem\EventData\StateChangedEventArgs.cs" />
      <Compile Include="Assets\System\UnitSystem\EventData\TakeDamageEventArgs.cs" />
      <Compile Include="Assets\System\UnitSystem\EventData\UnitDiedEventArgs.cs" />
@@ -87,9 +91,13 @@
      <Compile Include="Assets\System\UnitSystem\IAttachable.cs" />
      <Compile Include="Assets\System\UnitSystem\IAttribute.cs" />
      <Compile Include="Assets\System\UnitSystem\IObject.cs" />
-     <Compile Include="Assets\System\UnitSystem\IUnit.cs" />
-     <Compile Include="Assets\System\UnitSystem\Projectile.cs" />
-     <Compile Include="Assets\System\UnitSystem\Unit.cs" />
+     <Compile Include="Assets\System\UnitSystem\Projectile\IProjectile.cs" />
+     <Compile Include="Assets\System\UnitSystem\Projectile\Projectile.cs" />
+     <Compile Include="Assets\System\UnitSystem\Projectile\ProjectileInterface.cs" />
+     <Compile Include="Assets\System\UnitSystem\Projectile\ProjectileType.cs" />
+     <Compile Include="Assets\System\UnitSystem\Unit\IUnit.cs" />
+     <Compile Include="Assets\System\UnitSystem\Unit\Unit.cs" />
+     <Compile Include="Assets\System\UnitSystem\Unit\UnitInterface.cs" />
      <Compile Include="Assets\System\UnitSystem\UnitAttaction.cs" />
      <Compile Include="Assets\System\UnitSystem\UnitState.cs" />
      <Compile Include="Assets\Test\testbehaviour.cs" />

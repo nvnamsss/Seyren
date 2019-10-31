@@ -12,6 +12,7 @@ namespace Crom.System.UnitSystem
         bool Invulnerable { get; set; }
         IUnit Owner { get; set; }
         IAttachable Attach { get; set; }
+        float TimeScale { get; set; }
         void Damage(IUnit target, DamageType type);
         void Damage(IUnit target, float damage, DamageType type);
     }

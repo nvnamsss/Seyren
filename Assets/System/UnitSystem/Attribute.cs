@@ -31,13 +31,13 @@ namespace Crom.System.UnitSystem
 
         void Start()
         {
-            UnityEngine.Debug.Log("[Attribute] - " + "Mana regen: " + MpRegen);
+            //UnityEngine.Debug.Log("[Attribute] - " + "Mana regen: " + MpRegen);
         }
 
         public void Update()
         {
             CurrentHp += HpRegen;
-            Log("Current hp: " + CurrentHp);
+            //Log("Current hp: " + CurrentHp);
         }
 
         private void Log(object message)

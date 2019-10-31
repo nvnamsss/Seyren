@@ -1,5 +1,6 @@
 ﻿using Crom.System.DamageSystem;
 using Crom.System.UnitSystem;
+using Crom.System.UnitSystem.Projectile;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,9 @@ public class testmain : MonoBehaviour
         //Debug.Log((int)status);
         //Debug.Log((status | DamageStatus.Reduced) == status);
         Unit.CreateUnit();
+        string path = System.IO.Path.Combine(Application.dataPath, "Resources", "Knight_attack_01.png").Replace(@"\", "/");
+        Debug.Log(path);
+        ProjectileInterface.CreateProjectile("a", path);
     }
 
     // Update is called once per frame
