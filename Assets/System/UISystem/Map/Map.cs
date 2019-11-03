@@ -8,13 +8,21 @@ namespace Assets.System.UISystem.Map
 {
     class Map
     {
-        bool segment1;
+        List<MapSegment> segment;
+
+        public void addSegment(MapSegment s)
+        {
+            s.isActive = true;
+            segment.Add(s);
+        }
 
         public void updateMap(Map m)
         {
-            if (m.segment1)
-            {
-                //add a map segment
+            foreach(MapSegment i in segment) {
+                if (i.isActive == true)
+                {
+                    //draw map
+                }
             }
         }
     }

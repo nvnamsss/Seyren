@@ -90,6 +90,7 @@
     <Compile Include="Assets\System\UISystem\Inventory\Inventory.cs" />
     <Compile Include="Assets\System\UISystem\Mana\Mana.cs" />
     <Compile Include="Assets\System\UISystem\Map\Map.cs" />
+    <Compile Include="Assets\System\UISystem\Map\MapSegment.cs" />
     <Compile Include="Assets\System\UnitSystem\Action.cs" />
     <Compile Include="Assets\System\UnitSystem\AttachStatus.cs" />
     <Compile Include="Assets\System\UnitSystem\EventData\StateChangedEventArgs.cs" />
