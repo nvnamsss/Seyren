@@ -36,13 +36,13 @@ class TestBuffHPUnit : MonoBehaviour
         go1.GetComponent<Crom.System.BuffSystem.BuffableEntity>().AddBuff(buff1);
         go1.GetComponent<Crom.System.BuffSystem.BuffableEntity>().AddBuff(new TimedHPBuff(7f, hpBuff, go2));
 
-
+        
+        StartCoroutine(LogBySeconds());
         Destroy(this, 10f);
     }
 
     private void Update()
     {
-        StartCoroutine(LogBySeconds());
     }
 
 

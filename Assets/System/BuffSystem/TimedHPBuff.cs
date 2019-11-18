@@ -36,7 +36,7 @@ namespace Crom.System.BuffSystem
         {
             ////Revert speed increase
             //movementComponent.moveSpeed -= speedBuff.SpeedIncrease;
-            unit.MaxHp += hpBuff.HPIncrease;
+            unit.MaxHp -= hpBuff.HPIncrease;
         }
     }
 }
