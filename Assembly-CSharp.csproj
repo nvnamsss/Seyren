@@ -63,8 +63,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Init\DamageModification\Critical\CriticalStrike.cs" />
-    <Compile Include="Assets\System\BuffSystem\BuffControl.cs" />
-    <Compile Include="Assets\System\BuffSystem\BuffType.cs" />
+    <Compile Include="Assets\System\BuffSystem\BuffableEntity.cs" />
+    <Compile Include="Assets\System\BuffSystem\ScriptableObject\ScriptableBuff.cs" />
+    <Compile Include="Assets\System\BuffSystem\ScriptableObject\ScriptableHPBuff.cs" />
+    <Compile Include="Assets\System\BuffSystem\ScriptableObject\ScriptableSpeedBuff.cs" />
+    <Compile Include="Assets\System\BuffSystem\TimedBuff.cs" />
+    <Compile Include="Assets\System\BuffSystem\TimedHPBuff.cs" />
+    <Compile Include="Assets\System\BuffSystem\TimedSpeedBuff.cs" />
     <Compile Include="Assets\System\DamageSystem\Critical\CriticalInfo.cs" />
     <Compile Include="Assets\System\DamageSystem\Critical\CriticalInfos.cs" />
     <Compile Include="Assets\System\DamageSystem\DamageInfo.cs" />
@@ -98,6 +103,7 @@
     <Compile Include="Assets\System\UnitSystem\Unit.cs" />
     <Compile Include="Assets\System\UnitSystem\UnitAttaction.cs" />
     <Compile Include="Assets\System\UnitSystem\UnitState.cs" />
+    <Compile Include="Assets\Test\BuffTest\TestBuffHPUnit.cs" />
     <Compile Include="Assets\Test\testbehaviour.cs" />
     <Compile Include="Assets\Test\testmain.cs" />
     <Reference Include="Unity.XR.Management">
