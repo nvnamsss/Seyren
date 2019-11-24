@@ -63,6 +63,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Init\DamageModification\Critical\CriticalStrike.cs" />
+    <Compile Include="Assets\System\AbilitySystem\Ability.cs" />
+    <Compile Include="Assets\System\AbilitySystem\AbilityType.cs" />
+    <Compile Include="Assets\System\AbilitySystem\IAbility.cs" />
+    <Compile Include="Assets\System\ActionSystem\ActionType.cs" />
+    <Compile Include="Assets\System\ActionSystem\BreakAtion\BreakType.cs" />
+    <Compile Include="Assets\System\ActionSystem\DelayAction\DelayInfo.cs" />
+    <Compile Include="Assets\System\ActionSystem\DelayAction\DelayType.cs" />
+    <Compile Include="Assets\System\ActionSystem\IAction.cs" />
     <Compile Include="Assets\System\BuffSystem\BuffableEntity.cs" />
     <Compile Include="Assets\System\BuffSystem\ScriptableObject\ScriptableBuff.cs" />
     <Compile Include="Assets\System\BuffSystem\ScriptableObject\ScriptableHPBuff.cs" />
@@ -103,6 +111,7 @@
     <Compile Include="Assets\System\UnitSystem\Unit.cs" />
     <Compile Include="Assets\System\UnitSystem\UnitAttaction.cs" />
     <Compile Include="Assets\System\UnitSystem\UnitState.cs" />
+    <Compile Include="Assets\Test\AudioTest\AudioControl.cs" />
     <Compile Include="Assets\Test\BuffTest\TestBuffHPUnit.cs" />
     <Compile Include="Assets\Test\testbehaviour.cs" />
     <Compile Include="Assets\Test\testmain.cs" />
