@@ -10,8 +10,12 @@ namespace Crom.System.AbilitySystem
     public enum AbilityType
     {
         CannotBreak = 1,
-        Magical = 2,
-        Pure = 4,
-        OverTime = 8,
+        CannotCancle = 2,
+        CannotGetKnockDown = 4,
+        CanKnockDownWithSoonRelease = 8,
+        CanKnockDown = 16,
+        CanCancleNoCoolDown = 32,
+        CanCancleWithCoolDown = 64,
+
     }
 }

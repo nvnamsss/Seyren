@@ -7,15 +7,21 @@ using UnityEngine;
 
 namespace Crom.System.AbilitySystem
 {
-    interface IAbility
+    public interface IAbility
     {
+        AbilityType AbilityType { get; set; }
+
         AudioClip Sound { get; set; }
         GameObject BaseUnit { get; set; }
         Animation BaseAnimation { get; set; }
+
         float BaseCoolDown { get; set; }
+        float TimeCoolDownLeft { get; set; }
         float BaseCastingTime { get; set; }
         float TimeCastingLeft { get; set; }
-        //Default player cannt case any skill until he unlocked it!
+
+        float TimeUpdate { get; set; }
+        
         bool IsCastable { get; set; }
         bool IsCasting { get; set; }
 
@@ -23,7 +29,7 @@ namespace Crom.System.AbilitySystem
         GameObject PointTarget { get; set; }
 
         void UnlockAbility();
-        void TrycastAbility(GameObject objectTarget, GameObject pointTarget);
+        bool TryCastAbility(GameObject objectTarget, GameObject pointTarget);
 
 
     }
