@@ -86,6 +86,10 @@
     <Compile Include="Assets\System\DamageSystem\StackType.cs" />
     <Compile Include="Assets\System\DamageSystem\TriggerType.cs" />
     <Compile Include="Assets\System\Formula\GameFormula.cs" />
+    <Compile Include="Assets\System\ItemSystem\Armor.cs" />
+    <Compile Include="Assets\System\ItemSystem\Consumables.cs" />
+    <Compile Include="Assets\System\ItemSystem\Item.cs" />
+    <Compile Include="Assets\System\ItemSystem\Weapon.cs" />
     <Compile Include="Assets\System\UISystem\Health\Health.cs" />
     <Compile Include="Assets\System\UISystem\Inventory\Inventory.cs" />
     <Compile Include="Assets\System\UISystem\Mana\Mana.cs" />

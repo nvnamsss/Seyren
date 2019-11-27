@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Crom.System.UnitSystem;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,19 +10,19 @@ namespace Assets.System.UISystem.Health
     class HealthBar
     {
         private
-            int maxHealth;
-            int currHealth;
+           float maxHealth;
+            float currHealth;
 
         public 
-            void Init(HealthBar h, Object character)
+            void Init(Unit character)
         {
-            h.maxHealth = character.maxHealth;
-            h.currHealth = character.currHealth;
+            maxHealth = character.MaxHp;
+            currHealth = character.CurrentHp;
         }
 
-        void takeDmg(HealthBar h)
+        void takeDmg(float dmg)
         {
-            h.currHealth = h.currHealth - 1;
+            currHealth = currHealth - dmg;
         }
     }
 }

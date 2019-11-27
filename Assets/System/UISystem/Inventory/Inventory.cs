@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.System.ItemSystem;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,19 +7,41 @@ using System.Threading.Tasks;
 
 namespace Assets.System.UISystem.Inventory
 {
-    class Inventory
+    class Inventory : UIComponent
     {
         private
             List<Item> items;
 
-        public void pickUp(Inventory inven, Item item)
+        public void pickUp(Item item)
         {
-            inven.items.Add(item);
+            items.Add(item);
         }
 
-        public void discardOrUse(Inventory inven, Item item)
+        public void discardOrUse(int position)
         {
-            inven.items.Remove(item);
+            items[position].ammount--;
+            if (items[position].ammount == 0)
+                items.RemoveAt(position);
+        }
+
+        public void sortInventory()
+        {
+            items = items.OrderBy(i => i.type).ToList();
+        }
+
+        public void populate(UIInventory ui, Inventory inven) {
+            foreach (Item i in inven.items)
+            {
+                //fill the inventory
+            }
+        }
+
+        public static void Swap<Item>(List<Item> list, int indexA, int indexB, UIInventory ui)
+        {
+            Item tmp = list[indexA];
+            list[indexA] = list[indexB];
+            list[indexB] = tmp;
+            ui.update();
         }
     }
 }

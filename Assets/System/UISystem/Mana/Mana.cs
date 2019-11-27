@@ -3,25 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Crom.System.UnitSystem;
 
 namespace Assets.System.UISystem.Mana
 {
     class ManaBar
     {
         private
-            int maxMana;
-        int currMana;
+            float maxMana;
+        float currMana;
 
         public
-            void Init(ManaBar m, Object character)
+            void Init(Unit character)
         {
-            m.maxMana = character.maxMana;
-            m.currMana = character.currMana;
+            maxMana = character.MaxMp;
+            currMana = character.CurrentMp;
         }
 
-        void useSkill(ManaBar m, int drain)
+        void useSkill( int drain)
         {
-            m.currMana = m.currMana - drain;
+           currMana = currMana - drain;
         }
     }
 }

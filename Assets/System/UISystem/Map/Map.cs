@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assets.System.UISystem.Map
 {
-    class Map
+    class Map : UIComponent
     {
         List<MapSegment> segment;
 
@@ -16,7 +16,7 @@ namespace Assets.System.UISystem.Map
             segment.Add(s);
         }
 
-        public void updateMap(Map m)
+        public void updateMap()
         {
             foreach(MapSegment i in segment) {
                 if (i.isActive == true)
