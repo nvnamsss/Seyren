@@ -17,8 +17,6 @@ namespace Crom.System.UnitSystem
         public float MDamageAmplified { get; set; }
         public float MaxHp { get; set; }
         public float MaxMp { get; set; }
-        public float CurrentHp { get; set; }
-        public float CurrentMp { get; set; }
         public float HpRegen { get; set; }
         public float MpRegen { get; set; }
         public float HpRegenPercent { get; set; }
@@ -31,13 +29,10 @@ namespace Crom.System.UnitSystem
 
         void Start()
         {
-            //UnityEngine.Debug.Log("[Attribute] - " + "Mana regen: " + MpRegen);
         }
 
         public void Update()
         {
-            CurrentHp += HpRegen;
-            //Log("Current hp: " + CurrentHp);
         }
 
         private void Log(object message)

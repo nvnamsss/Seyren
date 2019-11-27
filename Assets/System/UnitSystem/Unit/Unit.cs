@@ -13,8 +13,8 @@ namespace Crom.System.UnitSystem
     {
         public delegate void DyingHandler(Unit sender, UnitDyingEventArgs e);
         public delegate void DiedHandler(Unit sender, UnitDiedEventArgs e);
-        public delegate void StateChangedHandler(Unit sender, StateChangedEventArgs e);
         public delegate void TakeDamageHandler(Unit sender, TakeDamageEventArgs e);
+        public delegate void StateChangedHandler(Unit sender, StateChangedEventArgs e);
         public event StateChangedHandler StateChanged;
         public event DyingHandler Dying;
         public event DiedHandler Died;
@@ -34,12 +34,51 @@ namespace Crom.System.UnitSystem
         public Attribute Attribute { get; set; }
         public bool IsFly { get; set; }
         public float TimeScale { get; set; }
+        public float CurrentHp
+        {
+            get
+            {
+                return _currentHp;
+            }
+            set
+            {
+                StateChangedHandler state = StateChanged;
+                StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.Hp, _currentHp, value);
+                if (state != null)
+                {
+                    state.Invoke(this, sce);
+                }
 
+                _currentHp = sce.NewValue;
+            }
+        }
+        public float CurrentMp
+        {
+            get
+            {
+                return _currentMp;
+            }
+            set
+            {
+                StateChangedHandler state = StateChanged;
+                StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.Mp, _currentMp, value);
+                if (state != null)
+                {
+                    state.Invoke(this, sce);
+                }
+
+                _currentMp = sce.NewValue;
+            }
+        }
+
+        private float _currentHp;
+        private float _currentMp;
+        
         public Unit()
         {
             Attribute = new Attribute();
             Attribute.AttackDamage = 51;
-            Attribute.CurrentHp = Attribute.MaxHp = 100;
+            CurrentHp = Attribute.MaxHp = 100;
             Attribute.HpRegen = 1;
             Attribute.PhysicalShield = 52;
             Attribute.Shield = 22;
@@ -71,6 +110,11 @@ namespace Crom.System.UnitSystem
             return go;
         }
 
+        /// <summary>
+        /// Order this unit to deal damage to target
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="type"></param>
         public void Damage(IUnit target, DamageType type)
         {
             DamageInfo damageInfo = new DamageInfo(this, target);
@@ -96,6 +140,30 @@ namespace Crom.System.UnitSystem
             UnityEngine.Debug.Log(damageInfo);
             if (Attribute.Shield > 0 || Attribute.PhysicalShield > 0 || Attribute.MagicShield > 0)
             {
+                //float min = 0;
+                //switch (damageInfo.DamageType)
+                //{
+                //    case DamageType.Physical:
+                //        min = Mathf.Min(Attribute.PhysicalShield, damageInfo.DamageAmount);
+                //        Attribute.PhysicalShield -= min;
+                //        damageInfo.DamageAmount -= min;
+                //        break;
+                //    case DamageType.Magical:
+                //        min = Mathf.Min(Attribute.MagicShield, damageInfo.DamageAmount);
+                //        Attribute.MagicShield -= min;
+                //        damageInfo.DamageAmount -= min;
+                //        break;
+                //    case DamageType.Pure:
+                //        min = Mathf.Min(Attribute.Shield, damageInfo.DamageAmount);
+                //        Attribute.Shield -= min;
+                //        damageInfo.DamageAmount -= min;
+                //        break;
+                //    case DamageType.OverTime:
+                //        break;
+                //    default:
+                //        break;
+                //}
+
                 if (damageInfo.DamageType == DamageType.Physical)
                 {
                     float min = Mathf.Min(Attribute.PhysicalShield, damageInfo.DamageAmount);
@@ -125,6 +193,7 @@ namespace Crom.System.UnitSystem
 
             target.Attribute.CurrentHp = target.Attribute.CurrentHp - damageInfo.DamageAmount;
             TakeDamage?.Invoke(this, new TakeDamageEventArgs(damageInfo));
+
         }
 
         public void Damage(IUnit target, float damage, DamageType type)
@@ -136,6 +205,34 @@ namespace Crom.System.UnitSystem
         {
             
         }
+
+        /// <summary>
+        /// Kill this unit
+        /// </summary>
+        /// <param name="killer"></param>
+        public void Kill(Unit killer)
+        {
+            DyingHandler dying = Dying;
+            UnitDyingEventArgs udinge = new UnitDyingEventArgs();
+            if (dying != null)
+            {
+                dying.Invoke(this, udinge);
+            }
+
+            if (udinge.Cancel)
+            {
+                return;
+            }
+
+            DiedHandler died = Died;
+
+            UnitDiedEventArgs udede = new UnitDiedEventArgs(killer);
+            if (died != null)
+            {
+                died.Invoke(this, udede);
+            }
+        }
+
     }
 
 }
