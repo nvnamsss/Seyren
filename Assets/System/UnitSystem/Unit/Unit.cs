@@ -15,7 +15,9 @@ namespace Crom.System.UnitSystem
         public delegate void DiedHandler(Unit sender, UnitDiedEventArgs e);
         public delegate void TakeDamageHandler(Unit sender, TakeDamageEventArgs e);
         public delegate void StateChangedHandler(Unit sender, StateChangedEventArgs e);
+        public delegate void StatusChangedHandler(Unit sender, StatusChangedEventArgs e);
         public event StateChangedHandler StateChanged;
+        public event StatusChangedHandler StatusChanged;
         public event DyingHandler Dying;
         public event DiedHandler Died;
         public event TakeDamageHandler TakeDamage;
@@ -71,6 +73,65 @@ namespace Crom.System.UnitSystem
             }
         }
 
+        public float CurrentShield
+        {
+            get
+            {
+                return _currentShield;
+            }
+            set
+            {
+                StateChangedHandler state = StateChanged;
+                StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.Shield, _currentShield, value);
+                if (state != null)
+                {
+                    state.Invoke(this, sce);
+                }
+
+                _currentShield = sce.NewValue;
+            }
+        }
+
+        public float CurrentMShield
+        {
+            get
+            {
+                return CurrentMShield;
+            }
+            set
+            {
+                StateChangedHandler state = StateChanged;
+                StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.MagicalShield, CurrentMShield, value);
+                if (state != null)
+                {
+                    state.Invoke(this, sce);
+                }
+
+                CurrentMShield = sce.NewValue;
+            }
+        }
+        public float CurrentPShield
+        {
+            get
+            {
+                return _currentPShield;
+            }
+            set
+            {
+                StateChangedHandler state = StateChanged;
+                StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.PhysicalShield, _currentPShield, value);
+                if (state != null)
+                {
+                    state.Invoke(this, sce);
+                }
+
+                _currentPShield = sce.NewValue;
+            }
+        }
+
+        private float _currentShield;
+        private float _currentMShield;
+        private float _currentPShield;
         private float _currentHp;
         private float _currentMp;
         
@@ -78,10 +139,10 @@ namespace Crom.System.UnitSystem
         {
             Attribute = new Attribute();
             Attribute.AttackDamage = 51;
-            CurrentHp = Attribute.MaxHp = 100;
             Attribute.HpRegen = 1;
-            Attribute.PhysicalShield = 52;
-            Attribute.Shield = 22;
+            CurrentHp = Attribute.MaxHp = 100;
+            CurrentPShield = 52;
+            CurrentShield = 22;
             Modification = new ModificationInfos();
             Modification.Critical.AddModification(Critical.CriticalStrike());
         }
@@ -111,22 +172,32 @@ namespace Crom.System.UnitSystem
         }
 
         /// <summary>
-        /// Order this unit to deal damage to target
+        /// Order source unit to deal damage to this unit
         /// </summary>
-        /// <param name="target"></param>
+        /// <param name="source"></param>
         /// <param name="type"></param>
-        public void Damage(IUnit target, DamageType type)
+        public void Damage(IUnit source, DamageType type)
         {
-            DamageInfo damageInfo = new DamageInfo(this, target);
+            Damage(source, type, TriggerType.All);
+        }
+
+        public void Damage(IUnit source, DamageType type, TriggerType trigger)
+        {
+            Damage(source, Attribute.AttackDamage, type, trigger);
+        }
+
+        public void Damage(IUnit source, float damage, DamageType type, TriggerType trigger)
+        {
+            DamageInfo damageInfo = new DamageInfo(this, source);
 
             damageInfo.TriggerType = TriggerType.All;
-            damageInfo.PrePassive = Modification.PrePassive;
-            damageInfo.Critical = Modification.Critical;
-            damageInfo.Evasion = target.Modification.Evasion;
-            damageInfo.Reduction = target.Modification.Reduction;
-            damageInfo.PostPassive = Modification.PostPassive;
+            damageInfo.PrePassive = source.Modification.PrePassive;
+            damageInfo.Critical = source.Modification.Critical;
+            damageInfo.Evasion = Modification.Evasion;
+            damageInfo.Reduction = Modification.Reduction;
+            damageInfo.PostPassive = source.Modification.PostPassive;
 
-            damageInfo.DamageAmount = Attribute.AttackDamage;
+            damageInfo.DamageAmount = damage;
             damageInfo.DamageType = type;
             damageInfo.CalculateDamage();
             /* Damage pipeline:
@@ -138,7 +209,7 @@ namespace Crom.System.UnitSystem
              */
 
             UnityEngine.Debug.Log(damageInfo);
-            if (Attribute.Shield > 0 || Attribute.PhysicalShield > 0 || Attribute.MagicShield > 0)
+            if (CurrentShield > 0 || CurrentPShield > 0 || CurrentMShield > 0)
             {
                 //float min = 0;
                 //switch (damageInfo.DamageType)
@@ -166,8 +237,8 @@ namespace Crom.System.UnitSystem
 
                 if (damageInfo.DamageType == DamageType.Physical)
                 {
-                    float min = Mathf.Min(Attribute.PhysicalShield, damageInfo.DamageAmount);
-                    Attribute.PhysicalShield -= min;
+                    float min = Mathf.Min(CurrentPShield, damageInfo.DamageAmount);
+                    CurrentPShield -= min;
                     damageInfo.DamageAmount -= min;
 
                     UnityEngine.Debug.Log("Physical shield prevent: " + min);
@@ -175,15 +246,15 @@ namespace Crom.System.UnitSystem
 
                 if (damageInfo.DamageType == DamageType.Magical)
                 {
-                    float min = Mathf.Min(Attribute.MagicShield, damageInfo.DamageAmount);
-                    Attribute.MagicShield -= min;
+                    float min = Mathf.Min(CurrentMShield, damageInfo.DamageAmount);
+                    CurrentMShield -= min;
                     damageInfo.DamageAmount -= min;
                 }
 
                 if (damageInfo.DamageAmount > 0)
                 {
-                    float min = Mathf.Min(Attribute.Shield, damageInfo.DamageAmount);
-                    Attribute.Shield -= min;
+                    float min = Mathf.Min(CurrentShield, damageInfo.DamageAmount);
+                    CurrentShield -= min;
                     damageInfo.DamageAmount -= min;
 
                     UnityEngine.Debug.Log("Shield prevent: " + min);
@@ -191,14 +262,8 @@ namespace Crom.System.UnitSystem
                 }
             }
 
-            target.Attribute.CurrentHp = target.Attribute.CurrentHp - damageInfo.DamageAmount;
+            CurrentHp = CurrentHp - damageInfo.DamageAmount;
             TakeDamage?.Invoke(this, new TakeDamageEventArgs(damageInfo));
-
-        }
-
-        public void Damage(IUnit target, float damage, DamageType type)
-        {
-
         }
 
         public void Damage(IUnit target, DamageInfo damageInfo)
@@ -233,6 +298,7 @@ namespace Crom.System.UnitSystem
             }
         }
 
+       
     }
 
 }

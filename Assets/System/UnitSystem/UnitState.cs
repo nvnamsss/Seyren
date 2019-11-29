@@ -11,5 +11,7 @@ namespace Crom.System.UnitSystem
         Hp,
         Mp,
         Shield,
+        MagicalShield,
+        PhysicalShield,
     }
 }

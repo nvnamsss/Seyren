@@ -19,13 +19,14 @@ namespace Crom.System.UnitSystem
         public float MaxMp { get; set; }
         public float HpRegen { get; set; }
         public float MpRegen { get; set; }
+        public float ShieldRegen { get; set; }
+        public float MShieldRegen { get; set; }
+        public float PShield { get; set; }
         public float HpRegenPercent { get; set; }
         public float MpRegenPercent { get; set; }
         public float Armor { get; set; }
         public float MArmor { get; set; }
-        public float Shield { get; set; }
-        public float MagicShield { get; set; }
-        public float PhysicalShield { get; set; }
+
 
         void Start()
         {

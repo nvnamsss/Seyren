@@ -64,7 +64,6 @@
      <Compile Include="Assets\System\DamageSystem\Critical\CriticalInfo.cs" />
      <Compile Include="Assets\System\DamageSystem\Critical\CriticalInfos.cs" />
      <Compile Include="Assets\System\DamageSystem\DamageInfo.cs" />
-     <Compile Include="Assets\System\DamageSystem\DamageStatus.cs" />
      <Compile Include="Assets\System\DamageSystem\DamageType.cs" />
      <Compile Include="Assets\System\DamageSystem\Evasion\EvasionInfo.cs" />
      <Compile Include="Assets\System\DamageSystem\Evasion\EvasionInfos.cs" />
@@ -72,6 +71,7 @@
      <Compile Include="Assets\System\DamageSystem\IEnumerableModification.cs" />
      <Compile Include="Assets\System\DamageSystem\IModifier.cs" />
      <Compile Include="Assets\System\DamageSystem\ModificationInfos.cs" />
+     <Compile Include="Assets\System\DamageSystem\ModificationStatus.cs" />
      <Compile Include="Assets\System\DamageSystem\PostPassive\PostPassiveInfo.cs" />
      <Compile Include="Assets\System\DamageSystem\PostPassive\PostPassiveInfos.cs" />
      <Compile Include="Assets\System\DamageSystem\PrePassive\PrePassiveInfo.cs" />
@@ -87,6 +87,7 @@
      <Compile Include="Assets\System\UnitSystem\Dummy\Dummy.cs" />
      <Compile Include="Assets\System\UnitSystem\Dummy\IDummy.cs" />
      <Compile Include="Assets\System\UnitSystem\EventData\StateChangedEventArgs.cs" />
+     <Compile Include="Assets\System\UnitSystem\EventData\StatusChangedEventArgs.cs" />
      <Compile Include="Assets\System\UnitSystem\EventData\TakeDamageEventArgs.cs" />
      <Compile Include="Assets\System\UnitSystem\EventData\UnitDiedEventArgs.cs" />
      <Compile Include="Assets\System\UnitSystem\EventData\UnitDyingEventArgs.cs" />

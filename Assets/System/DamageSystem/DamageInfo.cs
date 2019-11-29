@@ -19,7 +19,7 @@ namespace Crom.System.DamageSystem
         public IUnit Target { get; set; }
         public TriggerType TriggerType { get; set; }
         public DamageType DamageType { get; set; }
-        public DamageStatus DamageStatus { get; set; }
+        public ModificationStatus DamageStatus { get; set; }
         public PrePassiveInfos PrePassive { get; set; }
         public CriticalInfos Critical { get; set; }
         public EvasionInfos Evasion { get; set; }

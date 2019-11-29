@@ -13,8 +13,14 @@ namespace Crom.System.UnitSystem
         IUnit Owner { get; set; }
         IAttachable Attach { get; set; }
         float TimeScale { get; set; }
-        void Damage(IUnit target, DamageType type);
-        void Damage(IUnit target, float damage, DamageType type);
+        float CurrentHp { get; set; }
+        float CurrentMp { get; set; }
+        float CurrentShield { get; set; }
+        float CurrentMShield { get; set; }
+        float CurrentPShield { get; set; }
+        void Damage(IUnit source, DamageType type);
+        void Damage(IUnit source, float damage, DamageType type, TriggerType trigger);
+        void Damage(IUnit source, DamageType type, TriggerType trigger);
     }
 }
 
