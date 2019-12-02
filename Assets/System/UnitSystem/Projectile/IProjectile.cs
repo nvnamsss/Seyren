@@ -17,6 +17,7 @@ namespace Crom.System.UnitSystem.Projectile
         bool IsPenetrate { get; set; }
         ProjectileType Type { get; set; }
         IUnit Owner { get; set; }
+        IUnit Target { get; set; }
         void Move();
         void Hit();
     }

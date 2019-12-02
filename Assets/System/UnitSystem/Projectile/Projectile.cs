@@ -14,6 +14,7 @@ namespace Crom.System.UnitSystem.Projectile
         public int MaxHit { get; set; }
         public bool IsPenetrate { get; set; }
         public IUnit Owner { get; set; }
+        public IUnit Target { get; set; }
         public Attribute Attribute { get; set; }
         public ModificationInfos Modification { get; set; }
         public double ProjectileArc { get; set; }
