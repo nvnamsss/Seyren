@@ -94,6 +94,7 @@
      <Compile Include="Assets\System\UnitSystem\IAttachable.cs" />
      <Compile Include="Assets\System\UnitSystem\IAttribute.cs" />
      <Compile Include="Assets\System\UnitSystem\IObject.cs" />
+     <Compile Include="Assets\System\UnitSystem\Projectile\ArrowProjectilecs.cs" />
      <Compile Include="Assets\System\UnitSystem\Projectile\IProjectile.cs" />
      <Compile Include="Assets\System\UnitSystem\Projectile\Projectile.cs" />
      <Compile Include="Assets\System\UnitSystem\Projectile\ProjectileInterface.cs" />
@@ -106,6 +107,7 @@
      <Compile Include="Assets\System\UnitSystem\UnitStatus.cs" />
      <Compile Include="Assets\Test\testbehaviour.cs" />
      <Compile Include="Assets\Test\testmain.cs" />
+     <Compile Include="Assets\Utils\RotationUtil.cs" />
  <Reference Include="Unity.XR.Management">
  <HintPath>D:/Work/Git/Unity/Base2D/Library/ScriptAssemblies/Unity.XR.Management.dll</HintPath>
  </Reference>
