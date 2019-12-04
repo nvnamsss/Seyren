@@ -7,9 +7,9 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Crom.System.UnitSystem
+namespace Crom.System.UnitSystem.Units
 {
-    public class Unit : MonoBehaviour, IUnit
+    public class Unit : MonoBehaviour, IObject, IAttribute
     {
         public delegate void DyingHandler(Unit sender, UnitDyingEventArgs e);
         public delegate void DiedHandler(Unit sender, UnitDiedEventArgs e);
@@ -29,13 +29,23 @@ namespace Crom.System.UnitSystem
         public float AnimationSpeed { get; set; }
         public float TurnSpeed { get; set; }
         public Color VertexColor { get; set; }
-        public IUnit Owner { get; set; }
+        public Unit Owner { get; set; }
         public ModificationInfos Modification { get; set; }
         public IAttachable Attach { get; set; }
 
         public Attribute Attribute { get; set; }
-        public bool IsFly { get; set; }
-        public float TimeScale { get; set; }
+        public float TimeScale;
+        public bool IsFly
+        {
+            get
+            {
+                return _isFly;
+            }
+            set
+            {
+                _isFly = value;
+            }
+        }
         public float CurrentHp
         {
             get
@@ -128,13 +138,21 @@ namespace Crom.System.UnitSystem
                 _currentPShield = sce.NewValue;
             }
         }
-
-        private float _currentShield;
-        private float _currentMShield;
-        private float _currentPShield;
-        private float _currentHp;
-        private float _currentMp;
+        protected Unit _owner;
+        [SerializeField]
+        protected bool _isFly;
+        [SerializeField]
+        protected float _currentShield;
+        [SerializeField]
+        protected float _currentMShield;
+        [SerializeField]
+        protected float _currentPShield;
+        [SerializeField]
+        protected float _currentHp;
+        [SerializeField]
+        protected float _currentMp;
         
+
         public Unit()
         {
             Attribute = new Attribute();
@@ -150,7 +168,6 @@ namespace Crom.System.UnitSystem
 
         void Start()
         {
-            UnityEngine.Debug.Log("Mana regen: " + Attribute.MpRegen);
         }
 
         void Update()
@@ -176,21 +193,21 @@ namespace Crom.System.UnitSystem
         /// </summary>
         /// <param name="source"></param>
         /// <param name="type"></param>
-        public void Damage(IUnit source, DamageType type)
+        public void Damage(Unit source, DamageType type)
         {
             Damage(source, type, TriggerType.All);
         }
 
-        public void Damage(IUnit source, DamageType type, TriggerType trigger)
+        public void Damage(Unit source, DamageType type, TriggerType trigger)
         {
             Damage(source, Attribute.AttackDamage, type, trigger);
         }
 
-        public void Damage(IUnit source, float damage, DamageType type, TriggerType trigger)
+        public void Damage(Unit source, float damage, DamageType type, TriggerType trigger)
         {
             DamageInfo damageInfo = new DamageInfo(this, source);
 
-            damageInfo.TriggerType = TriggerType.All;
+            damageInfo.TriggerType = trigger;
             damageInfo.PrePassive = source.Modification.PrePassive;
             damageInfo.Critical = source.Modification.Critical;
             damageInfo.Evasion = Modification.Evasion;
@@ -264,11 +281,6 @@ namespace Crom.System.UnitSystem
 
             CurrentHp = CurrentHp - damageInfo.DamageAmount;
             TakeDamage?.Invoke(this, new TakeDamageEventArgs(damageInfo));
-        }
-
-        public void Damage(IUnit target, DamageInfo damageInfo)
-        {
-            
         }
 
         /// <summary>

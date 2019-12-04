@@ -1,5 +1,6 @@
 ﻿using Crom.System.DamageSystem;
 using Crom.System.UnitSystem;
+using Crom.System.UnitSystem.Units;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,9 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Crom.System.UnitSystem.Dummy
+namespace Crom.System.UnitSystem.Dummies
 {
-    public class Dummy : MonoBehaviour, IDummy, IAttribute, IObject
+    public class Dummy : MonoBehaviour, IAttribute, IObject
     {
         public int CustomValue { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool Targetable { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -28,7 +29,7 @@ namespace Crom.System.UnitSystem.Dummy
         public ModificationInfos Modification { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public float HitDelay { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public float TimeExpired { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public IUnit Owner { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Unit Owner { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public Dummy()
         {

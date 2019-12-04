@@ -4,6 +4,7 @@ using Crom.System.DamageSystem.PostPassive;
 using Crom.System.DamageSystem.PrePassive;
 using Crom.System.DamageSystem.Reduce;
 using Crom.System.UnitSystem;
+using Crom.System.UnitSystem.Units;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,8 +16,8 @@ namespace Crom.System.DamageSystem
 {
     public class DamageInfo: IModifier
     {
-        public IUnit Source { get; set; }
-        public IUnit Target { get; set; }
+        public Unit Source { get; set; }
+        public Unit Target { get; set; }
         public TriggerType TriggerType { get; set; }
         public DamageType DamageType { get; set; }
         public ModificationStatus DamageStatus { get; set; }
@@ -34,7 +35,7 @@ namespace Crom.System.DamageSystem
         public float increasedDamage;
         public float reducedDamage;
 
-        public DamageInfo(IUnit source, IUnit target)
+        public DamageInfo(Unit source, Unit target)
         {
             Source = source;
             Target  = target;

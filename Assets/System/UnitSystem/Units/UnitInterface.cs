@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crom.System.UnitSystem
+namespace Crom.System.UnitSystem.Units
 {
     public static class UnitInterface
     {

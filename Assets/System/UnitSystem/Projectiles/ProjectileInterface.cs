@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Crom.System.UnitSystem.Projectile
+namespace Crom.System.UnitSystem.Projectiles
 {
     public static class ProjectileInterface
     {
@@ -30,9 +30,9 @@ namespace Crom.System.UnitSystem.Projectile
             projectile.Type = type;
         }
 
-        public static void SetProjectileSpeed(Projectile projectile, double speed)
-        {
-            projectile.Speed = speed;
-        }
+        //public static void SetProjectileSpeed(Projectile projectile, double speed)
+        //{
+        //    projectile.Speed = speed;
+        //}
     }
 }

@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Crom.System.DamageSystem;
+using Crom.System.UnitSystem.Units;
 using UnityEngine;
 
-namespace Crom.System.UnitSystem.Projectile
+namespace Crom.System.UnitSystem.Projectiles
 {
-    public class Projectile : MonoBehaviour, IProjectile
+    public class Projectile : MonoBehaviour, IAttribute
     {
         public delegate void OnHitHandler(Projectile sender);
         public event OnHitHandler OnHit;
@@ -13,16 +14,16 @@ namespace Crom.System.UnitSystem.Projectile
         public Rigidbody2D Body { get; set; }
         public int MaxHit { get; set; }
         public bool IsPenetrate { get; set; }
-        public IUnit Owner { get; set; }
-        public IUnit Target { get; set; }
+        public Unit Owner { get; set; }
+        public Unit Target { get; set; }
         public Attribute Attribute { get; set; }
         public ModificationInfos Modification { get; set; }
         public double ProjectileArc { get; set; }
         public double Angle { get; set; }
         public double TimeExpired { get; set; }
-        public double HitDelay { get; set; }
-        public double Speed { get; set; }
-        public ProjectileType Type { get; set; }
+        public double HitDelay;
+        public double Speed;
+        public ProjectileType ProjectileType { get; set; }
 
         private double _hitDelay;
         private int _hit;
@@ -32,12 +33,11 @@ namespace Crom.System.UnitSystem.Projectile
             Speed = 0.01f;
             Angle = 90;
             IsPenetrate = false;
-            Type = ProjectileType.Arrow;
             _hitDelay = 0;
+            ProjectileType = ProjectileType.None;
         }
-        public void Hit()
+        public virtual void Hit()
         {
-            Debug.Log("[Projectile] - Hit");
             if (_hitDelay > 0)
             {
                 return;
@@ -45,7 +45,7 @@ namespace Crom.System.UnitSystem.Projectile
 
             if (_hit >= MaxHit)
             {
-                //Destroy(gameObject);               
+                Destroy(gameObject);               
             }
             //do something
             _hit = _hit + 1;
@@ -63,7 +63,7 @@ namespace Crom.System.UnitSystem.Projectile
             OnHit?.Invoke(this);
         }
 
-        public void Move()
+        public virtual void Move()
         {
             float rad = (float)(Angle * Mathf.Deg2Rad);
             Vector2 velocity = new Vector2(Mathf.Sin(rad), Mathf.Cos(rad)) * (float)Speed;
@@ -71,15 +71,9 @@ namespace Crom.System.UnitSystem.Projectile
             {
                 case ProjectileType.None:
                     break;
-                case ProjectileType.Arrow:
-                    Angle = Angle + ProjectileArc;
-                    Speed = Speed * 0.5;
-                    Body.AddForce(velocity, ForceMode2D.Impulse);
-                    break;
+                
                 case ProjectileType.Missile:
-                    Body.velocity = Vector2.zero;
-                    Body.angularVelocity = 0;
-                    Body.AddForce(velocity, ForceMode2D.Impulse);
+                    
                     break;
                 case ProjectileType.Laser:
                     Body.AddForce(velocity, ForceMode2D.Impulse);
@@ -93,65 +87,63 @@ namespace Crom.System.UnitSystem.Projectile
         }
 
         // Start is called before the first frame update
-        void Start()
+        protected virtual void Start()
         {
             Body = GetComponent<Rigidbody2D>();
-            Body.mass = 1f;
-            Body.gravityScale = 0;
+
             Collider = GetComponent<BoxCollider2D>();
-            Collider.size = new Vector2(1, 1);
-            Collider.isTrigger = false;
-            switch (Type)
-            {
-                case ProjectileType.None:
-                    break;
-                case ProjectileType.Arrow:
-                    Body.gravityScale = 1;
-                    Body.mass = (float)(18.0 / 1000.0);
-                    Speed = 0.1;
-                    break;
-                case ProjectileType.Missile:
-                    Body.gravityScale = 0;
-                    break;
-                case ProjectileType.Laser:
-                    Body.gravityScale = 0;
-                    Speed = 300000000;
-                    break;
-                case ProjectileType.Custom:
-                    break;
-                default:
-                    break;
-            }
+
+            //Body.mass = 1f;
+            //Body.gravityScale = 0;
+            //switch (Type)
+            //{
+            //    case ProjectileType.None:
+            //        break;
+            //    case ProjectileType.Arrow:
+                    
+            //        break;
+            //    case ProjectileType.Missile:
+            //        Body.gravityScale = 0;
+            //        break;
+            //    case ProjectileType.Laser:
+            //        Body.gravityScale = 0;
+            //        Speed = 300000000;
+            //        break;
+            //    case ProjectileType.Custom:
+            //        break;
+            //    default:
+            //        break;
+            //}
         }
 
         // Update is called once per frame
-        void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
             _hitDelay -= Time.deltaTime;
             Move();
         }
 
-        void OnCollisionEnter2D(Collision2D collision)
+        protected virtual void OnCollisionEnter2D(Collision2D collision)
         {
             Hit();
         }
 
-        void OnCollisionStay2D(Collision2D collision)
+        protected virtual void OnCollisionStay2D(Collision2D collision)
         {
             Hit();
         }
 
-        void OnTriggerEnter2D(Collider2D collision)
+        protected virtual void OnTriggerEnter2D(Collider2D collision)
         {
             Hit();
         }
 
-        void OnTriggerStay2D(Collider2D collision)
+        protected virtual void OnTriggerStay2D(Collider2D collision)
         {
             Hit();
         }
 
-        void OnTriggerExit2D(Collider2D collision)
+        protected virtual void OnTriggerExit2D(Collider2D collision)
         {
             Debug.Log("[Projectile] - Exit");
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crom.System.UnitSystem.Projectile
+namespace Crom.System.UnitSystem.Projectiles
 {
     public enum ProjectileType
     {
@@ -25,6 +25,9 @@ namespace Crom.System.UnitSystem.Projectile
         /// The projectile
         /// </summary>
         Homing,
+        /// <summary>
+        /// The projectile with trajectory is not controlled by developer instead of physic <br></br>
+        /// </summary>
         Custom,
     }
 }

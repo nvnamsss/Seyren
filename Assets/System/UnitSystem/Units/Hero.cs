@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.System.UnitSystem.Projectile
+namespace Crom.System.UnitSystem.Units
 {
-    class ArrowProjectilecs
+    public class Hero : Unit
     {
+
     }
 }
