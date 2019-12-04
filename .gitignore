@@ -4,3 +4,5 @@ Packages
 Temp
 obj
 ProjectSettings
+.vs
+Upgrade*
