@@ -11,7 +11,7 @@ namespace Assets.System.ItemSystem
     {
         string name { get; set; }
         string description { get; set; }
-        string type { get; }
+        ItemType itemType { get; }
         int ammount { get; set; }
     }
 }

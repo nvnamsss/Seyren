@@ -26,7 +26,7 @@ namespace Assets.System.UISystem.Inventory
 
         public void sortInventory()
         {
-            items = items.OrderBy(i => i.type).ToList();
+            items = items.OrderBy(i => i.itemType).ToList();
         }
 
         public void populate(UIInventory ui, Inventory inven) {
