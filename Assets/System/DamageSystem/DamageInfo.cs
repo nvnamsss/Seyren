@@ -4,6 +4,7 @@ using Crom.System.DamageSystem.PostPassive;
 using Crom.System.DamageSystem.PrePassive;
 using Crom.System.DamageSystem.Reduce;
 using Crom.System.UnitSystem;
+using Crom.System.UnitSystem.Units;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace Crom.System.DamageSystem
         public Unit Target { get; set; }
         public TriggerType TriggerType { get; set; }
         public DamageType DamageType { get; set; }
-        public DamageStatus DamageStatus { get; set; }
+        public ModificationStatus DamageStatus { get; set; }
         public PrePassiveInfos PrePassive { get; set; }
         public CriticalInfos Critical { get; set; }
         public EvasionInfos Evasion { get; set; }
@@ -105,8 +106,8 @@ namespace Crom.System.DamageSystem
 
         public override string ToString()
         {
-            string s = "Source: " + Source.name + Environment.NewLine +
-                "Target: " + Target.name + Environment.NewLine +
+            string s = "Source: " + (Source as Unit).name + Environment.NewLine +
+                "Target: " + (Target as Unit).name + Environment.NewLine +
                 "PrePassive: " + ((TriggerType | TriggerType.PrePassive) == TriggerType) + Environment.NewLine +
                 "Critical: " + ((TriggerType | TriggerType.Critical) == TriggerType) + Environment.NewLine +
                 "Evasion: " + ((TriggerType | TriggerType.Evasion) == TriggerType) + Environment.NewLine +

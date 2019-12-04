@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Crom.System.UnitSystem
 {
-    public enum UnitState
+    [Flags]
+    public enum UnitStatus
     {
-        Hp,
-        Mp,
-        Shield,
-        MagicalShield,
-        PhysicalShield,
+        Slow,
+        Knockback,
+        Stun,
+        Invulnerable,
+        SpellImmunity,
     }
 }

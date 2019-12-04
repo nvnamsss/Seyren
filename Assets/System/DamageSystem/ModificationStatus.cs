@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Crom.System.DamageSystem
 {
     [Flags()]
-    public enum DamageStatus
+    public enum ModificationStatus
     {
         Common = 0,
         Critical = 1,
