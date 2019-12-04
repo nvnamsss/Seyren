@@ -30,15 +30,20 @@ class TestBuffHPUnit : MonoBehaviour
         unit2.MaxHp = 50;
 
         //add Component
-        TimedHPBuff buff1 = new TimedHPBuff(5f, hpBuff, go1);
+        TimedHPBuff buff1 = new TimedHPBuff(10f, hpBuff, go1);
         go1.AddComponent(typeof(Crom.System.BuffSystem.BuffableEntity));
         go2.AddComponent(typeof(Crom.System.BuffSystem.BuffableEntity));
         go1.GetComponent<Crom.System.BuffSystem.BuffableEntity>().AddBuff(buff1);
-        go1.GetComponent<Crom.System.BuffSystem.BuffableEntity>().AddBuff(new TimedHPBuff(7f, hpBuff, go2));
+
+        go1.GetComponent<Crom.System.BuffSystem.BuffableEntity>().UpdateTime = 1f;
+        go2.GetComponent<Crom.System.BuffSystem.BuffableEntity>().UpdateTime = 2f;
+
+        go1.GetComponent<Crom.System.BuffSystem.BuffableEntity>().AddBuff(buff1);
+        go1.GetComponent<Crom.System.BuffSystem.BuffableEntity>().AddBuff(new TimedHPBuff(15f, hpBuff, go2));
 
         
         StartCoroutine(LogBySeconds());
-        Destroy(this, 10f);
+        Destroy(this, 20f);
     }
 
     private void Update()

@@ -113,6 +113,8 @@
     <Compile Include="Assets\System\UnitSystem\UnitState.cs" />
     <Compile Include="Assets\Test\AudioTest\AudioControl.cs" />
     <Compile Include="Assets\Test\BuffTest\TestBuffHPUnit.cs" />
+    <Compile Include="Assets\Test\TestPauseGame.cs" />
+    <Compile Include="Assets\Test\TestPauseGame2.cs" />
     <Compile Include="Assets\Test\testbehaviour.cs" />
     <Compile Include="Assets\Test\testmain.cs" />
     <Reference Include="Unity.XR.Management">

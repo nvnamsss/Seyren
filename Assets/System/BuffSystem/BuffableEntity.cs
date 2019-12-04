@@ -1,15 +1,19 @@
 ﻿using System.Collections;
+using Crom.System.ActionSystem;
 using System.Collections.Generic;
 using UnityEngine;
 using Crom.System.BuffSystem.ScriptableObject;
+using Crom.System.ActionSystem.BreakAtion;
+using Crom.System.ActionSystem.DelayAction;
 
 namespace Crom.System.BuffSystem
 {
-    public class BuffableEntity : MonoBehaviour
+    public class BuffableEntity : IAction
     {
 
         //List of all current buffs
         public List<TimedBuff> CurrentBuffs = new List<TimedBuff>();
+        public float UpdateTime { get; set; }
 
         void Update()
         {
@@ -19,7 +23,7 @@ namespace Crom.System.BuffSystem
 
             foreach (TimedBuff buff in CurrentBuffs.ToArray())
             {
-                buff.Tick(Time.deltaTime);
+                buff.Tick(UpdateTime);
                 if (buff.IsFinished)
                 {
                     CurrentBuffs.Remove(buff);
@@ -31,6 +35,16 @@ namespace Crom.System.BuffSystem
         {
             CurrentBuffs.Add(buff);
             buff.Activate();
+        }
+
+        public override bool BreakAction(BreakType breakType)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public override bool DelayAction(DelayInfo delayInfo)
+        {
+            throw new global::System.NotImplementedException();
         }
     }
 }

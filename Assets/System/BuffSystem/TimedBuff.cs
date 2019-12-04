@@ -5,7 +5,7 @@ using Crom.System.BuffSystem.ScriptableObject;
 
 namespace Crom.System.BuffSystem
 {
-    public abstract class TimedBuff
+    public abstract class TimedBuff : MonoBehaviour
     {
 
         protected float duration;
