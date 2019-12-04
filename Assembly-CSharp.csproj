@@ -10,8 +10,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{2AF33862-97A5-00B9-4367-B2D4C575D1CF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -59,9 +58,22 @@
      <Compile Include="Assets\Init\DamageModification\Critical\CriticalStrike.cs" />
      <Compile Include="Assets\Init\Projectile\Fireball.cs" />
      <Compile Include="Assets\System\AbilitySystem\Ability.cs" />
+     <Compile Include="Assets\System\AbilitySystem\AbilityType.cs" />
      <Compile Include="Assets\System\AbilitySystem\IAbility.cs" />
      <Compile Include="Assets\System\AbilitySystem\IActive.cs" />
      <Compile Include="Assets\System\AbilitySystem\IPassive.cs" />
+     <Compile Include="Assets\System\ActionSystem\ActionType.cs" />
+     <Compile Include="Assets\System\ActionSystem\BreakAtion\BreakType.cs" />
+     <Compile Include="Assets\System\ActionSystem\DelayAction\DelayInfo.cs" />
+     <Compile Include="Assets\System\ActionSystem\DelayAction\DelayType.cs" />
+     <Compile Include="Assets\System\ActionSystem\IAction.cs" />
+     <Compile Include="Assets\System\BuffSystem\BuffableEntity.cs" />
+     <Compile Include="Assets\System\BuffSystem\ScriptableObject\ScriptableBuff.cs" />
+     <Compile Include="Assets\System\BuffSystem\ScriptableObject\ScriptableHPBuff.cs" />
+     <Compile Include="Assets\System\BuffSystem\ScriptableObject\ScriptableSpeedBuff.cs" />
+     <Compile Include="Assets\System\BuffSystem\TimedBuff.cs" />
+     <Compile Include="Assets\System\BuffSystem\TimedHPBuff.cs" />
+     <Compile Include="Assets\System\BuffSystem\TimedSpeedBuff.cs" />
      <Compile Include="Assets\System\DamageSystem\Critical\CriticalInfo.cs" />
      <Compile Include="Assets\System\DamageSystem\Critical\CriticalInfos.cs" />
      <Compile Include="Assets\System\DamageSystem\DamageInfo.cs" />
@@ -82,6 +94,15 @@
      <Compile Include="Assets\System\DamageSystem\StackType.cs" />
      <Compile Include="Assets\System\DamageSystem\TriggerType.cs" />
      <Compile Include="Assets\System\Formula\GameFormula.cs" />
+     <Compile Include="Assets\System\ItemSystem\Armor.cs" />
+     <Compile Include="Assets\System\ItemSystem\Consumables.cs" />
+     <Compile Include="Assets\System\ItemSystem\Item.cs" />
+     <Compile Include="Assets\System\ItemSystem\Weapon.cs" />
+     <Compile Include="Assets\System\UISystem\Health\Health.cs" />
+     <Compile Include="Assets\System\UISystem\Inventory\Inventory.cs" />
+     <Compile Include="Assets\System\UISystem\Mana\Mana.cs" />
+     <Compile Include="Assets\System\UISystem\Map\Map.cs" />
+     <Compile Include="Assets\System\UISystem\Map\MapSegment.cs" />
      <Compile Include="Assets\System\UnitSystem\Action.cs" />
      <Compile Include="Assets\System\UnitSystem\AttachStatus.cs" />
      <Compile Include="Assets\System\UnitSystem\Attribute.cs" />
@@ -107,6 +128,10 @@
      <Compile Include="Assets\System\UnitSystem\Units\Tower.cs" />
      <Compile Include="Assets\System\UnitSystem\Units\Unit.cs" />
      <Compile Include="Assets\System\UnitSystem\Units\UnitInterface.cs" />
+     <Compile Include="Assets\Test\AudioTest\AudioControl.cs" />
+     <Compile Include="Assets\Test\BuffTest\TestBuffHPUnit.cs" />
+     <Compile Include="Assets\Test\TestPauseGame.cs" />
+     <Compile Include="Assets\Test\TestPauseGame2.cs" />
      <Compile Include="Assets\Test\testbehaviour.cs" />
      <Compile Include="Assets\Test\testmain.cs" />
      <Compile Include="Assets\Utils\RotationUtil.cs" />
@@ -669,7 +694,6 @@
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.0b9/Editor/Data/NetStandard/compat/2.0.0/shims/netfx/System.Xml.Serialization.dll</HintPath>
  </Reference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
