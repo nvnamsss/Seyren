@@ -8,5 +8,6 @@ namespace Crom.System.ActionSystem.DelayAction
         SampleType1 = 1,
         SampleType2 = 2,
         SampleType3 = 4,
+        All = ~0,
     }
 }

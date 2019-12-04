@@ -10,7 +10,7 @@ namespace Crom.System.ActionSystem
     public enum ActionType
     {
         Moving = 1,
-        Acttack = 2,
+        Attack = 2,
         CastAbility = 4,
     }
 }

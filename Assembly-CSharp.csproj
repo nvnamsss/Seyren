@@ -97,6 +97,7 @@
      <Compile Include="Assets\System\ItemSystem\Armor.cs" />
      <Compile Include="Assets\System\ItemSystem\Consumables.cs" />
      <Compile Include="Assets\System\ItemSystem\Item.cs" />
+     <Compile Include="Assets\System\ItemSystem\ItemType.cs" />
      <Compile Include="Assets\System\ItemSystem\Weapon.cs" />
      <Compile Include="Assets\System\UISystem\Health\Health.cs" />
      <Compile Include="Assets\System\UISystem\Inventory\Inventory.cs" />

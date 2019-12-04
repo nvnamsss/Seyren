@@ -59,7 +59,7 @@ namespace Crom.System.AbilitySystem
             {
                 switch (breakType)
                 {
-                    case BreakType.CancleBreak:
+                    case BreakType.CancelBreak:
                         return CancleBreakkAbility();
                     case BreakType.KnockDownBreak:
                         return KnockDownBreakAbility();

@@ -9,8 +9,9 @@ namespace Crom.System.ActionSystem.BreakAtion
     [Flags]
     public enum BreakType
     {
-        CancleBreak = 1,
+        CancelBreak = 1,
         KnockDownBreak = 2,
         SpecialBreak = 4,
+        All = ~0,
     }
 }
