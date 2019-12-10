@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Crom.System.ActionSystem.DelayAction
+namespace Base2D.System.ActionSystem.DelayAction
 {
     [Flags]
     public enum DelayType

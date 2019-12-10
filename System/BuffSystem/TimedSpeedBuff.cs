@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Crom.System.BuffSystem.ScriptableObject;
+using Base2D.System.BuffSystem.ScriptableObject;
 
-namespace Crom.System.BuffSystem
+namespace Base2D.System.BuffSystem
 {
     public class TimedSpeedBuff : TimedBuff
     {

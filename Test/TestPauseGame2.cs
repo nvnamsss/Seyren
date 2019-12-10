@@ -1,13 +1,13 @@
-﻿using Crom.System.UnitSystem;
-using Crom.System.ActionSystem;
-using Crom.System.ActionSystem.BreakAtion;
-using Crom.System.ActionSystem.DelayAction;
-using Crom.System.BuffSystem;
+﻿using Base2D.System.UnitSystem;
+using Base2D.System.ActionSystem;
+using Base2D.System.ActionSystem.BreakAtion;
+using Base2D.System.ActionSystem.DelayAction;
+using Base2D.System.BuffSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Crom.Test
+namespace Base2D.Test
 {
     public class TestPauseGame2 : MonoBehaviour
     {

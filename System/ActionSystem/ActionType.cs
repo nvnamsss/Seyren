@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crom.System.ActionSystem
+namespace Base2D.System.ActionSystem
 {
     [Flags]
     public enum ActionType

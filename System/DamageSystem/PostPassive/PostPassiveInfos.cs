@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crom.System.DamageSystem.PostPassive
+namespace Base2D.System.DamageSystem.PostPassive
 {
     public class PostPassiveInfos : IEnumerableModification
     {

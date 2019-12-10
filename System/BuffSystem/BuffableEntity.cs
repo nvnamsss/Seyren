@@ -1,12 +1,12 @@
 ﻿using System.Collections;
-using Crom.System.ActionSystem;
+using Base2D.System.ActionSystem;
 using System.Collections.Generic;
 using UnityEngine;
-using Crom.System.BuffSystem.ScriptableObject;
-using Crom.System.ActionSystem.BreakAtion;
-using Crom.System.ActionSystem.DelayAction;
+using Base2D.System.BuffSystem.ScriptableObject;
+using Base2D.System.ActionSystem.BreakAtion;
+using Base2D.System.ActionSystem.DelayAction;
 
-namespace Crom.System.BuffSystem
+namespace Base2D.System.BuffSystem
 {
     public class BuffableEntity : IAction
     {

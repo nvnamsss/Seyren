@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Crom.System.DamageSystem;
-using Crom.System.UnitSystem.Units;
+using Base2D.System.DamageSystem;
+using Base2D.System.UnitSystem.Units;
 using UnityEngine;
 
-namespace Crom.System.UnitSystem.Projectiles
+namespace Base2D.System.UnitSystem.Projectiles
 {
     public class Projectile : MonoBehaviour, IAttribute
     {
@@ -15,7 +15,17 @@ namespace Crom.System.UnitSystem.Projectiles
         public int MaxHit { get; set; }
         public bool IsPenetrate { get; set; }
         public Unit Owner { get; set; }
-        public Unit Target { get; set; }
+        public Unit Target
+        {
+            get
+            {
+                return _target;
+            }
+            set
+            {
+                _target = value;
+            }
+        }
         public Attribute Attribute { get; set; }
         public ModificationInfos Modification { get; set; }
         public double ProjectileArc { get; set; }
@@ -27,6 +37,8 @@ namespace Crom.System.UnitSystem.Projectiles
 
         private double _hitDelay;
         private int _hit;
+        [SerializeField]
+        protected Unit _target;
         public Projectile()
         {
             HitDelay = 10;
@@ -67,53 +79,13 @@ namespace Crom.System.UnitSystem.Projectiles
         {
             float rad = (float)(Angle * Mathf.Deg2Rad);
             Vector2 velocity = new Vector2(Mathf.Sin(rad), Mathf.Cos(rad)) * (float)Speed;
-            switch (Type)
-            {
-                case ProjectileType.None:
-                    break;
-                
-                case ProjectileType.Missile:
-                    
-                    break;
-                case ProjectileType.Laser:
-                    Body.AddForce(velocity, ForceMode2D.Impulse);
-                    break;
-                case ProjectileType.Custom:
-                    break;
-                default:
-                    break;
-            }
-            
         }
 
         // Start is called before the first frame update
         protected virtual void Start()
         {
             Body = GetComponent<Rigidbody2D>();
-
             Collider = GetComponent<BoxCollider2D>();
-
-            //Body.mass = 1f;
-            //Body.gravityScale = 0;
-            //switch (Type)
-            //{
-            //    case ProjectileType.None:
-            //        break;
-            //    case ProjectileType.Arrow:
-                    
-            //        break;
-            //    case ProjectileType.Missile:
-            //        Body.gravityScale = 0;
-            //        break;
-            //    case ProjectileType.Laser:
-            //        Body.gravityScale = 0;
-            //        Speed = 300000000;
-            //        break;
-            //    case ProjectileType.Custom:
-            //        break;
-            //    default:
-            //        break;
-            //}
         }
 
         // Update is called once per frame

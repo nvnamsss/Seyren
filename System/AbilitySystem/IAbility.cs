@@ -1,11 +1,11 @@
-﻿using Crom.System.UnitSystem;
-using Crom.System.ActionSystem;
-using Crom.System.BuffSystem;
+﻿using Base2D.System.UnitSystem;
+using Base2D.System.ActionSystem;
+using Base2D.System.BuffSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Crom.System.AbilitySystem
+namespace Base2D.System.AbilitySystem
 {
     public interface IAbility
     {

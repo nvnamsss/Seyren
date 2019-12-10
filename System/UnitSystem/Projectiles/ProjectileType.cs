@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crom.System.UnitSystem.Projectiles
+namespace Base2D.System.UnitSystem.Projectiles
 {
     public enum ProjectileType
     {

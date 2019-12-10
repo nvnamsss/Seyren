@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Crom.System.BuffSystem.ScriptableObject;
-using Crom.System.UnitSystem;
+using Base2D.System.BuffSystem.ScriptableObject;
+using Base2D.System.UnitSystem;
+using Base2D.System.UnitSystem.Units;
 
-namespace Crom.System.BuffSystem
+namespace Base2D.System.BuffSystem
 {
     class TimedHPBuff : TimedBuff
     {
@@ -21,12 +22,12 @@ namespace Crom.System.BuffSystem
         public override void Activate()
         {
             hpBuff = (ScriptableHPBuff)buff;
-            unit.MaxHp += hpBuff.HPIncrease;
+            unit.Attribute.MaxHp += hpBuff.HPIncrease;
         }
 
         public override void End()
         {
-            unit.MaxHp -= hpBuff.HPIncrease;
+            unit.Attribute.MaxHp -= hpBuff.HPIncrease;
         }
     }
 }

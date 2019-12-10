@@ -1,8 +1,8 @@
-﻿using Crom.System.ActionSystem.DelayAction;
-using Crom.System.ActionSystem.BreakAtion;
+﻿using Base2D.System.ActionSystem.DelayAction;
+using Base2D.System.ActionSystem.BreakAtion;
 using UnityEngine;
 
-namespace Crom.System.ActionSystem
+namespace Base2D.System.ActionSystem
 {
     public abstract class IAction : MonoBehaviour
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Crom.System.UnitSystem
+namespace Base2D.System.UnitSystem
 {
     public class Action
     {

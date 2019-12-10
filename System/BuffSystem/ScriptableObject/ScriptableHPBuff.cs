@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Crom.System.BuffSystem.ScriptableObject
+namespace Base2D.System.BuffSystem.ScriptableObject
 {
     class ScriptableHPBuff : ScriptableBuff
     {

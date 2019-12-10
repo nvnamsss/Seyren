@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crom.System.DamageSystem.Reduce
+namespace Base2D.System.DamageSystem.Reduce
 {
     public class ReductionInfo : IDamageModification, IModifier
     {

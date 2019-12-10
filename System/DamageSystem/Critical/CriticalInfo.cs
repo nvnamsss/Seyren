@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Crom.System.DamageSystem.Critical
+namespace Base2D.System.DamageSystem.Critical
 {
     public class CriticalInfo : IDamageModification, IModifier
     {

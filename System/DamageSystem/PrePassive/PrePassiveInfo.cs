@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crom.System.DamageSystem.PrePassive
+namespace Base2D.System.DamageSystem.PrePassive
 {
     public class PrePassiveInfo : IDamageModification
     {

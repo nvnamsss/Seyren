@@ -1,11 +1,11 @@
-﻿using Crom.System.UnitSystem.Units;
+﻿using Base2D.System.UnitSystem.Units;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crom.System.UnitSystem.EventData
+namespace Base2D.System.UnitSystem.EventData
 {
     public class UnitDiedEventArgs
     {

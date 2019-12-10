@@ -1,6 +1,6 @@
-﻿using Crom.System.DamageSystem;
-using Crom.System.UnitSystem;
-using Crom.System.UnitSystem.Units;
+﻿using Base2D.System.DamageSystem;
+using Base2D.System.UnitSystem;
+using Base2D.System.UnitSystem.Units;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Crom.System.UnitSystem.Dummies
+namespace Base2D.System.UnitSystem.Dummies
 {
     public class Dummy : MonoBehaviour, IAttribute, IObject
     {

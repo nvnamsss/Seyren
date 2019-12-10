@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Crom.System.UnitSystem.Projectiles
+namespace Base2D.System.UnitSystem.Projectiles
 {
     public class ArrowProjectile : Projectile
     {
@@ -13,14 +13,14 @@ namespace Crom.System.UnitSystem.Projectiles
         public ArrowProjectile()
         {
             ProjectileType = ProjectileType.Arrow;
-            Body.gravityScale = 1;
-            Body.mass = (float)(18.0 / 1000.0);
             Speed = 0.1;
         }
 
         protected override void Start()
         {
             base.Start();
+            Body.gravityScale = 1;
+            Body.mass = (float)(18.0 / 1000.0);
         }
         public override void Move()
         {

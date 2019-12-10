@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Crom.System.UnitSystem.Projectiles
+namespace Base2D.System.UnitSystem.Projectiles
 {
     public class MissileProjectile : Projectile
     {

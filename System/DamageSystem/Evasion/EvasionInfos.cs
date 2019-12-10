@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crom.System.DamageSystem.Evasion
+namespace Base2D.System.DamageSystem.Evasion
 {
     public class EvasionInfos : IEnumerableModification
     {

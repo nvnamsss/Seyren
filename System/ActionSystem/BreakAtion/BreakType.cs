@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crom.System.ActionSystem.BreakAtion
+namespace Base2D.System.ActionSystem.BreakAtion
 {
     [Flags]
     public enum BreakType

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crom.System.Formula
+namespace Base2D.System.Formula
 {
     public static class GameFormula
     {

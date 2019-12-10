@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace Crom.System.DamageSystem
+namespace Base2D.System.DamageSystem
 {
     public interface IEnumerableModification
     {

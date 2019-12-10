@@ -1,13 +1,13 @@
-﻿using Crom.Init.DamageModification;
-using Crom.System.DamageSystem;
-using Crom.System.DamageSystem.Critical;
-using Crom.System.DamageSystem.Evasion;
-using Crom.System.UnitSystem.EventData;
+﻿using Base2D.Init.DamageModification;
+using Base2D.System.DamageSystem;
+using Base2D.System.DamageSystem.Critical;
+using Base2D.System.DamageSystem.Evasion;
+using Base2D.System.UnitSystem.EventData;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Crom.System.UnitSystem.Units
+namespace Base2D.System.UnitSystem.Units
 {
     public class Unit : MonoBehaviour, IObject, IAttribute
     {

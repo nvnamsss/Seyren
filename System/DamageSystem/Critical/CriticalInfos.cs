@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crom.System.DamageSystem.Critical
+namespace Base2D.System.DamageSystem.Critical
 {
     public class CriticalInfos : IEnumerableModification
     {

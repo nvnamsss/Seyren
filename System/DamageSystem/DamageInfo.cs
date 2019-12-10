@@ -1,10 +1,10 @@
-﻿using Crom.System.DamageSystem.Critical;
-using Crom.System.DamageSystem.Evasion;
-using Crom.System.DamageSystem.PostPassive;
-using Crom.System.DamageSystem.PrePassive;
-using Crom.System.DamageSystem.Reduce;
-using Crom.System.UnitSystem;
-using Crom.System.UnitSystem.Units;
+﻿using Base2D.System.DamageSystem.Critical;
+using Base2D.System.DamageSystem.Evasion;
+using Base2D.System.DamageSystem.PostPassive;
+using Base2D.System.DamageSystem.PrePassive;
+using Base2D.System.DamageSystem.Reduce;
+using Base2D.System.UnitSystem;
+using Base2D.System.UnitSystem.Units;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crom.System.DamageSystem
+namespace Base2D.System.DamageSystem
 {
     public class DamageInfo: IModifier
     {

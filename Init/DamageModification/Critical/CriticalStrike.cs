@@ -1,11 +1,11 @@
-﻿using Crom.System.DamageSystem.Critical;
+﻿using Base2D.System.DamageSystem.Critical;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crom.Init.DamageModification
+namespace Base2D.Init.DamageModification
 {
     public static partial class Critical
     {

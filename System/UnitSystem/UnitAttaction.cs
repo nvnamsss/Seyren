@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Crom.System.UnitSystem
+namespace Base2D.System.UnitSystem
 {
     class UnitAttaction : IAttachable
     {
