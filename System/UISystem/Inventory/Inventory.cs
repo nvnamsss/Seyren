@@ -29,19 +29,18 @@ namespace Base2D.System.UISystem.Inventory
             items = items.OrderBy(i => i.itemType).ToList();
         }
 
-        public void populate(UIInventory ui, Inventory inven) {
+        public void populate(Inventory inven) {
             foreach (Item i in inven.items)
             {
                 //fill the inventory
             }
         }
 
-        public static void Swap<Item>(List<Item> list, int indexA, int indexB, UIInventory ui)
+        public static void Swap<Item>(List<Item> list, int indexA, int indexB)
         {
             Item tmp = list[indexA];
             list[indexA] = list[indexB];
             list[indexB] = tmp;
-            ui.update();
         }
     }
 }
