@@ -1,15 +1,9 @@
-Library
-Logs
-Packages
-Temp
-obj
-ProjectSettings
-<<<<<<< HEAD
-.vs
-Upgrade*
-=======
-.vs/Base2D/v15/Server/sqlite3/storage.ide-wal
-.vs/Base2D/v15/Server/sqlite3/storage.ide-shm
-.vs/Base2D/v15/Server/sqlite3/storage.ide
-.vs/Base2D/v15/Server/sqlite3/db.lock
->>>>>>> f6d85c3fad8ddcd5e6c0ad2cdba19e6fd3d05d40
+/_TerrainAutoUpgrade
+/48 Particle Effect Pack
+/ErbGameArt
+/Fantasy Skybox FREE
+/GE Common Assets
+/Knight Files
+/Sunnyland
+/Resources
+*.meta
