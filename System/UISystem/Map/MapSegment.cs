@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.System.UISystem.Map
+namespace Base2D.System.UISystem.Map
 {
     class MapSegment
     {

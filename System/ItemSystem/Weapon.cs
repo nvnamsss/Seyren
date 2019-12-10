@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Crom.System.DamageSystem;
-using Crom.System.UnitSystem;
+﻿using Base2D.System.DamageSystem;
+using Base2D.System.UnitSystem;
 
-namespace Assets.System.ItemSystem
+namespace Base2D.System.ItemSystem
 {
     class Weapon : Item
     {
@@ -14,7 +9,7 @@ namespace Assets.System.ItemSystem
         public int ammount { get; set; }
         public string name { get;set; }
         public string description { get;set; }
-        public Crom.System.UnitSystem.Attribute Attribute { get; set; }
+        public Attribute Attribute { get; set; }
         public ModificationInfos Modification { get; set; }
     }
 }

@@ -1,11 +1,11 @@
-﻿using Crom.System.UnitSystem;
+﻿using Base2D.System.UnitSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.System.ItemSystem
+namespace Base2D.System.ItemSystem
 {
     interface Item : IAttribute
     {

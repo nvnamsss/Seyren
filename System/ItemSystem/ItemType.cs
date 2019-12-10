@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.System.ItemSystem
+namespace Base2D.System.ItemSystem
 {
     public enum ItemType
     {

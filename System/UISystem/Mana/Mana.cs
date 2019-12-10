@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Crom.System.UnitSystem;
+﻿using Base2D.System.UnitSystem.Units;
 
-namespace Assets.System.UISystem.Mana
+namespace Base2D.System.UISystem.Mana
 {
     class ManaBar
     {
-        private
-            float maxMana;
-        float currMana;
+        private float maxMana;
+        private float currMana;
 
         public
             void Init(Unit character)
         {
-            maxMana = character.MaxMp;
+            maxMana = character.Attribute.MaxMp;
             currMana = character.CurrentMp;
         }
 

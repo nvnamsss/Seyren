@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.System.AbilitySystem
+namespace Base2D.System.AbilitySystem
 {
     interface IPassive
     {

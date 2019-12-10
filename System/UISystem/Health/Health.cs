@@ -1,11 +1,11 @@
-﻿using Crom.System.UnitSystem;
+﻿using Base2D.System.UnitSystem.Units;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.System.UISystem.Health
+namespace Base2D.System.UISystem.Health
 {
     class HealthBar
     {
@@ -16,7 +16,7 @@ namespace Assets.System.UISystem.Health
         public 
             void Init(Unit character)
         {
-            maxHealth = character.MaxHp;
+            maxHealth = character.Attribute.MaxHp;
             currHealth = character.CurrentHp;
         }
 
