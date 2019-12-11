@@ -10,9 +10,9 @@ namespace Base2D.System.UnitSystem.Projectiles
 {
     public class HomingProjectile : Projectile
     {
-        public Unit Target;
         public HomingProjectile()
         {
+            Speed = 100;
             ProjectileType = ProjectileType.Homing;
         }
 
@@ -27,12 +27,25 @@ namespace Base2D.System.UnitSystem.Projectiles
             {
                 return;
             }
-
-            Vector3 velocity = (Target.transform.position - transform.position) ;
-            Vector3 rotation = Base2D.Utils.RotationUtil.AngleBetween(transform.position, Target.transform.position);
+            Body.velocity = new Vector2(0, 0);
+            Vector3 velocity = (Target.transform.position - transform.position).normalized * (float)Speed;
+            Vector3 rotation = Utils.RotationUtil.AngleBetween(transform.position, Target.transform.position);
 
             Body.AddForce(velocity, ForceMode2D.Impulse);
             transform.rotation = Quaternion.Euler(rotation.x, rotation.y, rotation.z);
+        }
+
+        public static HomingProjectile Create(Unit target, Sprite sprite)
+        {
+            GameObject go = new GameObject("homing");
+            SpriteRenderer render = go.AddComponent(typeof(SpriteRenderer)) as SpriteRenderer;
+            render.sprite = sprite;
+
+            go.AddComponent<Rigidbody2D>();
+            var projectile = go.AddComponent<HomingProjectile>();
+            projectile.Target = target;
+
+            return projectile;
         }
     }
 }

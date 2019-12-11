@@ -41,7 +41,6 @@ namespace Base2D.System.UISystem.Inventory
             Item tmp = list[indexA];
             list[indexA] = list[indexB];
             list[indexB] = tmp;
-            ui.update();
         }
     }
 }
