@@ -26,7 +26,10 @@ namespace Base2D.System.UnitSystem
         public float MpRegenPercent { get; set; }
         public float Armor { get; set; }
         public float MArmor { get; set; }
-
+        public float AttackRange { get; set; }
+        public float CastRange { get; set; }
+        public float MovementSpeed { get; set; }
+        public float AttackSpeed { get; set; }
 
         void Start()
         {

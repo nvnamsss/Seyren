@@ -175,16 +175,21 @@ namespace Base2D.System.UnitSystem.Units
             Attribute.Update();
         }
 
-        public static GameObject CreateUnit()
-        {
-            GameObject go = new GameObject();
-            SpriteRenderer render = go.AddComponent(typeof(SpriteRenderer)) as SpriteRenderer;
-            Texture2D texture = new Texture2D(512, 256);
-            byte[] data = File.ReadAllBytes(Path.Combine(Application.dataPath, "Knight Files", "Knight PNG", "Knight_attack_01.png"));
+        public static Unit Create(string name, Vector3 location, Quaternion rotation, Sprite sprite)
+        { 
+            GameObject go = CreateObject(name, location, rotation, sprite);
+            var unit = go.AddComponent<Unit>();
 
-            go.AddComponent(typeof(Unit));
-            texture.LoadImage(data);
-            render.sprite = Sprite.Create(texture, new Rect(new Vector2(0, 0), new Vector2(512, 256)), new Vector2(0, 0));
+            return unit;
+        }
+
+        protected static GameObject CreateObject(string name, Vector3 location, Quaternion rotation, Sprite sprite)
+        {
+            GameObject go = new GameObject(name);
+            SpriteRenderer render = go.AddComponent(typeof(SpriteRenderer)) as SpriteRenderer;
+            go.transform.position = location;
+            go.transform.rotation = rotation;
+            render.sprite = sprite;
             return go;
         }
 

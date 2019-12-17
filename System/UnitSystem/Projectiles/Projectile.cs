@@ -120,6 +120,18 @@ namespace Base2D.System.UnitSystem.Projectiles
             Debug.Log("[Projectile] - Exit");
 
         }
+
+        protected static GameObject CreateObject(string name, Vector3 location, Quaternion rotation, Sprite sprite)
+        {
+            GameObject go = new GameObject(name);
+            SpriteRenderer render = go.AddComponent(typeof(SpriteRenderer)) as SpriteRenderer;
+            go.AddComponent<Rigidbody2D>();
+            go.AddComponent<BoxCollider2D>();
+            go.transform.position = location;
+            go.transform.rotation = rotation;
+            render.sprite = sprite;
+            return go;
+        }
     }
 
 }

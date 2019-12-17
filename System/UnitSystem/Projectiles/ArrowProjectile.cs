@@ -9,7 +9,8 @@ namespace Base2D.System.UnitSystem.Projectiles
 {
     public class ArrowProjectile : Projectile
     {
-
+        private float _speedX;
+        private float _speedY;
         public ArrowProjectile()
         {
             ProjectileType = ProjectileType.Arrow;
@@ -21,15 +22,39 @@ namespace Base2D.System.UnitSystem.Projectiles
             base.Start();
             Body.gravityScale = 1;
             Body.mass = (float)(18.0 / 1000.0);
+            Body.mass = 1;
         }
         public override void Move()
         {
             float rad = (float)(Angle * Mathf.Deg2Rad);
-            Vector2 velocity = new Vector2(Mathf.Sin(rad), Mathf.Cos(rad)) * (float)Speed;
-            Debug.Log("Move");
-            Angle = Angle + ProjectileArc;
-            Speed = Speed * 0.5;
+            //Vector2 velocity = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * (float)Speed;
+            Vector2 velocity = new Vector2(Mathf.Cos(rad) * (float)_speedX, Mathf.Sin(rad) * (float)_speedY);
+
+            Body.velocity = new Vector2(0, 0);
+            gameObject.transform.rotation = Quaternion.Euler(0 ,0, Utils.RotationUtil.AngleBetween(Body.transform.position, Body.transform.position + (Vector3)velocity).z);
+            //gameObject.transform.rotation = Quaternion.Euler(gameObject.transform.rotation.x, gameObject.transform.rotation.y, (float)Angle);
+            Angle = Angle - ProjectileArc;
+
             Body.AddForce(velocity, ForceMode2D.Impulse);
+
+            //if (Angle < 0)
+            //{
+            //    Destroy(gameObject);
+            //}
+        }
+
+        public static ArrowProjectile Create(string name, Vector3 location, Quaternion rotation, Sprite sprite, float speed, float arc)
+        {
+            GameObject go = CreateObject(name, location, rotation, sprite);
+            var arrow = go.AddComponent<ArrowProjectile>();
+            arrow.Speed = speed;
+            arrow.ProjectileArc = arc;
+            arrow.Angle = rotation.eulerAngles.z;
+            arrow._speedX = (float)(arrow.Speed * Mathf.Cos((float)(arrow.Angle * Mathf.Deg2Rad)));
+            arrow._speedY = (float)(arrow.Speed * Mathf.Sin((float)(arrow.Angle * Mathf.Deg2Rad)));
+
+
+            return arrow;
         }
 
         public override void Hit()

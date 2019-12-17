@@ -23,7 +23,6 @@ namespace Base2D.Utils
             rotation.z = AngleBetween(from.x, to.x, from.y, to.y);
             return rotation;
         }
-
         /// <summary>
         /// Calculate angle between 2 point a and b in 2d space <br></br>
         /// example in xy, forward of a will be x and up of a will be y

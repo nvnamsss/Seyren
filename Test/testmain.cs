@@ -20,10 +20,6 @@ public class testmain : MonoBehaviour
         //DamageStatus status = 0 | DamageStatus.Reduced | DamageStatus.Evade;
         //Debug.Log((int)status);
         //Debug.Log((status | DamageStatus.Reduced) == status);
-        Base2D.System.UnitSystem.Units.Unit.CreateUnit();
-        string path = System.IO.Path.Combine(Application.dataPath, "Resources", "Knight_attack_01.png").Replace(@"\", "/");
-        Debug.Log(path);
-        ProjectileInterface.CreateProjectile("a", path);
     }
 
     // Update is called once per frame
