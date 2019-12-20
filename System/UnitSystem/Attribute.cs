@@ -30,7 +30,7 @@ namespace Base2D.System.UnitSystem
         public float CastRange { get; set; }
         public float MovementSpeed { get; set; }
         public float AttackSpeed { get; set; }
-
+        public float JumpSpeed { get; set; }
         void Start()
         {
         }

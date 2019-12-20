@@ -1,15 +1,16 @@
 ﻿using Base2D.Init.DamageModification;
+using Base2D.System.ActionSystem;
 using Base2D.System.DamageSystem;
 using Base2D.System.DamageSystem.Critical;
 using Base2D.System.DamageSystem.Evasion;
 using Base2D.System.UnitSystem.EventData;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Base2D.System.UnitSystem.Units
 {
-    public class Unit : MonoBehaviour, IObject, IAttribute
+    public partial class Unit : MonoBehaviour, IObject, IAttribute
     {
         public delegate void DyingHandler(Unit sender, UnitDyingEventArgs e);
         public delegate void DiedHandler(Unit sender, UnitDiedEventArgs e);
@@ -21,138 +22,7 @@ namespace Base2D.System.UnitSystem.Units
         public event DyingHandler Dying;
         public event DiedHandler Died;
         public event TakeDamageHandler TakeDamage;
-        public int CustomValue { get; set; }
-        public bool Targetable { get; set; }
-        public bool Invulnerable { get; set; }
-        public float Size { get; set; }
-        public float Height { get; set; }
-        public float AnimationSpeed { get; set; }
-        public float TurnSpeed { get; set; }
-        public Color VertexColor { get; set; }
-        public Unit Owner { get; set; }
-        public ModificationInfos Modification { get; set; }
-        public IAttachable Attach { get; set; }
-
-        public Attribute Attribute { get; set; }
-        public float TimeScale;
-        public bool IsFly
-        {
-            get
-            {
-                return _isFly;
-            }
-            set
-            {
-                _isFly = value;
-            }
-        }
-        public float CurrentHp
-        {
-            get
-            {
-                return _currentHp;
-            }
-            set
-            {
-                StateChangedHandler state = StateChanged;
-                StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.Hp, _currentHp, value);
-                if (state != null)
-                {
-                    state.Invoke(this, sce);
-                }
-
-                _currentHp = sce.NewValue;
-            }
-        }
-        public float CurrentMp
-        {
-            get
-            {
-                return _currentMp;
-            }
-            set
-            {
-                StateChangedHandler state = StateChanged;
-                StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.Mp, _currentMp, value);
-                if (state != null)
-                {
-                    state.Invoke(this, sce);
-                }
-
-                _currentMp = sce.NewValue;
-            }
-        }
-
-        public float CurrentShield
-        {
-            get
-            {
-                return _currentShield;
-            }
-            set
-            {
-                StateChangedHandler state = StateChanged;
-                StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.Shield, _currentShield, value);
-                if (state != null)
-                {
-                    state.Invoke(this, sce);
-                }
-
-                _currentShield = sce.NewValue;
-            }
-        }
-
-        public float CurrentMShield
-        {
-            get
-            {
-                return CurrentMShield;
-            }
-            set
-            {
-                StateChangedHandler state = StateChanged;
-                StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.MagicalShield, CurrentMShield, value);
-                if (state != null)
-                {
-                    state.Invoke(this, sce);
-                }
-
-                CurrentMShield = sce.NewValue;
-            }
-        }
-        public float CurrentPShield
-        {
-            get
-            {
-                return _currentPShield;
-            }
-            set
-            {
-                StateChangedHandler state = StateChanged;
-                StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.PhysicalShield, _currentPShield, value);
-                if (state != null)
-                {
-                    state.Invoke(this, sce);
-                }
-
-                _currentPShield = sce.NewValue;
-            }
-        }
-        protected Unit _owner;
-        [SerializeField]
-        protected bool _isFly;
-        [SerializeField]
-        protected float _currentShield;
-        [SerializeField]
-        protected float _currentMShield;
-        [SerializeField]
-        protected float _currentPShield;
-        [SerializeField]
-        protected float _currentHp;
-        [SerializeField]
-        protected float _currentMp;
         
-
         public Unit()
         {
             Attribute = new Attribute();
@@ -163,34 +33,21 @@ namespace Base2D.System.UnitSystem.Units
             CurrentShield = 22;
             Modification = new ModificationInfos();
             Modification.Critical.AddModification(Critical.CriticalStrike());
-        }
 
+            Actions = new List<Action>();
+
+        }
 
         void Start()
         {
+            Body = GetComponent<Rigidbody2D>();
+            Abilites = new Dictionary<int, AbilitySystem.Ability>();
+            Abilites.Add(Base2D.Init.Abilities.Attack.Id, new Base2D.Init.Abilities.Attack(gameObject));
         }
 
         void Update()
         {
             Attribute.Update();
-        }
-
-        public static Unit Create(string name, Vector3 location, Quaternion rotation, Sprite sprite)
-        { 
-            GameObject go = CreateObject(name, location, rotation, sprite);
-            var unit = go.AddComponent<Unit>();
-
-            return unit;
-        }
-
-        protected static GameObject CreateObject(string name, Vector3 location, Quaternion rotation, Sprite sprite)
-        {
-            GameObject go = new GameObject(name);
-            SpriteRenderer render = go.AddComponent(typeof(SpriteRenderer)) as SpriteRenderer;
-            go.transform.position = location;
-            go.transform.rotation = rotation;
-            render.sprite = sprite;
-            return go;
         }
 
         /// <summary>
@@ -222,13 +79,6 @@ namespace Base2D.System.UnitSystem.Units
             damageInfo.DamageAmount = damage;
             damageInfo.DamageType = type;
             damageInfo.CalculateDamage();
-            /* Damage pipeline:
-             * calculate raw damage target will receive
-               apply effect, buff, modification, etc to raw damage
-               apply damage to target
-               checking shield
-               steal life
-             */
 
             UnityEngine.Debug.Log(damageInfo);
             if (CurrentShield > 0 || CurrentPShield > 0 || CurrentMShield > 0)
@@ -315,7 +165,38 @@ namespace Base2D.System.UnitSystem.Units
             }
         }
 
-       
+        public void Jump()
+        {
+            if (JumpTimes > 0)
+            {
+                Body?.AddForce(Vector2.up * Attribute.JumpSpeed, ForceMode2D.Impulse);
+                JumpTimes -= 1;
+            }
+        }
+
+        public void Move(Vector2 direction)
+        {
+            if ((UnitStatus | UnitStatus.Stun) == UnitStatus ||
+                (UnitStatus | UnitStatus.Knockback) == UnitStatus)
+            {
+                return;
+            }
+
+            Body?.AddForce(direction * Attribute.MovementSpeed);
+        }
+
+        public void Look(Vector2 direction)
+        {
+            transform.rotation = Quaternion.Euler(direction.x, direction.y, 0);
+        }
+
+        public void Attack()
+        {
+            if (Abilites.ContainsKey(Base2D.Init.Abilities.Attack.Id))
+            {
+                Abilites[Base2D.Init.Abilities.Attack.Id].TryCastAbility(new Vector3(transform.position.x + 1, 0, 0));
+            }
+        }
     }
 
 }

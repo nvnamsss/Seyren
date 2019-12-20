@@ -57,6 +57,20 @@ namespace Base2D.System.UnitSystem.Projectiles
             return arrow;
         }
 
+        public static ArrowProjectile Create(string name, Vector3 location, float zAngle, Sprite sprite, float speed, float arc)
+        {
+            GameObject go = CreateObject(name, location, Quaternion.Euler(0, 0, zAngle), sprite);
+            var arrow = go.AddComponent<ArrowProjectile>();
+            arrow.Speed = speed;
+            arrow.ProjectileArc = arc;
+            arrow.Angle = zAngle;
+            arrow._speedX = (float)(arrow.Speed * Mathf.Cos((float)(arrow.Angle * Mathf.Deg2Rad)));
+            arrow._speedY = (float)(arrow.Speed * Mathf.Sin((float)(arrow.Angle * Mathf.Deg2Rad)));
+
+
+            return arrow;
+        }
+
         public override void Hit()
         {
             base.Hit();

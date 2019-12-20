@@ -23,6 +23,13 @@ namespace Base2D.Utils
             rotation.z = AngleBetween(from.x, to.x, from.y, to.y);
             return rotation;
         }
+
+        public static Quaternion EulerAngleBetween(Vector3 from, Vector3 to)
+        {
+            Vector3 rotation = AngleBetween(from, to);
+
+            return Quaternion.Euler(rotation.x, rotation.y, rotation.z);
+        }
         /// <summary>
         /// Calculate angle between 2 point a and b in 2d space <br></br>
         /// example in xy, forward of a will be x and up of a will be y

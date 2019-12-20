@@ -10,7 +10,7 @@ using UnityEngine;
 namespace Base2D.System.AbilitySystem
 {
 
-    public abstract class Ability : IAction, IAbility
+    public abstract class Ability : Action, IAbility
     {
         public AbilityType AbilityType { get; set; }
 
@@ -30,17 +30,16 @@ namespace Base2D.System.AbilitySystem
         public bool IsCasting { get; set; }
 
         public GameObject ObjectTarget { get; set; }
-        public GameObject PointTarget { get; set; }
+        public Vector3 PointTarget { get; set; }
         
         public void UnlockAbility()
         {
             IsCastable = true;
         }
 
-        public bool TryCastAbility(GameObject ObjectTarget, GameObject PointTarget)
+        public bool TryCastAbility(GameObject ObjectTarget)
         {
             this.ObjectTarget = ObjectTarget;
-            this.PointTarget = PointTarget;
             if (IsCastable)
             {
                 StartCoroutine(StartCasting(0, BaseCastingTime));
@@ -48,11 +47,25 @@ namespace Base2D.System.AbilitySystem
             }
             else
             {
-                DoSomeThingIfCannotCasting(ObjectTarget, PointTarget);
+                DoSomeThingIfCannotCasting();
                 return false;
             }
         }
 
+        public bool TryCastAbility(Vector3 point)
+        {
+            PointTarget = point;
+            if (IsCastable)
+            {
+                StartCoroutine(StartCasting(0, BaseCastingTime));
+                return true;
+            }
+            else
+            {
+                DoSomeThingIfCannotCasting();
+                return false;
+            }
+        }
         public override bool BreakAction(BreakType breakType)
         {
             if (IsCasting)
@@ -60,11 +73,11 @@ namespace Base2D.System.AbilitySystem
                 switch (breakType)
                 {
                     case BreakType.CancelBreak:
-                        return CancleBreakkAbility();
+                        return CancelBreakAbility();
                     case BreakType.KnockDownBreak:
                         return KnockDownBreakAbility();
                     case BreakType.SpecialBreak:
-                        return SpectialBreakAbility();
+                        return SpecialBreakAbility();
                 }
             }
             return false;
@@ -81,17 +94,17 @@ namespace Base2D.System.AbilitySystem
             return true;
         }
 
-        protected bool CancleBreakkAbility()
+        protected bool CancelBreakAbility()
         {
             switch (AbilityType)
             {
-                case AbilityType.CannotCancle:
+                case AbilityType.CannotCancel:
                     return false;
-                case AbilityType.CanCancleNoCoolDown:
+                case AbilityType.CanCancelNoCoolDown:
                     StopAllCoroutines();
                     StartCoroutine(StartCoolDown(0, 0));
                     return true;
-                case AbilityType.CanCancleWithCoolDown:
+                case AbilityType.CanCancelWithCoolDown:
                     StopAllCoroutines();
                     StartCoroutine(StartCoolDown(0, BaseCoolDown));
                     return true;
@@ -106,7 +119,7 @@ namespace Base2D.System.AbilitySystem
             switch (AbilityType)
             {
                 case AbilityType.CanKnockDownWithSoonRelease:
-                    DoCastAbility(ObjectTarget, PointTarget);
+                    DoCastAbility();
                     StartCoroutine(StartCoolDown(0, BaseCoolDown));
                     return true;
                 case AbilityType.CanKnockDown:
@@ -119,34 +132,27 @@ namespace Base2D.System.AbilitySystem
             return false;
         }
 
-        protected abstract bool SpectialBreakAbility();
+        protected abstract bool SpecialBreakAbility();
 
         /// <summary>
         /// Init Ability Unit
         /// </summary>
-        /// <param name="ObjectUnit">Unit Init</param>
-        /// <param name="ObjectTarget">Source Tranform</param>
-        protected abstract void Initialize(GameObject ObjectUnit, GameObject ObjectTarget);
+
+        protected abstract void Initialize();
 
         /// <summary>
         /// Change Unit Animation
-        /// </summary>
-        /// <param name="PointTarget">Target</param>
-        protected abstract void DoAnimation(GameObject PointTarget);
+        protected abstract void DoAnimation();
         
         /// <summary>
         /// Main Cast Ability, call when Ability is release
         /// </summary>
-        /// <param name="ObjectTarget">Source Object</param>
-        /// <param name="PointTarget">Target Object</param>
-        protected abstract void DoCastAbility(GameObject ObjectTarget, GameObject PointTarget);
+        protected abstract void DoCastAbility();
 
         /// <summary>
         /// Làm gì đó nếu không thể Cast Skill
         /// </summary>
-        /// <param name="ObjectTarget"></param>
-        /// <param name="PointTarget"></param>
-        protected abstract void DoSomeThingIfCannotCasting(GameObject ObjectTarget, GameObject PointTarget);
+        protected abstract void DoSomeThingIfCannotCasting();
         
         IEnumerator StartCoolDown(float timeDelay, float timeCoolDown)
         {
@@ -180,7 +186,7 @@ namespace Base2D.System.AbilitySystem
             if (IsCasting)
             {
                 IsCasting = false;
-                DoCastAbility(ObjectTarget, PointTarget);
+                DoCastAbility();
                 StartCoroutine(StartCoolDown(0, BaseCoolDown));
             }
         }
