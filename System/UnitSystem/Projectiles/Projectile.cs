@@ -6,50 +6,21 @@ using UnityEngine;
 
 namespace Base2D.System.UnitSystem.Projectiles
 {
-    public class Projectile : MonoBehaviour, IAttribute
+    public partial class Projectile : MonoBehaviour, IAttribute
     {
-        public delegate void OnHitHandler(Projectile sender);
-        public event OnHitHandler OnHit;
-        public BoxCollider2D Collider { get; set; }
-        public Rigidbody2D Body { get; set; }
-        public int MaxHit { get; set; }
-        public bool IsPenetrate { get; set; }
-        public Unit Owner { get; set; }
-        public Unit Target
-        {
-            get
-            {
-                return _target;
-            }
-            set
-            {
-                _target = value;
-            }
-        }
-        public Attribute Attribute { get; set; }
-        public ModificationInfos Modification { get; set; }
-        public double ProjectileArc { get; set; }
-        public double Angle { get; set; }
-        public double TimeExpired { get; set; }
-        public double HitDelay;
-        public double Speed;
-        public ProjectileType ProjectileType { get; set; }
-
-        private double _hitDelay;
-        private int _hit;
-        [SerializeField]
-        protected Unit _target;
         public Projectile()
         {
             HitDelay = 10;
             Speed = 0.01f;
             Angle = 90;
-            IsPenetrate = false;
             _hitDelay = 0;
+            TimeExpire = float.MaxValue;
+            IsPenetrate = false;
             ProjectileType = ProjectileType.None;
         }
         public virtual void Hit()
         {
+            animator?.SetBool("hit", true);
             if (_hitDelay > 0)
             {
                 return;
@@ -59,7 +30,7 @@ namespace Base2D.System.UnitSystem.Projectiles
             {
                 Destroy(gameObject);               
             }
-            //do something
+
             _hit = _hit + 1;
             _hitDelay = HitDelay;
 
@@ -69,7 +40,7 @@ namespace Base2D.System.UnitSystem.Projectiles
             }
             else
             {
-                //Destroy(gameObject);
+
             }
 
             OnHit?.Invoke(this);
@@ -77,8 +48,17 @@ namespace Base2D.System.UnitSystem.Projectiles
 
         public virtual void Move()
         {
+            animator?.SetBool("move", true);
             float rad = (float)(Angle * Mathf.Deg2Rad);
             Vector2 velocity = new Vector2(Mathf.Sin(rad), Mathf.Cos(rad)) * (float)Speed;
+        }
+
+        /// <summary>
+        /// Remove projectile
+        /// </summary>
+        public virtual void Remove()
+        {
+
         }
 
         // Start is called before the first frame update
@@ -86,12 +66,18 @@ namespace Base2D.System.UnitSystem.Projectiles
         {
             Body = GetComponent<Rigidbody2D>();
             Collider = GetComponent<BoxCollider2D>();
+            animator = GetComponent<Animator>();
+            TimeExpired += (sender) =>
+            {
+                Destroy(sender.gameObject);
+            };
         }
 
         // Update is called once per frame
         protected virtual void FixedUpdate()
         {
             _hitDelay -= Time.deltaTime;
+            TimeExpire -= Time.deltaTime;
             Move();
         }
 
@@ -121,10 +107,12 @@ namespace Base2D.System.UnitSystem.Projectiles
 
         }
 
-        protected static GameObject CreateObject(string name, Vector3 location, Quaternion rotation, Sprite sprite)
+        protected static GameObject CreateObject(string name, Vector3 location, Quaternion rotation, Sprite sprite, RuntimeAnimatorController controller)
         {
             GameObject go = new GameObject(name);
-            SpriteRenderer render = go.AddComponent(typeof(SpriteRenderer)) as SpriteRenderer;
+            SpriteRenderer render = go.AddComponent<SpriteRenderer>();
+            Animator animator = go.AddComponent<Animator>();
+            animator.runtimeAnimatorController = controller;
             go.AddComponent<Rigidbody2D>();
             go.AddComponent<BoxCollider2D>();
             go.transform.position = location;

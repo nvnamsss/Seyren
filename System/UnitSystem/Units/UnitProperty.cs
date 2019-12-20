@@ -13,6 +13,17 @@ namespace Base2D.System.UnitSystem.Units
 {
     public partial class Unit : MonoBehaviour, IObject, IAttribute
     {
+        public delegate void DyingHandler(Unit sender, UnitDyingEventArgs e);
+        public delegate void DiedHandler(Unit sender, UnitDiedEventArgs e);
+        public delegate void TakeDamageHandler(Unit sender, TakeDamageEventArgs e);
+        public delegate void StateChangedHandler(Unit sender, StateChangedEventArgs e);
+        public delegate void StatusChangedHandler(Unit sender, StatusChangedEventArgs e);
+        public event StateChangedHandler StateChanged;
+        public event StatusChangedHandler StatusChanged;
+        public event DyingHandler Dying;
+        public event DiedHandler Died;
+        public event TakeDamageHandler TakeDamage;
+
         public int CustomValue { get; set; }
         public bool Targetable { get; set; }
         public bool Invulnerable { get; set; }
@@ -26,8 +37,9 @@ namespace Base2D.System.UnitSystem.Units
         public IAttachable Attach { get; set; }
         public Rigidbody2D Body { get; set; }
         public Attribute Attribute { get; set; }
+        public Dictionary<string, Sprite> Sprites { get; set; }
         public Dictionary<int, Ability> Abilites { get; set; }
-        public List<Action> Actions { get; }
+        public List<Action> Actions { get; set; }
         public float TimeScale;
         public UnitStatus UnitStatus
         {

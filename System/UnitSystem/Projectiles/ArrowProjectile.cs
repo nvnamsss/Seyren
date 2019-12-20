@@ -34,35 +34,35 @@ namespace Base2D.System.UnitSystem.Projectiles
             gameObject.transform.rotation = Quaternion.Euler(0 ,0, Utils.RotationUtil.AngleBetween(Body.transform.position, Body.transform.position + (Vector3)velocity).z);
             //gameObject.transform.rotation = Quaternion.Euler(gameObject.transform.rotation.x, gameObject.transform.rotation.y, (float)Angle);
             Angle = Angle - ProjectileArc;
+            if (Angle < 0)
+            {
+                Angle = 0;
+            }
 
             Body.AddForce(velocity, ForceMode2D.Impulse);
-
-            //if (Angle < 0)
-            //{
-            //    Destroy(gameObject);
-            //}
         }
 
-        public static ArrowProjectile Create(string name, Vector3 location, Quaternion rotation, Sprite sprite, float speed, float arc)
+        public static ArrowProjectile Create(string name, Vector3 location, Quaternion rotation, Sprite sprite, RuntimeAnimatorController controller, float speed, float arc, float duration = float.MaxValue)
         {
-            GameObject go = CreateObject(name, location, rotation, sprite);
+            GameObject go = CreateObject(name, location, rotation, sprite, controller);
             var arrow = go.AddComponent<ArrowProjectile>();
             arrow.Speed = speed;
             arrow.ProjectileArc = arc;
+            arrow.TimeExpire = duration;
             arrow.Angle = rotation.eulerAngles.z;
             arrow._speedX = (float)(arrow.Speed * Mathf.Cos((float)(arrow.Angle * Mathf.Deg2Rad)));
             arrow._speedY = (float)(arrow.Speed * Mathf.Sin((float)(arrow.Angle * Mathf.Deg2Rad)));
 
-
             return arrow;
         }
 
-        public static ArrowProjectile Create(string name, Vector3 location, float zAngle, Sprite sprite, float speed, float arc)
+        public static ArrowProjectile Create(string name, Vector3 location, float zAngle, Sprite sprite, RuntimeAnimatorController controller, float speed, float arc, float duration = float.MaxValue)
         {
-            GameObject go = CreateObject(name, location, Quaternion.Euler(0, 0, zAngle), sprite);
+            GameObject go = CreateObject(name, location, Quaternion.Euler(0, 0, zAngle), sprite, controller);
             var arrow = go.AddComponent<ArrowProjectile>();
             arrow.Speed = speed;
             arrow.ProjectileArc = arc;
+            arrow.TimeExpire = duration;
             arrow.Angle = zAngle;
             arrow._speedX = (float)(arrow.Speed * Mathf.Cos((float)(arrow.Angle * Mathf.Deg2Rad)));
             arrow._speedY = (float)(arrow.Speed * Mathf.Sin((float)(arrow.Angle * Mathf.Deg2Rad)));

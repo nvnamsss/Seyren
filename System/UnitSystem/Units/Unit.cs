@@ -4,6 +4,7 @@ using Base2D.System.DamageSystem;
 using Base2D.System.DamageSystem.Critical;
 using Base2D.System.DamageSystem.Evasion;
 using Base2D.System.UnitSystem.EventData;
+using Base2D.System.UnitSystem.Projectiles;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -12,16 +13,7 @@ namespace Base2D.System.UnitSystem.Units
 {
     public partial class Unit : MonoBehaviour, IObject, IAttribute
     {
-        public delegate void DyingHandler(Unit sender, UnitDyingEventArgs e);
-        public delegate void DiedHandler(Unit sender, UnitDiedEventArgs e);
-        public delegate void TakeDamageHandler(Unit sender, TakeDamageEventArgs e);
-        public delegate void StateChangedHandler(Unit sender, StateChangedEventArgs e);
-        public delegate void StatusChangedHandler(Unit sender, StatusChangedEventArgs e);
-        public event StateChangedHandler StateChanged;
-        public event StatusChangedHandler StatusChanged;
-        public event DyingHandler Dying;
-        public event DiedHandler Died;
-        public event TakeDamageHandler TakeDamage;
+        
         
         public Unit()
         {
@@ -34,13 +26,13 @@ namespace Base2D.System.UnitSystem.Units
             Modification = new ModificationInfos();
             Modification.Critical.AddModification(Critical.CriticalStrike());
 
-            Actions = new List<Action>();
 
         }
 
         void Start()
         {
             Body = GetComponent<Rigidbody2D>();
+            Actions = new List<Action>();
             Abilites = new Dictionary<int, AbilitySystem.Ability>();
             Abilites.Add(Base2D.Init.Abilities.Attack.Id, new Base2D.Init.Abilities.Attack(gameObject));
         }
@@ -194,7 +186,10 @@ namespace Base2D.System.UnitSystem.Units
         {
             if (Abilites.ContainsKey(Base2D.Init.Abilities.Attack.Id))
             {
-                Abilites[Base2D.Init.Abilities.Attack.Id].TryCastAbility(new Vector3(transform.position.x + 1, 0, 0));
+                Vector2 location = transform.position;
+                Quaternion rotation = transform.rotation;
+                Abilites[Base2D.Init.Abilities.Attack.Id].Create(location, rotation);
+                
             }
         }
     }

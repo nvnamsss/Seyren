@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Proj = Base2D.System.UnitSystem.Projectiles;
-namespace Base2D.Init.Projectile
+namespace Base2D.Init.Projectiles
 {
     public static partial class Projectile
     {

@@ -31,7 +31,9 @@ namespace Base2D.System.AbilitySystem
 
         public GameObject ObjectTarget { get; set; }
         public Vector3 PointTarget { get; set; }
-        
+
+        public abstract GameObject Create(Vector2 location, Quaternion rotation);
+
         public void UnlockAbility()
         {
             IsCastable = true;
