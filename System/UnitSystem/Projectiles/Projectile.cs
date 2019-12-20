@@ -18,7 +18,7 @@ namespace Base2D.System.UnitSystem.Projectiles
             IsPenetrate = false;
             ProjectileType = ProjectileType.None;
         }
-        public virtual void Hit()
+        public virtual void Hit(GameObject collider)
         {
             animator?.SetBool("hit", true);
             if (_hitDelay > 0)
@@ -43,7 +43,7 @@ namespace Base2D.System.UnitSystem.Projectiles
 
             }
 
-            OnHit?.Invoke(this);
+            OnHit?.Invoke(this, collider);
         }
 
         public virtual void Move()
@@ -83,22 +83,22 @@ namespace Base2D.System.UnitSystem.Projectiles
 
         protected virtual void OnCollisionEnter2D(Collision2D collision)
         {
-            Hit();
+            Hit(collision.gameObject);
         }
 
         protected virtual void OnCollisionStay2D(Collision2D collision)
         {
-            Hit();
+            Hit(collision.gameObject);
         }
 
         protected virtual void OnTriggerEnter2D(Collider2D collision)
         {
-            Hit();
+            Hit(collision.gameObject);
         }
 
         protected virtual void OnTriggerStay2D(Collider2D collision)
         {
-            Hit();
+            Hit(collision.gameObject);
         }
 
         protected virtual void OnTriggerExit2D(Collider2D collision)

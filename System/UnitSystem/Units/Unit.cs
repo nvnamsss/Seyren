@@ -13,8 +13,6 @@ namespace Base2D.System.UnitSystem.Units
 {
     public partial class Unit : MonoBehaviour, IObject, IAttribute
     {
-        
-        
         public Unit()
         {
             Attribute = new Attribute();
@@ -34,7 +32,7 @@ namespace Base2D.System.UnitSystem.Units
             Body = GetComponent<Rigidbody2D>();
             Actions = new List<Action>();
             Abilites = new Dictionary<int, AbilitySystem.Ability>();
-            Abilites.Add(Base2D.Init.Abilities.Attack.Id, new Base2D.Init.Abilities.Attack(gameObject));
+            Abilites.Add(Base2D.Init.Abilities.Attack.Id, new Base2D.Init.Abilities.Attack(this));
         }
 
         void Update()
@@ -42,6 +40,10 @@ namespace Base2D.System.UnitSystem.Units
             Attribute.Update();
         }
 
+        public bool IsEnemy(Unit unit)
+        {
+            return Player.Force.IsEnemy(unit.Player.Force);
+        }
         /// <summary>
         /// Order source unit to deal damage to this unit
         /// </summary>

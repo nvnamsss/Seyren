@@ -9,7 +9,7 @@ namespace Base2D.System.UnitSystem.Projectiles
     public partial class Projectile : MonoBehaviour, IAttribute
     {
         public delegate void TimeExpiredHandler(Projectile sender);
-        public delegate void OnHitHandler(Projectile sender);
+        public delegate void OnHitHandler(Projectile sender, GameObject collider);
         public event OnHitHandler OnHit;
         public event TimeExpiredHandler TimeExpired;
         public BoxCollider2D Collider { get; set; }

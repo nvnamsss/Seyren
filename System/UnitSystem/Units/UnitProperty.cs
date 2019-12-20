@@ -4,6 +4,7 @@ using Base2D.System.ActionSystem;
 using Base2D.System.DamageSystem;
 using Base2D.System.DamageSystem.Critical;
 using Base2D.System.DamageSystem.Evasion;
+using Base2D.System.ForceSystem;
 using Base2D.System.UnitSystem.EventData;
 using System.Collections.Generic;
 using System.IO;
@@ -24,6 +25,7 @@ namespace Base2D.System.UnitSystem.Units
         public event DiedHandler Died;
         public event TakeDamageHandler TakeDamage;
 
+        public Player Player { get; set; }
         public int CustomValue { get; set; }
         public bool Targetable { get; set; }
         public bool Invulnerable { get; set; }

@@ -29,9 +29,9 @@ namespace Base2D.System.UnitSystem.Projectiles
             Body.AddForce(velocity, ForceMode2D.Impulse);
         }
 
-        public override void Hit()
+        public override void Hit(GameObject collider)
         {
-            base.Hit();
+            base.Hit(collider);
         }
     }
 }

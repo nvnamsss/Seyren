@@ -1,5 +1,6 @@
 ﻿using Base2D.System.AbilitySystem;
 using Base2D.System.UnitSystem.Projectiles;
+using Base2D.System.UnitSystem.Units;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +13,13 @@ namespace Base2D.Init.Abilities
     public class Attack : Ability
     {
         public static readonly int Id = 0x64848401;
+        public Unit unit;
         public Sprite Sprite;
         public ArrowProjectile Projectile;
-        public Attack(GameObject unit)
+        public Attack(Unit u)
         {
             Sprite = ProjectileCollection.Cut;
+            unit = u;
             Projectile = ArrowProjectile.Create("attack", Vector3.zero,
                 Quaternion.Euler(0, 0, 0),
                 ProjectileCollection.Cut,
@@ -26,13 +29,24 @@ namespace Base2D.Init.Abilities
 
         public override GameObject Create(Vector2 location, Quaternion rotation)
         {
-            var go = ArrowProjectile.Create("attack", location,
+            var arrow = ArrowProjectile.Create("attack", location,
                 rotation,
                 ProjectileCollection.Cut,
                 ProjectileCollection.CutController,
-                1, 1, 0.1f).gameObject;
+                1, 1, 0.1f);
+            arrow.Owner = unit;
 
-            return go;
+            arrow.OnHit += (sender, e) =>
+            {
+                Unit u = e.GetComponent<Unit>();
+
+                if (u != null && unit.IsEnemy(u))
+                {
+                    u.Damage(arrow.Owner, System.DamageSystem.DamageType.Physical);
+                }
+            };
+
+            return arrow.gameObject;
         }
 
         protected override void DoAnimation()

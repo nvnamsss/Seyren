@@ -71,9 +71,9 @@ namespace Base2D.System.UnitSystem.Projectiles
             return arrow;
         }
 
-        public override void Hit()
+        public override void Hit(GameObject collider)
         {
-            base.Hit();
+            base.Hit(collider);
         }
     }
 }

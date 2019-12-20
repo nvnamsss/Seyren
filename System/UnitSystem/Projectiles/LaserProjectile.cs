@@ -12,7 +12,6 @@ namespace Base2D.System.UnitSystem.Projectiles
         public LaserProjectile()
         {
             MaxHit = int.MaxValue;
-
         }
 
         protected override void Start()
@@ -20,9 +19,9 @@ namespace Base2D.System.UnitSystem.Projectiles
             base.Start();
         }
 
-        public override void Hit()
+        public override void Hit(GameObject collider)
         {
-            base.Hit();
+            base.Hit(collider);
         }
 
         public override void Move()
