@@ -23,8 +23,6 @@ namespace Base2D.System.UnitSystem.Units
             CurrentShield = 22;
             Modification = new ModificationInfos();
             Modification.Critical.AddModification(Critical.CriticalStrike());
-
-
         }
 
         void Start()

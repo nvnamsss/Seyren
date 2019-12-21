@@ -8,10 +8,12 @@ namespace Base2D.System.UnitSystem.Projectiles
 {
     public partial class Projectile : MonoBehaviour, IAttribute
     {
+        public delegate void HitExceedHandler(Projectile sender);
         public delegate void TimeExpiredHandler(Projectile sender);
         public delegate void OnHitHandler(Projectile sender, GameObject collider);
         public event OnHitHandler OnHit;
         public event TimeExpiredHandler TimeExpired;
+        public event HitExceedHandler HitExceed;
         public BoxCollider2D Collider { get; set; }
         public Rigidbody2D Body { get; set; }
         public int MaxHit { get; set; }
@@ -43,11 +45,17 @@ namespace Base2D.System.UnitSystem.Projectiles
                 _timeExpired = value;
                 if (_timeExpired < 0)
                 {
-                    animator.SetBool("expired", true);
+                    Debug.Log("Time expired");
+                    Active = false;
+                    if (animator != null && animator.isInitialized)
+                    {
+                        animator.SetBool("expired", true);
+                    }
                     TimeExpired?.Invoke(this);
                 }
             }
         }
+        public bool Active;
         public double HitDelay;
         public double Speed;
         public ProjectileType ProjectileType { get; set; }

@@ -24,7 +24,8 @@ namespace Base2D.Init.Abilities
                 Quaternion.Euler(0, 0, 0),
                 ProjectileCollection.Cut,
                 ProjectileCollection.CutController,
-                1, 1, 0.1f);
+                1, 1, 10000f);
+            Projectile.IsPenetrate = true;
         }
 
         public override GameObject Create(Vector2 location, Quaternion rotation)
@@ -34,15 +35,21 @@ namespace Base2D.Init.Abilities
                 ProjectileCollection.Cut,
                 ProjectileCollection.CutController,
                 1, 1, 0.1f);
+            arrow.TimeExpire = 10000;
+            arrow.MaxHit = 100;
             arrow.Owner = unit;
 
             arrow.OnHit += (sender, e) =>
             {
                 Unit u = e.GetComponent<Unit>();
-
                 if (u != null && unit.IsEnemy(u))
                 {
+                    Debug.Log("Damage");
                     u.Damage(arrow.Owner, System.DamageSystem.DamageType.Physical);
+                }
+                else
+                {
+                    Debug.Log("Cannot damage");
                 }
             };
 

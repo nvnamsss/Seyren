@@ -125,7 +125,7 @@ namespace Base2D.System.UnitSystem.Units
         {
             get
             {
-                return CurrentMShield;
+                return _currentMShield;
             }
             set
             {

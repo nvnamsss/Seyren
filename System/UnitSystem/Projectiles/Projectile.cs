@@ -10,24 +10,38 @@ namespace Base2D.System.UnitSystem.Projectiles
     {
         public Projectile()
         {
-            HitDelay = 10;
+            MaxHit = 1;
+            HitDelay = 1;
             Speed = 0.01f;
             Angle = 90;
             _hitDelay = 0;
+            _hit = 0;
             TimeExpire = float.MaxValue;
             IsPenetrate = false;
+            Active = true;
             ProjectileType = ProjectileType.None;
         }
         public virtual void Hit(GameObject collider)
         {
-            animator?.SetBool("hit", true);
+            if (!Active)
+            {
+                return;
+            }
+
+            if (animator != null && animator.isInitialized)
+            {
+                animator.SetBool("hit", true);
+            }
+
             if (_hitDelay > 0)
             {
+                Debug.Log("Delay");
                 return;
             }
 
             if (_hit >= MaxHit)
             {
+                HitExceed?.Invoke(this);
                 Destroy(gameObject);               
             }
 
@@ -98,12 +112,13 @@ namespace Base2D.System.UnitSystem.Projectiles
 
         protected virtual void OnTriggerStay2D(Collider2D collision)
         {
+            Debug.Log("[Projectile] - Trigger Stay");
             Hit(collision.gameObject);
         }
 
         protected virtual void OnTriggerExit2D(Collider2D collision)
         {
-            Debug.Log("[Projectile] - Exit");
+            Debug.Log("[Projectile] - Trigger Exit");
 
         }
 
@@ -113,11 +128,11 @@ namespace Base2D.System.UnitSystem.Projectiles
             SpriteRenderer render = go.AddComponent<SpriteRenderer>();
             Animator animator = go.AddComponent<Animator>();
             animator.runtimeAnimatorController = controller;
-            go.AddComponent<Rigidbody2D>();
-            go.AddComponent<BoxCollider2D>();
             go.transform.position = location;
             go.transform.rotation = rotation;
             render.sprite = sprite;
+            go.AddComponent<Rigidbody2D>();
+            go.AddComponent<BoxCollider2D>();
             return go;
         }
     }
