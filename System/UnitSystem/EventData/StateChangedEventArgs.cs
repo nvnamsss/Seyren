@@ -8,9 +8,9 @@ namespace Base2D.System.UnitSystem.EventData
 {
     public class StateChangedEventArgs
     {
-        public UnitState State { get; set; }
-        public float OldValue { get; set; }
-        public float NewValue { get; set; }
+        public UnitState State { get; }
+        public float OldValue { get; }
+        public float NewValue { get; }
 
         public StateChangedEventArgs(UnitState state, float oldValue, float newValue)
         {

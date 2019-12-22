@@ -35,7 +35,6 @@ namespace Base2D.System.UnitSystem.Projectiles
 
             if (_hitDelay > 0)
             {
-                Debug.Log("Delay");
                 return;
             }
 
@@ -112,7 +111,6 @@ namespace Base2D.System.UnitSystem.Projectiles
 
         protected virtual void OnTriggerStay2D(Collider2D collision)
         {
-            Debug.Log("[Projectile] - Trigger Stay");
             Hit(collision.gameObject);
         }
 

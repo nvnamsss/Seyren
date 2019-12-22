@@ -20,7 +20,9 @@ namespace Base2D.System.UnitSystem.Units
             Attribute.HpRegen = 1;
             CurrentHp = Attribute.MaxHp = 100;
             CurrentPShield = 52;
+            CurrentMShield = 0;
             CurrentShield = 22;
+            JumpTimes = 1;
             Modification = new ModificationInfos();
             Modification.Critical.AddModification(Critical.CriticalStrike());
         }
@@ -54,12 +56,12 @@ namespace Base2D.System.UnitSystem.Units
 
         public void Damage(Unit source, DamageType type, TriggerType trigger)
         {
-            Damage(source, Attribute.AttackDamage, type, trigger);
+            Damage(source, source.Attribute.AttackDamage, type, trigger);
         }
 
         public void Damage(Unit source, float damage, DamageType type, TriggerType trigger)
         {
-            DamageInfo damageInfo = new DamageInfo(this, source);
+            DamageInfo damageInfo = new DamageInfo(source, this);
 
             damageInfo.TriggerType = trigger;
             damageInfo.PrePassive = source.Modification.PrePassive;
@@ -122,12 +124,15 @@ namespace Base2D.System.UnitSystem.Units
                     damageInfo.DamageAmount -= min;
 
                     UnityEngine.Debug.Log("Shield prevent: " + min);
-
                 }
             }
 
             CurrentHp = CurrentHp - damageInfo.DamageAmount;
-            TakeDamage?.Invoke(this, new TakeDamageEventArgs(damageInfo));
+            if (TakeDamage != null)
+            {
+                TakeDamage.Invoke(this, new TakeDamageEventArgs(damageInfo));
+            }
+            //TakeDamage?.Invoke(this, new TakeDamageEventArgs(damageInfo));
         }
 
         /// <summary>

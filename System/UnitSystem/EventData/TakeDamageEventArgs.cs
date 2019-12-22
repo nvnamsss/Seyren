@@ -9,7 +9,7 @@ namespace Base2D.System.UnitSystem.EventData
 {
     public class TakeDamageEventArgs
     {
-        DamageInfo Info { get; }
+        public DamageInfo Info { get; }
         public TakeDamageEventArgs(DamageInfo info)
         {
             Info = info;

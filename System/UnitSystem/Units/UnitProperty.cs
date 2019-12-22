@@ -130,13 +130,13 @@ namespace Base2D.System.UnitSystem.Units
             set
             {
                 StateChangedHandler state = StateChanged;
-                StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.MagicalShield, CurrentMShield, value);
+                StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.MagicalShield, _currentMShield, value);
                 if (state != null)
                 {
                     state.Invoke(this, sce);
                 }
 
-                CurrentMShield = sce.NewValue;
+                _currentMShield = sce.NewValue;
             }
         }
         public float CurrentPShield
