@@ -11,8 +11,9 @@ namespace Base2D.Utils
         /// <returns></returns>
         public static sd.Size GetImageSize(string path)
         {
-            sd.Image img = sd.Image.FromFile(path); 
-            return new sd.Size(img.Width, img.Height);
+            //sd.Image img = sd.Image.FromFile(path); 
+            //return new sd.Size(img.Width, img.Height);
+            return new sd.Size(0, 0);
         }
     }
 }
