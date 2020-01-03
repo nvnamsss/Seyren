@@ -8,7 +8,7 @@ namespace Base2D.System.ActionSystem
     {
         public ActionType Type { get; set; }
         public string Name { get; set; }
-        public Animation Animation { get; set; }
+        public Animator Animation { get; set; }
         abstract public bool BreakAction(BreakType breakType);
         abstract public bool DelayAction(DelayInfo delayInfo);
         public virtual void Play(string animation)
@@ -18,7 +18,7 @@ namespace Base2D.System.ActionSystem
 
         public virtual void PlayQueued(string animation, QueueMode queue, PlayMode play)
         {
-            Animation.PlayQueued(animation, queue, play);
+            // Animation.PlayQueued(animation, queue, play);
         }
     }
 }

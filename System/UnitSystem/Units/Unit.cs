@@ -179,7 +179,7 @@ namespace Base2D.System.UnitSystem.Units
                 return;
             }
 
-            Body?.AddForce(direction * Attribute.MovementSpeed);
+            Body.AddForce(direction * (Attribute.MovementSpeed + 0));
         }
 
         public void Look(Vector2 direction)
