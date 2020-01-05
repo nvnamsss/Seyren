@@ -33,6 +33,34 @@ namespace Base2D.System.UnitSystem.Units
             Actions = new List<Action>();
             Abilites = new Dictionary<int, AbilitySystem.Ability>();
             Abilites.Add(Base2D.Init.Abilities.Attack.Id, new Base2D.Init.Abilities.Attack(this));
+            #if UNITY_EDITOR
+            Attribute.Strength = Strength;
+            Attribute.Agility = Agility;
+            Attribute.Intelligent = Intelligent;
+
+            Attribute.AttackDamage = AttackDamage;
+            Attribute.MDamageAmplified = MDamageAmplified;
+
+            Attribute.MaxHp = MaxHp;
+            Attribute.MaxMp = MaxMp;
+            Attribute.HpRegen = HpRegen;
+            Attribute.MpRegen = MpRegen;
+            Attribute.ShieldRegen = ShieldRegen;
+            Attribute.MShieldRegen = MShieldRegen;
+            Attribute.PShield = PShield;
+            Attribute.HpRegenPercent = HpRegenPercent;
+            Attribute.MpRegenPercent = MpRegenPercent;
+
+            Attribute.Armor = Armor;
+            Attribute.MArmor = MArmor;
+
+            Attribute.AttackRange = AttackRange;
+            Attribute.CastRange = CastRange;
+
+            Attribute.MovementSpeed = MovementSpeed;
+            Attribute.AttackSpeed = AttackSpeed;
+            Attribute.JumpSpeed = JumpSpeed;
+            #endif
         }
 
         void Update()
@@ -179,7 +207,8 @@ namespace Base2D.System.UnitSystem.Units
                 return;
             }
 
-            Body.AddForce(direction * (Attribute.MovementSpeed + 0));
+            transform.Translate(direction * (Attribute.MovementSpeed + 0));
+            transform.Rotate(Utils.RotationUtils.AngleBetween(Vector3.zero, (Vector3)direction));
         }
 
         public void Look(Vector2 direction)

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Base2D.Utils
 {
-    public static class RotationUtil
+    public static class RotationUtils
     {
         /// <summary>
         /// Calculate rotation vector between 2 points in 3d space

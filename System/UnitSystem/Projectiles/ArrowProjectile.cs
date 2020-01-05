@@ -31,7 +31,7 @@ namespace Base2D.System.UnitSystem.Projectiles
             Vector2 velocity = new Vector2(Mathf.Cos(rad) * (float)_speedX, Mathf.Sin(rad) * (float)_speedY);
 
             Body.velocity = new Vector2(0, 0);
-            gameObject.transform.rotation = Quaternion.Euler(0 ,0, Utils.RotationUtil.AngleBetween(Body.transform.position, Body.transform.position + (Vector3)velocity).z);
+            gameObject.transform.rotation = Quaternion.Euler(0 ,0, Utils.RotationUtils.AngleBetween(Body.transform.position, Body.transform.position + (Vector3)velocity).z);
             //gameObject.transform.rotation = Quaternion.Euler(gameObject.transform.rotation.x, gameObject.transform.rotation.y, (float)Angle);
             Angle = Angle - ProjectileArc;
             if (Angle < 0)

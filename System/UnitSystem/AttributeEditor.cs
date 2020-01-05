@@ -15,7 +15,7 @@ namespace Base2D.System.UnitSystem.Units
         public float MDamageAmplified;
         public float MaxHp;
         public float MaxMp;
-        [Header("Health Settings")]
+        [Header("State Settings")]
         public float HpRegen;
         public float MpRegen;
         public float ShieldRegen;
@@ -25,8 +25,10 @@ namespace Base2D.System.UnitSystem.Units
         public float MpRegenPercent;
         public float Armor;
         public float MArmor;
+        [Header("State Settings")]
         public float AttackRange;
         public float CastRange;
+        [Header("Speed Settings")]
         public float MovementSpeed;
         public float AttackSpeed;
         public float JumpSpeed;

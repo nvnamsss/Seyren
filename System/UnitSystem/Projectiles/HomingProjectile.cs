@@ -29,8 +29,7 @@ namespace Base2D.System.UnitSystem.Projectiles
             }
             Body.velocity = new Vector2(0, 0);
             Vector3 velocity = (Target.transform.position - transform.position).normalized * (float)Speed;
-            Vector3 rotation = Utils.RotationUtil.AngleBetween(transform.position, Target.transform.position);
-
+            Vector3 rotation = Utils.RotationUtils.AngleBetween(transform.position, Target.transform.position);
             Body.AddForce(velocity, ForceMode2D.Impulse);
             transform.rotation = Quaternion.Euler(rotation.x, rotation.y, rotation.z);
         }
