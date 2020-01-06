@@ -199,16 +199,18 @@ namespace Base2D.System.UnitSystem.Units
             }
         }
 
-        public void Move(Vector2 direction)
+        public virtual void Move(Vector2 direction)
         {
             if ((UnitStatus | UnitStatus.Stun) == UnitStatus ||
                 (UnitStatus | UnitStatus.Knockback) == UnitStatus)
             {
                 return;
             }
-
-            transform.Translate(direction * (Attribute.MovementSpeed + 0));
-            transform.Rotate(Utils.RotationUtils.AngleBetween(Vector3.zero, (Vector3)direction));
+            
+            Vector2 translate = direction * Attribute.MovementSpeed;
+            translate.x = -Mathf.Abs(translate.x);
+            translate.y = -Mathf.Abs(translate.y);
+            transform.Translate(translate);
         }
 
         public void Look(Vector2 direction)
