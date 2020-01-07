@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Base2D.System.UISystem.Value;
 using Base2D.System.UnitSystem.Units;
 using UnityEngine;
 using UnityEngine.UI;
