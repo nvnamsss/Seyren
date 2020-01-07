@@ -28,6 +28,8 @@ namespace Base2D.System.UISystem.Map
                 }
             }
         }
+
+        
         GameObject FindInActiveObjectByName(string name)
 {
     Transform[] objs = Resources.FindObjectsOfTypeAll<Transform>() as Transform[];
