@@ -94,6 +94,11 @@ namespace Base2D.System.UnitSystem.Units
 
         public void Damage(Unit source, float damage, DamageType type, TriggerType trigger)
         {
+            if ((UnitStatus |= UnitStatus.Invulnerable) == UnitStatus)
+            {
+                return;
+            }
+            
             DamageInfo damageInfo = new DamageInfo(source, this);
 
             damageInfo.TriggerType = trigger;
