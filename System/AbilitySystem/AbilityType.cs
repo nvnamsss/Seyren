@@ -10,12 +10,12 @@ namespace Base2D.System.AbilitySystem
     public enum AbilityType
     {
         CannotBreak = 1,
-        CannotCancle = 2,
+        CannotCancel = 2,
         CannotGetKnockDown = 4,
         CanKnockDownWithSoonRelease = 8,
         CanKnockDown = 16,
-        CanCancleNoCoolDown = 32,
-        CanCancleWithCoolDown = 64,
+        CanCancelNoCoolDown = 32,
+        CanCancelWithCoolDown = 64,
         All = ~0,
     }
 }

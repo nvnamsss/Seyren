@@ -3,11 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Base2D.System.UnitSystem.Units
 {
-    public static class UnitInterface
+    public partial class Unit : MonoBehaviour, IObject, IAttribute
     {
+        public static Unit Create(string name, Vector3 location, Quaternion rotation, Sprite sprite)
+        {
+            GameObject go = CreateObject(name, location, rotation, sprite);
+            var unit = go.AddComponent<Unit>();
+
+            return unit;
+        }
+
+        protected static GameObject CreateObject(string name, Vector3 location, Quaternion rotation, Sprite sprite)
+        {
+            GameObject go = new GameObject(name);
+            SpriteRenderer render = go.AddComponent(typeof(SpriteRenderer)) as SpriteRenderer;
+            go.transform.position = location;
+            go.transform.rotation = rotation;
+            render.sprite = sprite;
+            return go;
+        }
+
         public static bool IsEnemy(Unit unit1, Unit unit2)
         {
             return true;

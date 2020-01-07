@@ -26,10 +26,11 @@ namespace Base2D.System.AbilitySystem
         bool IsCasting { get; set; }
 
         GameObject ObjectTarget { get; set; }
-        GameObject PointTarget { get; set; }
+        Vector3 PointTarget { get; set; }
 
         void UnlockAbility();
-        bool TryCastAbility(GameObject objectTarget, GameObject pointTarget);
+        bool TryCastAbility(GameObject target);
+        bool TryCastAbility(Vector3 target);
 
 
     }

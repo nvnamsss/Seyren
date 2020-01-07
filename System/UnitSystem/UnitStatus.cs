@@ -9,6 +9,7 @@ namespace Base2D.System.UnitSystem
     [Flags]
     public enum UnitStatus
     {
+        None,
         Slow,
         Knockback,
         Stun,

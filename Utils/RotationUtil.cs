@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Base2D.Utils
 {
-    public static class RotationUtil
+    public static class RotationUtils
     {
         /// <summary>
         /// Calculate rotation vector between 2 points in 3d space
@@ -24,6 +24,12 @@ namespace Base2D.Utils
             return rotation;
         }
 
+        public static Quaternion EulerAngleBetween(Vector3 from, Vector3 to)
+        {
+            Vector3 rotation = AngleBetween(from, to);
+
+            return Quaternion.Euler(rotation.x, rotation.y, rotation.z);
+        }
         /// <summary>
         /// Calculate angle between 2 point a and b in 2d space <br></br>
         /// example in xy, forward of a will be x and up of a will be y

@@ -8,7 +8,7 @@ using Base2D.System.ActionSystem.DelayAction;
 
 namespace Base2D.System.BuffSystem
 {
-    public class BuffableEntity : IAction
+    public class BuffableEntity : Action
     {
 
         //List of all current buffs
