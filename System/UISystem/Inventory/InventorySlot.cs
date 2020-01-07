@@ -37,6 +37,9 @@ public class InventorySlot : MonoBehaviour
             itemAmmountUI.enabled = true;
             itemAmmountUI.text = ammount.ToString();
         }
+        else{
+            itemAmmountUI.enabled = false;
+        }
     }
 
     public void clearItemFromSlot(){
