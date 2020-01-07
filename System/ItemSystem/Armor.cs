@@ -1,9 +1,13 @@
 ﻿using Base2D.System.DamageSystem;
-using Base2D.System.UnitSystem;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Base2D.System.ItemSystem
 {
-    public class Armor : Item
+    class Armor : Item
     {
         public string name { get;set; }
         public string description { get;set; }

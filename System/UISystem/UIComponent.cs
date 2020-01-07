@@ -1,12 +1,18 @@
-﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using UnityEngine;
 
-namespace Base2D.System.UISystem
+public class UIComponent : MonoBehaviour
 {
-    public class UIComponent
+    // Start is called before the first frame update
+    void Start()
     {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
     }
 }
