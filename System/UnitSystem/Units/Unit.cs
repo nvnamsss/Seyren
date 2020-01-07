@@ -1,4 +1,5 @@
 ﻿using Base2D.Init.DamageModification;
+using Base2D.System.TerrainSystem;
 using Base2D.System.ActionSystem;
 using Base2D.System.DamageSystem;
 using Base2D.System.DamageSystem.Critical;
@@ -30,10 +31,12 @@ namespace Base2D.System.UnitSystem.Units
         void Start()
         {
             Body = GetComponent<Rigidbody2D>();
+            Collider = GetComponent<Collider2D>();
             Actions = new List<Action>();
             Abilites = new Dictionary<int, AbilitySystem.Ability>();
             Abilites.Add(Base2D.Init.Abilities.Attack.Id, new Base2D.Init.Abilities.Attack(this));
-            #if UNITY_EDITOR
+            Abilites.Add(Base2D.Init.Abilities.DoubleJump.Id, new Base2D.Init.Abilities.DoubleJump(this));
+#if UNITY_EDITOR
             Attribute.Strength = Strength;
             Attribute.Agility = Agility;
             Attribute.Intelligent = Intelligent;
@@ -60,12 +63,14 @@ namespace Base2D.System.UnitSystem.Units
             Attribute.MovementSpeed = MovementSpeed;
             Attribute.AttackSpeed = AttackSpeed;
             Attribute.JumpSpeed = JumpSpeed;
-            #endif
+            _currentJump = JumpTimes;
+#endif
         }
 
         void Update()
         {
             Attribute.Update();
+            UpdateGrounding();
         }
 
         public bool IsEnemy(Unit unit)
@@ -192,10 +197,18 @@ namespace Base2D.System.UnitSystem.Units
 
         public void Jump()
         {
-            if (JumpTimes > 0)
+            if (_currentJump > 0)
             {
                 Body?.AddForce(Vector2.up * Attribute.JumpSpeed, ForceMode2D.Impulse);
-                JumpTimes -= 1;
+                _currentJump -= 1;
+            }
+            else
+            {
+                Debug.Log("Specific");
+                if (Abilites.ContainsKey(Base2D.Init.Abilities.DoubleJump.Id))
+                {
+                    Abilites[Base2D.Init.Abilities.DoubleJump.Id].Cast();
+                }
             }
         }
 
@@ -206,7 +219,7 @@ namespace Base2D.System.UnitSystem.Units
             {
                 return;
             }
-            
+
             Vector2 translate = direction * Attribute.MovementSpeed;
             translate.x = -Mathf.Abs(translate.x);
             translate.y = -Mathf.Abs(translate.y);
@@ -225,10 +238,26 @@ namespace Base2D.System.UnitSystem.Units
                 Vector2 location = transform.position;
                 Quaternion rotation = transform.rotation;
                 Abilites[Base2D.Init.Abilities.Attack.Id].Create(location, rotation);
-                
+
             }
+        }
+
+        private void UpdateGrounding()
+        {
+            if (Collider.IsTouchingLayers(Ground.Grass))
+            {
+                StandOn = GroundType.Grass;
+                StandOn = GroundType.Ground;
+                _currentJump = JumpTimes;
+            }
+            else if (Collider.IsTouchingLayers(Ground.Hard))
+            {
+                StandOn = GroundType.Ground;
+                _currentJump = JumpTimes;
+            }
+            else
+                StandOn = GroundType.Unknown;
         }
     }
 
 }
-       

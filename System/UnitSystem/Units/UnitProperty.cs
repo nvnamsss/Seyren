@@ -1,4 +1,5 @@
 ﻿using Base2D.Init.DamageModification;
+using Base2D.System.TerrainSystem;
 using Base2D.System.AbilitySystem;
 using Base2D.System.ActionSystem;
 using Base2D.System.DamageSystem;
@@ -37,13 +38,13 @@ namespace Base2D.System.UnitSystem.Units
         public Unit Owner { get; set; }
         public ModificationInfos Modification { get; set; }
         public IAttachable Attach { get; set; }
-        public Rigidbody2D Body { get; set; }
+
         public Attribute Attribute { get; set; }
         public Dictionary<string, Sprite> Sprites { get; set; }
         public Dictionary<int, Ability> Abilites { get; set; }
         public List<Action> Actions { get; set; }
         public float TimeScale;
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [Header("Attack Settings")]
         public float Strength;
         public float Agility;
@@ -69,7 +70,8 @@ namespace Base2D.System.UnitSystem.Units
         public float MovementSpeed;
         public float AttackSpeed;
         public float JumpSpeed;
-        #endif
+        public GroundType StandOn;
+#endif
         public UnitStatus UnitStatus
         {
             get
@@ -196,6 +198,8 @@ namespace Base2D.System.UnitSystem.Units
                 _jumpTimes = value;
             }
         }
+        public Rigidbody2D Body;
+        public Collider2D Collider;
         protected Unit _owner;
         [SerializeField]
         protected bool _isFly;
@@ -211,6 +215,8 @@ namespace Base2D.System.UnitSystem.Units
         protected float _currentMp;
         [SerializeField]
         protected int _jumpTimes;
+        [SerializeField]
+        protected int _currentJump;
         [SerializeField]
         protected UnitStatus _unitStatus;
     }

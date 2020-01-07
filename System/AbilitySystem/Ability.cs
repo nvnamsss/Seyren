@@ -68,6 +68,12 @@ namespace Base2D.System.AbilitySystem
                 return false;
             }
         }
+
+        public virtual bool Cast()
+        {
+            return false;
+        }
+
         public override bool BreakAction(BreakType breakType)
         {
             if (IsCasting)
