@@ -1,17 +1,22 @@
-﻿using Base2D.System.UnitSystem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Base2D.System.DamageSystem;
+using Base2D.System.UnitSystem;
+using UnityEngine;
 
 namespace Base2D.System.ItemSystem
 {
-    interface Item : IAttribute
+    public class Item : MonoBehaviour, IAttribute
     {
-        string name { get; set; }
-        string description { get; set; }
-        ItemType itemType { get; }
-        int ammount { get; set; }
+        public Attribute Attribute { get; set; }
+        public ModificationInfos Modification { get ;set; }
+        public string itemName;
+        public string description;
+        public ItemType itemType;
+
+        public Sprite icon;
+        public bool instaUse = false;
+
+        public virtual void Use(){
+
+        }
     }
 }
