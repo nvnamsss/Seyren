@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using UnityEngine;
 
 namespace Base2D.System.UISystem.Map
 {
-    class MapSegment
+    class MapSegment:MonoBehaviour      
     {
         public bool isActive = false;
+        public string mapName;
     }
 }
