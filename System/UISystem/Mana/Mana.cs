@@ -1,33 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Base2D.System.UnitSystem.Units;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using Base2D.System.UnitSystem.Units;
 
-public class mana : MonoBehaviour
+namespace Base2D.System.UISystem.Mana
 {
-    // Start is called before the first frame update
-
-    public Image manaImage;
-    public Hero character;
-
-    void Start()
+    class ManaBar
     {
-        character.Attribute.MaxMp = 100;
-        setMana();
-    }
+        private float maxMana;
+        private float currMana;
 
-    // Update is called once per frame
-    void Update()
-    {
-        updateMana();
-    }
+        public
+            void Init(Unit character)
+        {
+            maxMana = character.Attribute.MaxMp;
+            currMana = character.CurrentMp;
+        }
 
-    void setMana(){
-        manaImage.fillAmount = character.CurrentMp/character.Attribute.MaxMp;
-    }
-
-    void updateMana(){
-        manaImage.fillAmount = character.CurrentMp/character.Attribute.MaxMp;
+        void useSkill( int drain)
+        {
+           currMana = currMana - drain;
+        }
     }
 }
