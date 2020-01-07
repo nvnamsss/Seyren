@@ -28,14 +28,18 @@ namespace Base2D.System.UnitSystem.Units
             Modification.Critical.AddModification(Critical.CriticalStrike());
         }
 
-        void Start()
+        void Awake()
         {
             Body = GetComponent<Rigidbody2D>();
             Collider = GetComponent<Collider2D>();
-            Actions = new List<Action>();
+            Action = gameObject.AddComponent<Action>();
             Abilites = new Dictionary<int, AbilitySystem.Ability>();
             Abilites.Add(Base2D.Init.Abilities.Attack.Id, new Base2D.Init.Abilities.Attack(this));
             Abilites.Add(Base2D.Init.Abilities.DoubleJump.Id, new Base2D.Init.Abilities.DoubleJump(this));
+        }
+        void Start()
+        {
+
 #if UNITY_EDITOR
             Attribute.Strength = Strength;
             Attribute.Agility = Agility;
@@ -94,8 +98,9 @@ namespace Base2D.System.UnitSystem.Units
 
         public void Damage(Unit source, float damage, DamageType type, TriggerType trigger)
         {
-            if ((UnitStatus |= UnitStatus.Invulnerable) == UnitStatus)
+            if ((UnitStatus | UnitStatus.Invulnerable) == UnitStatus)
             {
+                Debug.Log("Invulnerable");
                 return;
             }
             
@@ -111,6 +116,7 @@ namespace Base2D.System.UnitSystem.Units
             damageInfo.DamageAmount = damage;
             damageInfo.DamageType = type;
             damageInfo.CalculateDamage();
+            Debug.Log("Calculated");
 
             UnityEngine.Debug.Log(damageInfo);
             if (CurrentShield > 0 || CurrentPShield > 0 || CurrentMShield > 0)
@@ -168,8 +174,17 @@ namespace Base2D.System.UnitSystem.Units
             CurrentHp = CurrentHp - damageInfo.DamageAmount;
             if (TakeDamage != null)
             {
+                Debug.Log("Trigger");
+
                 TakeDamage.Invoke(this, new TakeDamageEventArgs(damageInfo));
             }
+            else
+            {
+                Debug.Log("cant Trigger");
+
+            }
+            Debug.Log("Completed");
+
             //TakeDamage?.Invoke(this, new TakeDamageEventArgs(damageInfo));
         }
 
@@ -204,12 +219,14 @@ namespace Base2D.System.UnitSystem.Units
         {
             if (_currentJump > 0)
             {
-                Body?.AddForce(Vector2.up * Attribute.JumpSpeed, ForceMode2D.Impulse);
-                _currentJump -= 1;
+                if (StandOn == GroundType.Ground || StandOn == GroundType.Grass)
+                {
+                    Body.AddForce(Vector2.up * Attribute.JumpSpeed, ForceMode2D.Impulse);
+                    _currentJump -= 1;
+                }
             }
             else
             {
-                Debug.Log("Specific");
                 if (Abilites.ContainsKey(Base2D.Init.Abilities.DoubleJump.Id))
                 {
                     Abilites[Base2D.Init.Abilities.DoubleJump.Id].Cast();
@@ -252,7 +269,6 @@ namespace Base2D.System.UnitSystem.Units
             if (Collider.IsTouchingLayers(Ground.Grass))
             {
                 StandOn = GroundType.Grass;
-                StandOn = GroundType.Ground;
                 _currentJump = JumpTimes;
             }
             else if (Collider.IsTouchingLayers(Ground.Hard))

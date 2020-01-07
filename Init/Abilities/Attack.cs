@@ -56,25 +56,25 @@ namespace Base2D.Init.Abilities
             return arrow.gameObject;
         }
 
-        protected override void DoAnimation()
-        {
-        }
+        //protected override void DoAnimation()
+        //{
+        //}
 
-        protected override void DoCastAbility()
-        {
-        }
+        //protected override void DoCastAbility()
+        //{
+        //}
 
-        protected override void DoSomeThingIfCannotCasting()
-        {
-        }
+        //protected override void DoSomeThingIfCannotCasting()
+        //{
+        //}
 
-        protected override void Initialize()
-        {
-        }
+        //protected override void Initialize()
+        //{
+        //}
 
-        protected override bool SpecialBreakAbility()
-        {
-            return false;
-        }
+        //protected override bool SpecialBreakAbility()
+        //{
+        //    return false;
+        //}
     }
 }

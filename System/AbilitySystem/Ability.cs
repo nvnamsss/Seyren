@@ -10,7 +10,7 @@ using UnityEngine;
 namespace Base2D.System.AbilitySystem
 {
 
-    public abstract class Ability : Action, IAbility
+    public abstract class Ability : MonoBehaviour
     {
         public AbilityType AbilityType { get; set; }
 
@@ -34,73 +34,83 @@ namespace Base2D.System.AbilitySystem
 
         public abstract GameObject Create(Vector2 location, Quaternion rotation);
 
+
         public void UnlockAbility()
         {
             IsCastable = true;
         }
 
-        public bool TryCastAbility(GameObject ObjectTarget)
-        {
-            this.ObjectTarget = ObjectTarget;
-            if (IsCastable)
-            {
-                StartCoroutine(StartCasting(0, BaseCastingTime));
-                return true;
-            }
-            else
-            {
-                DoSomeThingIfCannotCasting();
-                return false;
-            }
-        }
+        //public bool TryCastAbility(GameObject ObjectTarget)
+        //{
+        //    this.ObjectTarget = ObjectTarget;
+        //    if (IsCastable)
+        //    {
+        //        StartCoroutine(StartCasting(0, BaseCastingTime));
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        DoSomeThingIfCannotCasting();
+        //        return false;
+        //    }
+        //}
 
-        public bool TryCastAbility(Vector3 point)
-        {
-            PointTarget = point;
-            if (IsCastable)
-            {
-                StartCoroutine(StartCasting(0, BaseCastingTime));
-                return true;
-            }
-            else
-            {
-                DoSomeThingIfCannotCasting();
-                return false;
-            }
-        }
+        //public bool TryCastAbility(Vector3 point)
+        //{
+        //    PointTarget = point;
+        //    if (IsCastable)
+        //    {
+        //        StartCoroutine(StartCasting(0, BaseCastingTime));
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        DoSomeThingIfCannotCasting();
+        //        return false;
+        //    }
+        //}
 
         public virtual bool Cast()
         {
             return false;
         }
 
-        public override bool BreakAction(BreakType breakType)
+        void Update()
         {
-            if (IsCasting)
-            {
-                switch (breakType)
-                {
-                    case BreakType.CancelBreak:
-                        return CancelBreakAbility();
-                    case BreakType.KnockDownBreak:
-                        return KnockDownBreakAbility();
-                    case BreakType.SpecialBreak:
-                        return SpecialBreakAbility();
-                }
-            }
-            return false;
+            TimeCoolDownLeft -= Time.deltaTime; ;
+            Debug.Log(TimeCoolDownLeft);
+        }
+        protected virtual void Tick(float time)
+        {
         }
 
+        //public override bool BreakAction(BreakType breakType)
+        //{
+        //    if (IsCasting)
+        //    {
+        //        switch (breakType)
+        //        {
+        //            case BreakType.CancelBreak:
+        //                return CancelBreakAbility();
+        //            case BreakType.KnockDownBreak:
+        //                return KnockDownBreakAbility();
+        //            case BreakType.SpecialBreak:
+        //                return SpecialBreakAbility();
+        //        }
+        //    }
+        //    return false;
+        //}
+
         //Default DelayAction
-        public override bool DelayAction(DelayInfo delayInfo)
-        {
-            if (IsCasting)
-            {
-                StopAllCoroutines();
-                StartCoroutine(StartCasting(delayInfo.DelayTime, TimeCastingLeft));
-            }
-            return true;
-        }
+        //public override bool DelayAction(DelayInfo delayInfo)
+        //{
+        //    if (IsCasting)
+        //    {
+        //        StopAllCoroutines();
+        //        StartCoroutine(StartCasting(delayInfo.DelayTime, TimeCastingLeft));
+        //    }
+        //    return true;
+        //}
 
         protected bool CancelBreakAbility()
         {
@@ -127,7 +137,7 @@ namespace Base2D.System.AbilitySystem
             switch (AbilityType)
             {
                 case AbilityType.CanKnockDownWithSoonRelease:
-                    DoCastAbility();
+                    //DoCastAbility();
                     StartCoroutine(StartCoolDown(0, BaseCoolDown));
                     return true;
                 case AbilityType.CanKnockDown:
@@ -140,29 +150,29 @@ namespace Base2D.System.AbilitySystem
             return false;
         }
 
-        protected abstract bool SpecialBreakAbility();
+        //protected abstract bool SpecialBreakAbility();
 
         /// <summary>
         /// Init Ability Unit
         /// </summary>
 
-        protected abstract void Initialize();
+        //protected abstract void Initialize();
 
         /// <summary>
         /// Change Unit Animation
-        protected abstract void DoAnimation();
+        //protected abstract void DoAnimation();
         
         /// <summary>
         /// Main Cast Ability, call when Ability is release
         /// </summary>
-        protected abstract void DoCastAbility();
+        //protected abstract void DoCastAbility();
 
         /// <summary>
         /// Làm gì đó nếu không thể Cast Skill
         /// </summary>
-        protected abstract void DoSomeThingIfCannotCasting();
+    
         
-        IEnumerator StartCoolDown(float timeDelay, float timeCoolDown)
+        protected IEnumerator StartCoolDown(float timeDelay, float timeCoolDown)
         {
             yield return new WaitForSeconds(timeDelay);
             IsCastable = false;
@@ -171,8 +181,8 @@ namespace Base2D.System.AbilitySystem
 
             while (TimeCoolDownLeft >= 0)
             {
-                yield return new WaitForSeconds(TimeUpdate);
-                TimeCoolDownLeft -= TimeUpdate;
+                yield return new WaitForSeconds(timeDelay);
+                TimeCoolDownLeft -= timeDelay;
             }
             IsCastable = true;
         }
@@ -186,15 +196,15 @@ namespace Base2D.System.AbilitySystem
 
             while (TimeCastingLeft >= 0)
             {
-                yield return new WaitForSeconds(TimeUpdate);
-                TimeCastingLeft -= TimeUpdate;
+                yield return new WaitForSeconds(timeDelay);
+                TimeCastingLeft -= timeDelay;
             }
 
             //Check if cast still allow
             if (IsCasting)
             {
                 IsCasting = false;
-                DoCastAbility();
+                //DoCastAbility();
                 StartCoroutine(StartCoolDown(0, BaseCoolDown));
             }
         }

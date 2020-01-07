@@ -42,7 +42,7 @@ namespace Base2D.System.UnitSystem.Units
         public Attribute Attribute { get; set; }
         public Dictionary<string, Sprite> Sprites { get; set; }
         public Dictionary<int, Ability> Abilites { get; set; }
-        public List<Action> Actions { get; set; }
+        public Action Action { get; set; }
         public float TimeScale;
 #if UNITY_EDITOR
         [Header("Attack Settings")]

@@ -14,27 +14,33 @@ namespace Base2D.Init.Abilities
     {
         public static readonly int Id = 0x74857701;
         public Unit unit;
-        public Sprite Sprite;
+        public GameObject Effect;
         public ArrowProjectile Projectile;
         public DoubleJump(Unit u)
         {
-            Sprite = ProjectileCollection.Cut;
+            Effect = ProjectileCollection.Cyclone;
             unit = u;
             BaseCoolDown = 1.0f;
         }
 
         public override bool Cast()
         {
-            Debug.Log("Cast Double jump");
             if (TimeCoolDownLeft > 0)
             {
                 return false;
             }
 
-            Vector2 force = new Vector2(0, 1.0f * unit.JumpSpeed);
+            Vector2 force = new Vector2(0, 0.5f * unit.JumpSpeed);
             unit.Body.AddForce(force, ForceMode2D.Impulse);
-
+            GameObject effect = Instantiate<GameObject>(Effect, unit.transform.position, unit.transform.rotation);
+            Destroy(effect, 0.5f);
+            TimeCoolDownLeft = BaseCoolDown;
+            unit.StartCoroutine(StartCoolDown(Time.deltaTime, 1));
             return true;
+        }
+
+        protected override void Tick(float time)
+        {
         }
         public override GameObject Create(Vector2 location, Quaternion rotation)
         {
@@ -42,25 +48,25 @@ namespace Base2D.Init.Abilities
             return gameObject;
         }
 
-        protected override void DoAnimation()
-        {
-        }
+        //protected override void DoAnimation()
+        //{
+        //}
 
-        protected override void DoCastAbility()
-        {
-        }
+        //protected override void DoCastAbility()
+        //{
+        //}
 
-        protected override void DoSomeThingIfCannotCasting()
-        {
-        }
+        //protected override void DoSomeThingIfCannotCasting()
+        //{
+        //}
 
-        protected override void Initialize()
-        {
-        }
+        //protected override void Initialize()
+        //{
+        //}
 
-        protected override bool SpecialBreakAbility()
-        {
-            return false;
-        }
+        //protected override bool SpecialBreakAbility()
+        //{
+        //    return false;
+        //}
     }
 }

@@ -46,5 +46,10 @@ namespace Base2D.System.BuffSystem
         {
             throw new global::System.NotImplementedException();
         }
+
+        protected override void Tick(float time)
+        {
+            throw new global::System.NotImplementedException();
+        }
     }
 }
