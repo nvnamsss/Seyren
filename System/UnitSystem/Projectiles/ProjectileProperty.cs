@@ -45,11 +45,10 @@ namespace Base2D.System.UnitSystem.Projectiles
                 _timeExpired = value;
                 if (_timeExpired < 0)
                 {
-                    Debug.Log("Time expired");
                     Active = false;
                     if (animator != null && animator.isInitialized)
                     {
-                        animator.SetBool("expired", true);
+                        animator.SetBool("Death", true);
                     }
                     TimeExpired?.Invoke(this);
                 }

@@ -8,7 +8,7 @@ namespace Base2D.System.UnitSystem.Projectiles
 {
     public partial class Projectile : MonoBehaviour, IAttribute
     {
-        public Projectile()
+        protected Projectile()
         {
             MaxHit = 1;
             HitDelay = 1;
@@ -40,8 +40,9 @@ namespace Base2D.System.UnitSystem.Projectiles
 
             if (_hit >= MaxHit)
             {
+                animator.SetBool("Death", true);
                 HitExceed?.Invoke(this);
-                Destroy(gameObject);               
+                Destroy(gameObject);
             }
 
             _hit = _hit + 1;
@@ -74,8 +75,7 @@ namespace Base2D.System.UnitSystem.Projectiles
 
         }
 
-        // Start is called before the first frame update
-        protected virtual void Start()
+        protected virtual void Awake()
         {
             Body = GetComponent<Rigidbody2D>();
             Collider = GetComponent<BoxCollider2D>();
@@ -84,6 +84,10 @@ namespace Base2D.System.UnitSystem.Projectiles
             {
                 Destroy(sender.gameObject);
             };
+        }
+        // Start is called before the first frame update
+        protected virtual void Start()
+        {
         }
 
         // Update is called once per frame

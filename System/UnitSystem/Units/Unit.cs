@@ -116,7 +116,6 @@ namespace Base2D.System.UnitSystem.Units
             damageInfo.DamageAmount = damage;
             damageInfo.DamageType = type;
             damageInfo.CalculateDamage();
-            Debug.Log("Calculated");
 
             UnityEngine.Debug.Log(damageInfo);
             if (CurrentShield > 0 || CurrentPShield > 0 || CurrentMShield > 0)
@@ -174,16 +173,9 @@ namespace Base2D.System.UnitSystem.Units
             CurrentHp = CurrentHp - damageInfo.DamageAmount;
             if (TakeDamage != null)
             {
-                Debug.Log("Trigger");
 
                 TakeDamage.Invoke(this, new TakeDamageEventArgs(damageInfo));
             }
-            else
-            {
-                Debug.Log("cant Trigger");
-
-            }
-            Debug.Log("Completed");
 
             //TakeDamage?.Invoke(this, new TakeDamageEventArgs(damageInfo));
         }
@@ -261,6 +253,18 @@ namespace Base2D.System.UnitSystem.Units
                 Quaternion rotation = transform.rotation;
                 Abilites[Base2D.Init.Abilities.Attack.Id].Create(location, rotation);
 
+            }
+        }
+
+        public void Spell(int spellId)
+        {
+            if (Abilites.ContainsKey(spellId))
+            {
+                Abilites[spellId].Cast();
+            }
+            else
+            {
+                Debug.LogWarning("[Unit] - Unit " + name + " do not contain " + spellId + " ability");
             }
         }
 

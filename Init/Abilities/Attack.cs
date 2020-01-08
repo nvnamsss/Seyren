@@ -56,6 +56,11 @@ namespace Base2D.Init.Abilities
             return arrow.gameObject;
         }
 
+        protected override void DoCastAbility()
+        {
+            throw new NotImplementedException();
+        }
+
         //protected override void DoAnimation()
         //{
         //}

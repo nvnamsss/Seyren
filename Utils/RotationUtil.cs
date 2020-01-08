@@ -30,6 +30,11 @@ namespace Base2D.Utils
 
             return Quaternion.Euler(rotation.x, rotation.y, rotation.z);
         }
+
+        public static Vector3 GetDirection(Quaternion quaternion)
+        {
+            return quaternion * Vector3.forward;
+        }
         /// <summary>
         /// Calculate angle between 2 point a and b in 2d space <br></br>
         /// example in xy, forward of a will be x and up of a will be y

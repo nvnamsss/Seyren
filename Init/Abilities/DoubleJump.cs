@@ -15,7 +15,6 @@ namespace Base2D.Init.Abilities
         public static readonly int Id = 0x74857701;
         public Unit unit;
         public GameObject Effect;
-        public ArrowProjectile Projectile;
         public DoubleJump(Unit u)
         {
             Effect = ProjectileCollection.Cyclone;
@@ -46,6 +45,11 @@ namespace Base2D.Init.Abilities
         {
 
             return gameObject;
+        }
+
+        protected override void DoCastAbility()
+        {
+            throw new NotImplementedException();
         }
 
         //protected override void DoAnimation()

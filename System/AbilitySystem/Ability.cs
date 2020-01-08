@@ -6,6 +6,7 @@ using Base2D.System.BuffSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Base2D.System.UnitSystem.Units;
 
 namespace Base2D.System.AbilitySystem
 {
@@ -71,6 +72,11 @@ namespace Base2D.System.AbilitySystem
         //}
 
         public virtual bool Cast()
+        {
+            return false;
+        }
+
+        public virtual bool Cast(Unit caster)
         {
             return false;
         }
@@ -161,17 +167,17 @@ namespace Base2D.System.AbilitySystem
         /// <summary>
         /// Change Unit Animation
         //protected abstract void DoAnimation();
-        
+
         /// <summary>
         /// Main Cast Ability, call when Ability is release
         /// </summary>
-        //protected abstract void DoCastAbility();
+        protected abstract void DoCastAbility();
 
         /// <summary>
         /// Làm gì đó nếu không thể Cast Skill
         /// </summary>
-    
-        
+
+
         protected IEnumerator StartCoolDown(float timeDelay, float timeCoolDown)
         {
             yield return new WaitForSeconds(timeDelay);
@@ -204,7 +210,7 @@ namespace Base2D.System.AbilitySystem
             if (IsCasting)
             {
                 IsCasting = false;
-                //DoCastAbility();
+                DoCastAbility();
                 StartCoroutine(StartCoolDown(0, BaseCoolDown));
             }
         }
