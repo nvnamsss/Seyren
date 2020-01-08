@@ -1,6 +1,6 @@
 ﻿using Base2D.System.ItemSystem;
-using Base2D.System.UISystem.Inventory;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class InventorySlot : MonoBehaviour
@@ -22,6 +22,12 @@ public class InventorySlot : MonoBehaviour
     public Button yesButton;
 
     public Button noButton;
+
+    public GameObject tooltip;
+
+    public Text itemName;
+
+    public Text description;
 
     public void addItemToSlot(Item newItem, int ammountItem){
         item = newItem;
@@ -69,7 +75,7 @@ public class InventorySlot : MonoBehaviour
     public void onConfirmDialog(){
         yesButton.onClick.RemoveAllListeners();
         noButton.onClick.RemoveAllListeners();
-        Base2D.System.UISystem.Inventory.UIInventory.instance.discardOrUse(item);
+        InventoryManager.instance.discardOrUse(item);
         ConfirmDiscardDialog.SetActive(false);
     }
 
@@ -78,4 +84,19 @@ public class InventorySlot : MonoBehaviour
         noButton.onClick.RemoveAllListeners();
         ConfirmDiscardDialog.SetActive(false);
     }
+
+    public void OnPointerEnter() 
+    {
+        Debug.Log("MouseOver");
+        if(item != null){
+            tooltip.SetActive(true);
+            itemName.text = item.itemName;
+            description.text = item.description;
+
+        }
+    }
+
+    public void OnPointerExit()  {
+        tooltip.SetActive(false);
+    }  
 }

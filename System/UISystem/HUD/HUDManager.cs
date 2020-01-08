@@ -5,27 +5,41 @@ using Base2D.System.UnitSystem.Units;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Health : MonoBehaviour
+public class HUDManager : MonoBehaviour
 {
-    // Start is called before the first frame update
 
-    public Hero character;
+    public static HUDManager instance;
+
+    void Awake() {
+        if (instance == null){
+            instance = this;
+        }
+    }
+
+    Hero character;
     public Image heart;
     public Image heartEmpty;
 
-    void Start()
-    {
-        character.Attribute.MaxHp = 5;
-        setHealth();
-    }
+    public Image manaImage;
 
-    // Update is called once per frame
-    void Update()
-    {
+    void Start()
+    {  
+        character = HeroManager.instance.character;
+        setHealth();
+        setMana();
         
     }
 
-    void setHealth(){
+    // Update is called once per frame
+    void setMana(){
+        manaImage.fillAmount = character.CurrentMp/character.Attribute.MaxMp;
+    }
+
+    public void updateMana(){
+        manaImage.fillAmount = character.CurrentMp/character.Attribute.MaxMp;
+    }
+
+    public void setHealth(){
 Debug.Log("setHealth");
         if(character.Attribute.MaxHp > 5){
             for (int i =6; i <= character.Attribute.MaxHp;i++){
@@ -35,11 +49,13 @@ Debug.Log("setHealth");
                 newHeart.name= "heart-full"+i;
                 newEmptyHeart.name="heart-empty"+i;            
 
-                newHeart.transform.parent = GameObject.Find("heart-full").transform;
-                newEmptyHeart.transform.parent = GameObject.Find("heart-empty").transform;
+                newHeart.transform.SetParent(GameObject.Find("heart-full").transform);
+                newEmptyHeart.transform.SetParent(GameObject.Find("heart-empty").transform);
 
                 newHeart.rectTransform.anchoredPosition = new Vector2(-222f+(45*(i-1)), 157f);
                 newEmptyHeart.rectTransform.anchoredPosition = new Vector2(-222f+(45*(i-1)), 157f);
+                newEmptyHeart.rectTransform.localScale = new Vector3(1,1,1);
+                newHeart.rectTransform.localScale = new Vector3(1,1,1);
             }
         }
 
@@ -50,7 +66,8 @@ Debug.Log("setHealth");
         }
     }
 
-    void increaseMaxHealth(){
+    public void increaseMaxHealth(){
+        character.CurrentHp = character.Attribute.MaxHp;
         var newHeart = Instantiate(heart);
         var newEmptyHeart = Instantiate(heartEmpty);
 
@@ -62,6 +79,9 @@ Debug.Log("setHealth");
 
         newHeart.rectTransform.anchoredPosition = new Vector2(-222f+(45*(character.Attribute.MaxHp-1)), 157f);
         newEmptyHeart.rectTransform.anchoredPosition = new Vector2(-222f+(45*(character.Attribute.MaxHp-1)), 157f);
+        newHeart.rectTransform.localScale = new Vector3(1,1,1);
+        newEmptyHeart.rectTransform.anchoredPosition = new Vector2(-222f+(45*(character.Attribute.MaxHp-1)), 157f);
+        newEmptyHeart.rectTransform.localScale = new Vector3(1,1,1);
 
         for (int i = 1;i<= character.Attribute.MaxHp;i++){
             FindInActiveObjectByName("heart-full"+i).SetActive(true);
@@ -72,7 +92,7 @@ Debug.Log("setHealth");
         GameObject.Find("heart-full"+(character.CurrentHp+1)).SetActive(false);
     }
 
-    void heal(){
+    public void heal(){
         for (int i = 1;i<= character.CurrentHp;i++){
             FindInActiveObjectByName("heart-full"+i).SetActive(true);
         }

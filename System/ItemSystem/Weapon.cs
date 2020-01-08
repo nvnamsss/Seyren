@@ -7,5 +7,17 @@ namespace Base2D.System.ItemSystem
         void OnAwake(){
             this.itemType = ItemType.Weapon;
         }
+
+        public WeaponType weaponType;
+
+        public override void Use(){
+            EquipmentManager.instance.Equip(this);
+            RemoveFromInventory(this);
+        }
+    }
+
+    public enum WeaponType{
+        Sword,
+        Spear
     }
 }

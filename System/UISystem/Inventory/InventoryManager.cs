@@ -1,17 +1,12 @@
-﻿using Base2D.System.ItemSystem;
-using System;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Base2D.System.ItemSystem;
 using UnityEngine;
 
-namespace Base2D.System.UISystem.Inventory
+public class InventoryManager : MonoBehaviour
 {
-    class UIInventory: MonoBehaviour
-    {
-        #region Singleton
-        public static UIInventory instance;
+    #region Singleton
+        public static InventoryManager instance;
         void Awake() {
 
             if(instance!= null)
@@ -22,7 +17,7 @@ namespace Base2D.System.UISystem.Inventory
 
             instance = this;
         }
-        #endregion Singleton
+        #endregion
 
         public int space = 20;
 
@@ -49,6 +44,10 @@ namespace Base2D.System.UISystem.Inventory
                     return true;                   
                 }              
             }
+            else{
+                item.Use();
+                return true;
+            }
 
             return false;
         }
@@ -74,17 +73,4 @@ namespace Base2D.System.UISystem.Inventory
                 onItemChangedCallBack.Invoke();
             }
         }
-
-        public void sortInventory()
-        {
-            items = items.OrderBy(i => i.itemType).ToList();
-        }
-
-        public static void Swap<Item>(List<Item> list, int indexA, int indexB)
-        {
-            Item tmp = list[indexA];
-            list[indexA] = list[indexB];
-            list[indexB] = tmp;
-        }
-    }
 }
