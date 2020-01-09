@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Base2D.System.UISystem.Value;
+using Base2D.System.UnitSystem.EventData;
 using Base2D.System.UnitSystem.Units;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,7 +25,9 @@ public class HUDManager : MonoBehaviour
 
     void Start()
     {  
-        character = HeroManager.instance.character;       
+        character = HeroManager.instance.character;   
+
+        character.StateChanged += UpdateHealthNMana;
     }
 
     // Update is called once per frame
@@ -86,7 +89,11 @@ Debug.Log("setHealth");
     }
 
     void takeDamage(){
-        GameObject.Find("heart-full"+(character.CurrentHp+1)).SetActive(false);
+        for(int i=1; i <= character.Attribute.MaxHp;i++){
+            if(i > character.CurrentHp){
+                FindInActiveObjectByName("heart-full"+i).SetActive(false);
+            }
+        }
     }
 
     public void heal(){
@@ -110,4 +117,9 @@ Debug.Log("setHealth");
     }
     return null;
 }
+
+    public void UpdateHealthNMana(Unit character, StateChangedEventArgs e){
+        takeDamage();
+        updateMana();
+    }
 }
