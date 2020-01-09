@@ -25,7 +25,6 @@ namespace Base2D.System.UnitSystem.Units
             CurrentShield = 22;
             JumpTimes = 1;
             Modification = new ModificationInfos();
-            Modification.Critical.AddModification(Critical.CriticalStrike());
         }
 
         void Awake()
@@ -34,8 +33,6 @@ namespace Base2D.System.UnitSystem.Units
             Collider = GetComponent<Collider2D>();
             Action = gameObject.AddComponent<Action>();
             Abilites = new Dictionary<int, AbilitySystem.Ability>();
-            Abilites.Add(Base2D.Init.Abilities.Attack.Id, new Base2D.Init.Abilities.Attack(this));
-            Abilites.Add(Base2D.Init.Abilities.DoubleJump.Id, new Base2D.Init.Abilities.DoubleJump(this));
         }
         void Start()
         {
@@ -67,8 +64,12 @@ namespace Base2D.System.UnitSystem.Units
             Attribute.MovementSpeed = MovementSpeed;
             Attribute.AttackSpeed = AttackSpeed;
             Attribute.JumpSpeed = JumpSpeed;
-            _currentJump = JumpTimes;
 #endif
+            _currentJump = JumpTimes;
+            _currentHp = Attribute.MaxHp;
+            _currentMp = Attribute.MaxMp;
+            _currentPShield = Attribute.PShield;
+            _currentMShield = Attribute.MShield;
         }
 
         void Update()

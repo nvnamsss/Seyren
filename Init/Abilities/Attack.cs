@@ -15,45 +15,38 @@ namespace Base2D.Init.Abilities
         public static readonly int Id = 0x64848401;
         public Unit unit;
         public Sprite Sprite;
-        public ArrowProjectile Projectile;
         public Attack(Unit u)
         {
-            Sprite = ProjectileCollection.Cut;
             unit = u;
-            Projectile = ArrowProjectile.Create("attack", Vector3.zero,
-                Quaternion.Euler(0, 0, 0),
-                ProjectileCollection.Cut,
-                ProjectileCollection.CutController,
-                1, 1, 10000f);
-            Projectile.IsPenetrate = true;
         }
 
         public override GameObject Create(Vector2 location, Quaternion rotation)
         {
-            var arrow = ArrowProjectile.Create("attack", location,
-                rotation,
-                ProjectileCollection.Cut,
-                ProjectileCollection.CutController,
-                1, 1, 0.1f);
-            arrow.TimeExpire = 10000;
-            arrow.MaxHit = 100;
-            arrow.Owner = unit;
+            //var arrow = ArrowProjectile.Create("attack", location,
+            //    rotation,
+            //    sprite\,
+            //    ProjectileCollection.CutController,
+            //    1, 1, 0.1f);
+            //arrow.TimeExpire = 10000;
+            //arrow.MaxHit = 100;
+            //arrow.Owner = unit;
 
-            arrow.OnHit += (sender, e) =>
-            {
-                Unit u = e.GetComponent<Unit>();
-                if (u != null && unit.IsEnemy(u))
-                {
-                    Debug.Log("Damage");
-                    u.Damage(arrow.Owner, System.DamageSystem.DamageType.Physical);
-                }
-                else
-                {
-                    Debug.Log("Cannot damage");
-                }
-            };
+            //arrow.OnHit += (sender, e) =>
+            //{
+            //    Unit u = e.GetComponent<Unit>();
+            //    if (u != null && unit.IsEnemy(u))
+            //    {
+            //        Debug.Log("Damage");
+            //        u.Damage(arrow.Owner, System.DamageSystem.DamageType.Physical);
+            //    }
+            //    else
+            //    {
+            //        Debug.Log("Cannot damage");
+            //    }
+            //};
 
-            return arrow.gameObject;
+            //return arrow.gameObject;
+            return null;
         }
 
         protected override void DoCastAbility()

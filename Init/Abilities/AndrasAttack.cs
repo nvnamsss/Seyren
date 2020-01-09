@@ -28,6 +28,7 @@ namespace Base2D.Init.Abilities
                 return false;
             }
 
+            IsCasting = true;
             unit.Action.Animator.SetBool("Attack", true);
             TimeCastingLeft = BaseCastingTime;
             unit.StartCoroutine(Casting(Time.deltaTime, BaseCastingTime));
@@ -56,13 +57,13 @@ namespace Base2D.Init.Abilities
 
         public override GameObject Create(Vector2 location, Quaternion rotation)
         {
-            MissileProjectile missile = MissileProjectile.Create("missile",
-            location,
-            rotation,
-            sprite,
-            controller,
-            0,
-            2);
+            MissileProjectile missile = MissileProjectile.Create("AndrasAttack",
+                location,
+                rotation,
+                sprite,
+                controller,
+                1,
+                20);
 
             missile.MaxHit = 100;
             missile.Owner = unit;

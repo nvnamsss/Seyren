@@ -22,6 +22,7 @@ namespace Base2D.System.UnitSystem
         public float ShieldRegen { get; set; }
         public float MShieldRegen { get; set; }
         public float PShield { get; set; }
+        public float MShield { get; set; }
         public float HpRegenPercent { get; set; }
         public float MpRegenPercent { get; set; }
         public float Armor { get; set; }
