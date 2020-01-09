@@ -17,28 +17,32 @@ namespace Base2D.Init.Abilities
         {
             unit = u;
             BaseCoolDown = unit.AttackSpeed;
-            BaseCastingTime = 0.2f;
-            sprite = ProjectileCollection.AncientEnergy;
+            BaseCastingTime = 0.4f;
             controller = ProjectileCollection.AncientEnergyController;
         }
         public override bool Cast()
         {
-            if (TimeCoolDownLeft > 0 || IsCasting)
+            if (TimeCoolDownLeft > 0 ||
+                IsCasting ||
+                unit.Action.Type == System.ActionSystem.ActionType.CastAbility ||
+                unit.Action.Type == System.ActionSystem.ActionType.Attack)
             {
                 return false;
             }
 
-            IsCasting = true;
+            unit.Action.Type = System.ActionSystem.ActionType.CastAbility;
+
             unit.Action.Animator.SetBool("Attack", true);
             TimeCastingLeft = BaseCastingTime;
             unit.StartCoroutine(Casting(Time.deltaTime, BaseCastingTime));
             return true;
         }
 
+
         IEnumerator Casting(float timeDelay, float timeCasting)
         {
-            yield return new WaitForSeconds(timeDelay);
             IsCasting = true;
+            yield return new WaitForSeconds(timeDelay);
             TimeCastingLeft = timeCasting;
 
             while (TimeCastingLeft >= 0)
@@ -48,7 +52,7 @@ namespace Base2D.Init.Abilities
             }
 
             if (IsCasting)
-            {
+            { 
                 IsCasting = false;
                 DoCastAbility();
             }
@@ -63,8 +67,8 @@ namespace Base2D.Init.Abilities
                 sprite,
                 controller,
                 1,
-                20);
-
+                0.5f);
+            missile.transform.localScale = new Vector3(3, 3, 1);
             missile.MaxHit = 100;
             missile.Owner = unit;
             missile.OnHit += (sender, e) =>
@@ -86,10 +90,17 @@ namespace Base2D.Init.Abilities
 
         protected override void DoCastAbility()
         {
-            IsCasting = false;
             unit.Action.Animator.SetBool("Attack", false);
 
-            Create(unit.transform.position, unit.transform.rotation);
+            Vector2 location = unit.transform.position;
+            Quaternion rotation = unit.transform.rotation;
+
+            location = location + (Vector2)(rotation * Vector2.left * 3);
+            location.y -= 1;
+
+            Create(location, rotation);
+
+            unit.Action.Type = System.ActionSystem.ActionType.None;
             TimeCoolDownLeft = BaseCoolDown;
             unit.StartCoroutine(StartCoolDown(Time.deltaTime, BaseCoolDown));
         }
