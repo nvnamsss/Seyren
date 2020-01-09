@@ -26,8 +26,6 @@ public class HUDManager : MonoBehaviour
     void Start()
     {  
         character = HeroManager.instance.character;   
-
-        character.StateChanged += UpdateHealthNMana;
     }
 
     // Update is called once per frame
@@ -35,12 +33,12 @@ public class HUDManager : MonoBehaviour
         manaImage.fillAmount = character.CurrentMp/character.Attribute.MaxMp;
     }
 
-    public void updateMana(){
-        manaImage.fillAmount = character.CurrentMp/character.Attribute.MaxMp;
+    public void updateMana(float newValue){
+        manaImage.fillAmount = newValue/character.Attribute.MaxMp;
     }
 
     public void setHealth(){
-Debug.Log("setHealth");
+        Debug.Log("setHealth");
         if(character.Attribute.MaxHp > 5){
             for (int i =6; i <= character.Attribute.MaxHp;i++){
                 var newHeart = Instantiate(heart);
@@ -88,9 +86,9 @@ Debug.Log("setHealth");
         }
     }
 
-    void takeDamage(){
+    void takeDamage(float newValue){
         for(int i=1; i <= character.Attribute.MaxHp;i++){
-            if(i > character.CurrentHp){
+            if(i > newValue){
                 FindInActiveObjectByName("heart-full"+i).SetActive(false);
             }
         }
@@ -119,7 +117,12 @@ Debug.Log("setHealth");
 }
 
     public void UpdateHealthNMana(Unit character, StateChangedEventArgs e){
-        takeDamage();
-        updateMana();
+        if(e.State == Base2D.System.UnitSystem.UnitState.Hp)
+        {
+            takeDamage(e.NewValue);
+        }
+        if(e.State == Base2D.System.UnitSystem.UnitState.Mp){
+            updateMana(e.NewValue);
+        }
     }
 }

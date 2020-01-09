@@ -74,7 +74,7 @@ namespace Base2D.System.UnitSystem.Units
 
             if(this.GetType() == typeof(Hero)){
                 HUDManager.instance.setHealth();
-                HUDManager.instance.updateMana();
+                HUDManager.instance.updateMana(CurrentMp);
                 StatusUIManager.instance.setStats();
             }
         }
