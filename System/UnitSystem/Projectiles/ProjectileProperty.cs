@@ -46,10 +46,10 @@ namespace Base2D.System.UnitSystem.Projectiles
                 if (_timeExpired < 0)
                 {
                     Active = false;
-                    if (animator != null && animator.isInitialized)
-                    {
-                        animator.SetBool("Death", true);
-                    }
+                    //if (animator != null && animator.isInitialized)
+                    //{
+                    //    animator.SetBool("Death", true);
+                    //}
                     TimeExpired?.Invoke(this);
                 }
             }

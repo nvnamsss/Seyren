@@ -30,7 +30,6 @@ namespace Base2D.System.UnitSystem.Projectiles
 
             if (animator != null && animator.isInitialized)
             {
-                animator.SetBool("hit", true);
             }
 
             if (_hitDelay > 0)
@@ -40,7 +39,6 @@ namespace Base2D.System.UnitSystem.Projectiles
 
             if (_hit >= MaxHit)
             {
-                animator.SetBool("Death", true);
                 HitExceed?.Invoke(this);
                 Destroy(gameObject);
             }
@@ -52,10 +50,7 @@ namespace Base2D.System.UnitSystem.Projectiles
             {
                 Collider.isTrigger = true;
             }
-            else
-            {
-
-            }
+            Debug.Log("God");
 
             OnHit?.Invoke(this, collider);
         }

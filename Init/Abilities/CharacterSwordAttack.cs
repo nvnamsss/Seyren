@@ -7,19 +7,19 @@ using UnityEngine;
 
 namespace Base2D.Init.Abilities
 {
-    public class AndrasAttack : Ability
+    public class CharacterSwordAttack : Ability
     {
-        public static readonly int Id = 0x65686501;
-        private Unit unit;
+        public static readonly int Id = 0x67658401;
+        public Unit unit;
         private Sprite sprite;
         private RuntimeAnimatorController controller;
-        public AndrasAttack(Unit u)
+        public CharacterSwordAttack(Unit u)
         {
             unit = u;
             BaseCoolDown = unit.AttackSpeed;
-            BaseCastingTime = 0.4f;
-            controller = ProjectileCollection.AncientEnergyController;
+            BaseCastingTime = 0.25f;
         }
+
         public override bool Cast()
         {
             if (TimeCoolDownLeft > 0 ||
@@ -30,45 +30,22 @@ namespace Base2D.Init.Abilities
                 return false;
             }
 
-            unit.Action.Type = System.ActionSystem.ActionType.CastAbility;
-
-            unit.Action.Animator.SetBool("Attack", true);
-            TimeCastingLeft = BaseCastingTime;
+            unit.Action.Type = System.ActionSystem.ActionType.Attack;
+            unit.Action.Animator.SetTrigger("atk1");
             unit.StartCoroutine(Casting(Time.deltaTime, BaseCastingTime));
+
             return true;
         }
-
-
-        IEnumerator Casting(float timeDelay, float timeCasting)
-        {
-            IsCasting = true;
-            yield return new WaitForSeconds(timeDelay);
-            TimeCastingLeft = timeCasting - timeDelay;
-
-            while (TimeCastingLeft >= 0)
-            {
-                yield return new WaitForSeconds(timeDelay);
-                TimeCastingLeft -= timeDelay;
-            }
-
-            if (IsCasting)
-            { 
-                IsCasting = false;
-                DoCastAbility();
-            }
-
-        }
-
         public override GameObject Create(Vector2 location, Quaternion rotation)
         {
-            MissileProjectile missile = MissileProjectile.Create("AndrasAttack",
+            MissileProjectile missile = MissileProjectile.Create("CharacterSwordAttack",
                 location,
                 rotation,
                 sprite,
                 controller,
-                1,
-                0.5f);
-            missile.transform.localScale = new Vector3(3, 3, 1);
+                0,
+                0.4f);
+            missile.Collider.size = new Vector2(2, 2);
             missile.MaxHit = 100;
             missile.Owner = unit;
             missile.OnHit += (sender, e) =>
@@ -88,21 +65,58 @@ namespace Base2D.Init.Abilities
             return missile.gameObject;
         }
 
+        IEnumerator Casting(float timeDelay, float timeCasting)
+        {
+            IsCasting = true;
+            yield return new WaitForSeconds(timeDelay);
+            TimeCastingLeft = timeCasting - timeDelay;
+
+            while (TimeCastingLeft >= 0)
+            {
+                yield return new WaitForSeconds(timeDelay);
+                TimeCastingLeft -= timeDelay;
+            }
+
+            if (IsCasting)
+            {
+                IsCasting = false;
+                DoCastAbility();
+            }
+
+        }
+
         protected override void DoCastAbility()
         {
-            unit.Action.Animator.SetBool("Attack", false);
-
+            unit.Action.Animator.SetTrigger("end-atk1");
             Vector2 location = unit.transform.position;
             Quaternion rotation = unit.transform.rotation;
 
-            location = location + (Vector2)(rotation * Vector2.left * 3);
-            location.y -= 1;
-
+            location = location + (Vector2)(rotation * Vector2.left * 2);
             Create(location, rotation);
-
             unit.Action.Type = System.ActionSystem.ActionType.None;
             TimeCoolDownLeft = BaseCoolDown;
             unit.StartCoroutine(StartCoolDown(Time.deltaTime, BaseCoolDown));
         }
+
+        //protected override void DoAnimation()
+        //{
+        //}
+
+        //protected override void DoCastAbility()
+        //{
+        //}
+
+        //protected override void DoSomeThingIfCannotCasting()
+        //{
+        //}
+
+        //protected override void Initialize()
+        //{
+        //}
+
+        //protected override bool SpecialBreakAbility()
+        //{
+        //    return false;
+        //}
     }
 }

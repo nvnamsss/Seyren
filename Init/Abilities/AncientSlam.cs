@@ -32,15 +32,15 @@ namespace Base2D.Init.Abilities
 
             unit.Action.Type = System.ActionSystem.ActionType.CastAbility;
             unit.Action.Animator.SetBool("Spell", true);
-            unit.StartCoroutine(Casting(Time.deltaTime, BaseCastingTime));
+            unit.StartCoroutine(Casting(0.4f, BaseCastingTime));
             return true;
         }
 
         IEnumerator Casting(float timeDelay, float timeCasting)
         {
             IsCasting = true;
-            TimeCastingLeft = timeCasting;
             yield return new WaitForSeconds(timeDelay);
+            TimeCastingLeft = timeCasting - timeDelay;
 
             while (TimeCastingLeft >= 0)
             {

@@ -33,6 +33,7 @@ namespace Base2D.System.UnitSystem.Units
             Collider = GetComponent<Collider2D>();
             Action = gameObject.AddComponent<Action>();
             Abilites = new Dictionary<int, AbilitySystem.Ability>();
+            Active = true;
         }
         void Start()
         {
@@ -174,10 +175,9 @@ namespace Base2D.System.UnitSystem.Units
             CurrentHp = CurrentHp - damageInfo.DamageAmount;
             if (TakeDamage != null)
             {
-
                 TakeDamage.Invoke(this, new TakeDamageEventArgs(damageInfo));
             }
-
+            damageSource = source;
             //TakeDamage?.Invoke(this, new TakeDamageEventArgs(damageInfo));
         }
 
@@ -187,6 +187,7 @@ namespace Base2D.System.UnitSystem.Units
         /// <param name="killer"></param>
         public void Kill(Unit killer)
         {
+            Active = false;
             DyingHandler dying = Dying;
             UnitDyingEventArgs udinge = new UnitDyingEventArgs();
             if (dying != null)
@@ -208,27 +209,38 @@ namespace Base2D.System.UnitSystem.Units
             }
         }
 
-        public void Jump()
+        public bool Jump()
         {
+            if (!Active)
+            {
+                return false;
+            }
+
             if (_currentJump > 0)
             {
                 if (StandOn == GroundType.Ground || StandOn == GroundType.Grass)
                 {
                     Body.AddForce(Vector2.up * Attribute.JumpSpeed, ForceMode2D.Impulse);
                     _currentJump -= 1;
+
+                    return true;
                 }
             }
             else
             {
-                if (Abilites.ContainsKey(Base2D.Init.Abilities.DoubleJump.Id))
-                {
-                    Abilites[Base2D.Init.Abilities.DoubleJump.Id].Cast();
-                }
+
             }
+
+            return false;
         }
 
         public virtual void Move(Vector2 direction)
         {
+            if (!Active)
+            {
+                return;
+            }
+
             if ((UnitStatus | UnitStatus.Stun) == UnitStatus ||
                 (UnitStatus | UnitStatus.Knockback) == UnitStatus)
             {
@@ -239,35 +251,51 @@ namespace Base2D.System.UnitSystem.Units
             translate.x = -Mathf.Abs(translate.x);
             translate.y = -Mathf.Abs(translate.y);
             transform.Translate(translate);
-            Action.Animator.SetBool("Move", true);
         }
 
         public void Look(Vector2 direction)
         {
+            if (!Active)
+            {
+                return;
+            }
+
             transform.rotation = Quaternion.Euler(direction.x, direction.y, 0);
         }
 
         public void Attack()
         {
-            if (Abilites.ContainsKey(Base2D.Init.Abilities.Attack.Id))
+            if (!Active)
+            {
+                return;
+            }
+
+            if (Abilites.ContainsKey(Base2D.Init.Abilities.CharacterSwordAttack.Id))
             {
                 Vector2 location = transform.position;
                 Quaternion rotation = transform.rotation;
-                Abilites[Base2D.Init.Abilities.Attack.Id].Create(location, rotation);
+                Abilites[Base2D.Init.Abilities.CharacterSwordAttack.Id].Create(location, rotation);
 
             }
         }
 
-        public void Spell(int spellId)
+        public bool Spell(int spellId)
         {
+            if (!Active)
+            {
+                return false;
+            }
+
             if (Abilites.ContainsKey(spellId))
             {
-                Abilites[spellId].Cast();
+                return Abilites[spellId].Cast();
             }
             else
             {
                 Debug.LogWarning("[Unit] - Unit " + name + " do not contain " + spellId + " ability");
             }
+
+            return false;
         }
 
         private void UpdateGrounding()

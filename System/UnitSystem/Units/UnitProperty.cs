@@ -110,6 +110,10 @@ namespace Base2D.System.UnitSystem.Units
                 }
 
                 _currentHp = sce.NewValue;
+                if (_currentHp < 0)
+                {
+                    Kill(damageSource);
+                }
             }
         }
         public float CurrentMp
@@ -200,6 +204,7 @@ namespace Base2D.System.UnitSystem.Units
         }
         public Rigidbody2D Body;
         public Collider2D Collider;
+        public bool Active;
         protected Unit _owner;
         [SerializeField]
         protected bool _isFly;
@@ -219,5 +224,6 @@ namespace Base2D.System.UnitSystem.Units
         protected int _currentJump;
         [SerializeField]
         protected UnitStatus _unitStatus;
+        protected Unit damageSource;
     }
 }

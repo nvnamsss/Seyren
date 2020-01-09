@@ -29,7 +29,7 @@ namespace Base2D.Init.Abilities
                 return false;
             }
 
-            Vector2 force = new Vector2(0, 0.5f * unit.JumpSpeed);
+            Vector2 force = new Vector2(0, 0.8f * unit.JumpSpeed);
             unit.Body.AddForce(force, ForceMode2D.Impulse);
             GameObject effect = Instantiate<GameObject>(Effect, unit.transform.position, unit.transform.rotation);
             Destroy(effect, 0.5f);
