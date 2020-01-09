@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Base2D.System.UISystem.Value;
+using Base2D.System.UnitSystem.EventData;
 using Base2D.System.UnitSystem.Units;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,7 +25,7 @@ public class HUDManager : MonoBehaviour
 
     void Start()
     {  
-        character = HeroManager.instance.character;       
+        character = HeroManager.instance.character;   
     }
 
     // Update is called once per frame
@@ -32,12 +33,12 @@ public class HUDManager : MonoBehaviour
         manaImage.fillAmount = character.CurrentMp/character.Attribute.MaxMp;
     }
 
-    public void updateMana(){
-        manaImage.fillAmount = character.CurrentMp/character.Attribute.MaxMp;
+    public void updateMana(float newValue){
+        manaImage.fillAmount = newValue/character.Attribute.MaxMp;
     }
 
     public void setHealth(){
-Debug.Log("setHealth");
+        Debug.Log("setHealth");
         if(character.Attribute.MaxHp > 5){
             for (int i =6; i <= character.Attribute.MaxHp;i++){
                 var newHeart = Instantiate(heart);
@@ -85,8 +86,12 @@ Debug.Log("setHealth");
         }
     }
 
-    void takeDamage(){
-        GameObject.Find("heart-full"+(character.CurrentHp+1)).SetActive(false);
+    void takeDamage(float newValue){
+        for(int i=1; i <= character.Attribute.MaxHp;i++){
+            if(i > newValue){
+                FindInActiveObjectByName("heart-full"+i).SetActive(false);
+            }
+        }
     }
 
     public void heal(){
@@ -110,4 +115,14 @@ Debug.Log("setHealth");
     }
     return null;
 }
+
+    public void UpdateHealthNMana(Unit character, StateChangedEventArgs e){
+        if(e.State == Base2D.System.UnitSystem.UnitState.Hp)
+        {
+            takeDamage(e.NewValue);
+        }
+        if(e.State == Base2D.System.UnitSystem.UnitState.Mp){
+            updateMana(e.NewValue);
+        }
+    }
 }

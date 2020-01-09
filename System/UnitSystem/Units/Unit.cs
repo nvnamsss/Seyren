@@ -19,10 +19,10 @@ namespace Base2D.System.UnitSystem.Units
             Attribute = new Attribute();
             Attribute.AttackDamage = 51;
             Attribute.HpRegen = 1;
-            CurrentHp = Attribute.MaxHp = 100;
-            CurrentPShield = 52;
-            CurrentMShield = 0;
-            CurrentShield = 22;
+            //CurrentHp = Attribute.MaxHp = 100;
+            //CurrentPShield = 52;
+            //CurrentMShield = 0;
+            //CurrentShield = 22;
             JumpTimes = 1;
             Modification = new ModificationInfos();
         }
@@ -72,7 +72,11 @@ namespace Base2D.System.UnitSystem.Units
             _currentPShield = Attribute.PShield;
             _currentMShield = Attribute.MShield;
 
-
+            if(this.GetType() == typeof(Hero)){
+                HUDManager.instance.setHealth();
+                HUDManager.instance.updateMana(CurrentMp);
+                StatusUIManager.instance.setStats();
+            }
         }
 
         void Update()
