@@ -17,7 +17,7 @@ namespace Base2D.Init.Abilities
         {
             unit = u;
             BaseCoolDown = unit.AttackSpeed;
-            BaseCastingTime = 0.2f;
+            BaseCastingTime = 0.4f;
             controller = ProjectileCollection.AncientEnergyController;
         }
         public override bool Cast()
@@ -27,17 +27,17 @@ namespace Base2D.Init.Abilities
                 return false;
             }
 
-            IsCasting = true;
             unit.Action.Animator.SetBool("Attack", true);
             TimeCastingLeft = BaseCastingTime;
             unit.StartCoroutine(Casting(Time.deltaTime, BaseCastingTime));
             return true;
         }
 
+
         IEnumerator Casting(float timeDelay, float timeCasting)
         {
-            yield return new WaitForSeconds(timeDelay);
             IsCasting = true;
+            yield return new WaitForSeconds(timeDelay);
             TimeCastingLeft = timeCasting;
 
             while (TimeCastingLeft >= 0)
@@ -47,7 +47,7 @@ namespace Base2D.Init.Abilities
             }
 
             if (IsCasting)
-            {
+            { 
                 IsCasting = false;
                 DoCastAbility();
             }
@@ -62,7 +62,7 @@ namespace Base2D.Init.Abilities
                 sprite,
                 controller,
                 1,
-                20);
+                0.5f);
             missile.transform.localScale = new Vector3(3, 3, 1);
             missile.MaxHit = 100;
             missile.Owner = unit;
@@ -85,7 +85,6 @@ namespace Base2D.Init.Abilities
 
         protected override void DoCastAbility()
         {
-            IsCasting = false;
             unit.Action.Animator.SetBool("Attack", false);
 
             Vector2 location = unit.transform.position;
