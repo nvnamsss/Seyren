@@ -2,6 +2,7 @@
 using Base2D.System.UnitSystem.Projectiles;
 using Base2D.System.UnitSystem.Units;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Base2D.Init.Abilities
@@ -12,12 +13,14 @@ namespace Base2D.Init.Abilities
         private Unit unit;
         private Sprite sprite;
         private RuntimeAnimatorController controller;
+        private Dictionary<Unit, int> hitList;
         public AncientSlam(Unit u)
         {
             unit = u;
             BaseCoolDown = 10;
             BaseCastingTime = 2;
             controller = ProjectileCollection.AncientEnergyController;
+            hitList = new Dictionary<Unit, int>();
         }
 
         public override bool Cast()
@@ -30,6 +33,7 @@ namespace Base2D.Init.Abilities
                 return false;
             }
 
+            hitList.Clear();
             unit.Action.Type = System.ActionSystem.ActionType.CastAbility;
             unit.Action.Animator.SetBool("Spell", true);
             unit.StartCoroutine(Casting(0.4f, BaseCastingTime));
@@ -80,12 +84,39 @@ namespace Base2D.Init.Abilities
                     controller,
                     10,
                     2);
-
+                missile.HitDelay = 0;
+                missile.Collider.size = new Vector2(0.86f, 0.86f);
                 missile.direction = direction;
                 missile.transform.localScale = new Vector3(3, 3, 1);
-                missile.MaxHit = 100;
+                missile.MaxHit = 100000;
                 missile.Owner = unit;
+                missile.OnHit += (sender, e) =>
+                {
+                    Unit u = e.GetComponent<Unit>();
+                    if (u == null)
+                    {
+                        return;
+                    }
 
+                    if (hitList.ContainsKey(u))
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        hitList.Add(u, 0);
+                    }
+
+                    if (sender.Owner.IsEnemy(u))
+                    {
+                        u.Damage(sender.Owner, System.DamageSystem.DamageType.Physical);
+                    }
+                    else
+                    {
+                        sender.ResetHit();
+                    }
+
+                };
                 angle = angle - 30;
             }
         }

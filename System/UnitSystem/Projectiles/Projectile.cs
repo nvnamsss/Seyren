@@ -28,10 +28,6 @@ namespace Base2D.System.UnitSystem.Projectiles
                 return;
             }
 
-            if (animator != null && animator.isInitialized)
-            {
-            }
-
             if (_hitDelay > 0)
             {
                 return;
@@ -50,14 +46,12 @@ namespace Base2D.System.UnitSystem.Projectiles
             {
                 Collider.isTrigger = true;
             }
-            Debug.Log("God");
 
             OnHit?.Invoke(this, collider);
         }
 
         public virtual void Move()
         {
-            animator?.SetBool("move", true);
             float rad = (float)(Angle * Mathf.Deg2Rad);
             Vector2 velocity = new Vector2(Mathf.Sin(rad), Mathf.Cos(rad)) * (float)Speed;
         }
@@ -68,6 +62,12 @@ namespace Base2D.System.UnitSystem.Projectiles
         public virtual void Remove()
         {
 
+        }
+
+        public virtual void ResetHit()
+        {
+            _hitDelay = 0;
+            _hit += 1;
         }
 
         protected virtual void Awake()
@@ -113,11 +113,6 @@ namespace Base2D.System.UnitSystem.Projectiles
             Hit(collision.gameObject);
         }
 
-        protected virtual void OnTriggerExit2D(Collider2D collision)
-        {
-            Debug.Log("[Projectile] - Trigger Exit");
-
-        }
 
         protected static GameObject CreateObject(string name, Vector3 location, Quaternion rotation, Sprite sprite, RuntimeAnimatorController controller)
         {

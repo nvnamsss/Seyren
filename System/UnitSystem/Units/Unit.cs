@@ -72,9 +72,7 @@ namespace Base2D.System.UnitSystem.Units
             _currentPShield = Attribute.PShield;
             _currentMShield = Attribute.MShield;
 
-            HUDManager.instance.setHealth();
-            HUDManager.instance.updateMana();
-            StatusUIManager.instance.setStats();
+
         }
 
         void Update()
