@@ -3,15 +3,12 @@ using UnityEngine;
 
 namespace Base2D.System.UISystem.Map
 {
-    class UIMap: MonoBehaviour
+    public class UIMap: MonoBehaviour
     {
         public List<MapSegment> segment;
 
         void Start(){
-            foreach (MapSegment s in segment){
-                s.isActive = true;
-            }
-            updateMap();
+
         }
         public void addSegment(MapSegment s)
         {
@@ -28,8 +25,6 @@ namespace Base2D.System.UISystem.Map
                 }
             }
         }
-
-        
         GameObject FindInActiveObjectByName(string name)
 {
     Transform[] objs = Resources.FindObjectsOfTypeAll<Transform>() as Transform[];
