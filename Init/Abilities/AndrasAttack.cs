@@ -18,7 +18,6 @@ namespace Base2D.Init.Abilities
             unit = u;
             BaseCoolDown = unit.AttackSpeed;
             BaseCastingTime = 0.2f;
-            sprite = ProjectileCollection.AncientEnergy;
             controller = ProjectileCollection.AncientEnergyController;
         }
         public override bool Cast()
@@ -64,7 +63,7 @@ namespace Base2D.Init.Abilities
                 controller,
                 1,
                 20);
-
+            missile.transform.localScale = new Vector3(3, 3, 1);
             missile.MaxHit = 100;
             missile.Owner = unit;
             missile.OnHit += (sender, e) =>
@@ -89,7 +88,13 @@ namespace Base2D.Init.Abilities
             IsCasting = false;
             unit.Action.Animator.SetBool("Attack", false);
 
-            Create(unit.transform.position, unit.transform.rotation);
+            Vector2 location = unit.transform.position;
+            Quaternion rotation = unit.transform.rotation;
+
+            location = location + (Vector2)(rotation * Vector2.left * 3);
+            location.y -= 1;
+
+            Create(location, rotation);
             TimeCoolDownLeft = BaseCoolDown;
             unit.StartCoroutine(StartCoolDown(Time.deltaTime, BaseCoolDown));
         }
