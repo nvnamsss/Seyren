@@ -27,7 +27,7 @@ namespace Base2D.System.ItemSystem
             if(this.instaUse == false){
                 RemoveFromInventory(this);
             }
-                HUDManager.instance.updateMana();
+                HUDManager.instance.updateMana(HeroManager.instance.character.CurrentMp);
                 HUDManager.instance.heal();
             
         }
