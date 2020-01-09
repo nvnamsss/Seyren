@@ -9,6 +9,7 @@ namespace Base2D.System.ActionSystem
     [Flags]
     public enum ActionType
     {
+        None = 0,
         Moving = 1,
         Attack = 2,
         CastAbility = 4,

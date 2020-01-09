@@ -22,12 +22,15 @@ namespace Base2D.Init.Abilities
 
         public override bool Cast()
         {
-            if (TimeCoolDownLeft > 0 || IsCasting)
+            if (TimeCoolDownLeft > 0 || 
+                IsCasting ||
+                unit.Action.Type == System.ActionSystem.ActionType.CastAbility ||
+                unit.Action.Type == System.ActionSystem.ActionType.Attack)
             {
                 return false;
             }
 
-            Debug.Log("Casting");
+            unit.Action.Type = System.ActionSystem.ActionType.CastAbility;
             unit.Action.Animator.SetBool("Spell", true);
             unit.StartCoroutine(Casting(Time.deltaTime, BaseCastingTime));
             return true;
@@ -92,7 +95,7 @@ namespace Base2D.Init.Abilities
             unit.Action.Animator.SetBool("Spell", false);
 
             Create();
-
+            unit.Action.Type = System.ActionSystem.ActionType.None;
             TimeCoolDownLeft = BaseCoolDown;
             unit.StartCoroutine(StartCoolDown(Time.deltaTime, BaseCoolDown));
         }

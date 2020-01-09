@@ -239,6 +239,7 @@ namespace Base2D.System.UnitSystem.Units
             translate.x = -Mathf.Abs(translate.x);
             translate.y = -Mathf.Abs(translate.y);
             transform.Translate(translate);
+            Action.Animator.SetBool("Move", true);
         }
 
         public void Look(Vector2 direction)
