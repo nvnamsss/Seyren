@@ -81,7 +81,7 @@ public class EquipmentManager : MonoBehaviour
                 ArmorSlots[index].icon.sprite = currentEquippedArmor[index].icon;
                 ArmorSlots[index].icon.enabled = true;
                 ArmorSlots[index].defaultIcon.enabled = false;
-
+                Debug.Log("equip");
                 increaseStats(currentEquippedArmor[index]);
             }
             else{
@@ -122,94 +122,95 @@ public class EquipmentManager : MonoBehaviour
     }
 
     public void increaseStats(Item item){
-            character.Attribute.Strength += item.Attribute.Strength;
-            character.Attribute.Agility += item.Attribute.Agility;
-            character.Attribute.Intelligent +=item.Attribute.Intelligent;
+        Debug.Log("stats: "+item.Agility);
+            character.Attribute.Strength += item.Strength;
+            character.Attribute.Agility += item.Agility;
+            character.Attribute.Intelligent +=item.Intelligent;
 
-            character.Attribute.AttackDamage +=item.Attribute.AttackDamage;
-            character.Attribute.MDamageAmplified +=item.Attribute.MDamageAmplified;
+            character.Attribute.AttackDamage +=item.AttackDamage;
+            character.Attribute.MDamageAmplified +=item.MDamageAmplified;
 
-            character.Attribute.MaxHp +=item.Attribute.MaxHp;
-            character.Attribute.MaxMp +=item.Attribute.MaxMp;
-            character.Attribute.HpRegen +=item.Attribute.HpRegen;
-            character.Attribute.MpRegen +=item.Attribute.MpRegen;
-            character.Attribute.ShieldRegen +=item.Attribute.ShieldRegen;
-            character.Attribute.MShieldRegen +=item.Attribute.MShieldRegen;
-            character.Attribute.PShield +=item.Attribute.PShield;
-            character.Attribute.HpRegenPercent +=item.Attribute.HpRegenPercent;
-            character.Attribute.MpRegenPercent +=item.Attribute.MpRegenPercent;
+            character.Attribute.MaxHp +=item.MaxHp;
+            character.Attribute.MaxMp +=item.MaxMp;
+            character.Attribute.HpRegen +=item.HpRegen;
+            character.Attribute.MpRegen +=item.MpRegen;
+            character.Attribute.ShieldRegen +=item.ShieldRegen;
+            character.Attribute.MShieldRegen +=item.MShieldRegen;
+            character.Attribute.PShield +=item.PShield;
+            character.Attribute.HpRegenPercent +=item.HpRegenPercent;
+            character.Attribute.MpRegenPercent +=item.MpRegenPercent;
 
-            character.Attribute.Armor +=item.Attribute.Armor;
-            character.Attribute.MArmor +=item.Attribute.MArmor;
+            character.Attribute.Armor +=item.Armor;
+            character.Attribute.MArmor +=item.MArmor;
 
-            character.Attribute.AttackRange +=item.Attribute.AttackRange;
-            character.Attribute.CastRange +=item.Attribute.CastRange;
+            character.Attribute.AttackRange +=item.AttackRange;
+            character.Attribute.CastRange +=item.CastRange;
 
-            character.Attribute.MovementSpeed +=item.Attribute.MovementSpeed;
-            character.Attribute.AttackSpeed +=item.Attribute.AttackSpeed;
-            character.Attribute.JumpSpeed +=item.Attribute.JumpSpeed;
+            character.Attribute.MovementSpeed +=item.MovementSpeed;
+            character.Attribute.AttackSpeed +=item.AttackSpeed;
+            character.Attribute.JumpSpeed +=item.JumpSpeed;
 
             StatusUIManager.instance.setStats();
     }
 
     public void decreaseStats(Item item){
-        character.Attribute.Strength -= item.Attribute.Strength;
-            character.Attribute.Agility -= item.Attribute.Agility;
-            character.Attribute.Intelligent -=item.Attribute.Intelligent;
+        character.Attribute.Strength -= item.Strength;
+            character.Attribute.Agility -= item.Agility;
+            character.Attribute.Intelligent -=item.Intelligent;
 
-            character.Attribute.AttackDamage -=item.Attribute.AttackDamage;
-            character.Attribute.MDamageAmplified -=item.Attribute.MDamageAmplified;
+            character.Attribute.AttackDamage -=item.AttackDamage;
+            character.Attribute.MDamageAmplified -=item.MDamageAmplified;
 
-            character.Attribute.MaxHp -=item.Attribute.MaxHp;
-            character.Attribute.MaxMp -=item.Attribute.MaxMp;
-            character.Attribute.HpRegen -=item.Attribute.HpRegen;
-            character.Attribute.MpRegen -=item.Attribute.MpRegen;
-            character.Attribute.ShieldRegen -=item.Attribute.ShieldRegen;
-            character.Attribute.MShieldRegen -=item.Attribute.MShieldRegen;
-            character.Attribute.PShield -=item.Attribute.PShield;
-            character.Attribute.HpRegenPercent -=item.Attribute.HpRegenPercent;
-            character.Attribute.MpRegenPercent -=item.Attribute.MpRegenPercent;
+            character.Attribute.MaxHp -=item.MaxHp;
+            character.Attribute.MaxMp -=item.MaxMp;
+            character.Attribute.HpRegen -=item.HpRegen;
+            character.Attribute.MpRegen -=item.MpRegen;
+            character.Attribute.ShieldRegen -=item.ShieldRegen;
+            character.Attribute.MShieldRegen -=item.MShieldRegen;
+            character.Attribute.PShield -=item.PShield;
+            character.Attribute.HpRegenPercent -=item.HpRegenPercent;
+            character.Attribute.MpRegenPercent -=item.MpRegenPercent;
 
-            character.Attribute.Armor -=item.Attribute.Armor;
-            character.Attribute.MArmor -=item.Attribute.MArmor;
+            character.Attribute.Armor -=item.Armor;
+            character.Attribute.MArmor -=item.MArmor;
 
-            character.Attribute.AttackRange -=item.Attribute.AttackRange;
-            character.Attribute.CastRange -=item.Attribute.CastRange;
+            character.Attribute.AttackRange -=item.AttackRange;
+            character.Attribute.CastRange -=item.CastRange;
 
-            character.Attribute.MovementSpeed -=item.Attribute.MovementSpeed;
-            character.Attribute.AttackSpeed -=item.Attribute.AttackSpeed;
-            character.Attribute.JumpSpeed -=item.Attribute.JumpSpeed;
+            character.Attribute.MovementSpeed -=item.MovementSpeed;
+            character.Attribute.AttackSpeed -=item.AttackSpeed;
+            character.Attribute.JumpSpeed -=item.JumpSpeed;
 
             StatusUIManager.instance.setStats();
     }
 
     public void switchStats(Item oldItem, Item newItem){
-         character.Attribute.Strength = character.Attribute.Strength - oldItem.Attribute.Strength + newItem.Attribute.Strength;
-            character.Attribute.Agility = character.Attribute.Agility - oldItem.Attribute.Agility + newItem.Attribute.Agility;
-            character.Attribute.Intelligent =character.Attribute.Intelligent - oldItem.Attribute.Intelligent + newItem.Attribute.Intelligent;
+         character.Attribute.Strength = character.Attribute.Strength - oldItem.Strength + newItem.Strength;
+            character.Attribute.Agility = character.Attribute.Agility - oldItem.Agility + newItem.Agility;
+            character.Attribute.Intelligent =character.Attribute.Intelligent - oldItem.Intelligent + newItem.Intelligent;
 
-            character.Attribute.AttackDamage =character.Attribute.AttackDamage - oldItem.Attribute.AttackDamage + newItem.Attribute.AttackDamage;
-            character.Attribute.MDamageAmplified =character.Attribute.MDamageAmplified - oldItem.Attribute.MDamageAmplified + newItem.Attribute.MDamageAmplified;
+            character.Attribute.AttackDamage =character.Attribute.AttackDamage - oldItem.AttackDamage + newItem.AttackDamage;
+            character.Attribute.MDamageAmplified =character.Attribute.MDamageAmplified - oldItem.MDamageAmplified + newItem.MDamageAmplified;
 
-            character.Attribute.MaxHp =character.Attribute.MaxHp - oldItem.Attribute.MaxHp + newItem.Attribute.MaxHp;
-            character.Attribute.MaxMp =character.Attribute.MaxMp - oldItem.Attribute.MaxMp + newItem.Attribute.MaxMp;
-            character.Attribute.HpRegen =character.Attribute.HpRegen - oldItem.Attribute.HpRegen + newItem.Attribute.HpRegen;
-            character.Attribute.MpRegen =character.Attribute.MpRegen - oldItem.Attribute.MpRegen + newItem.Attribute.MpRegen;
-            character.Attribute.ShieldRegen =character.Attribute.ShieldRegen - oldItem.Attribute.ShieldRegen + newItem.Attribute.ShieldRegen;
-            character.Attribute.MShieldRegen =character.Attribute.MShieldRegen - oldItem.Attribute.MShieldRegen + newItem.Attribute.MShieldRegen;
-            character.Attribute.PShield =character.Attribute.PShield - oldItem.Attribute.PShield + newItem.Attribute.PShield;
-            character.Attribute.HpRegenPercent =character.Attribute.HpRegenPercent - oldItem.Attribute.HpRegenPercent + newItem.Attribute.HpRegenPercent;
-            character.Attribute.MpRegenPercent =character.Attribute.MpRegenPercent - oldItem.Attribute.MpRegenPercent + newItem.Attribute.MpRegenPercent;
+            character.Attribute.MaxHp =character.Attribute.MaxHp - oldItem.MaxHp + newItem.MaxHp;
+            character.Attribute.MaxMp =character.Attribute.MaxMp - oldItem.MaxMp + newItem.MaxMp;
+            character.Attribute.HpRegen =character.Attribute.HpRegen - oldItem.HpRegen + newItem.HpRegen;
+            character.Attribute.MpRegen =character.Attribute.MpRegen - oldItem.MpRegen + newItem.MpRegen;
+            character.Attribute.ShieldRegen =character.Attribute.ShieldRegen - oldItem.ShieldRegen + newItem.ShieldRegen;
+            character.Attribute.MShieldRegen =character.Attribute.MShieldRegen - oldItem.MShieldRegen + newItem.MShieldRegen;
+            character.Attribute.PShield =character.Attribute.PShield - oldItem.PShield + newItem.PShield;
+            character.Attribute.HpRegenPercent =character.Attribute.HpRegenPercent - oldItem.HpRegenPercent + newItem.HpRegenPercent;
+            character.Attribute.MpRegenPercent =character.Attribute.MpRegenPercent - oldItem.MpRegenPercent + newItem.MpRegenPercent;
 
-            character.Attribute.Armor =character.Attribute.Armor - oldItem.Attribute.Armor + newItem.Attribute.Armor;
-            character.Attribute.MArmor =character.Attribute.MArmor - oldItem.Attribute.MArmor + newItem.Attribute.MArmor;
+            character.Attribute.Armor =character.Attribute.Armor - oldItem.Armor + newItem.Armor;
+            character.Attribute.MArmor =character.Attribute.MArmor - oldItem.MArmor + newItem.MArmor;
 
-            character.Attribute.AttackRange =character.Attribute.AttackRange - oldItem.Attribute.AttackRange + newItem.Attribute.AttackRange;
-            character.Attribute.CastRange =character.Attribute.CastRange - oldItem.Attribute.CastRange + newItem.Attribute.CastRange;
+            character.Attribute.AttackRange =character.Attribute.AttackRange - oldItem.AttackRange + newItem.AttackRange;
+            character.Attribute.CastRange =character.Attribute.CastRange - oldItem.CastRange + newItem.CastRange;
 
-            character.Attribute.MovementSpeed =character.Attribute.MovementSpeed - oldItem.Attribute.MovementSpeed + newItem.Attribute.MovementSpeed;
-            character.Attribute.AttackSpeed =character.Attribute.AttackSpeed - oldItem.Attribute.AttackSpeed + newItem.Attribute.AttackSpeed;
-            character.Attribute.JumpSpeed =character.Attribute.JumpSpeed - oldItem.Attribute.JumpSpeed + newItem.Attribute.JumpSpeed;
+            character.Attribute.MovementSpeed =character.Attribute.MovementSpeed - oldItem.MovementSpeed + newItem.MovementSpeed;
+            character.Attribute.AttackSpeed =character.Attribute.AttackSpeed - oldItem.AttackSpeed + newItem.AttackSpeed;
+            character.Attribute.JumpSpeed =character.Attribute.JumpSpeed - oldItem.JumpSpeed + newItem.JumpSpeed;
 
             StatusUIManager.instance.setStats();
     }

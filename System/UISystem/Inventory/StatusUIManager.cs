@@ -40,7 +40,7 @@ public class StatusUIManager : MonoBehaviour
 
     void Start()
     {
-        setStats();
+
     }
 
     // Update is called once per frame
@@ -49,6 +49,7 @@ public class StatusUIManager : MonoBehaviour
     }
 
     public void setStats(){
+        Debug.Log((int)character.Attribute.Agility);
         strText.text = ((int)character.Attribute.Strength).ToString();
         agiText.text = ((int)character.Attribute.Agility).ToString();
         intText.text = ((int)character.Attribute.Intelligent).ToString();
