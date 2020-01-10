@@ -3,6 +3,7 @@ using Base2D.System.UnitSystem.Projectiles;
 using Base2D.System.UnitSystem.Units;
 using System.Collections;
 using UnityEngine;
+using UnityEngine;
 
 namespace Base2D.Init.Abilities
 {
@@ -13,11 +14,11 @@ namespace Base2D.Init.Abilities
         public MissileProjectile Projectile;
         private Sprite sprite;
         private RuntimeAnimatorController controller;
+        private static string magicFlamePath = "Effect/MagicFlame/MagicFlame";
         public MagicFlame(Unit u)
         {
             unit = u;
-            sprite = ProjectileCollection.MagicFlame;
-            controller = ProjectileCollection.MagicFlameController;
+            controller = Resources.Load<RuntimeAnimatorController>(magicFlamePath);
             BaseCoolDown = 1;
         }
 
@@ -67,8 +68,9 @@ namespace Base2D.Init.Abilities
                 10,
                 2);
 
+            missile.Collider.size = new Vector2(1, 2);
             missile.direction = euler.y == 180 ? new Vector2(1, 0) : new Vector2(-1, 0);
-            missile.MaxHit = 100;
+            missile.MaxHit = 100000;
             missile.Owner = unit;
             missile.OnHit += (sender, e) =>
             {
@@ -80,7 +82,7 @@ namespace Base2D.Init.Abilities
                 }
                 else
                 {
-                    Debug.Log("Cannot damage");
+                    missile.ResetHit();
                 }
             };
 

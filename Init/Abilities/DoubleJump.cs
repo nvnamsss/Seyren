@@ -15,9 +15,10 @@ namespace Base2D.Init.Abilities
         public static readonly int Id = 0x74857701;
         public Unit unit;
         public GameObject Effect;
+        private static string cyclonePath = "Effect/Cyclone/Cyclone_Effect";
         public DoubleJump(Unit u)
         {
-            Effect = ProjectileCollection.Cyclone;
+            Effect = Resources.Load<GameObject>(cyclonePath);
             unit = u;
             BaseCoolDown = 1.0f;
         }

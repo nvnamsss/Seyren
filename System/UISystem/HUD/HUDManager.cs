@@ -17,7 +17,7 @@ public class HUDManager : MonoBehaviour
         }
     }
 
-    Hero character;
+    public Hero character;
     public Image heart;
     public Image heartEmpty;
 

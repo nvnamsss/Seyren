@@ -13,8 +13,12 @@ public class MapManager : MonoBehaviour
     }
     // Start is called before the first frame update
 
-    public UIMap mapToManage;
+    public void setPlayerPosition(float newX, float newY, float newZ){
+        HeroManager.instance.character.transform.localPosition = new Vector3(newX,newY,newZ);
+    }
 
+    public UIMap mapToManage;
+    
     public void UpdateMap(){
         mapToManage.updateMap();
     }

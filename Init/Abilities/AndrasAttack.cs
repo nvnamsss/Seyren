@@ -15,12 +15,13 @@ namespace Base2D.Init.Abilities
         private Sprite sprite;
         private RuntimeAnimatorController controller;
         private Dictionary<Unit, int> hitList;
+        private static string ancientEnergyPath = "Effect/AncientEnergy/AncientEnergy";
         public AndrasAttack(Unit u)
         {
             unit = u;
             BaseCoolDown = unit.AttackSpeed;
             BaseCastingTime = 0.4f;
-            controller = ProjectileCollection.AncientEnergyController;
+            controller = Resources.Load<RuntimeAnimatorController>(ancientEnergyPath);
             hitList = new Dictionary<Unit, int>();
         }
         public override bool Cast()

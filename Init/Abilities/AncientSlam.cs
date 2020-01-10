@@ -14,12 +14,14 @@ namespace Base2D.Init.Abilities
         private Sprite sprite;
         private RuntimeAnimatorController controller;
         private Dictionary<Unit, int> hitList;
+        private static string ancientEnergyPath = "Effect/AncientEnergy/AncientEnergy";
+
         public AncientSlam(Unit u)
         {
             unit = u;
             BaseCoolDown = 10;
             BaseCastingTime = 2;
-            controller = ProjectileCollection.AncientEnergyController;
+            controller = Resources.Load<RuntimeAnimatorController>(ancientEnergyPath);
             hitList = new Dictionary<Unit, int>();
         }
 
