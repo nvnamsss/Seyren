@@ -19,7 +19,7 @@ namespace Base2D.Init.Abilities
         {
             unit = u;
             BaseCoolDown = unit.AttackSpeed;
-            BaseCastingTime = 0.4f;
+            BaseCastingTime = 0.1f;
             controller = ProjectileCollection.AncientEnergyController;
             hitList = new Dictionary<Unit, int>();
         }
@@ -36,7 +36,7 @@ namespace Base2D.Init.Abilities
             hitList.Clear();
             unit.Action.Type = System.ActionSystem.ActionType.CastAbility;
 
-            unit.Action.Animator.SetBool("Attack", true);
+            unit.Action.Animator.SetTrigger("attack1");
             TimeCastingLeft = BaseCastingTime;
             unit.StartCoroutine(Casting(Time.deltaTime, BaseCastingTime));
             return true;
@@ -65,21 +65,21 @@ namespace Base2D.Init.Abilities
 
         public override GameObject Create(Vector2 location, Quaternion rotation)
         {
-            SwordProjectile missile = SwordProjectile.Create("AndrasAttack",
+            SwordProjectile slash = SwordProjectile.Create("MinotaurSlash",
                 location,
                 rotation,
                 sprite,
                 controller,
                 0,
                 0.5f);
-            missile.HitDelay = 0;
-            missile.Collider.isTrigger = true;
-            missile.Collider.autoTiling = true;
-            missile.Collider.size = new Vector2(0.86f, 0.86f);
-            missile.transform.localScale = new Vector3(3, 3, 1);
-            missile.MaxHit = 100;
-            missile.Owner = unit;
-            missile.OnHit += (sender, e) =>
+            slash.HitDelay = 0;
+            slash.Collider.isTrigger = true;
+            slash.Collider.autoTiling = true;
+            slash.Collider.size = new Vector2(0.86f, 0.86f);
+            slash.transform.localScale = new Vector3(3, 3, 1);
+            slash.MaxHit = 100;
+            slash.Owner = unit;
+            slash.OnHit += (sender, e) =>
             {
                 Unit u = e.GetComponent<Unit>();
                 if (u == null)
@@ -108,7 +108,7 @@ namespace Base2D.Init.Abilities
                 }
             };
 
-            return missile.gameObject;
+            return slash.gameObject;
         }
 
         protected override void DoCastAbility()
@@ -118,7 +118,7 @@ namespace Base2D.Init.Abilities
             Vector2 location = unit.transform.position;
             Quaternion rotation = unit.transform.rotation;
 
-            location = location + (Vector2)(rotation * Vector2.left * 3);
+            location = location + (Vector2)(rotation * new Vector2(1,1));
             location.y -= 1;
 
             Create(location, rotation);

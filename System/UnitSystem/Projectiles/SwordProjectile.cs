@@ -39,10 +39,10 @@ namespace Base2D.System.UnitSystem.Projectiles
         public static SwordProjectile Create(string name, Vector2 location, Quaternion rotation, Sprite sprite, RuntimeAnimatorController controller, float speed, float duration = float.MaxValue)
         {
             GameObject go = CreateObject(name, location, rotation, sprite, controller);
-            SwordProjectile missile = go.AddComponent<SwordProjectile>();
-            missile.Speed = speed;
-            missile.TimeExpire = duration;
-            return missile;
+            SwordProjectile slash = go.AddComponent<SwordProjectile>();
+            slash.Speed = speed;
+            slash.TimeExpire = duration;
+            return slash;
         }
     }
 }
