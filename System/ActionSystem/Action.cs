@@ -7,9 +7,30 @@ namespace Base2D.System.ActionSystem
     [DisallowMultipleComponent]
     public class Action : MonoBehaviour
     {
-        public ActionType Type { get; set; }
+        public delegate void ActionChangeHandler(Action sender, ActionEventArgs e);
+        public event ActionChangeHandler ActionChanging;
+        public event ActionChangeHandler ActionChanged;
+        public ActionType Type
+        {
+            get
+            {
+                return _type;
+            }
+            set
+            {
+                ActionEventArgs acing = new ActionEventArgs(_type, value);
+                ActionChanging?.Invoke(this, acing);
+                _type = acing.New;
+                
+                if (!acing.Changed)
+                {
+                    ActionChanged?.Invoke(this, acing);
+                }
+            }
+        }
         public string Name { get; set; }
         public Animator Animator { get; set; }
+        private ActionType _type;
         public virtual bool BreakAction(BreakType breakType)
         {
             return false;
