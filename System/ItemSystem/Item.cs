@@ -22,35 +22,8 @@ namespace Base2D.System.ItemSystem
 
         }
 
-        void Start(){
-            #if UNITY_EDITOR
-            Attribute.Strength = Strength;
-            Attribute.Agility = Agility;
-            Attribute.Intelligent = Intelligent;
-
-            Attribute.AttackDamage = AttackDamage;
-            Attribute.MDamageAmplified = MDamageAmplified;
-
-            Attribute.MaxHp = MaxHp;
-            Attribute.MaxMp = MaxMp;
-            Attribute.HpRegen = HpRegen;
-            Attribute.MpRegen = MpRegen;
-            Attribute.ShieldRegen = ShieldRegen;
-            Attribute.MShieldRegen = MShieldRegen;
-            Attribute.PShield = PShield;
-            Attribute.HpRegenPercent = HpRegenPercent;
-            Attribute.MpRegenPercent = MpRegenPercent;
-
-            Attribute.Armor = Armor;
-            Attribute.MArmor = MArmor;
-
-            Attribute.AttackRange = AttackRange;
-            Attribute.CastRange = CastRange;
-
-            Attribute.MovementSpeed = MovementSpeed;
-            Attribute.AttackSpeed = AttackSpeed;
-            Attribute.JumpSpeed = JumpSpeed;
-#endif
+        void Awake(){
+            
         }
 
         public void RemoveFromInventory(Item item){

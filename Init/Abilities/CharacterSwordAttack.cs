@@ -16,7 +16,7 @@ namespace Base2D.Init.Abilities
         public CharacterSwordAttack(Unit u)
         {
             unit = u;
-            BaseCoolDown = unit.AttackSpeed;
+            BaseCoolDown = 10 / unit.AttackSpeed;
             BaseCastingTime = 0.25f;
         }
 
@@ -46,7 +46,7 @@ namespace Base2D.Init.Abilities
                 0,
                 0.4f);
             missile.Collider.size = new Vector2(2.4f, 2.4f);
-            missile.MaxHit = 100;
+            missile.MaxHit = 10000000;
             missile.Owner = unit;
             missile.OnHit += (sender, e) =>
             {

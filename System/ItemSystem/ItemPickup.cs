@@ -6,9 +6,7 @@ namespace Base2D.System.ItemSystem{
         public Item item;
 
         public void Start(){
-            if(item != null){
-                gameObject.GetComponent<SpriteRenderer>().sprite = item.icon;
-            }
+
         }
         void OnTriggerEnter2D(Collider2D other) {
             if (other.tag == "Player"){

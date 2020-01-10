@@ -8,20 +8,19 @@ using UnityEngine;
 
 namespace Base2D.Init.Abilities
 {
-    public class AndrasAttack : Ability
+    public class MinotaurHello1 : Ability
     {
         public static readonly int Id = 0x65686501;
         private Unit unit;
         private Sprite sprite;
         private RuntimeAnimatorController controller;
         private Dictionary<Unit, int> hitList;
-        private static string ancientEnergyPath = "Effect/AncientEnergy/AncientEnergy";
-        public AndrasAttack(Unit u)
+        public MinotaurHello1(Unit u)
         {
             unit = u;
             BaseCoolDown = unit.AttackSpeed;
-            BaseCastingTime = 0.4f;
-            controller = Resources.Load<RuntimeAnimatorController>(ancientEnergyPath);
+            BaseCastingTime = 0.1f;
+            controller = ProjectileCollection.AncientEnergyController;
             hitList = new Dictionary<Unit, int>();
         }
         public override bool Cast()
@@ -37,7 +36,7 @@ namespace Base2D.Init.Abilities
             hitList.Clear();
             unit.Action.Type = System.ActionSystem.ActionType.CastAbility;
 
-            unit.Action.Animator.SetBool("Attack", true);
+            unit.Action.Animator.SetTrigger("attack1");
             TimeCastingLeft = BaseCastingTime;
             unit.StartCoroutine(Casting(Time.deltaTime, BaseCastingTime));
             return true;
@@ -57,7 +56,7 @@ namespace Base2D.Init.Abilities
             }
 
             if (IsCasting)
-            { 
+            {
                 IsCasting = false;
                 DoCastAbility();
             }
@@ -66,21 +65,21 @@ namespace Base2D.Init.Abilities
 
         public override GameObject Create(Vector2 location, Quaternion rotation)
         {
-            MissileProjectile missile = MissileProjectile.Create("AndrasAttack",
+            SwordProjectile slash = SwordProjectile.Create("MinotaurSlash",
                 location,
                 rotation,
                 sprite,
                 controller,
                 0,
                 0.5f);
-            missile.HitDelay = 0;
-            missile.Collider.isTrigger = true;
-            missile.Collider.autoTiling = true;
-            missile.Collider.size = new Vector2(0.86f, 0.86f);
-            missile.transform.localScale = new Vector3(3, 3, 1);
-            missile.MaxHit = 100;
-            missile.Owner = unit;
-            missile.OnHit += (sender, e) =>
+            slash.HitDelay = 0;
+            slash.Collider.isTrigger = true;
+            slash.Collider.autoTiling = true;
+            slash.Collider.size = new Vector2(0.86f, 0.86f);
+            slash.transform.localScale = new Vector3(3, 3, 1);
+            slash.MaxHit = 100;
+            slash.Owner = unit;
+            slash.OnHit += (sender, e) =>
             {
                 Unit u = e.GetComponent<Unit>();
                 if (u == null)
@@ -109,7 +108,7 @@ namespace Base2D.Init.Abilities
                 }
             };
 
-            return missile.gameObject;
+            return slash.gameObject;
         }
 
         protected override void DoCastAbility()
@@ -119,7 +118,7 @@ namespace Base2D.Init.Abilities
             Vector2 location = unit.transform.position;
             Quaternion rotation = unit.transform.rotation;
 
-            location = location + (Vector2)(rotation * Vector2.left * 3);
+            location = location + (Vector2)(rotation * new Vector2(1,1));
             location.y -= 1;
 
             Create(location, rotation);
