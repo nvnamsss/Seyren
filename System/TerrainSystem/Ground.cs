@@ -6,8 +6,8 @@ namespace Base2D.System.TerrainSystem
 {
     public class Ground : MonoBehaviour
     {
-        public static LayerMask Grass = LayerMask.GetMask("GrassGround");
-        public static LayerMask Hard = LayerMask.GetMask("HardGround");
+        public static LayerMask Grass; 
+        public static LayerMask Hard;
         public GroundType GroundType {get; }
 
         public static GroundType GetGround(string layer)
@@ -17,9 +17,10 @@ namespace Base2D.System.TerrainSystem
             return type;
         }
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
-
+            Grass = LayerMask.GetMask("GrassGround");
+            Hard = LayerMask.GetMask("HardGround");
         }
 
         // Update is called once per frame

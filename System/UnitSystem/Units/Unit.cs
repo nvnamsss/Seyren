@@ -82,7 +82,7 @@ namespace Base2D.System.UnitSystem.Units
         void Update()
         {
             Attribute.Update();
-            UpdateGrounding();
+            //UpdateGrounding();
         }
 
         public bool IsEnemy(Unit unit)
@@ -308,6 +308,27 @@ namespace Base2D.System.UnitSystem.Units
             }
             else
                 StandOn = GroundType.Unknown;
+        }
+
+        public void OnCollisionEnter2D(Collision2D other) {
+            if(other.transform.tag == "GrassGround"){
+            StandOn = GroundType.Grass;
+            _currentJump = JumpTimes;
+            }
+            else if(other.transform.tag == "HardGround"){
+            StandOn = GroundType.Ground;
+            _currentJump = JumpTimes;
+            }
+            else if(other.transform.tag == "Enemy"){
+            StandOn = GroundType.Ground;
+            _currentJump = JumpTimes;
+            }
+            
+        }
+
+        public void OnCollisionExit2D(Collision2D other) {
+                StandOn = GroundType.Unknown;
+            
         }
     }
 

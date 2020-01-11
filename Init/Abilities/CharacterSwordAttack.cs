@@ -87,7 +87,7 @@ namespace Base2D.Init.Abilities
 
         protected override void DoCastAbility()
         {
-            unit.Action.Animator.SetTrigger("end-atk1");
+            //unit.Action.Animator.SetTrigger("end-atk1");
             Vector2 location = unit.transform.position;
             Quaternion rotation = unit.transform.rotation;
 
