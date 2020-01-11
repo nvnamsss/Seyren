@@ -8,21 +8,20 @@ using UnityEngine;
 
 namespace Base2D.Init.Abilities
 {
-    public class MinotaurHello1 : Ability
+    public class MinotaurSwordAttack1 : Ability
     {
-        public static readonly int Id = 0x65686501;
+        public static readonly int Id = 0x67658402;
         private Unit unit;
         private Sprite sprite;
         private RuntimeAnimatorController controller;
         private Dictionary<Unit, int> hitList;
-        public MinotaurHello1(Unit u)
+        public MinotaurSwordAttack1(Unit u)
         {
             unit = u;
-            BaseCoolDown = unit.AttackSpeed;
+            BaseCoolDown = 10 / unit.AttackSpeed;
             BaseCastingTime = 0.1f;
-            controller = ProjectileCollection.AncientEnergyController;
-            hitList = new Dictionary<Unit, int>();
         }
+
         public override bool Cast()
         {
             if (TimeCoolDownLeft > 0 ||
@@ -33,53 +32,30 @@ namespace Base2D.Init.Abilities
                 return false;
             }
 
-            hitList.Clear();
-            unit.Action.Type = System.ActionSystem.ActionType.CastAbility;
-
+            unit.Action.Type = System.ActionSystem.ActionType.Attack;
             unit.Action.Animator.SetTrigger("attack1");
-            TimeCastingLeft = BaseCastingTime;
             unit.StartCoroutine(Casting(Time.deltaTime, BaseCastingTime));
+
             return true;
         }
-
-
-        IEnumerator Casting(float timeDelay, float timeCasting)
-        {
-            IsCasting = true;
-            yield return new WaitForSeconds(timeDelay);
-            TimeCastingLeft = timeCasting - timeDelay;
-
-            while (TimeCastingLeft >= 0)
-            {
-                yield return new WaitForSeconds(timeDelay);
-                TimeCastingLeft -= timeDelay;
-            }
-
-            if (IsCasting)
-            {
-                IsCasting = false;
-                DoCastAbility();
-            }
-
-        }
-
         public override GameObject Create(Vector2 location, Quaternion rotation)
         {
-            SwordProjectile slash = SwordProjectile.Create("MinotaurSlash",
+            MissileProjectile missile = MissileProjectile.Create("MinotaurSwordAttack1",
                 location,
                 rotation,
                 sprite,
                 controller,
                 0,
-                0.5f);
-            slash.HitDelay = 0;
-            slash.Collider.isTrigger = true;
-            slash.Collider.autoTiling = true;
-            slash.Collider.size = new Vector2(0.86f, 0.86f);
-            slash.transform.localScale = new Vector3(3, 3, 1);
-            slash.MaxHit = 100;
-            slash.Owner = unit;
-            slash.OnHit += (sender, e) =>
+                0.4f);
+            missile.HitDelay = 0;
+            missile.Collider.isTrigger = true;
+            missile.Collider.autoTiling = true;
+            missile.Collider.size = new Vector2(3.3f, 3.5f);
+            missile.Collider.offset = new Vector2(3f, -0.5f);
+            missile.transform.localScale = new Vector3(1, 1, 1);
+            missile.MaxHit = 1000;
+            missile.Owner = unit;
+            missile.OnHit += (sender, e) =>
             {
                 Unit u = e.GetComponent<Unit>();
                 if (u == null)
@@ -108,24 +84,62 @@ namespace Base2D.Init.Abilities
                 }
             };
 
-            return slash.gameObject;
+            return missile.gameObject;
+        }
+
+        IEnumerator Casting(float timeDelay, float timeCasting)
+        {
+            IsCasting = true;
+            yield return new WaitForSeconds(timeDelay);
+            TimeCastingLeft = timeCasting - timeDelay;
+
+            while (TimeCastingLeft >= 0)
+            {
+                yield return new WaitForSeconds(timeDelay);
+                TimeCastingLeft -= timeDelay;
+            }
+
+            if (IsCasting)
+            {
+                IsCasting = false;
+                DoCastAbility();
+            }
+
         }
 
         protected override void DoCastAbility()
         {
-            unit.Action.Animator.SetBool("Attack", false);
-
+            unit.Action.Animator.SetTrigger("end-atk1");
             Vector2 location = unit.transform.position;
             Quaternion rotation = unit.transform.rotation;
 
-            location = location + (Vector2)(rotation * new Vector2(1,1));
-            location.y -= 1;
-
+            location = location + (Vector2)(rotation * Vector2.left * 2);
             Create(location, rotation);
-
             unit.Action.Type = System.ActionSystem.ActionType.None;
             TimeCoolDownLeft = BaseCoolDown;
             unit.StartCoroutine(StartCoolDown(Time.deltaTime, BaseCoolDown));
         }
+
+        //protected override void DoAnimation()
+        //{
+        //}
+
+        //protected override void DoCastAbility()
+        //{
+        //}
+
+        //protected override void DoSomeThingIfCannotCasting()
+        //{
+        //}
+
+        //protected override void Initialize()
+        //{
+        //}
+
+        //protected override bool SpecialBreakAbility()
+        //{
+        //    return false;
+        //}
     }
 }
+
