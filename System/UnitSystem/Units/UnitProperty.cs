@@ -110,7 +110,7 @@ namespace Base2D.System.UnitSystem.Units
                 }
 
                 _currentHp = sce.NewValue;
-                if (_currentHp < 0)
+                if (_currentHp <= 0)
                 {
                     Kill(damageSource);
                 }
