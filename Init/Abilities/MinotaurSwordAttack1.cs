@@ -20,6 +20,7 @@ namespace Base2D.Init.Abilities
             unit = u;
             BaseCoolDown = 10 / unit.AttackSpeed;
             BaseCastingTime = 0.1f;
+            hitList = new Dictionary<Unit, int>();
         }
 
         public override bool Cast()
@@ -32,6 +33,7 @@ namespace Base2D.Init.Abilities
                 return false;
             }
 
+            hitList.Clear();
             unit.Action.Type = System.ActionSystem.ActionType.Attack;
             unit.Action.Animator.SetTrigger("attack1");
             unit.StartCoroutine(Casting(Time.deltaTime, BaseCastingTime));
@@ -40,16 +42,15 @@ namespace Base2D.Init.Abilities
         }
         public override GameObject Create(Vector2 location, Quaternion rotation)
         {
-            MissileProjectile missile = MissileProjectile.Create("MinotaurSwordAttack1",
+            MissileProjectile missile = MissileProjectile.Create("Minotaur Sword Attack1",
                 location,
                 rotation,
                 sprite,
                 controller,
                 0,
-                0.4f);
+                0.1f);
             missile.HitDelay = 0;
             missile.Collider.isTrigger = true;
-            missile.Collider.autoTiling = true;
             missile.Collider.size = new Vector2(3.3f, 3.5f);
             missile.Collider.offset = new Vector2(3f, -0.5f);
             missile.transform.localScale = new Vector3(1, 1, 1);
