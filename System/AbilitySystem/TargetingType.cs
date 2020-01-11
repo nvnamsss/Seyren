@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace Base2D.System.AbilitySystem
 {
-    interface IActiveAbility
+    public enum TargetingType
     {
+        NoTarget,
+        UnitTarget,
+        PointTarget,
+        UnitOrPointTarget,
+        AreaTarget,
     }
 }

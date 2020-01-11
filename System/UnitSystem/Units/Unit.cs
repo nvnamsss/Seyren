@@ -254,9 +254,7 @@ namespace Base2D.System.UnitSystem.Units
             }
 
             Vector2 translate = direction * Attribute.MovementSpeed;
-            translate.x = -Mathf.Abs(translate.x);
-            translate.y = -Mathf.Abs(translate.y);
-            transform.Translate(translate);
+            transform.position += (Vector3)translate;
         }
 
         public void Look(Vector2 direction)
@@ -274,14 +272,6 @@ namespace Base2D.System.UnitSystem.Units
             if (!Active)
             {
                 return;
-            }
-
-            if (Abilites.ContainsKey(Base2D.Init.Abilities.CharacterSwordAttack.Id))
-            {
-                Vector2 location = transform.position;
-                Quaternion rotation = transform.rotation;
-                Abilites[Base2D.Init.Abilities.CharacterSwordAttack.Id].Create(location, rotation);
-
             }
         }
 

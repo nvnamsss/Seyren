@@ -12,11 +12,15 @@ namespace Base2D.System.AbilitySystem
 {
     public abstract class Ability
     {
-        public AbilityType AbilityType { get; set; }
+        public delegate void CooldownCompletedHandler(Ability sender);
+        public event CooldownCompletedHandler CooldownCompleted;
+        public CastType CastType { get; protected set; }
+        public BreakType BreakType { get; set; }
         public float BaseCoolDown { get; set; }
         public float TimeCoolDownLeft { get; set; }
         public float BaseCastingTime { get; set; }
         public float TimeCastingLeft { get; set; }
+        public float ManaCost { get; set; }
 
         //Default player cannt case any skill until he unlocked it!
         public bool IsCastable { get; set; }
@@ -38,7 +42,6 @@ namespace Base2D.System.AbilitySystem
         public Unit Caster;
         public Unit Target;
         public Vector3 PointTarget;
-        public abstract GameObject Create(Vector2 location, Quaternion rotation);
         protected int _level;
 
         public virtual bool UnlockAbility()
@@ -55,33 +58,44 @@ namespace Base2D.System.AbilitySystem
             BaseCoolDown = cooldown;
             _level = level;
         }
+        
 
-        public abstract bool Cast();
-        public abstract bool Cast(Unit caster);
+        public virtual bool Cast()
+        {
+            if (!Condition())
+            {
+                return false;
+            }
 
+            switch (CastType)
+            {
+                case CastType.Channel:
+                    break;
+                case CastType.Casting:
+                    break;
+                case CastType.Instant:
+                    break;
+                case CastType.Aura:
+                    break;
+                case CastType.Autocast:
+                    break;
+                case CastType.Toggle:
+                    break;
+                default:
+                    break;
+            }
 
+            return true;
+        }
+
+        protected abstract bool Condition();
         /// <summary>
         /// Main Cast Ability, call when Ability is release
         /// </summary>
         protected abstract void DoCastAbility();
 
-        /// <summary>
-        /// Làm gì đó nếu không thể Cast Skill
-        /// </summary>
 
-        protected virtual IEnumerator Casted(float timeDelay, float timeCoolDown)
-        {
-            IsCastable = false;
-            IsCasting = false;
-            TimeCoolDownLeft = timeCoolDown - timeDelay;
 
-            while (TimeCoolDownLeft >= 0)
-            {
-                yield return new WaitForSeconds(timeDelay);
-                TimeCoolDownLeft -= timeDelay;
-            }
-            IsCastable = true;
-        }
 
         protected virtual IEnumerator Casting(float timeDelay, float timeCasting)
         {
@@ -102,6 +116,19 @@ namespace Base2D.System.AbilitySystem
             }
         }
 
+        protected virtual IEnumerator Casted(float timeDelay, float timeCoolDown)
+        {
+            IsCastable = false;
+            IsCasting = false;
+            TimeCoolDownLeft = timeCoolDown - timeDelay;
+
+            while (TimeCoolDownLeft >= 0)
+            {
+                yield return new WaitForSeconds(timeDelay);
+                TimeCoolDownLeft -= timeDelay;
+            }
+            IsCastable = true;
+        }
     }
 
 }

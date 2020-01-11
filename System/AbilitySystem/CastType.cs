@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace Base2D.System.AbilitySystem
 {
-    interface IPassive
+    public enum CastType
     {
+        Channel,
+        Casting,
+        Instant,
+        Aura,
+        Autocast,
+        Toggle,
     }
 }

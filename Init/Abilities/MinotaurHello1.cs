@@ -15,7 +15,7 @@ namespace Base2D.Init.Abilities
         private Sprite sprite;
         private RuntimeAnimatorController controller;
         private Dictionary<Unit, int> hitList;
-        public MinotaurHello1(Unit u)
+        public MinotaurHello1(Unit u) : base(u, u.AttackSpeed, 0.1f, 1)
         {
             unit = u;
             BaseCoolDown = unit.AttackSpeed;
@@ -63,7 +63,7 @@ namespace Base2D.Init.Abilities
 
         }
 
-        public override GameObject Create(Vector2 location, Quaternion rotation)
+        public GameObject Create(Vector2 location, Quaternion rotation)
         {
             SwordProjectile slash = SwordProjectile.Create("MinotaurSlash",
                 location,
@@ -125,7 +125,11 @@ namespace Base2D.Init.Abilities
 
             unit.Action.Type = System.ActionSystem.ActionType.None;
             TimeCoolDownLeft = BaseCoolDown;
-            unit.StartCoroutine(StartCoolDown(Time.deltaTime, BaseCoolDown));
+        }
+
+        protected override bool Condition()
+        {
+            throw new NotImplementedException();
         }
     }
 }

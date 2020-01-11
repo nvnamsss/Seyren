@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Base2D.System.AbilitySystem
 {
     [Flags]
-    public enum AbilityType
+    public enum BreakType
     {
         CannotBreak = 1,
         CannotCancel = 2,

@@ -16,7 +16,7 @@ namespace Base2D.Init.Abilities
         private RuntimeAnimatorController controller;
         private Dictionary<Unit, int> hitList;
         private static string ancientEnergyPath = "Effect/AncientEnergy/AncientEnergy";
-        public AndrasAttack(Unit u)
+        public AndrasAttack(Unit u) : base(u, 0.4f, u.Attribute.AttackSpeed, 1)
         {
             unit = u;
             BaseCoolDown = unit.AttackSpeed;
@@ -64,7 +64,7 @@ namespace Base2D.Init.Abilities
 
         }
 
-        public override GameObject Create(Vector2 location, Quaternion rotation)
+        public GameObject Create(Vector2 location, Quaternion rotation)
         {
             MissileProjectile missile = MissileProjectile.Create("AndrasAttack",
                 location,
@@ -126,7 +126,11 @@ namespace Base2D.Init.Abilities
 
             unit.Action.Type = System.ActionSystem.ActionType.None;
             TimeCoolDownLeft = BaseCoolDown;
-            unit.StartCoroutine(StartCoolDown(Time.deltaTime, BaseCoolDown));
+        }
+
+        protected override bool Condition()
+        {
+            throw new NotImplementedException();
         }
     }
 }
