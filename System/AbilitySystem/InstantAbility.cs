@@ -10,6 +10,16 @@ namespace Base2D.System.AbilitySystem
             CastType = CastType.Instant;
         }
 
+        public virtual bool Cast()
+        {
+            if (!Condition())
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         protected abstract override bool Condition();
 
         protected abstract override void DoCastAbility();

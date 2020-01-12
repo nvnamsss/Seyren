@@ -15,9 +15,14 @@ namespace Base2D.System.AbilitySystem
             IsOn = true;
         }
 
-        protected abstract override bool Condition();
+        public virtual bool Cast()
+        {
+            if (!Condition())
+            {
+                return false;
+            }
 
-        protected abstract override void DoCastAbility();
-
+            return true;
+        }
     }
 }
