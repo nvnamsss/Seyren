@@ -27,7 +27,7 @@ namespace Base2D.Init.Abilities
 
         public override bool Cast()
         {
-            if (!IsCastable || 
+            if (!Active || 
                 TimeCoolDownLeft > 0 || 
                 IsCasting ||
                 unit.Action.Type == System.ActionSystem.ActionType.CastAbility ||

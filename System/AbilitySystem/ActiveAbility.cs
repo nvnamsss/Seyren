@@ -11,13 +11,16 @@ namespace Base2D.System.AbilitySystem
 {
     public abstract class ActiveAbility : Ability
     {
+        public float BaseCastingTime { get; set; }
+        public float TimeCastingLeft { get; set; }
         public bool IsCasting { get; set; }
         public BreakType BreakType { get; set; }
+        protected abstract void DoCastAbility();
 
         public ActiveAbility(Unit caster, float castTime, float cooldown, int level) :
             base(caster, castTime, cooldown, level)
         {
-
+            CastType = CastType.Active;
         }
 
         public override bool Cast()
@@ -27,10 +30,10 @@ namespace Base2D.System.AbilitySystem
                 return false;
             }
 
+            Caster.StartCoroutine(Casting(TimeDelay, BaseCastingTime));
             return true;
         }
 
-        protected abstract void DoCastAbility();
 
         protected virtual IEnumerator Casting(float timeDelay, float timeCasting)
         {
@@ -47,13 +50,13 @@ namespace Base2D.System.AbilitySystem
             {
                 IsCasting = false;
                 DoCastAbility();
-                Caster.StartCoroutine(Casted(0, BaseCoolDown));
+                Caster.StartCoroutine(Casted(TimeDelay, BaseCoolDown));
             }
         }
 
         protected virtual IEnumerator Casted(float timeDelay, float timeCoolDown)
         {
-            IsCastable = false;
+            Active = false;
             IsCasting = false;
             TimeCoolDownLeft = timeCoolDown - timeDelay;
 
@@ -62,7 +65,7 @@ namespace Base2D.System.AbilitySystem
                 yield return new WaitForSeconds(timeDelay);
                 TimeCoolDownLeft -= timeDelay;
             }
-            IsCastable = true;
+            Active = true;
         }
     }
 }

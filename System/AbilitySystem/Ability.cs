@@ -12,10 +12,20 @@ namespace Base2D.System.AbilitySystem
 {
     public abstract class Ability
     {
+        public delegate void StatusChangedHandler(Ability sender);
         public delegate void CooldownCompletedHandler(Ability sender);
+        public event StatusChangedHandler StatusChanged;
+        /// <summary>
+        /// Trigger when ability cooldown is done and ability is ready to use
+        /// </summary>
         public event CooldownCompletedHandler CooldownCompleted;
         public CastType CastType { get; protected set; }
         public float BaseCoolDown { get; set; }
+        /// <summary>
+        /// Time between every process of an ability <br></br>
+        /// TimeDelay is using on reduce cast time, cooldown, etc...
+        /// </summary>
+        public float TimeDelay { get; set; }
         public float TimeCoolDownLeft
         {
             get
@@ -34,8 +44,26 @@ namespace Base2D.System.AbilitySystem
             }
         }
         public float ManaCost { get; set; }
-        //Default player cannt case any skill until he unlocked it!
-        public bool IsCastable { get; set; }
+        /// <summary>
+        /// Status of ability
+        /// </summary>
+        public bool Active
+        {
+            get
+            {
+                return _active;
+            }
+            set
+            {
+                bool original = _active;
+                _active = value;
+
+                if (_active != original)
+                {
+                    StatusChanged(this);
+                }
+            }
+        }
 
 
         public int Level
@@ -53,20 +81,23 @@ namespace Base2D.System.AbilitySystem
         public Unit Caster;
         public Unit Target;
         public Vector3 PointTarget;
+        protected bool _active;
         protected float _timeCooldownLeft;
         protected int _level;
 
         public virtual bool UnlockAbility()
         {
-            IsCastable = true;
+            Active = true;
 
-            return IsCastable;
+            return Active;
         }
 
-        public Ability(Unit caster, float castTime, float cooldown, int level)
+        public Ability(Unit caster, float timeDelay, float cooldown, int level)
         {
             Caster = caster;
+            TimeDelay = timeDelay;
             BaseCoolDown = cooldown;
+            TimeCoolDownLeft = 0;
             _level = level;
         }
 

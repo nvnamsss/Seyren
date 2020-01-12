@@ -18,6 +18,10 @@ namespace Base2D.System.AbilitySystem
 
         public BreakType BreakType { get; set; }
         public bool IsChanneling { get; set; }
+        /// <summary>
+        /// time between every Channel process  <br></br>
+        /// This Interval is using for Channel method
+        /// </summary>
         public float Interval { get; set; }
         public float ChannelTime { get; set; }
         public float ChannelTimeLeft { get; set; }
@@ -44,7 +48,7 @@ namespace Base2D.System.AbilitySystem
 
         protected abstract override bool Condition();
         protected abstract void DoChannelAbility();
-        protected IEnumerator Channel(float timeDelay, float channelTime)
+        protected IEnumerator Channel(float interval, float channelTime)
         {
             IsChanneling = true;
             ChannelTimeLeft = channelTime;
@@ -52,20 +56,20 @@ namespace Base2D.System.AbilitySystem
 
             while (ChannelTimeLeft >= 0)
             {
-                yield return new WaitForSeconds(timeDelay);
+                yield return new WaitForSeconds(interval);
                 DoChannelAbility();
-                ChannelTimeLeft -= timeDelay;
-                TotalChannelTime += timeDelay;
+                ChannelTimeLeft -= interval;
+                TotalChannelTime += interval;
             }
 
-            Caster.StartCoroutine(Casted(0, BaseCoolDown));
+            Caster.StartCoroutine(Casted(TimeDelay, BaseCoolDown));
             yield break;
         }
 
         protected IEnumerator Casted(float timeDelay, float cooldown)
         {
             ChannelEnd?.Invoke(this);
-            IsCastable = false;
+            Active = false;
             IsChanneling = false;
             TimeCoolDownLeft = cooldown - timeDelay;
 
@@ -74,7 +78,7 @@ namespace Base2D.System.AbilitySystem
                 yield return new WaitForSeconds(timeDelay);
                 TimeCoolDownLeft -= timeDelay;
             }
-            IsCastable = true;
+            Active = true;
         }
     }
 }

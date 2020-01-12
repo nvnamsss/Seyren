@@ -1,33 +1,42 @@
 ﻿using Base2D.System.UnitSystem.Units;
 using System.Collections;
+using UnityEngine;
 
 namespace Base2D.System.AbilitySystem
 {
     public abstract class InstantAbility : Ability
     {
+        protected abstract override bool Condition();
+
+        protected abstract void DoCastAbility();
         public InstantAbility(Unit caster, float cooldown, int level) : base(caster, 0, cooldown, 1)
         {
             CastType = CastType.Instant;
         }
 
-        public virtual bool Cast()
+        public override bool Cast()
         {
             if (!Condition())
             {
                 return false;
             }
 
+            Caster.StartCoroutine(Casted(TimeDelay, BaseCoolDown));
             return true;
         }
 
-        protected abstract override bool Condition();
 
-        protected abstract override void DoCastAbility();
 
-        protected override IEnumerator Casting(float timeDelay, float timeCasting)
+        protected virtual IEnumerator Casted(float timeDelay, float cooldown)
         {
             DoCastAbility();
-            Caster.StartCoroutine(Casted(0, BaseCoolDown));
+            TimeCoolDownLeft = cooldown - timeDelay;
+
+            while (TimeCoolDownLeft >= 0)
+            {
+                yield return new WaitForSeconds(timeDelay);
+                TimeCoolDownLeft -= timeDelay;
+            }
             yield break;
         }
     }
