@@ -9,7 +9,7 @@ namespace Base2D.System.AbilitySystem
 {
     public interface IAbility
     {
-        AbilityType AbilityType { get; set; }
+        CastType AbilityType { get; set; }
 
         AudioClip Sound { get; set; }
         GameObject BaseUnit { get; set; }

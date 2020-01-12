@@ -13,7 +13,7 @@ namespace Base2D.Init.Abilities
         public Unit unit;
         private Sprite sprite;
         private RuntimeAnimatorController controller;
-        public CharacterSwordAttack(Unit u)
+        public CharacterSwordAttack(Unit u) : base(u, 0.25f, 10 / u.Attribute.AttackSpeed, 1)
         {
             unit = u;
             BaseCoolDown = 10 / unit.AttackSpeed;
@@ -36,7 +36,7 @@ namespace Base2D.Init.Abilities
 
             return true;
         }
-        public override GameObject Create(Vector2 location, Quaternion rotation)
+        public GameObject Create(Vector2 location, Quaternion rotation)
         {
             MissileProjectile missile = MissileProjectile.Create("CharacterSwordAttack",
                 location,
@@ -95,7 +95,11 @@ namespace Base2D.Init.Abilities
             Create(location, rotation);
             unit.Action.Type = System.ActionSystem.ActionType.None;
             TimeCoolDownLeft = BaseCoolDown;
-            unit.StartCoroutine(StartCoolDown(Time.deltaTime, BaseCoolDown));
+        }
+
+        protected override bool Condition()
+        {
+            throw new NotImplementedException();
         }
 
         //protected override void DoAnimation()

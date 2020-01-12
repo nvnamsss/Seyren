@@ -1,220 +1,113 @@
-﻿using Base2D.System.UnitSystem;
-using Base2D.System.ActionSystem;
+﻿using System.Collections.Generic;
+using System.Collections;
 using Base2D.System.ActionSystem.BreakAtion;
 using Base2D.System.ActionSystem.DelayAction;
+using Base2D.System.ActionSystem;
 using Base2D.System.BuffSystem;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Base2D.System.UnitSystem.Units;
+using Base2D.System.UnitSystem;
+using UnityEngine;
 
 namespace Base2D.System.AbilitySystem
 {
-
-    public abstract class Ability : MonoBehaviour
+    public abstract class Ability
     {
-        public AbilityType AbilityType { get; set; }
-
-        public AudioClip Sound { get; set; }
-        public GameObject BaseUnit { get; set; }
-        public Animation BaseAnimation { get; set; }
-
-        public float BaseCoolDown { get; set; }
-        public float TimeCoolDownLeft { get; set; }
-        public float BaseCastingTime { get; set; }
-        public float TimeCastingLeft { get; set; }
-
-        public float TimeUpdate { get; set; }
-
-        //Default player cannt case any skill until he unlocked it!
-        public bool IsCastable { get; set; }
-        public bool IsCasting { get; set; }
-
-        public GameObject ObjectTarget { get; set; }
-        public Vector3 PointTarget { get; set; }
-
-        public abstract GameObject Create(Vector2 location, Quaternion rotation);
-
-
-        public void UnlockAbility()
-        {
-            IsCastable = true;
-        }
-
-        //public bool TryCastAbility(GameObject ObjectTarget)
-        //{
-        //    this.ObjectTarget = ObjectTarget;
-        //    if (IsCastable)
-        //    {
-        //        StartCoroutine(StartCasting(0, BaseCastingTime));
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        DoSomeThingIfCannotCasting();
-        //        return false;
-        //    }
-        //}
-
-        //public bool TryCastAbility(Vector3 point)
-        //{
-        //    PointTarget = point;
-        //    if (IsCastable)
-        //    {
-        //        StartCoroutine(StartCasting(0, BaseCastingTime));
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        DoSomeThingIfCannotCasting();
-        //        return false;
-        //    }
-        //}
-
-        public virtual bool Cast()
-        {
-            return false;
-        }
-
-        public virtual bool Cast(Unit caster)
-        {
-            return false;
-        }
-
-        void Update()
-        {
-            TimeCoolDownLeft -= Time.deltaTime; ;
-            Debug.Log(TimeCoolDownLeft);
-        }
-        protected virtual void Tick(float time)
-        {
-        }
-
-        //public override bool BreakAction(BreakType breakType)
-        //{
-        //    if (IsCasting)
-        //    {
-        //        switch (breakType)
-        //        {
-        //            case BreakType.CancelBreak:
-        //                return CancelBreakAbility();
-        //            case BreakType.KnockDownBreak:
-        //                return KnockDownBreakAbility();
-        //            case BreakType.SpecialBreak:
-        //                return SpecialBreakAbility();
-        //        }
-        //    }
-        //    return false;
-        //}
-
-        //Default DelayAction
-        //public override bool DelayAction(DelayInfo delayInfo)
-        //{
-        //    if (IsCasting)
-        //    {
-        //        StopAllCoroutines();
-        //        StartCoroutine(StartCasting(delayInfo.DelayTime, TimeCastingLeft));
-        //    }
-        //    return true;
-        //}
-
-        protected bool CancelBreakAbility()
-        {
-            switch (AbilityType)
-            {
-                case AbilityType.CannotCancel:
-                    return false;
-                case AbilityType.CanCancelNoCoolDown:
-                    StopAllCoroutines();
-                    StartCoroutine(StartCoolDown(0, 0));
-                    return true;
-                case AbilityType.CanCancelWithCoolDown:
-                    StopAllCoroutines();
-                    StartCoroutine(StartCoolDown(0, BaseCoolDown));
-                    return true;
-            }
-
-            return false;
-        }
-
-        protected bool KnockDownBreakAbility()
-        {
-
-            switch (AbilityType)
-            {
-                case AbilityType.CanKnockDownWithSoonRelease:
-                    //DoCastAbility();
-                    StartCoroutine(StartCoolDown(0, BaseCoolDown));
-                    return true;
-                case AbilityType.CanKnockDown:
-                    StopAllCoroutines();
-                    StartCoroutine(StartCoolDown(0, BaseCoolDown));
-                    return true;
-                case AbilityType.CannotGetKnockDown:
-                    return false;
-            }
-            return false;
-        }
-
-        //protected abstract bool SpecialBreakAbility();
-
+        public delegate void StatusChangedHandler(Ability sender);
+        public delegate void CooldownCompletedHandler(Ability sender);
+        public event StatusChangedHandler StatusChanged;
         /// <summary>
-        /// Init Ability Unit
+        /// Trigger when ability cooldown is done and ability is ready to use
         /// </summary>
-
-        //protected abstract void Initialize();
-
+        public event CooldownCompletedHandler CooldownCompleted;
+        public CastType CastType { get; protected set; }
+        public float BaseCoolDown { get; set; }
         /// <summary>
-        /// Change Unit Animation
-        //protected abstract void DoAnimation();
+        /// Time between every process of an ability <br></br>
+        /// TimeDelay is using on reduce cast time, cooldown, etc...
+        /// </summary>
+        public float TimeDelay { get; set; }
+        public float TimeCoolDownLeft
+        {
+            get
+            {
+                return _timeCooldownLeft;
+            }
+            set
+            {
+                float original = _timeCooldownLeft;
+                _timeCooldownLeft = value;
 
+                if (original > 0 && _timeCooldownLeft <= 0)
+                {
+                    CooldownCompleted?.Invoke(this);
+                }
+            }
+        }
+        public float ManaCost { get; set; }
+        /// <summary>
+        /// Status of ability
+        /// </summary>
+        public bool Active
+        {
+            get
+            {
+                return _active;
+            }
+            set
+            {
+                bool original = _active;
+                _active = value;
+
+                if (_active != original)
+                {
+                    StatusChanged(this);
+                }
+            }
+        }
+
+
+        public int Level
+        {
+            get
+            {
+                return _level;
+            }
+            set
+            {
+                _level = value;
+            }
+        }
+
+        public Unit Caster;
+        public Unit Target;
+        public Vector3 PointTarget;
+        protected bool _active;
+        protected float _timeCooldownLeft;
+        protected int _level;
+
+        public virtual bool UnlockAbility()
+        {
+            Active = true;
+
+            return Active;
+        }
+
+        public Ability(Unit caster, float timeDelay, float cooldown, int level)
+        {
+            Caster = caster;
+            TimeDelay = timeDelay;
+            BaseCoolDown = cooldown;
+            TimeCoolDownLeft = 0;
+            _level = level;
+        }
+
+
+        public abstract bool Cast();
+
+        protected abstract bool Condition();
         /// <summary>
         /// Main Cast Ability, call when Ability is release
         /// </summary>
-        protected abstract void DoCastAbility();
-
-        /// <summary>
-        /// Làm gì đó nếu không thể Cast Skill
-        /// </summary>
-
-
-        protected IEnumerator StartCoolDown(float timeDelay, float timeCoolDown)
-        {
-            yield return new WaitForSeconds(timeDelay);
-            IsCastable = false;
-            IsCasting = false;
-            TimeCoolDownLeft = timeCoolDown;
-
-            while (TimeCoolDownLeft >= 0)
-            {
-                yield return new WaitForSeconds(timeDelay);
-                TimeCoolDownLeft -= timeDelay;
-            }
-            IsCastable = true;
-        }
-
-        IEnumerator StartCasting(float timeDelay, float timeCasting)
-        {
-            //Delay before Casting
-            yield return new WaitForSeconds(timeDelay);
-            IsCasting = true;
-            TimeCastingLeft = timeCasting;
-
-            while (TimeCastingLeft >= 0)
-            {
-                yield return new WaitForSeconds(timeDelay);
-                TimeCastingLeft -= timeDelay;
-            }
-
-            //Check if cast still allow
-            if (IsCasting)
-            {
-                IsCasting = false;
-                DoCastAbility();
-                StartCoroutine(StartCoolDown(0, BaseCoolDown));
-            }
-        }
-        
     }
 
 }

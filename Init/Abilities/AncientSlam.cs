@@ -16,7 +16,7 @@ namespace Base2D.Init.Abilities
         private Dictionary<Unit, int> hitList;
         private static string ancientEnergyPath = "Effect/AncientEnergy/AncientEnergy";
 
-        public AncientSlam(Unit u)
+        public AncientSlam(Unit u) : base(u, 2, 10, 1)
         {
             unit = u;
             BaseCoolDown = 10;
@@ -27,7 +27,8 @@ namespace Base2D.Init.Abilities
 
         public override bool Cast()
         {
-            if (TimeCoolDownLeft > 0 || 
+            if (!Active || 
+                TimeCoolDownLeft > 0 || 
                 IsCasting ||
                 unit.Action.Type == System.ActionSystem.ActionType.CastAbility ||
                 unit.Action.Type == System.ActionSystem.ActionType.Attack)
@@ -42,28 +43,8 @@ namespace Base2D.Init.Abilities
             return true;
         }
 
-        IEnumerator Casting(float timeDelay, float timeCasting)
-        {
-            IsCasting = true;
-            yield return new WaitForSeconds(timeDelay);
-            TimeCastingLeft = timeCasting - timeDelay;
 
-            while (TimeCastingLeft >= 0)
-            {
-                yield return new WaitForSeconds(timeDelay);
-                TimeCastingLeft -= timeDelay;
-            }
-
-            if (IsCasting)
-            {
-                IsCasting = false;
-                DoCastAbility();
-            }
-
-        }
-
-
-        public override GameObject Create(Vector2 location, Quaternion rotation)
+        public GameObject Create(Vector2 location, Quaternion rotation)
         {
             return null;
         }
@@ -130,7 +111,7 @@ namespace Base2D.Init.Abilities
             Create();
             unit.Action.Type = System.ActionSystem.ActionType.None;
             TimeCoolDownLeft = BaseCoolDown;
-            unit.StartCoroutine(StartCoolDown(Time.deltaTime, BaseCoolDown));
         }
+
     }
 }

@@ -3,7 +3,6 @@ using Base2D.System.UnitSystem.Projectiles;
 using Base2D.System.UnitSystem.Units;
 using System.Collections;
 using UnityEngine;
-using UnityEngine;
 
 namespace Base2D.Init.Abilities
 {
@@ -15,19 +14,25 @@ namespace Base2D.Init.Abilities
         private Sprite sprite;
         private RuntimeAnimatorController controller;
         private static string magicFlamePath = "Effect/MagicFlame/MagicFlame";
-        public MagicFlame(Unit u)
+        public MagicFlame(Unit u) : base(u, 0.2f, 1, 1)
         {
             unit = u;
             controller = Resources.Load<RuntimeAnimatorController>(magicFlamePath);
             BaseCoolDown = 1;
+            BaseCastingTime = 0.2f;
         }
 
         public override bool Cast()
         {
-            if (TimeCoolDownLeft > 0 || IsCasting)
+            if (!Active ||
+                TimeCoolDownLeft > 0 ||
+                IsCasting ||
+                unit.Action.Type == System.ActionSystem.ActionType.CastAbility ||
+                unit.Action.Type == System.ActionSystem.ActionType.Attack)
             {
                 return false;
             }
+
 
             IsCasting = true;
             unit.Action.Animator.SetBool("Spell", true);
@@ -57,7 +62,7 @@ namespace Base2D.Init.Abilities
 
         }
 
-        public override GameObject Create(Vector2 location, Quaternion rotation)
+        public GameObject Create(Vector2 location, Quaternion rotation)
         {
             Vector3 euler = rotation.eulerAngles;
             MissileProjectile missile = MissileProjectile.Create("missile",
@@ -95,7 +100,11 @@ namespace Base2D.Init.Abilities
             unit.Action.Animator.SetBool("Spell", false);
             Create(unit.transform.position, unit.transform.rotation);
             TimeCoolDownLeft = BaseCoolDown;
-            unit.StartCoroutine(StartCoolDown(Time.deltaTime, 1));
+        }
+
+        protected override bool Condition()
+        {
+            throw new global::System.NotImplementedException();
         }
     }
 }
