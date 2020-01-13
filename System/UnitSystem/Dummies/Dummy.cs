@@ -11,31 +11,52 @@ using UnityEngine;
 
 namespace Base2D.System.UnitSystem.Dummies
 {
-    public class Dummy : MonoBehaviour, IAttribute, IObject
+    [RequireComponent(typeof(Collider2D))]
+    [RequireComponent(typeof(Rigidbody2D))]
+    public partial class Dummy : MonoBehaviour, IAttribute, IObject
     {
-        public int CustomValue { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool Targetable { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool Invulnerable { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         
-        public bool IsFly { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public float Size { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public float Height { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public float AnimationSpeed { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public float TurnSpeed { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public Color VertexColor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public Attribute Attribute { get; set; }
-
-        public ModificationInfos Modification { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public float HitDelay { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public float TimeExpired { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public Unit Owner { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public Dummy()
+        Dummy()
         {
 
         }
 
+        protected virtual void Awake()
+        {
+
+        }
+
+        protected virtual void Start()
+        {
+
+        }
+            
+        protected virtual void Update()
+        {
+
+        }
+
+        protected virtual void FixedUpdate()
+        {
+            
+        }
+
+        protected virtual void OnCollisionEnter2D(Collision2D collision)
+        {
+        }
+
+        protected virtual void OnCollisionStay2D(Collision2D collision)
+        {
+        }
+
+        protected virtual void OnTriggerEnter2D(Collider2D collision)
+        {
+        }
+
+        protected virtual void OnTriggerStay2D(Collider2D collision)
+        {
+        }
         public void Damage(Unit target, DamageType type)
         {
 
@@ -44,19 +65,6 @@ namespace Base2D.System.UnitSystem.Dummies
         public void Damage(Unit target, float damage, DamageType type)
         {
 
-        }
-
-        public static GameObject CreateDummy()
-        {
-            GameObject go = new GameObject();
-            SpriteRenderer render = go.AddComponent(typeof(SpriteRenderer)) as SpriteRenderer;
-            Texture2D texture = new Texture2D(512, 256);
-            byte[] data = File.ReadAllBytes(Path.Combine(Application.dataPath, "Knight Files", "Knight PNG", "Knight_attack_01.png"));
-
-            go.AddComponent(typeof(Dummy));
-            texture.LoadImage(data);
-            render.sprite = Sprite.Create(texture, new Rect(new Vector2(0, 0), new Vector2(512, 256)), new Vector2(0, 0));
-            return go;
         }
 
         public void Move()
