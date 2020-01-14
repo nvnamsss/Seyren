@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Base2D.Init.Abilities
 {
-    public class CharacterSwordAttack : Ability
+    public class CharacterSwordAttack : ActiveAbility
     {
         public static readonly int Id = 0x67658401;
         public Unit unit;
@@ -18,23 +18,16 @@ namespace Base2D.Init.Abilities
             unit = u;
             BaseCoolDown = 10 / unit.AttackSpeed;
             BaseCastingTime = 0.25f;
-        }
 
-        public override bool Cast()
-        {
-            if (TimeCoolDownLeft > 0 ||
-                IsCasting ||
-                unit.Action.Type == System.ActionSystem.ActionType.CastAbility ||
-                unit.Action.Type == System.ActionSystem.ActionType.Attack)
+            Casting += (sender, e) =>
             {
-                return false;
-            }
 
-            unit.Action.Type = System.ActionSystem.ActionType.Attack;
-            unit.Action.Animator.SetTrigger("atk1");
-            unit.StartCoroutine(Casting(Time.deltaTime, BaseCastingTime));
+            };
 
-            return true;
+            Casted += (sender) =>
+            {
+
+            };
         }
         public GameObject Create(Vector2 location, Quaternion rotation)
         {
@@ -65,25 +58,7 @@ namespace Base2D.Init.Abilities
             return missile.gameObject;
         }
 
-        IEnumerator Casting(float timeDelay, float timeCasting)
-        {
-            IsCasting = true;
-            yield return new WaitForSeconds(timeDelay);
-            TimeCastingLeft = timeCasting - timeDelay;
 
-            while (TimeCastingLeft >= 0)
-            {
-                yield return new WaitForSeconds(timeDelay);
-                TimeCastingLeft -= timeDelay;
-            }
-
-            if (IsCasting)
-            {
-                IsCasting = false;
-                DoCastAbility();
-            }
-
-        }
 
         protected override void DoCastAbility()
         {
@@ -99,28 +74,11 @@ namespace Base2D.Init.Abilities
 
         protected override bool Condition()
         {
-            throw new NotImplementedException();
+            return !Active ||
+                TimeCoolDownLeft > 0 ||
+                IsCasting ||
+                unit.Action.Type == System.ActionSystem.ActionType.CastAbility ||
+                unit.Action.Type == System.ActionSystem.ActionType.Attack;
         }
-
-        //protected override void DoAnimation()
-        //{
-        //}
-
-        //protected override void DoCastAbility()
-        //{
-        //}
-
-        //protected override void DoSomeThingIfCannotCasting()
-        //{
-        //}
-
-        //protected override void Initialize()
-        //{
-        //}
-
-        //protected override bool SpecialBreakAbility()
-        //{
-        //    return false;
-        //}
     }
 }

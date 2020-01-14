@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Base2D.Init.Abilities
 {
-    public class MagicFlame : Ability
+    public class MagicFlame : ActiveAbility
     {
         public static readonly int Id = 0x77707601;
         public Unit unit;
@@ -20,46 +20,16 @@ namespace Base2D.Init.Abilities
             controller = Resources.Load<RuntimeAnimatorController>(magicFlamePath);
             BaseCoolDown = 1;
             BaseCastingTime = 0.2f;
-        }
 
-        public override bool Cast()
-        {
-            if (!Active ||
-                TimeCoolDownLeft > 0 ||
-                IsCasting ||
-                unit.Action.Type == System.ActionSystem.ActionType.CastAbility ||
-                unit.Action.Type == System.ActionSystem.ActionType.Attack)
+            Casting += (sender, e) =>
             {
-                return false;
-            }
+                unit.Action.Animator.SetBool("Spell", true);
+            };
 
-
-            IsCasting = true;
-            unit.Action.Animator.SetBool("Spell", true);
-            TimeCastingLeft = 0.2f;
-            unit.StartCoroutine(Casting(Time.deltaTime, 0.2f));
-
-            return true;
-        }
-
-        IEnumerator Casting(float timeDelay, float timeCasting)
-        {
-            yield return new WaitForSeconds(timeDelay);
-            IsCasting = true;
-            TimeCastingLeft = timeCasting;
-
-            while (TimeCastingLeft >= 0)
+            Casted += (sender) =>
             {
-                yield return new WaitForSeconds(timeDelay);
-                TimeCastingLeft -= timeDelay;
-            }
-
-            if (IsCasting)
-            {
-                IsCasting = false;
-                DoCastAbility();
-            }
-
+                unit.Action.Animator.SetBool("Spell", false);
+            };
         }
 
         public GameObject Create(Vector2 location, Quaternion rotation)
@@ -97,14 +67,17 @@ namespace Base2D.Init.Abilities
         protected override void DoCastAbility()
         {
             IsCasting = false;
-            unit.Action.Animator.SetBool("Spell", false);
             Create(unit.transform.position, unit.transform.rotation);
             TimeCoolDownLeft = BaseCoolDown;
         }
 
         protected override bool Condition()
         {
-            throw new global::System.NotImplementedException();
+            return !Active ||
+                TimeCoolDownLeft > 0 ||
+                IsCasting ||
+                unit.Action.Type == System.ActionSystem.ActionType.CastAbility ||
+                unit.Action.Type == System.ActionSystem.ActionType.Attack;
         }
     }
 }

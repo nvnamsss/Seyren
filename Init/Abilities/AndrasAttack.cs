@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Base2D.Init.Abilities
 {
-    public class AndrasAttack : Ability
+    public class AndrasAttack : ActiveAbility
     {
         public static readonly int Id = 0x65686501;
         private Unit unit;
@@ -23,45 +23,6 @@ namespace Base2D.Init.Abilities
             BaseCastingTime = 0.4f;
             controller = Resources.Load<RuntimeAnimatorController>(ancientEnergyPath);
             hitList = new Dictionary<Unit, int>();
-        }
-        public override bool Cast()
-        {
-            if (TimeCoolDownLeft > 0 ||
-                IsCasting ||
-                unit.Action.Type == System.ActionSystem.ActionType.CastAbility ||
-                unit.Action.Type == System.ActionSystem.ActionType.Attack)
-            {
-                return false;
-            }
-
-            hitList.Clear();
-            unit.Action.Type = System.ActionSystem.ActionType.CastAbility;
-
-            unit.Action.Animator.SetBool("Attack", true);
-            TimeCastingLeft = BaseCastingTime;
-            unit.StartCoroutine(Casting(Time.deltaTime, BaseCastingTime));
-            return true;
-        }
-
-
-        IEnumerator Casting(float timeDelay, float timeCasting)
-        {
-            IsCasting = true;
-            yield return new WaitForSeconds(timeDelay);
-            TimeCastingLeft = timeCasting - timeDelay;
-
-            while (TimeCastingLeft >= 0)
-            {
-                yield return new WaitForSeconds(timeDelay);
-                TimeCastingLeft -= timeDelay;
-            }
-
-            if (IsCasting)
-            { 
-                IsCasting = false;
-                DoCastAbility();
-            }
-
         }
 
         public GameObject Create(Vector2 location, Quaternion rotation)
@@ -130,7 +91,11 @@ namespace Base2D.Init.Abilities
 
         protected override bool Condition()
         {
-            throw new NotImplementedException();
+            return !Active ||
+                TimeCoolDownLeft > 0 ||
+                IsCasting ||
+                unit.Action.Type == System.ActionSystem.ActionType.CastAbility ||
+                unit.Action.Type == System.ActionSystem.ActionType.Attack;
         }
     }
 }

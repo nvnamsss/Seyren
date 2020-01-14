@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Base2D.Init.Abilities
 {
-    public class AncientSlam : Ability
+    public class AncientSlam : ActiveAbility
     {
         public static readonly int Id = 0x65678301;
         private Unit unit;
@@ -23,26 +23,17 @@ namespace Base2D.Init.Abilities
             BaseCastingTime = 2;
             controller = Resources.Load<RuntimeAnimatorController>(ancientEnergyPath);
             hitList = new Dictionary<Unit, int>();
-        }
 
-        public override bool Cast()
-        {
-            if (!Active || 
-                TimeCoolDownLeft > 0 || 
-                IsCasting ||
-                unit.Action.Type == System.ActionSystem.ActionType.CastAbility ||
-                unit.Action.Type == System.ActionSystem.ActionType.Attack)
+            Casting += (sender, e) =>
             {
-                return false;
-            }
+                unit.Action.Animator.SetBool("Spell", true);
+            };
 
-            hitList.Clear();
-            unit.Action.Type = System.ActionSystem.ActionType.CastAbility;
-            unit.Action.Animator.SetBool("Spell", true);
-            unit.StartCoroutine(Casting(0.4f, BaseCastingTime));
-            return true;
+            Casted += (sender) =>
+            {
+                unit.Action.Animator.SetBool("Spell", false);
+            };
         }
-
 
         public GameObject Create(Vector2 location, Quaternion rotation)
         {
@@ -113,5 +104,13 @@ namespace Base2D.Init.Abilities
             TimeCoolDownLeft = BaseCoolDown;
         }
 
+        protected override bool Condition()
+        {
+            return !Active ||
+                TimeCoolDownLeft > 0 ||
+                IsCasting ||
+                unit.Action.Type == System.ActionSystem.ActionType.CastAbility ||
+                unit.Action.Type == System.ActionSystem.ActionType.Attack;
+        }
     }
 }

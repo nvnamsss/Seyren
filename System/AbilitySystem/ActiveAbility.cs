@@ -11,6 +11,10 @@ namespace Base2D.System.AbilitySystem
 {
     public abstract class ActiveAbility : Ability
     {
+        public delegate void CastingSpellHandler(ActiveAbility sender, CastingSpellEventArgs e);
+        public delegate void CastedSpellHandler(ActiveAbility sender);
+        public event CastingSpellHandler Casting;
+        public event CastedSpellHandler Casted;
         public float BaseCastingTime { get; set; }
         public float TimeCastingLeft { get; set; }
         public bool IsCasting { get; set; }
@@ -30,12 +34,20 @@ namespace Base2D.System.AbilitySystem
                 return false;
             }
 
-            Caster.StartCoroutine(Casting(TimeDelay, BaseCastingTime));
+            CastingSpellEventArgs cing = new CastingSpellEventArgs();
+            Casting?.Invoke(this, cing);
+
+            if (cing.Cancel)
+            {
+                return false;
+            }
+
+            Caster.StartCoroutine(CastingProcess(TimeDelay, BaseCastingTime));
             return true;
         }
 
 
-        protected virtual IEnumerator Casting(float timeDelay, float timeCasting)
+        protected virtual IEnumerator CastingProcess(float timeDelay, float timeCasting)
         {
             IsCasting = true;
             TimeCastingLeft = timeCasting;
@@ -50,12 +62,13 @@ namespace Base2D.System.AbilitySystem
             {
                 IsCasting = false;
                 DoCastAbility();
-                Caster.StartCoroutine(Casted(TimeDelay, BaseCoolDown));
+                Caster.StartCoroutine(CastedProcess(TimeDelay, BaseCoolDown));
             }
         }
 
-        protected virtual IEnumerator Casted(float timeDelay, float timeCoolDown)
+        protected virtual IEnumerator CastedProcess(float timeDelay, float timeCoolDown)
         {
+            Casted?.Invoke(this);
             Active = false;
             IsCasting = false;
             TimeCoolDownLeft = timeCoolDown - timeDelay;

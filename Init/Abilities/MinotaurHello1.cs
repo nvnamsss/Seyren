@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Base2D.Init.Abilities
 {
-    public class MinotaurHello1 : Ability
+    public class MinotaurHello1 : ActiveAbility
     {
         public static readonly int Id = 0x65686501;
         private Unit unit;
