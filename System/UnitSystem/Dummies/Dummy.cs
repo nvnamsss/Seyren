@@ -1,5 +1,6 @@
 ﻿using Base2D.System.DamageSystem;
 using Base2D.System.UnitSystem;
+using Base2D.System.UnitSystem.Projectiles;
 using Base2D.System.UnitSystem.Units;
 using System;
 using System.Collections.Generic;
@@ -15,16 +16,17 @@ namespace Base2D.System.UnitSystem.Dummies
     [RequireComponent(typeof(Rigidbody2D))]
     public partial class Dummy : MonoBehaviour, IAttribute, IObject
     {
-        
-
         Dummy()
         {
-
+            AffectedUnits = new List<Unit>();
+            AffectedDummies = new List<Dummy>();
+            AffectedProjectiles= new List<Projectile >();
         }
 
         protected virtual void Awake()
         {
-
+            Body = GetComponent<Rigidbody2D>();
+            Collider = GetComponent<Collider2D>();
         }
 
         protected virtual void Start()
@@ -44,18 +46,23 @@ namespace Base2D.System.UnitSystem.Dummies
 
         protected virtual void OnCollisionEnter2D(Collision2D collision)
         {
+
         }
 
-        protected virtual void OnCollisionStay2D(Collision2D collision)
-        {
-        }
 
         protected virtual void OnTriggerEnter2D(Collider2D collision)
         {
+            
         }
 
-        protected virtual void OnTriggerStay2D(Collider2D collision)
+        private void OnCollisionExit2D(Collision2D collision)
         {
+            
+        }
+
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            
         }
         public void Damage(Unit target, DamageType type)
         {

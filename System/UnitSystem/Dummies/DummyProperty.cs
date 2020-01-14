@@ -1,10 +1,7 @@
 ﻿using Base2D.System.DamageSystem;
+using Base2D.System.UnitSystem.Projectiles;
 using Base2D.System.UnitSystem.Units;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Base2D.System.UnitSystem.Dummies
@@ -27,6 +24,11 @@ namespace Base2D.System.UnitSystem.Dummies
         public ModificationInfos Modification { get; set; }
         public float HitDelay { get; set; }
         public float TimeExpired { get; set; }
+        public List<Unit> AffectedUnits;
+        public List<Projectile> AffectedProjectiles;
+        public List<Dummy> AffectedDummies;
         public Unit Owner { get; set; }
+        public Rigidbody2D Body;
+        public Collider2D Collider;
     }
 }
