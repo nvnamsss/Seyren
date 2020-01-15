@@ -8,6 +8,10 @@ namespace Base2D.System.UnitSystem.Dummies
 {
     public partial class Dummy : MonoBehaviour, IAttribute, IObject
     {
+        public delegate void UnitAffectedHandler(Dummy sender, Unit affected);
+        public event UnitAffectedHandler UnitIn;
+        public event UnitAffectedHandler UnitOut;
+
         public int CustomValue { get; set; }
         public bool Targetable { get; set; }
         public bool Invulnerable { get; set; }

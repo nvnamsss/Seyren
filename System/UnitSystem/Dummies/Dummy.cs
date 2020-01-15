@@ -21,6 +21,7 @@ namespace Base2D.System.UnitSystem.Dummies
             AffectedUnits = new List<Unit>();
             AffectedDummies = new List<Dummy>();
             AffectedProjectiles= new List<Projectile >();
+            Modification = new ModificationInfos();
         }
 
         protected virtual void Awake()
@@ -52,7 +53,26 @@ namespace Base2D.System.UnitSystem.Dummies
 
         protected virtual void OnTriggerEnter2D(Collider2D collision)
         {
+            Unit unit = collision.GetComponent<Unit>();
+            Projectile projectile = collision.GetComponent<Projectile>();
+            Dummy dummy = collision.GetComponent<Dummy>();
+
+            if (unit != null)
+            {
+                AffectedUnits.Add(unit);
+                UnitIn?.Invoke(this, unit);
+            }
+
+            if (projectile != null)
+            {
+                AffectedProjectiles.Add(projectile);
+            }
             
+            if (dummy != null)
+            {
+                AffectedDummies.Add(dummy);
+                UnitOut?.Invoke(this, unit);
+            }
         }
 
         private void OnCollisionExit2D(Collision2D collision)
@@ -62,8 +82,26 @@ namespace Base2D.System.UnitSystem.Dummies
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            
+            Unit unit = collision.GetComponent<Unit>();
+            Projectile projectile = collision.GetComponent<Projectile>();
+            Dummy dummy = collision.GetComponent<Dummy>();
+
+            if (unit != null)
+            {
+                AffectedUnits.Remove(unit);
+            }
+
+            if (projectile != null)
+            {
+                AffectedProjectiles.Remove(projectile);
+            }
+
+            if (dummy != null)
+            {
+                AffectedDummies.Remove(dummy);
+            }
         }
+
         public void Damage(Unit target, DamageType type)
         {
 

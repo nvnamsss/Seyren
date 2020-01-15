@@ -71,12 +71,6 @@ namespace Base2D.System.UnitSystem.Units
             _currentMp = Attribute.MaxMp;
             _currentPShield = Attribute.PShield;
             _currentMShield = Attribute.MShield;
-
-            if(this.GetType() == typeof(Hero)){
-                HUDManager.instance.setHealth();
-                HUDManager.instance.updateMana(CurrentMp);
-                StatusUIManager.instance.setStats();
-            }
         }
 
         void Update()

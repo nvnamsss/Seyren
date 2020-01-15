@@ -21,5 +21,27 @@ namespace Base2D.System.UnitSystem.Dummies
             render.sprite = Sprite.Create(texture, new Rect(new Vector2(0, 0), new Vector2(512, 256)), new Vector2(0, 0));
             return go;
         }
+
+        public static Dummy CreateCircleDummy()
+        {
+            GameObject go = new GameObject();
+            SpriteRenderer render = go.AddComponent<SpriteRenderer>();
+            go.AddComponent<CircleCollider2D>();
+            go.AddComponent<Rigidbody2D>();
+            Dummy dummy = go.AddComponent<Dummy>();
+
+            return dummy;
+        }
+
+        public static Dummy CreateBoxDummy()
+        {
+            GameObject go = new GameObject();
+            SpriteRenderer render = go.AddComponent<SpriteRenderer>();
+            go.AddComponent<BoxCollider2D>();
+            go.AddComponent<Rigidbody2D>();
+            Dummy dummy = go.AddComponent<Dummy>();
+
+            return dummy;
+        }
     }
 }

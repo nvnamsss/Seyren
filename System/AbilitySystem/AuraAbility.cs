@@ -36,8 +36,6 @@ namespace Base2D.System.AbilitySystem
 
         protected virtual IEnumerator OnActive(float interval)
         {
-            base.Active = false;
-
             while (base.Active)
             {
                 yield return new WaitForSeconds(interval);

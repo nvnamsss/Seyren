@@ -101,7 +101,6 @@ namespace Base2D.System.AbilitySystem
             _level = level;
         }
 
-
         public abstract bool Cast();
         /// <summary>
         /// Ability will be casted if condition is true
