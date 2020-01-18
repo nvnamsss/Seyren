@@ -19,7 +19,7 @@ namespace Base2D.Init.Abilities
         public AndrasAttack(Unit u) : base(u, 0.4f, u.Attribute.AttackSpeed, 1)
         {
             unit = u;
-            BaseCoolDown = unit.AttackSpeed;
+            BaseCoolDown = unit.Attribute.AttackSpeed;
             BaseCastingTime = 0.4f;
             controller = Resources.Load<RuntimeAnimatorController>(ancientEnergyPath);
             hitList = new Dictionary<Unit, int>();

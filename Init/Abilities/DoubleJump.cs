@@ -19,7 +19,7 @@ namespace Base2D.Init.Abilities
 
         protected override void DoCastAbility()
         {
-            Vector2 force = new Vector2(0, 0.8f * unit.JumpSpeed);
+            Vector2 force = new Vector2(0, 0.8f * unit.Attribute.JumpSpeed);
             unit.Body.AddForce(force, ForceMode2D.Impulse);
             GameObject effect = Object.Instantiate(Effect, unit.transform.position, unit.transform.rotation);
             Object.Destroy(effect, 0.5f);

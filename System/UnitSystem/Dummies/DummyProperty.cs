@@ -9,8 +9,14 @@ namespace Base2D.System.UnitSystem.Dummies
     public partial class Dummy : MonoBehaviour, IAttribute, IObject
     {
         public delegate void UnitAffectedHandler(Dummy sender, Unit affected);
+        public delegate void DummyAffectedHandler(Dummy sender, Dummy affected);
+        public delegate void ProjectileAffectedHandler(Dummy sender, Projectile affected);
         public event UnitAffectedHandler UnitIn;
         public event UnitAffectedHandler UnitOut;
+        public event DummyAffectedHandler DummyIn;
+        public event DummyAffectedHandler DummyOut;
+        public event ProjectileAffectedHandler ProjectileIn;
+        public event ProjectileAffectedHandler ProjectileOut;
 
         public int CustomValue { get; set; }
         public bool Targetable { get; set; }

@@ -9,6 +9,7 @@ using Base2D.System.UnitSystem.Projectiles;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEditor;
 
 namespace Base2D.System.UnitSystem.Units
 {
@@ -16,13 +17,6 @@ namespace Base2D.System.UnitSystem.Units
     {
         public Unit()
         {
-            Attribute = new Attribute();
-            Attribute.AttackDamage = 51;
-            Attribute.HpRegen = 1;
-            //CurrentHp = Attribute.MaxHp = 100;
-            //CurrentPShield = 52;
-            //CurrentMShield = 0;
-            //CurrentShield = 22;
             JumpTimes = 1;
             Modification = new ModificationInfos();
         }
@@ -33,11 +27,12 @@ namespace Base2D.System.UnitSystem.Units
             Collider = GetComponent<Collider2D>();
             Action = gameObject.AddComponent<Action>();
             Abilites = new Dictionary<int, AbilitySystem.Ability>();
+            Attribute = Attribute == null ? ScriptableObject.CreateInstance<Attribute>() : Attribute;
             Active = true;
         }
         void Start()
         {
-
+            
 #if UNITY_EDITOR
             Attribute.Strength = Strength;
             Attribute.Agility = Agility;
@@ -66,16 +61,16 @@ namespace Base2D.System.UnitSystem.Units
             Attribute.AttackSpeed = AttackSpeed;
             Attribute.JumpSpeed = JumpSpeed;
 #endif
-            _currentJump = JumpTimes;
-            _currentHp = Attribute.MaxHp;
-            _currentMp = Attribute.MaxMp;
-            _currentPShield = Attribute.PShield;
-            _currentMShield = Attribute.MShield;
+            //_currentJump = JumpTimes;
+            //_currentHp = Attribute.MaxHp;
+            //_currentMp = Attribute.MaxMp;
+            //_currentPShield = Attribute.PShield;
+            //_currentMShield = Attribute.MShield;
         }
 
         void Update()
         {
-            Attribute.Update();
+            //Attribute.Update();
             //UpdateGrounding();
         }
 

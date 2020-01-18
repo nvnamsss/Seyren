@@ -16,7 +16,7 @@ namespace Base2D.Init.Abilities
         public CharacterSwordAttack(Unit u) : base(u, 0.25f, 10 / u.Attribute.AttackSpeed, 1)
         {
             unit = u;
-            BaseCoolDown = 10 / unit.AttackSpeed;
+            BaseCoolDown = 10 / unit.Attribute.AttackSpeed;
             BaseCastingTime = 0.25f;
 
             Casting += (sender, e) =>

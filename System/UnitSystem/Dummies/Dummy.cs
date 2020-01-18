@@ -66,12 +66,13 @@ namespace Base2D.System.UnitSystem.Dummies
             if (projectile != null)
             {
                 AffectedProjectiles.Add(projectile);
+                ProjectileIn?.Invoke(this, projectile);
             }
             
             if (dummy != null)
             {
                 AffectedDummies.Add(dummy);
-                UnitOut?.Invoke(this, unit);
+                DummyIn?.Invoke(this, dummy);
             }
         }
 
@@ -89,16 +90,19 @@ namespace Base2D.System.UnitSystem.Dummies
             if (unit != null)
             {
                 AffectedUnits.Remove(unit);
+                UnitOut?.Invoke(this, unit);
             }
 
             if (projectile != null)
             {
                 AffectedProjectiles.Remove(projectile);
+                ProjectileOut?.Invoke(this, projectile);
             }
 
             if (dummy != null)
             {
                 AffectedDummies.Remove(dummy);
+                DummyOut?.Invoke(this, dummy);
             }
         }
 

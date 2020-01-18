@@ -38,7 +38,6 @@ namespace Base2D.System.UnitSystem.Units
         public Unit Owner { get; set; }
         public ModificationInfos Modification { get; set; }
         public IAttachable Attach { get; set; }
-
         public Attribute Attribute { get; set; }
         public Dictionary<string, Sprite> Sprites { get; set; }
         public Dictionary<int, Ability> Abilites { get; set; }
@@ -70,8 +69,8 @@ namespace Base2D.System.UnitSystem.Units
         public float MovementSpeed;
         public float AttackSpeed;
         public float JumpSpeed;
-        public GroundType StandOn;
 #endif
+        public GroundType StandOn;
         public UnitStatus UnitStatus
         {
             get

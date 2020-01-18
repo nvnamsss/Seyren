@@ -15,10 +15,10 @@ namespace Base2D.Init.Abilities
         private Sprite sprite;
         private RuntimeAnimatorController controller;
         private Dictionary<Unit, int> hitList;
-        public MinotaurHello1(Unit u) : base(u, u.AttackSpeed, 0.1f, 1)
+        public MinotaurHello1(Unit u) : base(u, u.Attribute.AttackSpeed, 0.1f, 1)
         {
             unit = u;
-            BaseCoolDown = unit.AttackSpeed;
+            BaseCoolDown = unit.Attribute.AttackSpeed;
             BaseCastingTime = 0.1f;
             controller = ProjectileCollection.AncientEnergyController;
             hitList = new Dictionary<Unit, int>();

@@ -6,9 +6,10 @@ namespace Base2D.System.ItemSystem
 {
     public partial class Item : MonoBehaviour, IAttribute
     {
-        public Item(){
-            Attribute = new Attribute();
+        public Item()
+        {
         }
+
         public Attribute Attribute { get; set; }
         public ModificationInfos Modification { get ;set; }
         public string itemName;
@@ -23,7 +24,7 @@ namespace Base2D.System.ItemSystem
         }
 
         void Awake(){
-            
+            Attribute = Attribute == null ? ScriptableObject.CreateInstance<Attribute>() : Attribute;
         }
 
         public void RemoveFromInventory(Item item){
