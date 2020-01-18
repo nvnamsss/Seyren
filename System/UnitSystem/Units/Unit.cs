@@ -19,6 +19,7 @@ namespace Base2D.System.UnitSystem.Units
         {
             JumpTimes = 1;
             Modification = new ModificationInfos();
+            Attribute = new Attribute();
         }
 
         void Awake()
@@ -27,45 +28,16 @@ namespace Base2D.System.UnitSystem.Units
             Collider = GetComponent<Collider2D>();
             Action = gameObject.AddComponent<Action>();
             Abilites = new Dictionary<int, AbilitySystem.Ability>();
-            Attribute = Attribute == null ? ScriptableObject.CreateInstance<Attribute>() : Attribute;
             Active = true;
         }
         void Start()
         {
-            
-#if UNITY_EDITOR
-            Attribute.Strength = Strength;
-            Attribute.Agility = Agility;
-            Attribute.Intelligent = Intelligent;
 
-            Attribute.AttackDamage = AttackDamage;
-            Attribute.MDamageAmplified = MDamageAmplified;
-
-            Attribute.MaxHp = MaxHp;
-            Attribute.MaxMp = MaxMp;
-            Attribute.HpRegen = HpRegen;
-            Attribute.MpRegen = MpRegen;
-            Attribute.ShieldRegen = ShieldRegen;
-            Attribute.MShieldRegen = MShieldRegen;
-            Attribute.PShield = PShield;
-            Attribute.HpRegenPercent = HpRegenPercent;
-            Attribute.MpRegenPercent = MpRegenPercent;
-
-            Attribute.Armor = Armor;
-            Attribute.MArmor = MArmor;
-
-            Attribute.AttackRange = AttackRange;
-            Attribute.CastRange = CastRange;
-
-            Attribute.MovementSpeed = MovementSpeed;
-            Attribute.AttackSpeed = AttackSpeed;
-            Attribute.JumpSpeed = JumpSpeed;
-#endif
-            //_currentJump = JumpTimes;
-            //_currentHp = Attribute.MaxHp;
-            //_currentMp = Attribute.MaxMp;
-            //_currentPShield = Attribute.PShield;
-            //_currentMShield = Attribute.MShield;
+            _currentJump = JumpTimes;
+            _currentHp = Attribute.MaxHp;
+            _currentMp = Attribute.MaxMp;
+            _currentPShield = Attribute.PShield;
+            _currentMShield = Attribute.MShield;
         }
 
         void Update()

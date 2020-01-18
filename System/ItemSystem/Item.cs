@@ -8,6 +8,7 @@ namespace Base2D.System.ItemSystem
     {
         public Item()
         {
+            Attribute = new Attribute();
         }
 
         public Attribute Attribute { get; set; }
@@ -24,7 +25,7 @@ namespace Base2D.System.ItemSystem
         }
 
         void Awake(){
-            Attribute = Attribute == null ? ScriptableObject.CreateInstance<Attribute>() : Attribute;
+            //Attribute = Attribute == null ? ScriptableObject.CreateInstance<Attribute>() : Attribute;
         }
 
         public void RemoveFromInventory(Item item){

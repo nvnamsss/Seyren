@@ -38,38 +38,21 @@ namespace Base2D.System.UnitSystem.Units
         public Unit Owner { get; set; }
         public ModificationInfos Modification { get; set; }
         public IAttachable Attach { get; set; }
-        public Attribute Attribute { get; set; }
         public Dictionary<string, Sprite> Sprites { get; set; }
         public Dictionary<int, Ability> Abilites { get; set; }
-        public Action Action { get; set; }
-        public float TimeScale;
-#if UNITY_EDITOR
-        [Header("Attack Settings")]
-        public float Strength;
-        public float Agility;
-        public float Intelligent;
-        public float AttackDamage;
-        public float MDamageAmplified;
-        [Header("State Settings")]
-        public float MaxHp;
-        public float MaxMp;
-        public float HpRegen;
-        public float MpRegen;
-        public float ShieldRegen;
-        public float MShieldRegen;
-        public float PShield;
-        public float HpRegenPercent;
-        public float MpRegenPercent;
-        public float Armor;
-        public float MArmor;
-        [Header("Range Settings")]
-        public float AttackRange;
-        public float CastRange;
-        [Header("Speed Settings")]
-        public float MovementSpeed;
-        public float AttackSpeed;
-        public float JumpSpeed;
-#endif
+        public Attribute Attribute
+        {
+            get
+            {
+                return _attribute;
+            }
+            set
+            {
+                _attribute = value;
+            }
+        }
+        public ActionSystem.Action Action { get; set; }
+
         public GroundType StandOn;
         public UnitStatus UnitStatus
         {
@@ -204,8 +187,11 @@ namespace Base2D.System.UnitSystem.Units
         public Rigidbody2D Body;
         public Collider2D Collider;
         public bool Active;
-        protected Unit _owner;
+        public float TimeScale;
         [SerializeField]
+        protected Attribute _attribute;
+        protected Unit _owner;
+        [SerializeField]    
         protected bool _isFly;
         [SerializeField]
         protected float _currentShield;
