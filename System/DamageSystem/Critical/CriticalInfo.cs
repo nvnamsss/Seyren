@@ -59,9 +59,6 @@ namespace Base2D.System.DamageSystem.Critical
             Critical(damageInfo, chance <= Chance, chance);
         }
 
-        public virtual void Critical(DamageInfo info, bool success, float chance)
-        {
-
-        }
+        public abstract void Critical(DamageInfo info, bool success, float chance);
     }
 }

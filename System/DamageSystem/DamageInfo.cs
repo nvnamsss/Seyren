@@ -57,7 +57,7 @@ namespace Base2D.System.DamageSystem
 
             if (triggerPrePassive)
             {
-                foreach (DictionaryEntry entry in PrePassive.Modifications)
+                foreach (DictionaryEntry entry in PrePassive)
                 {
                     CriticalInfo modifier = entry.Value as CriticalInfo;
                     modifier.Trigger(this);
@@ -67,7 +67,7 @@ namespace Base2D.System.DamageSystem
 
             if (triggerCritical && CanCritical)
             {
-                foreach (DictionaryEntry entry in Critical.Modifications)
+                foreach (DictionaryEntry entry in Critical)
                 {
                     CriticalInfo modifier = entry.Value as CriticalInfo;
                     modifier.Trigger(this);
@@ -76,10 +76,9 @@ namespace Base2D.System.DamageSystem
             
             if (triggerEvasion && CanEvade)
             {
-                foreach (DictionaryEntry entry in Evasion.Modifications)
+                foreach (KeyValuePair<int, EvasionInfo> entry in Evasion)
                 {
-                    EvasionInfo modifier = entry.Value as EvasionInfo;
-                    modifier.Trigger(this);
+                    entry.Value.Trigger(this);
                 }
             }
             

@@ -2,7 +2,7 @@
 
 namespace Base2D.System.DamageSystem
 {
-    public interface IEnumerableModification<T> where T : IDamageModification<T>
+    public interface IEnumerableModification<T>
     {
         int Count { get; }
         bool AddModification(T modification);
