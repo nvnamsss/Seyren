@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 
 namespace Base2D.System.DamageSystem.Evasion
 {
-    public class EvasionInfos : IEnumerableModification
+    public class EvasionInfos : IEnumerableModification<EvasionInfo>, IEnumerable
     {
-        public Hashtable Modifications { get; set; }
+        private Dictionary<int, EvasionInfo> _modification;
 
         public EvasionInfos()
         {
-            Modifications = new Hashtable();
+            _modification = new Dictionary<int, EvasionInfo>();
         }
-        public bool AddModification(IDamageModification modification)
+        public bool AddModification(EvasionInfo modification)
         {
             EvasionInfo evasion = modification as EvasionInfo;
 
-            if (Modifications.ContainsKey(evasion.Id))
+            if (_modification.ContainsKey(evasion.Id))
             {
                 evasion.Stacks.Add(modification);
                 switch (evasion.Stacks)
@@ -30,38 +30,33 @@ namespace Base2D.System.DamageSystem.Evasion
             }
             else
             {
-                Modifications.Add(evasion.Id, evasion);
+                _modification.Add(evasion.Id, evasion);
             }
 
             return true;
         }
 
-        public IDamageModification GetModification(string id)
-        {
-            if (!Modifications.ContainsKey(id))
-            {
-                return EvasionInfo.None;
-            }
-
-            return Modifications[id] as EvasionInfo;
-        }
-
-        public bool SetModification(string id, IDamageModification modification)
-        {
-
-            if (!Modifications.ContainsKey(id))
-            {
-                return false;
-            }
-
-            Modifications[id] = modification;
-
-            return true;
-        }
-
-        public bool RemoveModification(IDamageModification modification)
+        public bool RemoveModification(EvasionInfo modification)
         {
             return false;
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return _modification.GetEnumerator();
+        }
+
+        public EvasionInfo this[int id]
+        {
+            get
+            {
+                if (_modification.ContainsKey(id))
+                {
+                    return _modification[id];
+                }
+
+                return null;
+            }
         }
     }
 }

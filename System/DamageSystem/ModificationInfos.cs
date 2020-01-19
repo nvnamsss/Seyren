@@ -8,9 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using UnityEngine;
 namespace Base2D.System.DamageSystem
 {
+    [Serializable]
     public class ModificationInfos
     {
         public PrePassiveInfos PrePassive { get; }
@@ -18,7 +19,8 @@ namespace Base2D.System.DamageSystem
         public EvasionInfos Evasion { get; }
         public ReductionInfos Reduction { get; }
         public PostPassiveInfos PostPassive { get; }
-
+        [SerializeField]
+        protected CriticalInfos _critical;
         public ModificationInfos()
         {
             PrePassive = new PrePassiveInfos();
@@ -30,7 +32,10 @@ namespace Base2D.System.DamageSystem
 
         public void Add(ModificationInfos modification)
         {
-
+            foreach (var item in Critical)
+            {
+                
+            }
         }
 
         public void Remove(ModificationInfos modification)

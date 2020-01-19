@@ -10,6 +10,7 @@ using Base2D.System.UnitSystem.EventData;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using System;
 
 namespace Base2D.System.UnitSystem.Units
 {
@@ -210,5 +211,7 @@ namespace Base2D.System.UnitSystem.Units
         [SerializeField]
         protected UnitStatus _unitStatus;
         protected Unit damageSource;
+        public ModificationInfos info;
     }
+
 }

@@ -6,19 +6,28 @@ using System.Threading.Tasks;
 
 namespace Base2D.System.DamageSystem.PrePassive
 {
-    public class PrePassiveInfo : IDamageModification
+    public abstract class PrePassiveInfo : IDamageModification<PrePassiveInfo>
     {
-        public static readonly PrePassiveInfo None = new PrePassiveInfo();
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public float Chance { get; set; }
         public bool CanStack { get; set; }
-        public List<IDamageModification> Stacks { get; set; }
+        public List<PrePassiveInfo> Stacks { get; set; }
         public StackType StackType { get; set; }
 
         public PrePassiveInfo()
         {
-            Stacks = new List<IDamageModification>();
+            Stacks = new List<PrePassiveInfo>();
         }
+
+        public virtual void Trigger(DamageInfo info)
+        {
+            Triggered(info);
+        }
+
+        /// <summary>
+        /// Doing something when post passive is triggered
+        /// </summary>
+        public abstract void Triggered(DamageInfo info);
     }
 }

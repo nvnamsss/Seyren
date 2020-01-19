@@ -7,21 +7,21 @@ using System.Threading.Tasks;
 
 namespace Base2D.System.DamageSystem.PrePassive
 {
-    public class PrePassiveInfos : IEnumerableModification
+    public class PrePassiveInfos : IEnumerableModification<PrePassiveInfo>, IEnumerable
     {
-        public Hashtable Modifications { get; set; }
-
+        public int Count => _modification.Count;
+        private Dictionary<int, PrePassiveInfo> _modification;
         public PrePassiveInfos()
         {
-            Modifications = new Hashtable();
+            _modification = new Dictionary<int, PrePassiveInfo>();
         }
-        public bool AddModification(IDamageModification modification)
-        {
-            PrePassiveInfo passive = modification as PrePassiveInfo;
 
-            if (Modifications.ContainsKey(passive.Id))
+
+        public bool AddModification(PrePassiveInfo modification)
+        {
+            if (_modification.ContainsKey(modification.Id))
             {
-                switch (passive.Stacks)
+                switch (modification.Stacks)
                 {
                     default:
                         return false;
@@ -29,38 +29,40 @@ namespace Base2D.System.DamageSystem.PrePassive
             }
             else
             {
-                Modifications.Add(passive.Id, passive);
+                _modification.Add(modification.Id, modification);
             }
 
             return true;
         }
 
-        public IDamageModification GetModification(string id)
-        {
-            if (!Modifications.ContainsKey(id))
-            {
-                return PrePassiveInfo.None;
-            }
+        public bool RemoveModification(PrePassiveInfo modification)
 
-            return Modifications[id] as PrePassiveInfo;
-        }
-
-        public bool RemoveModification(IDamageModification modification)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool SetModification(string id, IDamageModification modification)
-        {
-
-            if (!Modifications.ContainsKey(id))
+        { 
+            if (!_modification.ContainsKey(modification.Id))
             {
                 return false;
             }
 
-            Modifications[id] = modification;
-
+            _modification.Remove(modification.Id);
             return true;
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return _modification.GetEnumerator();
+        }
+
+        public PrePassiveInfo this[int id]
+        {
+            get
+            {
+                if (_modification.ContainsKey(id))
+                {
+                    return _modification[id];
+                }
+
+                return null;
+            }
         }
     }
 }

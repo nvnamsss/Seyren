@@ -13,6 +13,7 @@ using UnityEditor;
 
 namespace Base2D.System.UnitSystem.Units
 {
+    [CreateAssetMenu(fileName = "Unit", menuName = "Create/Unit")]
     public partial class Unit : MonoBehaviour, IObject, IAttribute
     {
         public Unit()

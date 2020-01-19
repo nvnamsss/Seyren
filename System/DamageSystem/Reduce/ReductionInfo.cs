@@ -6,18 +6,23 @@ using System.Threading.Tasks;
 
 namespace Base2D.System.DamageSystem.Reduce
 {
-    public class ReductionInfo : IDamageModification, IModifier
+    public abstract class ReductionInfo : IDamageModification<ReductionInfo>, IModifier
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public float Chance { get; set; }
-        public List<IDamageModification> Stacks { get; set; }
+        public List<ReductionInfo> Stacks { get; set; }
         public StackType StackType { get; set; }
         public bool CanEvade { get; set; }
         public bool CanCritical { get; set; }
         public bool CanReduce { get; set; }
 
-        public void Reduce(DamageInfo damageInfo)
+        public void Trigger(DamageInfo info)
+        {
+            Reduced(info);
+        }
+
+        public void Reduced(DamageInfo damageInfo)
         {
 
         }

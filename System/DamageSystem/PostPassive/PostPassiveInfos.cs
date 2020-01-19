@@ -7,60 +7,55 @@ using System.Threading.Tasks;
 
 namespace Base2D.System.DamageSystem.PostPassive
 {
-    public class PostPassiveInfos : IEnumerableModification
+    public class PostPassiveInfos : IEnumerableModification<PostPassiveInfo>, IEnumerable
     {
-        public Hashtable Modifications { get; set; }
+        public int Count => _modification.Count;
+        private Dictionary<int, PostPassiveInfo> _modification;
 
         public PostPassiveInfos()
         {
-            Modifications = new Hashtable();
+            _modification = new Dictionary<int, PostPassiveInfo>();
         }
-        public bool AddModification(IDamageModification modification)
+        public bool AddModification(PostPassiveInfo modification)
         {
-            PostPassiveInfo passive = modification as PostPassiveInfo;
-
-            if (Modifications.ContainsKey(passive.Id))
-            {
-                switch (passive.Stacks)
-                {
-                    default:
-                        return false;
-                }
-            }
-            else
-            {
-                Modifications.Add(passive.Id, passive);
-            }
+            //if (_modification.ContainsKey(modification.Id))
+            //{
+            //    switch (modification.Stacks)
+            //    {
+            //        default:
+            //            return false;
+            //    }
+            //}
+            //else
+            //{
+            //    Modifications.Add(modification.Id, modification);
+            //}
 
             return true;
         }
 
-        public IDamageModification GetModification(string id)
-        {
-            if (!Modifications.ContainsKey(id))
-            {
-                return PostPassiveInfo.None;
-            }
 
-            return Modifications[id] as PostPassiveInfo;
-        }
-
-        public bool RemoveModification(IDamageModification modification)
+        public bool RemoveModification(PostPassiveInfo modification)
         {
             throw new NotImplementedException();
         }
 
-        public bool SetModification(string id, IDamageModification modification)
+        public IEnumerator GetEnumerator()
         {
+            return _modification.GetEnumerator();
+        }
 
-            if (!Modifications.ContainsKey(id))
+        public PostPassiveInfo this[int id]
+        {
+            get
             {
-                return false;
+                if (_modification.ContainsKey(id))
+                {
+                    return _modification[id];
+                }
+
+                return null;
             }
-
-            Modifications[id] = modification;
-
-            return true;
         }
     }
 }

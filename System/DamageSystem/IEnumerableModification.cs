@@ -2,13 +2,10 @@
 
 namespace Base2D.System.DamageSystem
 {
-    public interface IEnumerableModification
+    public interface IEnumerableModification<T> where T : IDamageModification<T>
     {
-        Hashtable Modifications { get; set; }
-
-        bool AddModification(IDamageModification modification);
-        IDamageModification GetModification(string id);
-        bool SetModification(string id, IDamageModification modification);
-        bool RemoveModification(IDamageModification modification);
+        int Count { get; }
+        bool AddModification(T modification);
+        bool RemoveModification(T modification);
     }
 }

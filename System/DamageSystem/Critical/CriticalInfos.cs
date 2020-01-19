@@ -4,23 +4,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using UnityEngine;
 namespace Base2D.System.DamageSystem.Critical
 {
-    public class CriticalInfos : IEnumerableModification
+    [Serializable]
+    public class CriticalInfos : IEnumerableModification<CriticalInfo>, IEnumerable
     {
-        public Hashtable Modifications { get; set; }
-
+        public int Count => _modification.Count;
+        private Dictionary<int, CriticalInfo> _modification;
         public CriticalInfos()
         {
-            Modifications = new Hashtable();
+            _modification = new Dictionary<int, CriticalInfo>();
         }
 
-        public bool AddModification(IDamageModification modification)
+        public bool AddModification(CriticalInfo critical)
         {
-            CriticalInfo critical = modification as CriticalInfo;
 
-            if (Modifications.ContainsKey(critical.Id))
+            if (_modification.ContainsKey(critical.Id))
             {
                 switch (critical.Stacks)
                 {
@@ -30,38 +30,38 @@ namespace Base2D.System.DamageSystem.Critical
             }
             else
             {
-                Modifications.Add(critical.Id, critical);
+                _modification.Add(critical.Id, critical);
             }
 
             return true;
         }
 
-        public IDamageModification GetModification(string id)
+        public bool RemoveModification(CriticalInfo modification)
         {
-            if (!Modifications.ContainsKey(id))
-            {
-                return CriticalInfo.None;
-            }
-
-            return Modifications[id] as CriticalInfo;
-        }
-
-        public bool SetModification(string id, IDamageModification modification)
-        {
-
-            if (!Modifications.ContainsKey(id))
+            if (!_modification.ContainsKey(modification.Id))
             {
                 return false;
             }
-
-            Modifications[id] = modification;
-
+            _modification.Remove(modification.Id);
             return true;
         }
 
-        public bool RemoveModification(IDamageModification modification)
+        public IEnumerator GetEnumerator()
         {
-            return false;
+            return _modification.GetEnumerator();
+        }
+
+        public CriticalInfo this[int id]
+        {
+            get
+            {
+                if (_modification.ContainsKey(id))
+                {
+                    return _modification[id];
+                }
+
+                return null;
+            }
         }
     }
 }

@@ -1,33 +1,48 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace Base2D.System.DamageSystem.Critical
 {
-    public class CriticalInfo : IDamageModification, IModifier
+    public abstract class CriticalInfo : IDamageModification<CriticalInfo>, IModifier
     {
         /**
          * 1: Physical damage only
          * 2: Magical damage only
          * 3: Both
          **/
-        public static readonly CriticalInfo None = new CriticalInfo();
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public float Chance { get; set; }
         public float Multiple { get; set; }
         public float Bonus { get; set; }
-        public List<IDamageModification> Stacks { get; set; }
+        public List<CriticalInfo> Stacks { get; set; }
         public StackType StackType { get; set; }
         public bool CanEvade { get; set; }
         public bool CanCritical { get; set; }
         public bool CanReduce { get; set; }
 
         public int CriticalType;
-        
-
-        public void Critical(DamageInfo damageInfo)
+        [SerializeField]
+        private string _name;
+        [SerializeField]
+        private float _chance;
+        [SerializeField]
+        private float _multiple;
+        [SerializeField]
+        private float _bonus;
+        [SerializeField]
+        private StackType stackType;
+        [SerializeField]
+        private bool _canEvade;
+        [SerializeField]
+        private bool _canCritical;
+        [SerializeField]
+        private bool _canReduce;
+        public virtual void Trigger(DamageInfo damageInfo)
         {
-            float chance = Random.Range(0, 100);
+            float chance = UnityEngine.Random.Range(0, 100);
             Debug.Log(Name + ":" + chance);
             if (chance <= Chance)
             {
@@ -41,6 +56,12 @@ namespace Base2D.System.DamageSystem.Critical
                 damageInfo.CanReduce = CanReduce;
                 Debug.Log("Damage: " + damageInfo.DamageAmount);
             }
+            Critical(damageInfo, chance <= Chance, chance);
+        }
+
+        public virtual void Critical(DamageInfo info, bool success, float chance)
+        {
+
         }
     }
 }

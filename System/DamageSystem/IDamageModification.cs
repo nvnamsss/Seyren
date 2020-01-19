@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace Base2D.System.DamageSystem
 {
-    public interface IDamageModification
+    public interface IDamageModification<T>
     {
-        string Id { get; set; }
+        int Id { get; set; }
         string Name { get; set; }
         float Chance { get; set; }
-        List<IDamageModification> Stacks { get; set; }
+        List<T> Stacks { get; set; }
         StackType StackType { get; set; }
+
+        void Trigger(DamageInfo info);
     }
 }

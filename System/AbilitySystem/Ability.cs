@@ -7,9 +7,11 @@ using Base2D.System.BuffSystem;
 using Base2D.System.UnitSystem.Units;
 using Base2D.System.UnitSystem;
 using UnityEngine;
+using System;
 
 namespace Base2D.System.AbilitySystem
 {
+    [Serializable]
     public abstract class Ability
     {
         public delegate void StatusChangedHandler(Ability sender);
@@ -77,7 +79,7 @@ namespace Base2D.System.AbilitySystem
                 _level = value;
             }
         }
-
+        [SerializeField]
         public Unit Caster;
         public Unit Target;
         public Vector3 PointTarget;

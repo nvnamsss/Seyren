@@ -6,21 +6,24 @@ using System.Threading.Tasks;
 
 namespace Base2D.System.DamageSystem.Evasion
 {
-    public class EvasionInfo : IDamageModification, IModifier
+    
+    public abstract class EvasionInfo : IDamageModification<EvasionInfo>, IModifier
     {
-        public static readonly EvasionInfo None = new EvasionInfo();
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public float Chance { get; set; }
-        public List<IDamageModification> Stacks { get; set; }
+        public List<EvasionInfo> Stacks { get; set; }
         public StackType StackType { get; set; }
         public bool CanEvade { get; set; }
         public bool CanCritical { get; set; }
         public bool CanReduce { get; set; }
 
-        public void Evade(DamageInfo damageInfo)
+        public virtual void Trigger(DamageInfo damageInfo)
         {
-
+            float chance = UnityEngine.Random.Range(0, 100);
+            Evaded(damageInfo, chance < Chance, chance);
         }
+
+        public abstract void Evaded(DamageInfo info, bool success, float chance);
     }
 }

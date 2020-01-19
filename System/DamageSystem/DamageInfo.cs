@@ -60,7 +60,7 @@ namespace Base2D.System.DamageSystem
                 foreach (DictionaryEntry entry in PrePassive.Modifications)
                 {
                     CriticalInfo modifier = entry.Value as CriticalInfo;
-                    modifier.Critical(this);
+                    modifier.Trigger(this);
                 }
             }
             
@@ -70,7 +70,7 @@ namespace Base2D.System.DamageSystem
                 foreach (DictionaryEntry entry in Critical.Modifications)
                 {
                     CriticalInfo modifier = entry.Value as CriticalInfo;
-                    modifier.Critical(this);
+                    modifier.Trigger(this);
                 }
             }
             
@@ -79,26 +79,26 @@ namespace Base2D.System.DamageSystem
                 foreach (DictionaryEntry entry in Evasion.Modifications)
                 {
                     EvasionInfo modifier = entry.Value as EvasionInfo;
-                    modifier.Evade(this);
+                    modifier.Trigger(this);
                 }
             }
             
             if (triggerReduction && CanReduce)
             {
-                foreach (DictionaryEntry entry in Reduction.Modifications)
-                {
-                    ReductionInfo modifier = entry.Value as ReductionInfo;
-                    modifier.Reduce(this);
-                }
+                //foreach (DictionaryEntry entry in Reduction.Modifications)
+                //{
+                //    ReductionInfo modifier = entry.Value as ReductionInfo;
+                //    modifier.Reduce(this);
+                //}
             }
             
             if (triggerPostPassive)
             {
-                foreach (DictionaryEntry entry in PostPassive.Modifications)
-                {
-                    CriticalInfo modifier = entry.Value as CriticalInfo;
-                    modifier.Critical(this);
-                }
+                //foreach (DictionaryEntry entry in PostPassive.Modifications)
+                //{
+                //    CriticalInfo modifier = entry.Value as CriticalInfo;
+                //    modifier.Critical(this);
+                //}
             }
 
             return damage;

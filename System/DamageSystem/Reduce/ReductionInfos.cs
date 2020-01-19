@@ -7,33 +7,38 @@ using System.Threading.Tasks;
 
 namespace Base2D.System.DamageSystem.Reduce
 {
-    public class ReductionInfos : IEnumerableModification
+    public class ReductionInfos : IEnumerableModification<ReductionInfo>, IEnumerable
     {
-        public Hashtable Modifications { get; set; }
+        public int Count => _modification.Count;
+        public ReductionInfo this[int id]
+        {
+            get
+            {
+                if (_modification.ContainsKey(id))
+                {
+                    return _modification[id];
+                }
 
-        public bool AddModification(IDamageModification modification)
+                return null;
+            }
+        }
+
+        private Dictionary<int, ReductionInfo> _modification;
+
+        public bool AddModification(ReductionInfo modification)
         {
             throw new NotImplementedException();
         }
 
-        public IDamageModification GetModification(string id)
+        public bool RemoveModification(ReductionInfo modification)
         {
             throw new NotImplementedException();
         }
 
-        public bool RemoveModification(IDamageModification modification)
+        public IEnumerator GetEnumerator()
         {
-            throw new NotImplementedException();
+            return _modification.GetEnumerator();
         }
 
-        public bool SetModification(string id, IDamageModification modification)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ReductionInfos()
-        {
-            Modifications = new Hashtable();
-        }
     }
 }
