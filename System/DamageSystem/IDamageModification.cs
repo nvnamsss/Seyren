@@ -12,7 +12,7 @@ namespace Base2D.System.DamageSystem
         string Name { get; set; }
         float Chance { get; set; }
         List<T> Stacks { get; set; }
-        StackType StackType { get; set; }
+        StackType StackType { get; }
 
         void Trigger(DamageInfo info);
     }

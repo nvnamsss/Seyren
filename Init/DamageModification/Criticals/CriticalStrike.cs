@@ -1,4 +1,5 @@
-﻿using Base2D.System.DamageSystem.Critical;
+﻿using Base2D.System.DamageSystem;
+using Base2D.System.DamageSystem.Critical;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +8,16 @@ using System.Threading.Tasks;
 
 namespace Base2D.Init.DamageModification
 {
-    public static partial class Critical
+    public class CriticalStrike : CriticalInfo
     {
+        public CriticalStrike()
+        {
+            Id = 0xc01;
+            Name = "Critical Strike";
+            Chance = 80.0f;
+            Multiple = 2.0f;
+            StackType = StackType.Unique;
+        }
         //public static CriticalInfo CriticalStrike()
         //{
         //    CriticalInfo critical = new CriticalInfo();
@@ -23,8 +32,12 @@ namespace Base2D.Init.DamageModification
         //    critical.CanEvade = true;
         //    critical.CanCritical = false;
         //    critical.CanReduce = false;
-            
+
         //    return critical;
         //}
+        public override void Critical(DamageInfo info, bool success, float chance)
+        {
+          
+        }
     }
 }

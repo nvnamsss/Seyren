@@ -27,11 +27,22 @@ namespace Base2D.System.DamageSystem
         {
             if (_modification.ContainsKey(modification.Id))
             {
-                switch (modification.Stacks)
+                switch (modification.StackType)
                 {
-                    default:
-                        return false;
+                    case StackType.Unique:
+                        UniqueStack(modification);
+                        break;
+                    case StackType.Diminishing:
+                        DiminishingStack(modification);
+                        break;
+                    case StackType.ByHalf:
+                        ByHalfStack(modification);
+                        break;
+                    case StackType.Directly:
+                        DirectlyStack(modification);
+                        break;
                 }
+                _modification[modification.Id].Stacks.Add(modification);
             }
             else
             {
@@ -57,5 +68,28 @@ namespace Base2D.System.DamageSystem
             return _modification.GetEnumerator();
         }
 
+        protected void DiminishingStack(T modification)
+        {
+            _modification[modification.Id].Chance += (100 - _modification[modification.Id].Chance) * modification.Chance;
+        }
+
+        protected void DirectlyStack(T modification)
+        {
+            _modification[modification.Id].Chance += modification.Chance;
+        }
+
+        protected void ByHalfStack(T modification)
+        {
+            float plus = modification.Chance / (_modification[modification.Id].Stacks.Count + 1);
+            _modification[modification.Id].Chance += plus;
+        }
+
+        protected void UniqueStack(T modification)
+        {
+            if (modification.Chance > _modification[modification.Id].Chance)
+            {
+                _modification[modification.Id].Chance = modification.Chance;
+            }
+        }
     }
 }

@@ -19,8 +19,6 @@ namespace Base2D.System.DamageSystem
         public EvasionInfos Evasion { get; }
         public ReductionInfos Reduction { get; }
         public PostPassiveInfos PostPassive { get; }
-        [SerializeField]
-        protected CriticalInfos _critical;
         public ModificationInfos()
         {
             PrePassive = new PrePassiveInfos();

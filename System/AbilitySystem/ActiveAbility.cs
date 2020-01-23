@@ -46,7 +46,6 @@ namespace Base2D.System.AbilitySystem
             return true;
         }
 
-
         protected virtual IEnumerator CastingProcess(float timeDelay, float timeCasting)
         {
             IsCasting = true;
