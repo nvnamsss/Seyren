@@ -1,4 +1,5 @@
 ﻿using Base2D.System.AbilitySystem;
+using Base2D.System.UnitSystem.EventData;
 using Base2D.System.UnitSystem.Projectiles;
 using Base2D.System.UnitSystem.Units;
 using System;
@@ -59,6 +60,7 @@ namespace Base2D.Init.Abilities
                     controller,
                     10,
                     2);
+                missile.Condition = HitCondition;
                 missile.HitDelay = 0;
                 missile.Collider.size = new Vector2(0.86f, 0.86f);
                 missile.direction = direction;
@@ -68,32 +70,29 @@ namespace Base2D.Init.Abilities
                 missile.OnHit += (sender, e) =>
                 {
                     Unit u = e.GetComponent<Unit>();
-                    if (u == null)
-                    {
-                        return;
-                    }
-
-                    if (hitList.ContainsKey(u))
-                    {
-                        return;
-                    }
-                    else
-                    {
-                        hitList.Add(u, 0);
-                    }
-
-                    if (sender.Owner.IsEnemy(u))
-                    {
-                        u.Damage(sender.Owner, System.DamageSystem.DamageType.Physical);
-                    }
-                    else
-                    {
-                        sender.ResetHit();
-                    }
-
+                    hitList.Add(u, 0);
+                    u.Damage(sender.Owner, System.DamageSystem.DamageType.Physical);
                 };
                 angle = angle - 30;
             }
+        }
+
+        private void HitCondition(Projectile projectile, ConditionEventArgs<GameObject> e)
+        {
+            Unit u = e.Object.GetComponent<Unit>();
+            if (u == null)
+            {
+                e.Match = false;
+                return;
+            }
+
+            if (hitList.ContainsKey(u))
+            {
+                e.Match = false;
+                return;
+            }
+
+            e.Match = projectile.Owner.IsEnemy(u);
         }
 
         protected override void DoCastAbility()

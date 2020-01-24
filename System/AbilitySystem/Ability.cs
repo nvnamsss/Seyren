@@ -104,7 +104,6 @@ namespace Base2D.System.AbilitySystem
         }
 
         public abstract bool Cast();
-        public abstract bool Cast(bool );
         /// <summary>
         /// Ability will be casted if condition is true
         /// </summary>

@@ -1,5 +1,6 @@
 ﻿using Base2D.System.DamageSystem;
 using Base2D.System.UnitSystem;
+using Base2D.System.UnitSystem.EventData;
 using Base2D.System.UnitSystem.Projectiles;
 using Base2D.System.UnitSystem.Units;
 using System;
@@ -47,38 +48,89 @@ namespace Base2D.System.UnitSystem.Dummies
 
         protected virtual void OnCollisionEnter2D(Collision2D collision)
         {
+            ConditionEventArgs<GameObject> e = new ConditionEventArgs<GameObject>(collision.gameObject, true);
+            Condition?.Invoke(this, e);
 
+            if (e.Match)
+            {
+                Unit unit = collision.gameObject.GetComponent<Unit>();
+                Projectile projectile = collision.gameObject.GetComponent<Projectile>();
+                Dummy dummy = collision.gameObject.GetComponent<Dummy>();
+
+                if (unit != null)
+                {
+                    AffectedUnits.Remove(unit);
+                    UnitOut?.Invoke(this, unit);
+                }
+
+                if (projectile != null)
+                {
+                    AffectedProjectiles.Remove(projectile);
+                    ProjectileOut?.Invoke(this, projectile);
+                }
+
+                if (dummy != null)
+                {
+                    AffectedDummies.Remove(dummy);
+                    DummyOut?.Invoke(this, dummy);
+                }
+            }
         }
-
 
         protected virtual void OnTriggerEnter2D(Collider2D collision)
         {
-            Unit unit = collision.GetComponent<Unit>();
-            Projectile projectile = collision.GetComponent<Projectile>();
-            Dummy dummy = collision.GetComponent<Dummy>();
+            ConditionEventArgs<GameObject> e = new ConditionEventArgs<GameObject>(collision.gameObject, true);
+            Condition?.Invoke(this, e);
 
-            if (unit != null)
+            if (e.Match)
             {
-                AffectedUnits.Add(unit);
-                UnitIn?.Invoke(this, unit);
-            }
+                Unit unit = collision.gameObject.GetComponent<Unit>();
+                Projectile projectile = collision.gameObject.GetComponent<Projectile>();
+                Dummy dummy = collision.gameObject.GetComponent<Dummy>();
 
-            if (projectile != null)
-            {
-                AffectedProjectiles.Add(projectile);
-                ProjectileIn?.Invoke(this, projectile);
-            }
-            
-            if (dummy != null)
-            {
-                AffectedDummies.Add(dummy);
-                DummyIn?.Invoke(this, dummy);
+                if (unit != null)
+                {
+                    AffectedUnits.Remove(unit);
+                    UnitOut?.Invoke(this, unit);
+                }
+
+                if (projectile != null)
+                {
+                    AffectedProjectiles.Remove(projectile);
+                    ProjectileOut?.Invoke(this, projectile);
+                }
+
+                if (dummy != null)
+                {
+                    AffectedDummies.Remove(dummy);
+                    DummyOut?.Invoke(this, dummy);
+                }
             }
         }
 
         private void OnCollisionExit2D(Collision2D collision)
         {
-            
+            Unit unit = collision.gameObject.GetComponent<Unit>();
+            Projectile projectile = collision.gameObject.GetComponent<Projectile>();
+            Dummy dummy = collision.gameObject.GetComponent<Dummy>();
+
+            if (unit != null)
+            {
+                AffectedUnits.Remove(unit);
+                UnitOut?.Invoke(this, unit);
+            }
+
+            if (projectile != null)
+            {
+                AffectedProjectiles.Remove(projectile);
+                ProjectileOut?.Invoke(this, projectile);
+            }
+
+            if (dummy != null)
+            {
+                AffectedDummies.Remove(dummy);
+                DummyOut?.Invoke(this, dummy);
+            }
         }
 
         private void OnTriggerExit2D(Collider2D collision)
@@ -114,16 +166,6 @@ namespace Base2D.System.UnitSystem.Dummies
         public void Damage(Unit target, float damage, DamageType type)
         {
 
-        }
-
-        public void Move()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Hit()
-        {
-            throw new NotImplementedException();
         }
     }
 }

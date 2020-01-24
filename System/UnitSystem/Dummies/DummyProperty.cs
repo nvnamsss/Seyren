@@ -1,4 +1,5 @@
 ﻿using Base2D.System.DamageSystem;
+using Base2D.System.UnitSystem.EventData;
 using Base2D.System.UnitSystem.Projectiles;
 using Base2D.System.UnitSystem.Units;
 using System.Collections.Generic;
@@ -8,9 +9,11 @@ namespace Base2D.System.UnitSystem.Dummies
 {
     public partial class Dummy : MonoBehaviour, IAttribute, IObject
     {
+        public delegate void ConditionHandler(Dummy sender, ConditionEventArgs<GameObject> e);
         public delegate void UnitAffectedHandler(Dummy sender, Unit affected);
         public delegate void DummyAffectedHandler(Dummy sender, Dummy affected);
         public delegate void ProjectileAffectedHandler(Dummy sender, Projectile affected);
+        public ConditionHandler Condition;
         public event UnitAffectedHandler UnitIn;
         public event UnitAffectedHandler UnitOut;
         public event DummyAffectedHandler DummyIn;

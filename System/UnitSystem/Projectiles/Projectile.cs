@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Base2D.System.DamageSystem;
+using Base2D.System.UnitSystem.EventData;
 using Base2D.System.UnitSystem.Units;
 using UnityEngine;
 
@@ -95,24 +96,47 @@ namespace Base2D.System.UnitSystem.Projectiles
 
         protected virtual void OnCollisionEnter2D(Collision2D collision)
         {
-            Hit(collision.gameObject);
+            ConditionEventArgs<GameObject> e = new ConditionEventArgs<GameObject>(collision.gameObject, true);
+            Condition?.Invoke(this, e);
+
+            if (e.Match)
+            {
+                Hit(collision.gameObject);
+            }
         }
 
         protected virtual void OnCollisionStay2D(Collision2D collision)
         {
-            Hit(collision.gameObject);
+            ConditionEventArgs<GameObject> e = new ConditionEventArgs<GameObject>(collision.gameObject, true);
+            Condition?.Invoke(this, e);
+
+            if (e.Match)
+            {
+                Hit(collision.gameObject);
+            }
         }
 
         protected virtual void OnTriggerEnter2D(Collider2D collision)
         {
-            Hit(collision.gameObject);
+            ConditionEventArgs<GameObject> e = new ConditionEventArgs<GameObject>(collision.gameObject, true);
+            Condition?.Invoke(this, e);
+
+            if (e.Match)
+            {
+                Hit(collision.gameObject);
+            }
         }
 
         protected virtual void OnTriggerStay2D(Collider2D collision)
         {
-            Hit(collision.gameObject);
-        }
+            ConditionEventArgs<GameObject> e = new ConditionEventArgs<GameObject>(collision.gameObject, true);
+            Condition?.Invoke(this, e);
 
+            if (e.Match)
+            {
+                Hit(collision.gameObject);
+            }
+        }
 
         protected static GameObject CreateObject(string name, Vector3 location, Quaternion rotation, Sprite sprite, RuntimeAnimatorController controller)
         {
