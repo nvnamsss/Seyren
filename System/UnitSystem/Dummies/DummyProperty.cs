@@ -9,11 +9,15 @@ namespace Base2D.System.UnitSystem.Dummies
 {
     public partial class Dummy : MonoBehaviour, IAttribute, IObject
     {
-        public delegate void ConditionHandler(Dummy sender, ConditionEventArgs<GameObject> e);
+        public delegate void UnitConditionHandler(Dummy sender, ConditionEventArgs<Unit> e);
+        public delegate void DummyConditionHandler(Dummy sender, ConditionEventArgs<Dummy> e);
+        public delegate void ProjectileConditionHandler(Dummy sender, ConditionEventArgs<Projectile> e);
         public delegate void UnitAffectedHandler(Dummy sender, Unit affected);
         public delegate void DummyAffectedHandler(Dummy sender, Dummy affected);
         public delegate void ProjectileAffectedHandler(Dummy sender, Projectile affected);
-        public ConditionHandler Condition;
+        public UnitConditionHandler UnitCondition;
+        public DummyConditionHandler DummyCondition;
+        public ProjectileConditionHandler ProjectileCondition;
         public event UnitAffectedHandler UnitIn;
         public event UnitAffectedHandler UnitOut;
         public event DummyAffectedHandler DummyIn;

@@ -1,5 +1,6 @@
 ﻿using Base2D.System.AbilitySystem;
 using Base2D.System.UnitSystem.Dummies;
+using Base2D.System.UnitSystem.EventData;
 using Base2D.System.UnitSystem.Units;
 using UnityEngine;
 
@@ -29,6 +30,11 @@ namespace Base2D.Init.Abilities
         protected override bool Condition()
         {
             return true;
+        }
+
+        private void DummyCondition(Dummy dummy, ConditionEventArgs<Unit> e)
+        {
+            e.Match = e.Object.IsEnemy(Caster);
         }
 
         private void UnitInCallback(Dummy sender, Unit triggerUnit)
