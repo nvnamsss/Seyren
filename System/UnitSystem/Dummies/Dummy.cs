@@ -59,10 +59,94 @@ namespace Base2D.System.UnitSystem.Dummies
                 
                 if (e.Match)
                 {
+                    AffectedUnits.Add(unit);
+                    UnitIn?.Invoke(this, unit);
+                }
+                
+            }
+
+            if (projectile != null)
+            {
+                ConditionEventArgs<Projectile> e = new ConditionEventArgs<Projectile>(projectile, true);
+                ProjectileCondition?.Invoke(this, e);
+
+                if (e.Match)
+                {
+                    AffectedProjectiles.Add(projectile);
+                    ProjectileIn?.Invoke(this, projectile);
+                }
+            }
+
+            if (dummy != null)
+            {
+                ConditionEventArgs<Dummy> e = new ConditionEventArgs<Dummy>(dummy, true);
+                DummyCondition?.Invoke(this, e);
+
+                if (e.Match)
+                {
+                    AffectedDummies.Add(dummy);
+                    DummyIn?.Invoke(this, dummy);
+                }
+            }
+        }
+
+        protected virtual void OnTriggerEnter2D(Collider2D collision)
+        {
+            Unit unit = collision.gameObject.GetComponent<Unit>();
+            Projectile projectile = collision.gameObject.GetComponent<Projectile>();
+            Dummy dummy = collision.gameObject.GetComponent<Dummy>();
+
+            if (unit != null)
+            {
+                ConditionEventArgs<Unit> e = new ConditionEventArgs<Unit>(unit, true);
+                UnitCondition?.Invoke(this, e);
+                
+                if (e.Match)
+                {
+                    AffectedUnits.Add(unit);
+                    UnitIn?.Invoke(this, unit);
+                }
+            }
+
+            if (projectile != null)
+            {
+                ConditionEventArgs<Projectile> e = new ConditionEventArgs<Projectile>(projectile, true);
+                ProjectileCondition?.Invoke(this, e);
+                if (e.Match)
+                {
+                    AffectedProjectiles.Add(projectile);
+                    ProjectileIn?.Invoke(this, projectile);
+                }
+            }
+
+            if (dummy != null)
+            {
+                ConditionEventArgs<Dummy> e = new ConditionEventArgs<Dummy>(dummy, true);
+                DummyCondition?.Invoke(this, e);
+                if (e.Match)
+                {
+                    AffectedDummies.Add(dummy);
+                    DummyIn?.Invoke(this, dummy);
+                }
+            }
+        }
+
+        private void OnCollisionExit2D(Collision2D collision)
+        {
+            Unit unit = collision.gameObject.GetComponent<Unit>();
+            Projectile projectile = collision.gameObject.GetComponent<Projectile>();
+            Dummy dummy = collision.gameObject.GetComponent<Dummy>();
+
+            if (unit != null)
+            {
+                ConditionEventArgs<Unit> e = new ConditionEventArgs<Unit>(unit, true);
+                UnitCondition?.Invoke(this, e);
+
+                if (e.Match)
+                {
                     AffectedUnits.Remove(unit);
                     UnitOut?.Invoke(this, unit);
                 }
-                
             }
 
             if (projectile != null)
@@ -90,56 +174,6 @@ namespace Base2D.System.UnitSystem.Dummies
             }
         }
 
-        protected virtual void OnTriggerEnter2D(Collider2D collision)
-        {
-            Unit unit = collision.gameObject.GetComponent<Unit>();
-            Projectile projectile = collision.gameObject.GetComponent<Projectile>();
-            Dummy dummy = collision.gameObject.GetComponent<Dummy>();
-
-            if (unit != null)
-            {
-                AffectedUnits.Remove(unit);
-                UnitOut?.Invoke(this, unit);
-            }
-
-            if (projectile != null)
-            {
-                AffectedProjectiles.Remove(projectile);
-                ProjectileOut?.Invoke(this, projectile);
-            }
-
-            if (dummy != null)
-            {
-                AffectedDummies.Remove(dummy);
-                DummyOut?.Invoke(this, dummy);
-            }
-        }
-
-        private void OnCollisionExit2D(Collision2D collision)
-        {
-            Unit unit = collision.gameObject.GetComponent<Unit>();
-            Projectile projectile = collision.gameObject.GetComponent<Projectile>();
-            Dummy dummy = collision.gameObject.GetComponent<Dummy>();
-
-            if (unit != null)
-            {
-                AffectedUnits.Remove(unit);
-                UnitOut?.Invoke(this, unit);
-            }
-
-            if (projectile != null)
-            {
-                AffectedProjectiles.Remove(projectile);
-                ProjectileOut?.Invoke(this, projectile);
-            }
-
-            if (dummy != null)
-            {
-                AffectedDummies.Remove(dummy);
-                DummyOut?.Invoke(this, dummy);
-            }
-        }
-
         private void OnTriggerExit2D(Collider2D collision)
         {
             Unit unit = collision.GetComponent<Unit>();
@@ -148,20 +182,38 @@ namespace Base2D.System.UnitSystem.Dummies
 
             if (unit != null)
             {
-                AffectedUnits.Remove(unit);
-                UnitOut?.Invoke(this, unit);
+                ConditionEventArgs<Unit> e = new ConditionEventArgs<Unit>(unit, true);
+                UnitCondition?.Invoke(this, e);
+
+                if (e.Match)
+                {
+                    AffectedUnits.Remove(unit);
+                    UnitOut?.Invoke(this, unit);
+                }
             }
 
             if (projectile != null)
             {
-                AffectedProjectiles.Remove(projectile);
-                ProjectileOut?.Invoke(this, projectile);
+                ConditionEventArgs<Projectile> e = new ConditionEventArgs<Projectile>(projectile, true);
+                ProjectileCondition?.Invoke(this, e);
+
+                if (e.Match)
+                {
+                    AffectedProjectiles.Remove(projectile);
+                    ProjectileOut?.Invoke(this, projectile);
+                }
             }
 
             if (dummy != null)
             {
-                AffectedDummies.Remove(dummy);
-                DummyOut?.Invoke(this, dummy);
+                ConditionEventArgs<Dummy> e = new ConditionEventArgs<Dummy>(dummy, true);
+                DummyCondition?.Invoke(this, e);
+
+                if (e.Match)
+                {
+                    AffectedDummies.Remove(dummy);
+                    DummyOut?.Invoke(this, dummy);
+                }
             }
         }
 
