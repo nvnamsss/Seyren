@@ -22,14 +22,28 @@ namespace Base2D.System.UnitSystem.Dummies
             return go;
         }
 
+
+        public static Dummy Create(GameObject go)
+        {
+            Dummy dummy = go.AddComponent<Dummy>();
+
+            return dummy;
+        }
+
         public static Dummy CreateCircleDummy()
         {
             GameObject go = new GameObject();
             SpriteRenderer render = go.AddComponent<SpriteRenderer>();
-            go.AddComponent<CircleCollider2D>();
-            go.AddComponent<Rigidbody2D>();
-            Dummy dummy = go.AddComponent<Dummy>();
+            return CreateCircleDummy(go);
+        }
 
+        public static Dummy CreateCircleDummy(GameObject go)
+        {   
+            GameObject g = Instantiate(go);
+            g.name = go.name; 
+            g.AddComponent<CircleCollider2D>();
+            g.AddComponent<Rigidbody2D>();
+            Dummy dummy = g.AddComponent<Dummy>();
             return dummy;
         }
 
@@ -37,9 +51,18 @@ namespace Base2D.System.UnitSystem.Dummies
         {
             GameObject go = new GameObject();
             SpriteRenderer render = go.AddComponent<SpriteRenderer>();
-            go.AddComponent<BoxCollider2D>();
-            go.AddComponent<Rigidbody2D>();
-            Dummy dummy = go.AddComponent<Dummy>();
+
+            return CreateBoxDummy(go);
+        }
+
+        public static Dummy CreateBoxDummy(GameObject go)
+        {
+            GameObject g = Instantiate(go);
+            g.name = go.name;
+
+            g.AddComponent<BoxCollider2D>();
+            g.AddComponent<Rigidbody2D>();
+            Dummy dummy = g.AddComponent<Dummy>();
 
             return dummy;
         }

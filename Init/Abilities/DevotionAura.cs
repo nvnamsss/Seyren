@@ -12,7 +12,8 @@ namespace Base2D.Init.Abilities
         private Dummy dummy;
         public DevotionAura(Unit caster, float aoe, int level) : base(caster, aoe, level)
         {
-            dummy = Dummy.CreateCircleDummy();
+            GameObject go = Resources.Load<GameObject>("DevotionAura");
+            dummy = Dummy.CreateCircleDummy(go);
             CircleCollider2D collider = dummy.Collider as CircleCollider2D;
             collider.radius = AoE;
             dummy.Collider.isTrigger = true;
