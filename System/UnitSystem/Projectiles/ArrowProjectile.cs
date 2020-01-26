@@ -71,9 +71,28 @@ namespace Base2D.System.UnitSystem.Projectiles
             return arrow;
         }
 
+        /// <summary>
+        /// Create new Arrow base on existed GameObject
+        /// </summary>
         public static ArrowProjectile Create(GameObject go)
         {
-            ArrowProjectile arrow = go.AddComponent<ArrowProjectile>();
+            GameObject g = Instantiate(go);
+            ArrowProjectile arrow = g.AddComponent<ArrowProjectile>();
+            return arrow;
+        }
+
+        /// <summary>
+        /// Create new Arrow base on existed GameObject then add a collider to created arrow
+        /// </summary>
+        /// <typeparam name="TCollider2D">Collider2D type like BoxCollider2D, CircleCollider2D, etc</typeparam>
+        public static ArrowProjectile Create<TCollider2D>(GameObject go) where TCollider2D : Collider2D
+        {
+            GameObject g = Instantiate(go);
+            Rigidbody2D body = g.GetComponent<Rigidbody2D>();
+            TCollider2D collider = g.GetComponent<TCollider2D>();
+            if (body == null) g.AddComponent<Rigidbody2D>();
+            if (collider == null) g.AddComponent<TCollider2D>();
+            ArrowProjectile arrow = g.AddComponent<ArrowProjectile>();
             return arrow;
         }
 

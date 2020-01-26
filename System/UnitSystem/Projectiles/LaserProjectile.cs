@@ -33,5 +33,31 @@ namespace Base2D.System.UnitSystem.Projectiles
             Vector2 velocity = direction * (float)Speed;
             Body.AddForce(velocity, ForceMode2D.Impulse);
         }
+
+        /// <summary>
+        /// Create new Laser base on existed GameObject
+        /// </summary>
+        public static LaserProjectile Create(GameObject go)
+        {
+            GameObject g = Instantiate(go);
+            LaserProjectile laser = g.AddComponent<LaserProjectile>();
+
+            return laser;
+        }
+
+        /// <summary>
+        /// Create new Laser base on existed GameObject then add a collider to created Laser
+        /// </summary>
+        /// <typeparam name="TCollider2D">Collider2D type like BoxCollider2D, CircleCollider2D, etc</typeparam>
+        public static LaserProjectile Create<TCollider2D>(GameObject go) where TCollider2D : Collider2D
+        {
+            GameObject g = Instantiate(go);
+            Rigidbody2D body = g.GetComponent<Rigidbody2D>();
+            TCollider2D collider = g.GetComponent<TCollider2D>();
+            if (body == null) g.AddComponent<Rigidbody2D>();
+            if (collider == null) g.AddComponent<TCollider2D>();
+            LaserProjectile laser = g.AddComponent<LaserProjectile>();
+            return laser;
+        }
     }
 }

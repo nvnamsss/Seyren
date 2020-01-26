@@ -41,9 +41,30 @@ namespace Base2D.System.UnitSystem.Projectiles
             return missile;
         }
 
+        /// <summary>
+        /// Create new Missile base on existed GameObject
+        /// </summary>
         public static MissileProjectile Create(GameObject go)
         {
-            MissileProjectile missile = go.AddComponent<MissileProjectile>();
+            GameObject g = Instantiate(go);
+            MissileProjectile missile = g.AddComponent<MissileProjectile>();
+
+            return missile;
+        }
+
+        /// <summary>
+        /// Create new Missile base on existed GameObject then add a collider to created Missile
+        /// </summary>
+        /// <typeparam name="TCollider2D">Collider2D type like BoxCollider2D, CircleCollider2D, etc</typeparam>
+        public static MissileProjectile Create<TCollider2D>(GameObject go) where TCollider2D : Collider2D
+        {
+            GameObject g = Instantiate(go);
+            Rigidbody2D body = g.GetComponent<Rigidbody2D>();
+            if (body == null) g.AddComponent<Rigidbody2D>();
+            g.AddComponent<TCollider2D>();
+            MissileProjectile missile = g.AddComponent<MissileProjectile>();
+            //Rigidbody2D body = g.GetComponent<Rigidbody2D>();
+            //Collider2D collider = g.GetComponent<Collider2D>();
 
             return missile;
         }
