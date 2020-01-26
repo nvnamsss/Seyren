@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Base2D.System.UnitSystem.Projectiles
 {
-    public partial class Projectile : MonoBehaviour, IAttribute
+    public abstract partial class Projectile : MonoBehaviour, IAttribute
     {
         public delegate void HitExceedHandler(Projectile sender);
         public delegate void TimeExpiredHandler(Projectile sender);
@@ -22,21 +22,9 @@ namespace Base2D.System.UnitSystem.Projectiles
         public int MaxHit { get; set; }
         public bool IsPenetrate { get; set; }
         public Unit Owner { get; set; }
-        public Unit Target
-        {
-            get
-            {
-                return _target;
-            }
-            set
-            {
-                _target = value;
-            }
-        }
         public Attribute Attribute { get; set; }
         public ModificationInfos Modification { get; set; }
-        public double ProjectileArc { get; set; }
-        public double Angle { get; set; }
+
         public double TimeExpire
         {
             get
@@ -60,7 +48,7 @@ namespace Base2D.System.UnitSystem.Projectiles
         public bool Active;
         public double HitDelay;
         public double Speed;
-        public ProjectileType ProjectileType { get; set; }
+        public ProjectileType ProjectileType => _projectileType;
 
         protected Animator animator;
         [SerializeField]
@@ -69,7 +57,6 @@ namespace Base2D.System.UnitSystem.Projectiles
         protected double _hitDelay;
         [SerializeField]
         protected int _hit;
-        [SerializeField]
-        protected Unit _target;
+        protected ProjectileType _projectileType;
     }
 }

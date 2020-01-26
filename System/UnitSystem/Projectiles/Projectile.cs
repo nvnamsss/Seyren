@@ -7,21 +7,20 @@ using UnityEngine;
 
 namespace Base2D.System.UnitSystem.Projectiles
 {
-    public partial class Projectile : MonoBehaviour, IAttribute
+    public abstract partial class Projectile : MonoBehaviour, IAttribute
     {
         protected Projectile()
         {
             MaxHit = 1;
             HitDelay = 1;
-            Speed = 0.01f;
-            Angle = 90;
             _hitDelay = 0;
             _hit = 0;
-            TimeExpire = float.MaxValue;
+            _timeExpired = float.MaxValue;
             IsPenetrate = false;
             Active = true;
-            ProjectileType = ProjectileType.None;
         }
+        public abstract void Move();
+
         public virtual void Hit(GameObject collider)
         {
             if (!Active)
@@ -51,11 +50,6 @@ namespace Base2D.System.UnitSystem.Projectiles
             OnHit?.Invoke(this, collider);
         }
 
-        public virtual void Move()
-        {
-            float rad = (float)(Angle * Mathf.Deg2Rad);
-            Vector2 velocity = new Vector2(Mathf.Sin(rad), Mathf.Cos(rad)) * (float)Speed;
-        }
 
         /// <summary>
         /// Remove projectile

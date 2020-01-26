@@ -9,9 +9,12 @@ namespace Base2D.System.UnitSystem.Projectiles
 {
     public class LaserProjectile : Projectile
     {
-        public LaserProjectile()
+        public Vector2 direction;
+        public float distance;
+        LaserProjectile()
         {
             MaxHit = int.MaxValue;
+            _projectileType = ProjectileType.Laser;
         }
 
         protected override void Start()
@@ -26,8 +29,7 @@ namespace Base2D.System.UnitSystem.Projectiles
 
         public override void Move()
         {
-            float rad = (float)(Angle * Mathf.Deg2Rad);
-            Vector2 velocity = new Vector2(Mathf.Sin(rad), Mathf.Cos(rad)) * (float)Speed;
+            Vector2 velocity = direction * (float)Speed;
             Body.AddForce(velocity, ForceMode2D.Impulse);
         }
     }

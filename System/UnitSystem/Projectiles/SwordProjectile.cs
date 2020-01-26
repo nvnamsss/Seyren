@@ -12,7 +12,7 @@ namespace Base2D.System.UnitSystem.Projectiles
         public Vector2 direction;
         public SwordProjectile()
         {
-            ProjectileType = ProjectileType.Missile;
+            _projectileType = ProjectileType.Missile;
         }
 
         protected override void Start()

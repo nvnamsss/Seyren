@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Base2D.System.UnitSystem.Projectiles
 {
-    public partial class Projectile : MonoBehaviour, IAttribute
+    public abstract partial class Projectile : MonoBehaviour, IAttribute
     {
 
     }

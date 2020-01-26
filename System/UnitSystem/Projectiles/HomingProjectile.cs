@@ -10,15 +10,24 @@ namespace Base2D.System.UnitSystem.Projectiles
 {
     public class HomingProjectile : Projectile
     {
-        public HomingProjectile()
+        public Unit Target
         {
-            Speed = 100;
-            ProjectileType = ProjectileType.Homing;
+            get
+            {
+                return _target;
+            }
+            set
+            {
+                _target = value;
+            }
         }
 
-        public HomingProjectile(Unit target) : base()
+        [SerializeField]
+        private Unit _target;
+        HomingProjectile()
         {
-            Target = target;
+            Speed = 100;
+            _projectileType = ProjectileType.Homing;
         }
 
         public override void Move()
@@ -45,6 +54,14 @@ namespace Base2D.System.UnitSystem.Projectiles
             projectile.Target = target;
 
             return projectile;
+        }
+
+        public static HomingProjectile Create(Unit target, GameObject go)
+        {
+            HomingProjectile homing = go.AddComponent<HomingProjectile>();
+            homing.Target = target;
+
+            return homing;
         }
     }
 }

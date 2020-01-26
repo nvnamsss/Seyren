@@ -10,9 +10,9 @@ namespace Base2D.System.UnitSystem.Projectiles
     public class MissileProjectile : Projectile
     {
         public Vector2 direction;
-        public MissileProjectile()
+        MissileProjectile()
         {
-            ProjectileType = ProjectileType.Missile;
+            _projectileType = ProjectileType.Missile;
         }
 
         protected override void Start()
@@ -24,10 +24,6 @@ namespace Base2D.System.UnitSystem.Projectiles
         public override void Move()
         {
             Vector2 velocity = direction * (float)Speed * Time.deltaTime;
-            //velocity.x = Mathf.Abs(velocity.x);
-            //velocity.y = Mathf.Abs(velocity.y);
-            //transform.Translate(velocity);
-            //Body.velocity = Vector2.zero;
             Body.AddForce(velocity, ForceMode2D.Impulse);
         }
 
@@ -42,6 +38,13 @@ namespace Base2D.System.UnitSystem.Projectiles
             MissileProjectile missile = go.AddComponent<MissileProjectile>();
             missile.Speed = speed;
             missile.TimeExpire = duration;
+            return missile;
+        }
+
+        public static MissileProjectile Create(GameObject go)
+        {
+            MissileProjectile missile = go.AddComponent<MissileProjectile>();
+
             return missile;
         }
     }

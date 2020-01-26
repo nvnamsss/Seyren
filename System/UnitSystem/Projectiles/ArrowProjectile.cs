@@ -9,11 +9,13 @@ namespace Base2D.System.UnitSystem.Projectiles
 {
     public class ArrowProjectile : Projectile
     {
+        public double ProjectileArc { get; set; }
+        public double Angle { get; set; }
         private float _speedX;
         private float _speedY;
-        public ArrowProjectile()
+        ArrowProjectile()
         {
-            ProjectileType = ProjectileType.Arrow;
+            _projectileType = ProjectileType.Arrow;
             Speed = 0.1;
         }
 
@@ -42,6 +44,11 @@ namespace Base2D.System.UnitSystem.Projectiles
             Body.AddForce(velocity, ForceMode2D.Impulse);
         }
 
+        public override void Hit(GameObject collider)
+        {
+            base.Hit(collider);
+        }
+
         public static ArrowProjectile Create(string name, Vector3 location, Quaternion rotation, Sprite sprite, RuntimeAnimatorController controller, float speed, float arc, float duration = float.MaxValue)
         {
             GameObject go = CreateObject(name, location, rotation, sprite, controller);
@@ -67,13 +74,15 @@ namespace Base2D.System.UnitSystem.Projectiles
             arrow._speedX = (float)(arrow.Speed * Mathf.Cos((float)(arrow.Angle * Mathf.Deg2Rad)));
             arrow._speedY = (float)(arrow.Speed * Mathf.Sin((float)(arrow.Angle * Mathf.Deg2Rad)));
 
+            return arrow;
+        }
+
+        public static ArrowProjectile Create(GameObject go)
+        {
+            ArrowProjectile arrow = go.AddComponent<ArrowProjectile>();
 
             return arrow;
         }
 
-        public override void Hit(GameObject collider)
-        {
-            base.Hit(collider);
-        }
     }
 }
