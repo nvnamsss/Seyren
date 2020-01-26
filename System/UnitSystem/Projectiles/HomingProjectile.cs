@@ -58,11 +58,20 @@ namespace Base2D.System.UnitSystem.Projectiles
         /// <summary>
         /// Create new Homing base on existed GameObject
         /// </summary>
-        /// <param name="target">Targeted Unit that Homing will chasing</param>
-        public static HomingProjectile Create(Unit target, GameObject go)
+        public static HomingProjectile Create(GameObject go)
         {
             GameObject g = Instantiate(go);
             HomingProjectile homing = g.AddComponent<HomingProjectile>();
+
+            return homing;
+        }
+        /// <summary>
+        /// Create new Homing base on existed GameObject
+        /// </summary>
+        /// <param name="target">Targeted Unit that Homing will chasing</param>
+        public static HomingProjectile Create(Unit target, GameObject go)
+        {
+            HomingProjectile homing = Create(go);
             homing.Target = target;
 
             return homing;

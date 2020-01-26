@@ -9,8 +9,8 @@ namespace Base2D.System.UnitSystem.Projectiles
 {
     public class LaserProjectile : Projectile
     {
-        public Vector2 direction;
-        public float distance;
+        public Vector2 Direction;
+        public float Distance;
         LaserProjectile()
         {
             Speed = 3 * Mathf.Pow(10, 8);
@@ -30,7 +30,7 @@ namespace Base2D.System.UnitSystem.Projectiles
 
         public override void Move()
         {
-            Vector2 velocity = direction * (float)Speed;
+            Vector2 velocity = Direction * (float)Speed;
             Body.AddForce(velocity, ForceMode2D.Impulse);
         }
 
@@ -45,6 +45,19 @@ namespace Base2D.System.UnitSystem.Projectiles
             return laser;
         }
 
+        /// <summary>
+        /// Create new Laser base on existed GameObject
+        /// </summary>
+        /// <param name="direction">Fly direction of arrow</param>
+        /// <param name="distance">Max distance laser can go</param>
+        public static LaserProjectile Create(Vector2 direction, float distance, GameObject go)
+        {
+            LaserProjectile laser = Create(go);
+            laser.Direction = direction;
+            laser.Distance = distance;
+
+            return laser;
+        }
         /// <summary>
         /// Create new Laser base on existed GameObject then add a collider to created Laser
         /// </summary>
@@ -69,8 +82,8 @@ namespace Base2D.System.UnitSystem.Projectiles
         public static LaserProjectile Create<TCollider2D>(Vector2 direction, float distance, GameObject go) where TCollider2D : Collider2D
         {
             LaserProjectile laser = Create<TCollider2D>(go);
-            laser.direction = direction;
-            laser.distance = distance;
+            laser.Direction = direction;
+            laser.Distance = distance;
 
             return laser;
         }

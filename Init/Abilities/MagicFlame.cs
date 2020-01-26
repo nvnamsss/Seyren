@@ -44,7 +44,7 @@ namespace Base2D.Init.Abilities
                 2);
             missile.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
             //missile.Collider.size = new Vector2(1, 2);
-            missile.direction = euler.y == 180 ? new Vector2(1, 0) : new Vector2(-1, 0);
+            missile.Direction = euler.y == 180 ? new Vector2(1, 0) : new Vector2(-1, 0);
             missile.MaxHit = 100000;
             missile.Owner = unit;
             missile.OnHit += (sender, e) =>

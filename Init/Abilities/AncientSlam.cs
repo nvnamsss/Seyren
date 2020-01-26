@@ -63,7 +63,7 @@ namespace Base2D.Init.Abilities
                 missile.Condition = HitCondition;
                 missile.BaseHitDelay = 0;
                 //missile.Collider.size = new Vector2(0.86f, 0.86f);
-                missile.direction = direction;
+                missile.Direction = direction;
                 missile.transform.localScale = new Vector3(3, 3, 1);
                 missile.MaxHit = 100000;
                 missile.Owner = unit;

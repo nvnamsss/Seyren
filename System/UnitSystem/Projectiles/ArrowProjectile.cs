@@ -82,6 +82,19 @@ namespace Base2D.System.UnitSystem.Projectiles
         }
 
         /// <summary>
+        /// Create new Arrow base on existed GameObject
+        /// </summary>
+        /// <param name="direction">Fly direction of arrow</param>
+        /// <param name="arc">Turn speed of arrow, higher arc cause arrow change direction faster</param>
+        public static ArrowProjectile Create(Vector2 direction, float arc, GameObject go)
+        {
+            ArrowProjectile arrow = Create(go);
+            arrow.Direction = direction;
+            arrow.Arc = arc;
+
+            return arrow;
+        }
+        /// <summary>
         /// Create new Arrow base on existed GameObject then add a collider to created arrow
         /// </summary>
         /// <typeparam name="TCollider2D">Collider2D type like BoxCollider2D, CircleCollider2D, etc</typeparam>

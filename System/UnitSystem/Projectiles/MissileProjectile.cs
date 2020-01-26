@@ -9,7 +9,7 @@ namespace Base2D.System.UnitSystem.Projectiles
 {
     public class MissileProjectile : Projectile
     {
-        public Vector2 direction;
+        public Vector2 Direction;
         MissileProjectile()
         {
             _projectileType = ProjectileType.Missile;
@@ -23,7 +23,7 @@ namespace Base2D.System.UnitSystem.Projectiles
 
         public override void Move()
         {
-            Vector2 velocity = direction * (float)Speed * Time.deltaTime;
+            Vector2 velocity = Direction * (float)Speed * Time.deltaTime;
             Body.AddForce(velocity, ForceMode2D.Impulse);
         }
 
@@ -53,6 +53,17 @@ namespace Base2D.System.UnitSystem.Projectiles
         }
 
         /// <summary>
+        /// Create new Missile base on existed GameObject
+        /// </summary>
+        /// <param name="direction">Fly direction of missile</param>
+        public static MissileProjectile Create(Vector2 direction, GameObject go)
+        {
+            MissileProjectile missile = Create(go);
+            missile.Direction = direction;
+
+            return missile;
+        }
+        /// <summary>
         /// Create new Missile base on existed GameObject then add a collider to created Missile
         /// </summary>
         /// <typeparam name="TCollider2D">Collider2D type like BoxCollider2D, CircleCollider2D, etc</typeparam>
@@ -77,7 +88,7 @@ namespace Base2D.System.UnitSystem.Projectiles
         public static MissileProjectile Create<TCollider2D>(Vector2 direction, GameObject go) where TCollider2D : Collider2D
         {
             MissileProjectile missile = Create<TCollider2D>(go);
-            missile.direction = direction;
+            missile.Direction = direction;
 
             return missile;
         }
