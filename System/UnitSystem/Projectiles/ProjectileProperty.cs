@@ -17,15 +17,19 @@ namespace Base2D.System.UnitSystem.Projectiles
         public event OnHitHandler OnHit;
         public event TimeExpiredHandler TimeExpired;
         public event HitExceedHandler HitExceed;
-        public BoxCollider2D Collider { get; set; }
+        public Collider2D Collider { get; set; }
         public Rigidbody2D Body { get; set; }
-        public int MaxHit { get; set; }
+        public int MaxHit
+        {
+            get => _maxHit;
+            set => _maxHit = value;
+        }
         public bool IsPenetrate { get; set; }
         public Unit Owner { get; set; }
         public Attribute Attribute { get; set; }
         public ModificationInfos Modification { get; set; }
 
-        public double TimeExpire
+        public float TimeExpire
         {
             get
             {
@@ -37,26 +41,59 @@ namespace Base2D.System.UnitSystem.Projectiles
                 if (_timeExpired < 0)
                 {
                     Active = false;
-                    //if (animator != null && animator.isInitialized)
-                    //{
-                    //    animator.SetBool("Death", true);
-                    //}
                     TimeExpired?.Invoke(this);
                 }
             }
         }
-        public bool Active;
-        public double HitDelay;
-        public double Speed;
+        public bool Active
+        {
+            get
+            {
+                return _active;
+            }
+            set
+            {
+                _active = value;
+            }
+        }
+        public float BaseHitDelay
+        {
+            get
+            {
+                return _baseHitDelay;
+            }
+            set
+            {
+                _baseHitDelay = value;
+            }
+        }
+        public float Speed
+        {
+            get
+            {
+                return _speed;
+            }
+            set
+            {
+                _speed = value;
+            }
+        }
         public ProjectileType ProjectileType => _projectileType;
 
         protected Animator animator;
         [SerializeField]
-        protected double _timeExpired;
+        protected float _timeExpired;
         [SerializeField]
-        protected double _hitDelay;
+        protected float _baseHitDelay;
+        protected float _hitDelay;
         [SerializeField]
-        protected int _hit;
+        protected float _speed;
+        [SerializeField]
+        protected int _maxHit;
+        [SerializeField]
+        protected int _currentHit;
+        [SerializeField]
+        protected bool _active;
         protected ProjectileType _projectileType;
     }
 }

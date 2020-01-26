@@ -38,7 +38,7 @@ namespace Base2D.Init.Abilities
                 controller,
                 0,
                 0.4f);
-            missile.Collider.size = new Vector2(2.4f, 2.4f);
+            //missile.Collider.size = new Vector2(2.4f, 2.4f);
             missile.MaxHit = 10000000;
             missile.Owner = unit;
             missile.OnHit += (sender, e) =>

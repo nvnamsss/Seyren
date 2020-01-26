@@ -72,10 +72,10 @@ namespace Base2D.Init.Abilities
                 controller,
                 0,
                 0.5f);
-            slash.HitDelay = 0;
+            slash.BaseHitDelay = 0;
             slash.Collider.isTrigger = true;
-            slash.Collider.autoTiling = true;
-            slash.Collider.size = new Vector2(0.86f, 0.86f);
+            //slash.Collider.autoTiling = true;
+            //slash.Collider.size = new Vector2(0.86f, 0.86f);
             slash.transform.localScale = new Vector3(3, 3, 1);
             slash.MaxHit = 100;
             slash.Owner = unit;

@@ -34,10 +34,10 @@ namespace Base2D.Init.Abilities
                 controller,
                 0,
                 0.5f);
-            missile.HitDelay = 0;
+            missile.BaseHitDelay = 0;
             missile.Collider.isTrigger = true;
-            missile.Collider.autoTiling = true;
-            missile.Collider.size = new Vector2(0.86f, 0.86f);
+            //missile.Collider.autoTiling = true;
+            //missile.Collider.size = new Vector2(0.86f, 0.86f);
             missile.transform.localScale = new Vector3(3, 3, 1);
             missile.MaxHit = 100;
             missile.Owner = unit;

@@ -13,6 +13,7 @@ namespace Base2D.System.UnitSystem.Projectiles
         public float distance;
         LaserProjectile()
         {
+            Speed = 3 * Mathf.Pow(10, 8);
             MaxHit = int.MaxValue;
             _projectileType = ProjectileType.Laser;
         }

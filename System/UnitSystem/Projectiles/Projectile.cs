@@ -11,13 +11,14 @@ namespace Base2D.System.UnitSystem.Projectiles
     {
         protected Projectile()
         {
-            MaxHit = 1;
-            HitDelay = 1;
+            _maxHit = 1;
+            _baseHitDelay = 1;
+            _speed = 1;
             _hitDelay = 0;
-            _hit = 0;
+            _currentHit = 0;
             _timeExpired = float.MaxValue;
+            _active = true;
             IsPenetrate = false;
-            Active = true;
         }
         public abstract void Move();
 
@@ -33,16 +34,16 @@ namespace Base2D.System.UnitSystem.Projectiles
                 return;
             }
 
-            if (_hit >= MaxHit)
+            if (_currentHit >= MaxHit)
             {
                 HitExceed?.Invoke(this);
                 Destroy(gameObject);
             }
 
-            _hit = _hit + 1;
-            _hitDelay = HitDelay;
+            _currentHit = _currentHit + 1;
+            _hitDelay = BaseHitDelay;
 
-            if (!IsPenetrate)
+            if (IsPenetrate)
             {
                 Collider.isTrigger = true;
             }
@@ -56,19 +57,18 @@ namespace Base2D.System.UnitSystem.Projectiles
         /// </summary>
         public virtual void Remove()
         {
-
         }
 
         public virtual void ResetHit()
         {
             _hitDelay = 0;
-            _hit += 1;
+            _currentHit += 1;
         }
 
         protected virtual void Awake()
         {
             Body = GetComponent<Rigidbody2D>();
-            Collider = GetComponent<BoxCollider2D>();
+            Collider = GetComponent<Collider2D>();
             animator = GetComponent<Animator>();
             TimeExpired += (sender) =>
             {

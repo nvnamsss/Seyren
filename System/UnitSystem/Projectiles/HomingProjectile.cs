@@ -26,7 +26,6 @@ namespace Base2D.System.UnitSystem.Projectiles
         private Unit _target;
         HomingProjectile()
         {
-            Speed = 100;
             _projectileType = ProjectileType.Homing;
         }
 
