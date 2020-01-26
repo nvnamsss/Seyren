@@ -59,5 +59,20 @@ namespace Base2D.System.UnitSystem.Projectiles
             LaserProjectile laser = g.AddComponent<LaserProjectile>();
             return laser;
         }
+
+        /// <summary>
+        /// Create new Laser base on existed GameObject then add a collider to created Laser
+        /// </summary>
+        /// <typeparam name="TCollider2D"></typeparam>
+        /// <param name="direction">Fly direction of arrow</param>
+        /// <param name="distance">Max distance laser can go</param>
+        public static LaserProjectile Create<TCollider2D>(Vector2 direction, float distance, GameObject go) where TCollider2D : Collider2D
+        {
+            LaserProjectile laser = Create<TCollider2D>(go);
+            laser.direction = direction;
+            laser.distance = distance;
+
+            return laser;
+        }
     }
 }

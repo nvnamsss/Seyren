@@ -67,14 +67,11 @@ namespace Base2D.System.UnitSystem.Projectiles
 
             return homing;
         }
-
         /// <summary>
-        /// Create new Homing base on existed GameObject then add a collider 
+        /// Create new Homing base on existed GameObject then add a collider to created Homing
         /// </summary>
-        /// <typeparam name="TCollider2D"></typeparam>
-        /// <param name="target">Targeted Unit that Homing will chasing</param>
-        /// <returns></returns>
-        public static HomingProjectile Create<TCollider2D>(Unit target, GameObject go) where TCollider2D : Collider2D
+        /// <typeparam name="TCollider2D">Collider2D type like BoxCollider2D, CircleCollider2D, etc</typeparam>
+        public static HomingProjectile Create<TCollider2D>(GameObject go) where TCollider2D : Collider2D
         {
             GameObject g = Instantiate(go);
             Rigidbody2D body = g.GetComponent<Rigidbody2D>();
@@ -82,6 +79,19 @@ namespace Base2D.System.UnitSystem.Projectiles
             if (body == null) g.AddComponent<Rigidbody2D>();
             if (collider == null) g.AddComponent<TCollider2D>();
             HomingProjectile homing = g.AddComponent<HomingProjectile>();
+
+            return homing;
+        }
+
+        /// <summary>
+        /// Create new Homing base on existed GameObject then add a collider to created Homing
+        /// </summary>
+        /// <typeparam name="TCollider2D">Collider2D type like BoxCollider2D, CircleCollider2D, etc</typeparam>
+        /// <param name="target">Targeted Unit that Homing will chasing</param>
+        /// <returns></returns>
+        public static HomingProjectile Create<TCollider2D>(Unit target, GameObject go) where TCollider2D : Collider2D
+        {
+            HomingProjectile homing = Create<TCollider2D>(go);
             homing.Target = target;
             return homing;
         }

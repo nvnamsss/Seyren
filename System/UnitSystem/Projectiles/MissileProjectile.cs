@@ -60,11 +60,24 @@ namespace Base2D.System.UnitSystem.Projectiles
         {
             GameObject g = Instantiate(go);
             Rigidbody2D body = g.GetComponent<Rigidbody2D>();
+            TCollider2D collider = g.GetComponent<TCollider2D>();
             if (body == null) g.AddComponent<Rigidbody2D>();
-            g.AddComponent<TCollider2D>();
+            if (collider == null) g.AddComponent<TCollider2D>();
             MissileProjectile missile = g.AddComponent<MissileProjectile>();
-            //Rigidbody2D body = g.GetComponent<Rigidbody2D>();
-            //Collider2D collider = g.GetComponent<Collider2D>();
+
+            return missile;
+        }
+
+        /// <summary>
+        /// Create new Missile base on existed GameObject then add a collider to created Missile
+        /// </summary>
+        /// <typeparam name="TCollider2D"></typeparam>
+        /// <param name="direction">Fly direction of missile</param>
+        /// <returns></returns>
+        public static MissileProjectile Create<TCollider2D>(Vector2 direction, GameObject go) where TCollider2D : Collider2D
+        {
+            MissileProjectile missile = Create<TCollider2D>(go);
+            missile.direction = direction;
 
             return missile;
         }
