@@ -56,6 +56,11 @@ namespace Base2D.System.UnitSystem.Projectiles
                 _active = value;
             }
         }
+        public Vector2 BaseLook
+        {
+            get => _baseLook;
+            set => _baseLook = value;
+        }
         public float BaseHitDelay
         {
             get
@@ -94,6 +99,8 @@ namespace Base2D.System.UnitSystem.Projectiles
         protected int _currentHit;
         [SerializeField]
         protected bool _active;
+        [SerializeField]
+        protected Vector2 _baseLook;
         protected ProjectileType _projectileType;
     }
 }

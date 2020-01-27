@@ -9,21 +9,21 @@ namespace Base2D.System.UnitSystem.Projectiles
 {
     public class ArrowProjectile : Projectile
     {
-        public float Arc { get; set; }
+        public Vector2 Arc
+        {
+            get => _arc;
+            set => _arc = value;
+        }
         public float Angle
         {
-            get
-            {
-                return _angle;
-            }
-            set
-            {
-                _angle = value;
-            }
+            get => _angle;
+            set => _angle = value;
         }
         public Vector2 Direction;
         [SerializeField]
         private float _angle;
+        [SerializeField]
+        private Vector2 _arc;
         ArrowProjectile()
         {
             _projectileType = ProjectileType.Arrow;
@@ -39,36 +39,20 @@ namespace Base2D.System.UnitSystem.Projectiles
         public override void Move()
         {
             float rad = Angle * Mathf.Deg2Rad;
-            Vector2 velocity = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * Direction * Speed;
+            Direction = Direction + Arc;
+            Vector2 velocity = Direction * Speed;
 
-            Body.velocity = new Vector2(0, 0);
+            Body.velocity = new Vector2(0, 0);      
             gameObject.transform.rotation = Quaternion.Euler(0 , 0, Vector3.Angle(Body.transform.position, Body.transform.position + (Vector3)velocity));
-            Angle = Angle - Arc;
-            if (Angle < 0)
-            {
-                Angle = 0;
-            }
 
             Body.AddForce(velocity, ForceMode2D.Impulse);
+            Look(velocity);
         }
         
 
         public override void Hit(GameObject collider)
         {
             base.Hit(collider);
-        }
-
-        public static ArrowProjectile Create(string name, Vector3 location, Quaternion rotation, Sprite sprite, RuntimeAnimatorController controller, Vector2 direction, float speed, float arc, float duration = float.MaxValue)
-        {
-            GameObject go = CreateObject(name, location, rotation, sprite, controller);
-            var arrow = go.AddComponent<ArrowProjectile>();
-            arrow.Speed = speed;
-            arrow.Arc = arc;
-            arrow.TimeExpire = duration;
-            arrow.Angle = rotation.eulerAngles.z;
-            arrow.Direction = direction;
-
-            return arrow;
         }
 
         /// <summary>
@@ -86,7 +70,7 @@ namespace Base2D.System.UnitSystem.Projectiles
         /// </summary>
         /// <param name="direction">Fly direction of arrow</param>
         /// <param name="arc">Turn speed of arrow, higher arc cause arrow change direction faster</param>
-        public static ArrowProjectile Create(Vector2 direction, float arc, GameObject go)
+        public static ArrowProjectile Create(Vector2 direction, Vector2 arc, GameObject go)
         {
             ArrowProjectile arrow = Create(go);
             arrow.Direction = direction;
@@ -115,7 +99,7 @@ namespace Base2D.System.UnitSystem.Projectiles
         /// <param name="direction">Fly direction of arrow</param>
         /// <param name="arc">Turn speed of arrow, higher arc cause arrow change direction faster</param>
         /// <returns></returns>
-        public static ArrowProjectile Create<TCollider2D>(Vector2 direction, float arc, GameObject go) where TCollider2D : Collider2D
+        public static ArrowProjectile Create<TCollider2D>(Vector2 direction, Vector2 arc, GameObject go) where TCollider2D : Collider2D
         {
             ArrowProjectile arrow = Create<TCollider2D>(go);
             arrow.Direction = direction;

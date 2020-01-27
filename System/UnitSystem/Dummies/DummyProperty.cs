@@ -35,7 +35,11 @@ namespace Base2D.System.UnitSystem.Dummies
         public float AnimationSpeed { get; set; }
         public float TurnSpeed { get; set; }
         public Color VertexColor { get; set; }
-
+        public Vector2 BaseLook
+        {
+            get => _baseLook;
+            set => _baseLook = value;
+        }
         public Attribute Attribute { get; set; }
 
         public ModificationInfos Modification { get; set; }
@@ -47,5 +51,7 @@ namespace Base2D.System.UnitSystem.Dummies
         public Unit Owner { get; set; }
         public Rigidbody2D Body;
         public Collider2D Collider;
+        [SerializeField]
+        protected Vector2 _baseLook;
     }
 }

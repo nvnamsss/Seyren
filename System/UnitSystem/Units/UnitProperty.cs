@@ -53,8 +53,14 @@ namespace Base2D.System.UnitSystem.Units
             }
         }
         public ActionSystem.Action Action { get; set; }
+        
 
         public GroundType StandOn;
+        public Vector2 BaseLook
+        {
+            get => _baseLook;
+            set => _baseLook = value;
+        }
         public UnitStatus UnitStatus
         {
             get
@@ -210,6 +216,8 @@ namespace Base2D.System.UnitSystem.Units
         protected int _currentJump;
         [SerializeField]
         protected UnitStatus _unitStatus;
+        [SerializeField]
+        protected Vector2 _baseLook;
         protected Unit damageSource;
         public ModificationInfos info;
     }

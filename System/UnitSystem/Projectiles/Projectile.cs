@@ -65,6 +65,20 @@ namespace Base2D.System.UnitSystem.Projectiles
             _currentHit += 1;
         }
 
+        public void Look(Vector2 direction)
+        {
+            float dot = Vector2.Dot(BaseLook, direction);
+
+            Vector3 look = Vector3.Cross(BaseLook, direction);
+            if (look == Vector3.zero)
+            {
+                look.z = dot < 0 ? 180 : 0;
+            }   
+            float w = Mathf.Sqrt(Mathf.Pow(BaseLook.magnitude, 2) * Mathf.Pow(direction.magnitude, 2)) + dot;
+            Quaternion quaternion = new Quaternion(look.x, look.y, look.z, w);
+            transform.rotation = quaternion.normalized;
+        }
+
         protected virtual void Awake()
         {
             Body = GetComponent<Rigidbody2D>();
