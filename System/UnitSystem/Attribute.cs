@@ -302,19 +302,6 @@ namespace Base2D.System.UnitSystem
         [SerializeField]
         private float _jumpSpeed;
 
-        void Start()
-        {
-        }
-
-        public void Update()
-        {
-        }
-
-        private void Log(object message)
-        {
-            Debug.Log("[Attribute] - " + message);
-        }
-
         public static Attribute operator +(Attribute lhs, Attribute rhs)
         {
             lhs.Strength += rhs.Strength;
@@ -379,16 +366,5 @@ namespace Base2D.System.UnitSystem
             return lhs;
         }
 
-    }
-    public struct abc : IEquatable<abc>
-    {
-        public int a;
-        public int b;
-        public int c;
-
-        public bool Equals(abc other)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

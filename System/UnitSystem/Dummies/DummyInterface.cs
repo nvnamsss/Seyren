@@ -22,49 +22,33 @@ namespace Base2D.System.UnitSystem.Dummies
             return go;
         }
 
-
+        /// <summary>
+        /// Create dummy base on existed GameObject, based Object must contain RigidBody2D and Collider2D
+        /// </summary>
         public static Dummy Create(GameObject go)
         {
-            Dummy dummy = go.AddComponent<Dummy>();
-
-            return dummy;
-        }
-
-        public static Dummy CreateCircleDummy()
-        {
-            GameObject go = new GameObject();
-            SpriteRenderer render = go.AddComponent<SpriteRenderer>();
-            return CreateCircleDummy(go);
-        }
-
-        public static Dummy CreateCircleDummy(GameObject go)
-        {   
             GameObject g = Instantiate(go);
-            g.name = go.name; 
-            g.AddComponent<CircleCollider2D>();
-            g.AddComponent<Rigidbody2D>();
             Dummy dummy = g.AddComponent<Dummy>();
+
             return dummy;
         }
 
-        public static Dummy CreateBoxDummy()
-        {
-            GameObject go = new GameObject();
-            SpriteRenderer render = go.AddComponent<SpriteRenderer>();
-
-            return CreateBoxDummy(go);
-        }
-
-        public static Dummy CreateBoxDummy(GameObject go)
+        /// <summary>
+        /// Create dummy base on existed GameObject then add Collider to GameObject
+        /// </summary>
+        /// <typeparam name="TCollider2D">Collider2D type like BoxCollider2D, CircleCollider2D, etc</typeparam>
+        public static Dummy Create<TCollider2D>(GameObject go) where TCollider2D : Collider2D
         {
             GameObject g = Instantiate(go);
             g.name = go.name;
-
-            g.AddComponent<BoxCollider2D>();
-            g.AddComponent<Rigidbody2D>();
+            Rigidbody2D body = g.GetComponent<Rigidbody2D>();
+            TCollider2D collider = g.GetComponent<TCollider2D>();
+            if (body == null) g.AddComponent<Rigidbody2D>();
+            if (collider == null) g.AddComponent<TCollider2D>();
             Dummy dummy = g.AddComponent<Dummy>();
 
             return dummy;
         }
+
     }
 }

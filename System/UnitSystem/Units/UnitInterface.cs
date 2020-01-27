@@ -17,6 +17,24 @@ namespace Base2D.System.UnitSystem.Units
             return unit;
         }
 
+        public static Unit Create(GameObject go)
+        {
+            GameObject g = Instantiate(go);
+            Unit unit = g.AddComponent<Unit>();
+
+            return unit;
+        }
+
+        public static Unit Create<TCollider2D>(GameObject go) where TCollider2D : Collider2D
+        {
+            GameObject g = Instantiate(go);
+            TCollider2D collider = g.GetComponent<TCollider2D>();
+            if (collider == null) g.AddComponent<TCollider2D>();
+            Unit unit = g.AddComponent<Unit>();
+
+            return unit;
+        }
+
         protected static GameObject CreateObject(string name, Vector3 location, Quaternion rotation, Sprite sprite)
         {
             GameObject go = new GameObject(name);

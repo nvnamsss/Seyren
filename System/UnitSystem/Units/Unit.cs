@@ -13,7 +13,6 @@ using UnityEditor;
 
 namespace Base2D.System.UnitSystem.Units
 {
-    [CreateAssetMenu(fileName = "Unit", menuName = "Create/Unit")]
     public partial class Unit : MonoBehaviour, IObject, IAttribute
     {
         public Unit()
@@ -87,25 +86,24 @@ namespace Base2D.System.UnitSystem.Units
             damageInfo.DamageType = type;
             damageInfo.CalculateDamage();
 
-            UnityEngine.Debug.Log(damageInfo);
             if (CurrentShield > 0 || CurrentPShield > 0 || CurrentMShield > 0)
             {
                 //float min = 0;
                 //switch (damageInfo.DamageType)
                 //{
                 //    case DamageType.Physical:
-                //        min = Mathf.Min(Attribute.PhysicalShield, damageInfo.DamageAmount);
-                //        Attribute.PhysicalShield -= min;
+                //        min = Mathf.Min(CurrentPShield, damageInfo.DamageAmount);
+                //        CurrentPShield -= min;
                 //        damageInfo.DamageAmount -= min;
                 //        break;
                 //    case DamageType.Magical:
-                //        min = Mathf.Min(Attribute.MagicShield, damageInfo.DamageAmount);
-                //        Attribute.MagicShield -= min;
+                //        min = Mathf.Min(CurrentMShield, damageInfo.DamageAmount);
+                //        CurrentMShield -= min;
                 //        damageInfo.DamageAmount -= min;
                 //        break;
                 //    case DamageType.Pure:
-                //        min = Mathf.Min(Attribute.Shield, damageInfo.DamageAmount);
-                //        Attribute.Shield -= min;
+                //        min = Mathf.Min(CurrentShield, damageInfo.DamageAmount);
+                //        CurrentShield -= min;
                 //        damageInfo.DamageAmount -= min;
                 //        break;
                 //    case DamageType.OverTime:
