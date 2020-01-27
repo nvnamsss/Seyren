@@ -14,14 +14,8 @@ namespace Base2D.System.UnitSystem.Projectiles
             get => _arc;
             set => _arc = value;
         }
-        public float Angle
-        {
-            get => _angle;
-            set => _angle = value;
-        }
+
         public Vector2 Direction;
-        [SerializeField]
-        private float _angle;
         [SerializeField]
         private Vector2 _arc;
         ArrowProjectile()
@@ -38,12 +32,10 @@ namespace Base2D.System.UnitSystem.Projectiles
         }
         public override void Move()
         {
-            float rad = Angle * Mathf.Deg2Rad;
             Direction = Direction + Arc;
             Vector2 velocity = Direction * Speed;
 
             Body.velocity = new Vector2(0, 0);      
-            gameObject.transform.rotation = Quaternion.Euler(0 , 0, Vector3.Angle(Body.transform.position, Body.transform.position + (Vector3)velocity));
 
             Body.AddForce(velocity, ForceMode2D.Impulse);
             Look(velocity);
