@@ -29,10 +29,10 @@ namespace Base2D.System.UnitSystem.Units
             Action = gameObject.AddComponent<Action>();
             Abilites = new Dictionary<int, AbilitySystem.Ability>();
             Active = true;
+            Attribute = BaseAttribute + Attribute.zero;
         }
         void Start()
         {
-
             _currentJump = JumpTimes;
             _currentHp = Attribute.MaxHp;
             _currentMp = Attribute.MaxMp;
@@ -224,16 +224,11 @@ namespace Base2D.System.UnitSystem.Units
                 return;
             }
 
-            float dot = Vector2.Dot(BaseLook, direction);
-
-            Vector3 look = Vector3.Cross(BaseLook, direction);
-            if (look == Vector3.zero)
-            {
-                look.z = dot < 0 ? 180 : 0;
-            }
-            float w = Mathf.Sqrt(Mathf.Pow(BaseLook.magnitude, 2) * Mathf.Pow(direction.magnitude, 2)) + dot;
-            Quaternion quaternion = new Quaternion(look.x, look.y, look.z, w);
-            transform.rotation = quaternion.normalized;
+            float forwardDot = Vector2.Dot(Forward, direction);
+            Vector2 f = Forward * forwardDot;
+            Quaternion q1 = Quaternion.FromToRotation(Forward, f);
+            Quaternion q2 = Quaternion.FromToRotation(f, direction);
+            transform.rotation = q2 * q1;
         }
 
         public void Attack()

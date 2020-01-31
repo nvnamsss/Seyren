@@ -72,11 +72,12 @@ namespace Base2D.System.UnitSystem.Projectiles
             Vector3 look = Vector3.Cross(BaseLook, direction);
             if (look == Vector3.zero)
             {
-                look.z = dot < 0 ? 180 : 0;
+
             }   
             float w = Mathf.Sqrt(Mathf.Pow(BaseLook.magnitude, 2) * Mathf.Pow(direction.magnitude, 2)) + dot;
             Quaternion quaternion = new Quaternion(look.x, look.y, look.z, w);
             transform.rotation = quaternion.normalized;
+            transform.rotation = Quaternion.FromToRotation(BaseLook, direction);
         }
 
         protected virtual void Awake()

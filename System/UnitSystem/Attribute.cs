@@ -302,6 +302,7 @@ namespace Base2D.System.UnitSystem
         [SerializeField]
         private float _jumpSpeed;
 
+        public static Attribute zero => new Attribute();
         public static Attribute operator +(Attribute lhs, Attribute rhs)
         {
             lhs.Strength += rhs.Strength;

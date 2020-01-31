@@ -52,14 +52,31 @@ namespace Base2D.System.UnitSystem.Units
                 _attribute = value;
             }
         }
+        public Attribute BaseAttribute
+        {
+            get
+            {
+                return _baseAttribute;
+            }
+            set
+            {
+                _baseAttribute = Attribute;
+            }
+        }
         public ActionSystem.Action Action { get; set; }
         
 
         public GroundType StandOn;
-        public Vector2 BaseLook
+        public Vector2 Forward
         {
-            get => _baseLook;
-            set => _baseLook = value;
+            get => _forward;
+            set => _forward = value;
+        }
+
+        public Vector2 Upward
+        {
+            get => _upward;
+            set => _upward = value;
         }
         public UnitStatus UnitStatus
         {
@@ -197,6 +214,8 @@ namespace Base2D.System.UnitSystem.Units
         public float TimeScale;
         [SerializeField]
         protected Attribute _attribute;
+        [SerializeField]
+        protected Attribute _baseAttribute;
         protected Unit _owner;
         [SerializeField]    
         protected bool _isFly;
@@ -217,7 +236,9 @@ namespace Base2D.System.UnitSystem.Units
         [SerializeField]
         protected UnitStatus _unitStatus;
         [SerializeField]
-        protected Vector2 _baseLook;
+        protected Vector2 _forward;
+        [SerializeField]
+        protected Vector2 _upward;
         protected Unit damageSource;
         public ModificationInfos info;
     }

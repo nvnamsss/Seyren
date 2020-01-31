@@ -34,9 +34,8 @@ namespace Base2D.System.UnitSystem.Projectiles
         {
             Direction = Direction + Arc;
             Vector2 velocity = Direction * Speed;
-
+            
             Body.velocity = new Vector2(0, 0);      
-
             Body.AddForce(velocity, ForceMode2D.Impulse);
             Look(velocity);
         }
