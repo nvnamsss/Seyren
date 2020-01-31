@@ -72,12 +72,6 @@ namespace Base2D.System.UnitSystem.Units
             get => _forward;
             set => _forward = value;
         }
-
-        public Vector2 Upward
-        {
-            get => _upward;
-            set => _upward = value;
-        }
         public UnitStatus UnitStatus
         {
             get
@@ -237,8 +231,6 @@ namespace Base2D.System.UnitSystem.Units
         protected UnitStatus _unitStatus;
         [SerializeField]
         protected Vector2 _forward;
-        [SerializeField]
-        protected Vector2 _upward;
         protected Unit damageSource;
         public ModificationInfos info;
     }

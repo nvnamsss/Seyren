@@ -219,14 +219,19 @@ namespace Base2D.System.UnitSystem.Units
 
         public void Look(Vector2 direction)
         {
+            Look(Forward, direction);
+        }
+
+        public void Look(Vector2 forward, Vector2 direction)
+        {
             if (!Active)
             {
                 return;
             }
 
-            float forwardDot = Vector2.Dot(Forward, direction);
-            Vector2 f = Forward * forwardDot;
-            Quaternion q1 = Quaternion.FromToRotation(Forward, f);
+            float forwardDot = Vector2.Dot(forward, direction);
+            Vector2 f = forward * forwardDot;
+            Quaternion q1 = Quaternion.FromToRotation(forward, f);
             Quaternion q2 = Quaternion.FromToRotation(f, direction);
             transform.rotation = q2 * q1;
         }

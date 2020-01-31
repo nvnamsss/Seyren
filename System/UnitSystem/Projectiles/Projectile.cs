@@ -67,17 +67,21 @@ namespace Base2D.System.UnitSystem.Projectiles
 
         public void Look(Vector2 direction)
         {
-            float dot = Vector2.Dot(BaseLook, direction);
+            Look(Forward, direction);
+        }
 
-            Vector3 look = Vector3.Cross(BaseLook, direction);
-            if (look == Vector3.zero)
+        public void Look(Vector2 forward, Vector2 direction)
+        {
+            if (!Active)
             {
+                return;
+            }
 
-            }   
-            float w = Mathf.Sqrt(Mathf.Pow(BaseLook.magnitude, 2) * Mathf.Pow(direction.magnitude, 2)) + dot;
-            Quaternion quaternion = new Quaternion(look.x, look.y, look.z, w);
-            transform.rotation = quaternion.normalized;
-            transform.rotation = Quaternion.FromToRotation(BaseLook, direction);
+            float forwardDot = Vector2.Dot(forward, direction);
+            Vector2 f = forward * forwardDot;
+            Quaternion q1 = Quaternion.FromToRotation(forward, f);
+            Quaternion q2 = Quaternion.FromToRotation(f, direction);
+            transform.rotation = q2 * q1;
         }
 
         protected virtual void Awake()
