@@ -35,6 +35,11 @@ namespace Base2D.System.UnitSystem.Dummies
         public float AnimationSpeed { get; set; }
         public float TurnSpeed { get; set; }
         public Color VertexColor { get; set; }
+        public bool Active
+        {
+            get => _active;
+            set => _active = value;
+        }
         public Vector2 Forward
         {
             get => _forward;
@@ -53,5 +58,7 @@ namespace Base2D.System.UnitSystem.Dummies
         public Collider2D Collider;
         [SerializeField]
         protected Vector2 _forward;
+        [SerializeField]
+        protected bool _active;
     }
 }
