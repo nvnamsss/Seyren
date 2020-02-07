@@ -35,6 +35,7 @@ namespace Base2D.System.AbilitySystem
         }
 
         protected bool _isOn;
+        protected Coroutine cooldownCoroutine;
         protected abstract void DoCastAbility();
 
         public ToggleAbility(Unit caster) : base(caster, 0, 0, 1)
@@ -50,7 +51,7 @@ namespace Base2D.System.AbilitySystem
             }
 
             IsOn = !IsOn;
-            Caster.StartCoroutine(Casted(TimeDelay, BaseCoolDown));
+            cooldownCoroutine = Caster.StartCoroutine(Casted(TimeDelay, BaseCoolDown));
             return true;
         }
 

@@ -12,8 +12,8 @@ namespace Base2D.System.UnitSystem.Projectiles
         public delegate void HitExceedHandler(Projectile sender);
         public delegate void TimeExpiredHandler(Projectile sender);
         public delegate void OnHitHandler(Projectile sender, GameObject collider);
-        public delegate void ConditionHandler(Projectile sender, ConditionEventArgs<GameObject> e);
-        public ConditionHandler Condition;
+        public delegate bool HitConditionHandler<T>(Projectile sender, T hit);
+        public HitConditionHandler<GameObject> HitCondition;
         public event OnHitHandler OnHit;
         public event TimeExpiredHandler TimeExpired;
         public event HitExceedHandler HitExceed;

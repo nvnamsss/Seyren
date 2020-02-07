@@ -23,6 +23,9 @@ namespace Base2D.System.UnitSystem.Dummies
             AffectedDummies = new List<Dummy>();
             AffectedProjectiles= new List<Projectile >();
             Modification = new ModificationInfos();
+            UnitCondition = (s, u) => true;
+            ProjectileCondition = (s, p) => true;
+            DummyCondition = (s, d) => true;
         }
 
         protected virtual void Awake()
@@ -54,10 +57,9 @@ namespace Base2D.System.UnitSystem.Dummies
 
             if (unit != null)
             {
-                ConditionEventArgs<Unit> e = new ConditionEventArgs<Unit>(unit, true);
-                UnitCondition?.Invoke(this, e);
+                bool match = UnitCondition(this, unit);
                 
-                if (e.Match)
+                if (match)
                 {
                     AffectedUnits.Add(unit);
                     UnitIn?.Invoke(this, unit);
@@ -68,9 +70,9 @@ namespace Base2D.System.UnitSystem.Dummies
             if (projectile != null)
             {
                 ConditionEventArgs<Projectile> e = new ConditionEventArgs<Projectile>(projectile, true);
-                ProjectileCondition?.Invoke(this, e);
+                bool match = ProjectileCondition(this, projectile);
 
-                if (e.Match)
+                if (match)
                 {
                     AffectedProjectiles.Add(projectile);
                     ProjectileIn?.Invoke(this, projectile);
@@ -80,9 +82,9 @@ namespace Base2D.System.UnitSystem.Dummies
             if (dummy != null)
             {
                 ConditionEventArgs<Dummy> e = new ConditionEventArgs<Dummy>(dummy, true);
-                DummyCondition?.Invoke(this, e);
+                bool? match = DummyCondition?.Invoke(this, dummy);
 
-                if (e.Match)
+                if (match.Value) 
                 {
                     AffectedDummies.Add(dummy);
                     DummyIn?.Invoke(this, dummy);
@@ -98,10 +100,9 @@ namespace Base2D.System.UnitSystem.Dummies
 
             if (unit != null)
             {
-                ConditionEventArgs<Unit> e = new ConditionEventArgs<Unit>(unit, true);
-                UnitCondition?.Invoke(this, e);
+                bool match = UnitCondition(this, unit);
                 
-                if (e.Match)
+                if (match)
                 {
                     AffectedUnits.Add(unit);
                     UnitIn?.Invoke(this, unit);
@@ -110,9 +111,8 @@ namespace Base2D.System.UnitSystem.Dummies
 
             if (projectile != null)
             {
-                ConditionEventArgs<Projectile> e = new ConditionEventArgs<Projectile>(projectile, true);
-                ProjectileCondition?.Invoke(this, e);
-                if (e.Match)
+                bool match = ProjectileCondition(this, projectile);
+                if (match)
                 {
                     AffectedProjectiles.Add(projectile);
                     ProjectileIn?.Invoke(this, projectile);
@@ -121,9 +121,8 @@ namespace Base2D.System.UnitSystem.Dummies
 
             if (dummy != null)
             {
-                ConditionEventArgs<Dummy> e = new ConditionEventArgs<Dummy>(dummy, true);
-                DummyCondition?.Invoke(this, e);
-                if (e.Match)
+                bool match = DummyCondition(this, dummy);
+                if (match)
                 {
                     AffectedDummies.Add(dummy);
                     DummyIn?.Invoke(this, dummy);
@@ -139,10 +138,9 @@ namespace Base2D.System.UnitSystem.Dummies
 
             if (unit != null)
             {
-                ConditionEventArgs<Unit> e = new ConditionEventArgs<Unit>(unit, true);
-                UnitCondition?.Invoke(this, e);
+                bool match = UnitCondition(this, unit);
 
-                if (e.Match)
+                if (match)
                 {
                     AffectedUnits.Remove(unit);
                     UnitOut?.Invoke(this, unit);
@@ -151,10 +149,9 @@ namespace Base2D.System.UnitSystem.Dummies
 
             if (projectile != null)
             {
-                ConditionEventArgs<Projectile> e = new ConditionEventArgs<Projectile>(projectile, true);
-                ProjectileCondition?.Invoke(this, e);
+                bool match = ProjectileCondition(this, projectile);
 
-                if (e.Match)
+                if (match)
                 {
                     AffectedProjectiles.Remove(projectile);
                     ProjectileOut?.Invoke(this, projectile);
@@ -163,10 +160,9 @@ namespace Base2D.System.UnitSystem.Dummies
 
             if (dummy != null)
             {
-                ConditionEventArgs<Dummy> e = new ConditionEventArgs<Dummy>(dummy, true);
-                DummyCondition?.Invoke(this, e);
+                bool match = DummyCondition(this, dummy);
 
-                if (e.Match)
+                if (match)
                 {
                     AffectedDummies.Remove(dummy);
                     DummyOut?.Invoke(this, dummy);
@@ -182,10 +178,9 @@ namespace Base2D.System.UnitSystem.Dummies
 
             if (unit != null)
             {
-                ConditionEventArgs<Unit> e = new ConditionEventArgs<Unit>(unit, true);
-                UnitCondition?.Invoke(this, e);
+                bool match = UnitCondition(this, unit);
 
-                if (e.Match)
+                if (match)
                 {
                     AffectedUnits.Remove(unit);
                     UnitOut?.Invoke(this, unit);
@@ -194,10 +189,9 @@ namespace Base2D.System.UnitSystem.Dummies
 
             if (projectile != null)
             {
-                ConditionEventArgs<Projectile> e = new ConditionEventArgs<Projectile>(projectile, true);
-                ProjectileCondition?.Invoke(this, e);
+                bool match = ProjectileCondition(this, projectile);
 
-                if (e.Match)
+                if (match)
                 {
                     AffectedProjectiles.Remove(projectile);
                     ProjectileOut?.Invoke(this, projectile);
@@ -206,10 +200,9 @@ namespace Base2D.System.UnitSystem.Dummies
 
             if (dummy != null)
             {
-                ConditionEventArgs<Dummy> e = new ConditionEventArgs<Dummy>(dummy, true);
-                DummyCondition?.Invoke(this, e);
+                bool match = DummyCondition(this, dummy);
 
-                if (e.Match)
+                if (match)
                 {
                     AffectedDummies.Remove(dummy);
                     DummyOut?.Invoke(this, dummy);

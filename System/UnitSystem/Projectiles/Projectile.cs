@@ -19,6 +19,7 @@ namespace Base2D.System.UnitSystem.Projectiles
             _timeExpired = float.MaxValue;
             _active = true;
             IsPenetrate = false;
+            HitCondition = (s, obj) => true;
         }
         public abstract void Move();
 
@@ -109,10 +110,9 @@ namespace Base2D.System.UnitSystem.Projectiles
 
         protected virtual void OnCollisionEnter2D(Collision2D collision)
         {
-            ConditionEventArgs<GameObject> e = new ConditionEventArgs<GameObject>(collision.gameObject, true);
-            Condition?.Invoke(this, e);
+            bool hit = HitCondition(this, collision.gameObject);
 
-            if (e.Match)
+            if (hit)
             {
                 Hit(collision.gameObject);
             }
@@ -120,10 +120,9 @@ namespace Base2D.System.UnitSystem.Projectiles
 
         protected virtual void OnCollisionStay2D(Collision2D collision)
         {
-            ConditionEventArgs<GameObject> e = new ConditionEventArgs<GameObject>(collision.gameObject, true);
-            Condition?.Invoke(this, e);
+            bool hit = HitCondition(this, collision.gameObject);
 
-            if (e.Match)
+            if (hit)
             {
                 Hit(collision.gameObject);
             }
@@ -131,10 +130,9 @@ namespace Base2D.System.UnitSystem.Projectiles
 
         protected virtual void OnTriggerEnter2D(Collider2D collision)
         {
-            ConditionEventArgs<GameObject> e = new ConditionEventArgs<GameObject>(collision.gameObject, true);
-            Condition?.Invoke(this, e);
+            bool hit = HitCondition(this, collision.gameObject);
 
-            if (e.Match)
+            if (hit)
             {
                 Hit(collision.gameObject);
             }
@@ -142,10 +140,9 @@ namespace Base2D.System.UnitSystem.Projectiles
 
         protected virtual void OnTriggerStay2D(Collider2D collision)
         {
-            ConditionEventArgs<GameObject> e = new ConditionEventArgs<GameObject>(collision.gameObject, true);
-            Condition?.Invoke(this, e);
+            bool hit = HitCondition(this, collision.gameObject);
 
-            if (e.Match)
+            if (hit)
             {
                 Hit(collision.gameObject);
             }

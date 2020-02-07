@@ -1,50 +1,79 @@
 ﻿using Base2D.System.ActionSystem.DelayAction;
 using Base2D.System.ActionSystem.BreakAtion;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Base2D.System.ActionSystem
 {
     [DisallowMultipleComponent]
     public class Action : MonoBehaviour
     {
+        public struct ActionData
+        {
+            public string name;
+            public float time;
+            public bool breakable;
+            public IAction action;
+
+            public ActionData(string name, float time, bool breakable, IAction action)
+            {
+                this.name = name;
+                this.time = time;
+                this.breakable = breakable;
+                this.action = action;
+            }
+
+            public ActionData(float time, bool breakable, IAction action) : this(string.Empty, time, breakable, action)
+            {
+
+            }
+        }
+
         public ActionType Type { get; set; }
-        public string Name { get; set; }
         public Animator Animator { get; set; }
-        public virtual bool BreakAction(BreakType breakType)
-        {
-            return false;
-        }
-        public virtual bool DelayAction(DelayInfo delayInfo)
-        {
-            return false;
-
-        }
-        public virtual void Play(string animation)
-        {
-            Animator.Play(animation);
-        }
-
-        public virtual void PlayQueued(string animation, QueueMode queue, PlayMode play)
-        {
-            // Animation.PlayQueued(animation, queue, play);
-        }
-
-        void Awake()
+        public ActionData CurrentAction => _currentAction;
+        private Queue<ActionData> _queue;
+        private ActionData _currentAction;
+        private void Awake()
         {
             Animator = GetComponent<Animator>();
-        }
-        void Start()
-        {
+            _queue = new Queue<ActionData>();
         }
 
-        void FixedUpdate()
+        private void FixedUpdate()
         {
-            Tick(Time.deltaTime);
+            _currentAction.time -= Time.fixedDeltaTime;
+            if (_currentAction.time <= 0)
+            {
+                RemoveAction();
+            }
         }
 
-        protected virtual void Tick(float time)
+        public void Play(IAction action)
         {
+            action.EndAction += (s) =>
+            {
+                RemoveAction();
+            };
+            action.Invoke();
+        }
 
+        public void PlayQueue(ActionData action)
+        {
+            _queue.Enqueue(action);
+            enabled = true;
+        }
+        
+        public void RemoveAction()
+        {
+            if (_queue.Count > 0)
+            {
+                _currentAction = _queue.Dequeue();
+            }
+            else
+            {   
+                enabled = false;
+            }
         }
     }
 }

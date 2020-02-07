@@ -19,8 +19,9 @@ namespace Base2D.System.AbilitySystem
         public float TimeCastingLeft { get; set; }
         public bool IsCasting { get; set; }
         public BreakType BreakType { get; set; }
+        protected Coroutine castCoroutine;
+        protected Coroutine cooldownCoroutine;
         protected abstract void DoCastAbility();
-
         public ActiveAbility(Unit caster, float castTime, float cooldown, int level) :
             base(caster, castTime, cooldown, level)
         {
@@ -42,7 +43,7 @@ namespace Base2D.System.AbilitySystem
                 return false;
             }
 
-            Caster.StartCoroutine(CastingProcess(TimeDelay, BaseCastingTime));
+            castCoroutine = Caster.StartCoroutine(CastingProcess(TimeDelay, BaseCastingTime));
             return true;
         }
 
@@ -61,7 +62,7 @@ namespace Base2D.System.AbilitySystem
             {
                 IsCasting = false;
                 DoCastAbility();
-                Caster.StartCoroutine(CastedProcess(TimeDelay, BaseCoolDown));
+                cooldownCoroutine = Caster.StartCoroutine(CastedProcess(TimeDelay, BaseCoolDown));
             }
         }
 

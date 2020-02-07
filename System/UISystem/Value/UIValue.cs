@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 namespace Base2D.System.UISystem.Value
 {
     class UIValue
-    {     
-           public float maxHealth;
-           public float currHealth;
-           public float maxMana;
-           public float currMana;
-          public void Init(Unit character)
+    {
+        public float maxHealth;
+        public float currHealth;
+        public float maxMana;
+        public float currMana;
+        public void Init(Unit character)
         {
             maxHealth = character.Attribute.MaxHp;
             currHealth = character.CurrentHp;
@@ -26,11 +26,9 @@ namespace Base2D.System.UISystem.Value
             currHealth = currHealth - dmg;
         }
 
-        public void useSkill( int drain)
+        public void useSkill(int drain)
         {
-           currMana = currMana - drain;
+            currMana = currMana - drain;
         }
-
-
     }
 }

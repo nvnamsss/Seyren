@@ -26,6 +26,8 @@ namespace Base2D.System.AbilitySystem
         public float ChannelTime { get; set; }
         public float ChannelTimeLeft { get; set; }
         public float TotalChannelTime;
+        protected Coroutine channelCoroutine;
+        protected Coroutine cooldownCoroutine;
         public ChannelAbility(Unit caster, float channelTime, float interval, float cooldown, int level) : 
             base(caster, channelTime, cooldown, level)
         {
@@ -42,7 +44,7 @@ namespace Base2D.System.AbilitySystem
             }
 
             ChannelStart?.Invoke(this);
-            Caster.StartCoroutine(Channel(Interval, ChannelTime));
+            channelCoroutine = Caster.StartCoroutine(Channel(Interval, ChannelTime));
             return true;
         }
 
@@ -62,7 +64,7 @@ namespace Base2D.System.AbilitySystem
                 TotalChannelTime += interval;
             }
 
-            Caster.StartCoroutine(Casted(TimeDelay, BaseCoolDown));
+            cooldownCoroutine = Caster.StartCoroutine(Casted(TimeDelay, BaseCoolDown));
             yield break;
         }
 

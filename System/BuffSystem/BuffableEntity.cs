@@ -8,7 +8,7 @@ using Base2D.System.ActionSystem.DelayAction;
 
 namespace Base2D.System.BuffSystem
 {
-    public class BuffableEntity : Action
+    public class BuffableEntity
     {
 
         //List of all current buffs
@@ -35,21 +35,6 @@ namespace Base2D.System.BuffSystem
         {
             CurrentBuffs.Add(buff);
             buff.Activate();
-        }
-
-        public override bool BreakAction(BreakType breakType)
-        {
-            throw new global::System.NotImplementedException();
-        }
-
-        public override bool DelayAction(DelayInfo delayInfo)
-        {
-            throw new global::System.NotImplementedException();
-        }
-
-        protected override void Tick(float time)
-        {
-            throw new global::System.NotImplementedException();
         }
     }
 }

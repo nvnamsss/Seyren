@@ -62,7 +62,7 @@ namespace Base2D.System.AbilitySystem
 
                 if (_active != original)
                 {
-                    StatusChanged(this);
+                    StatusChanged?.Invoke(this);
                 }
             }
         }
@@ -86,7 +86,6 @@ namespace Base2D.System.AbilitySystem
         protected bool _active;
         protected float _timeCooldownLeft;
         protected int _level;
-
         public virtual bool UnlockAbility()
         {
             Active = true;

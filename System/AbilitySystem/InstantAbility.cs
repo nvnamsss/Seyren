@@ -6,6 +6,7 @@ namespace Base2D.System.AbilitySystem
 {
     public abstract class InstantAbility : Ability
     {
+        protected Coroutine cooldownCoroutine;
         protected abstract override bool Condition();
 
         protected abstract void DoCastAbility();
@@ -21,11 +22,9 @@ namespace Base2D.System.AbilitySystem
                 return false;
             }
 
-            Caster.StartCoroutine(Casted(TimeDelay, BaseCoolDown));
+            cooldownCoroutine = Caster.StartCoroutine(Casted(TimeDelay, BaseCoolDown));
             return true;
         }
-
-
 
         protected virtual IEnumerator Casted(float timeDelay, float cooldown)
         {

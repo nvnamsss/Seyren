@@ -47,7 +47,7 @@ namespace Base2D.Init.Abilities
             float angle = 180;
             for (int loop = 0; loop < 7; loop++)
             {
-                float rad = (float)(angle * Mathf.Deg2Rad);
+                float rad = (angle * Mathf.Deg2Rad);
                 Vector2 location = unit.transform.position;
                 location.y -= 1;
                 Quaternion rotation = unit.transform.rotation;
@@ -60,7 +60,7 @@ namespace Base2D.Init.Abilities
                     controller,
                     10,
                     2);
-                missile.Condition = HitCondition;
+                missile.HitCondition = HitCondition;
                 missile.BaseHitDelay = 0;
                 //missile.Collider.size = new Vector2(0.86f, 0.86f);
                 missile.Direction = direction;
