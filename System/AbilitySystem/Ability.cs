@@ -14,6 +14,8 @@ namespace Base2D.System.AbilitySystem
     [Serializable]
     public abstract class Ability
     {
+        public static float MaxInterval = 4;
+        public static float MinInterval = 1;
         public delegate void StatusChangedHandler(Ability sender);
         public delegate void CooldownCompletedHandler(Ability sender);
         public event StatusChangedHandler StatusChanged;
@@ -24,22 +26,21 @@ namespace Base2D.System.AbilitySystem
         public CastType CastType { get; protected set; }
         public float BaseCoolDown { get; set; }
         /// <summary>
-        /// Time between every process of an ability <br></br>
-        /// TimeDelay is using on reduce cast time, cooldown, etc...
+        /// Time between every process for cooldown of an ability <br></br>
         /// </summary>
-        public float TimeDelay { get; set; }
-        public float TimeCoolDownLeft
+        public float CooldownInterval { get; set; }
+        public float CooldownRemaining
         {
             get
             {
-                return _timeCooldownLeft;
+                return _cooldownRemaining;
             }
             set
             {
-                float original = _timeCooldownLeft;
-                _timeCooldownLeft = value;
+                float original = _cooldownRemaining;
+                _cooldownRemaining = value;
 
-                if (original > 0 && _timeCooldownLeft <= 0)
+                if (original > 0 && _cooldownRemaining <= 0)
                 {
                     CooldownCompleted?.Invoke(this);
                 }
@@ -84,7 +85,7 @@ namespace Base2D.System.AbilitySystem
         public Unit Target;
         public Vector3 PointTarget;
         protected bool _active;
-        protected float _timeCooldownLeft;
+        protected float _cooldownRemaining;
         protected int _level;
         public virtual bool UnlockAbility()
         {
@@ -93,12 +94,17 @@ namespace Base2D.System.AbilitySystem
             return Active;
         }
 
-        public Ability(Unit caster, float timeDelay, float cooldown, int level)
+        public Ability(Unit caster, float cooldown, int level)
         {
             Caster = caster;
-            TimeDelay = timeDelay;
+            if (cooldown > MaxInterval)
+                CooldownInterval = MaxInterval / 10;
+            else if (cooldown < MinInterval)
+                CooldownInterval = cooldown;
+            else
+                CooldownInterval = cooldown / 10;
             BaseCoolDown = cooldown;
-            TimeCoolDownLeft = 0;
+            CooldownRemaining = 0;
             _level = level;
         }
 

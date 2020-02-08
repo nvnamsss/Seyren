@@ -29,7 +29,7 @@ namespace Base2D.Init.Abilities
         public AncientSlam(Unit u) : base(u, 2, 10, 1)
         {
             BaseCoolDown = 10;
-            BaseCastingTime = 2;
+            BaseCastTime = 2;
             controller = Resources.Load<RuntimeAnimatorController>(ancientEnergyPath);
             hitList = new Dictionary<Unit, int>();
 
@@ -131,7 +131,7 @@ namespace Base2D.Init.Abilities
         protected override bool Condition()
         {
             return !(!Active ||
-                TimeCoolDownLeft > 0 ||
+                CooldownRemaining > 0 ||
                 IsCasting);
         }
 

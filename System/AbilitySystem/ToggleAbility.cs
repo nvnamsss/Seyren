@@ -38,7 +38,7 @@ namespace Base2D.System.AbilitySystem
         protected Coroutine cooldownCoroutine;
         protected abstract void DoCastAbility();
 
-        public ToggleAbility(Unit caster) : base(caster, 0, 0, 1)
+        public ToggleAbility(Unit caster) : base(caster, 0, 1)
         {
             _isOn = true;
         }
@@ -51,19 +51,19 @@ namespace Base2D.System.AbilitySystem
             }
 
             IsOn = !IsOn;
-            cooldownCoroutine = Caster.StartCoroutine(Casted(TimeDelay, BaseCoolDown));
+            cooldownCoroutine = Caster.StartCoroutine(Casted(CooldownInterval, BaseCoolDown));
             return true;
         }
 
         protected virtual IEnumerator Casted(float timeDelay, float cooldown)
         {
             DoCastAbility();
-            TimeCoolDownLeft = cooldown - timeDelay;
+            CooldownRemaining = cooldown - timeDelay;
 
-            while (TimeCoolDownLeft >= 0)
+            while (CooldownRemaining >= 0)
             {
                 yield return new WaitForSeconds(timeDelay);
-                TimeCoolDownLeft -= timeDelay;
+                CooldownRemaining -= timeDelay;
             }
             yield break;
         }

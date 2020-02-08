@@ -13,7 +13,7 @@ namespace Base2D.System.AbilitySystem
     {
         public float AoE;
         public float Interval;
-        public AuraAbility(Unit caster, float aoe, int level) : base(caster, 0, 0, level)
+        public AuraAbility(Unit caster, float aoe, int level) : base(caster, 0, level)
         {
             AoE = aoe;
             ManaCost = 0;
@@ -40,7 +40,7 @@ namespace Base2D.System.AbilitySystem
             {
                 yield return new WaitForSeconds(interval);
                 AuraInterval();
-                TimeCoolDownLeft -= interval;
+                CooldownRemaining -= interval;
             }
         }
 

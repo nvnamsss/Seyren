@@ -19,13 +19,13 @@ namespace Base2D.Init.Abilities
         {
             unit = u;
             BaseCoolDown = unit.Attribute.AttackSpeed;
-            BaseCastingTime = 0.1f;
+            BaseCastTime = 0.1f;
             controller = ProjectileCollection.AncientEnergyController;
             hitList = new Dictionary<Unit, int>();
         }
         public override bool Cast()
         {
-            if (TimeCoolDownLeft > 0 ||
+            if (CooldownRemaining > 0 ||
                 IsCasting ||
                 unit.Action.Type == System.ActionSystem.ActionType.CastAbility ||
                 unit.Action.Type == System.ActionSystem.ActionType.Attack)
@@ -37,8 +37,8 @@ namespace Base2D.Init.Abilities
             unit.Action.Type = System.ActionSystem.ActionType.CastAbility;
 
             unit.Action.Animator.SetTrigger("attack1");
-            TimeCastingLeft = BaseCastingTime;
-            unit.StartCoroutine(Casting(Time.deltaTime, BaseCastingTime));
+            CastTimeRemaining = BaseCastTime;
+            unit.StartCoroutine(Casting(Time.deltaTime, BaseCastTime));
             return true;
         }
 
@@ -47,12 +47,12 @@ namespace Base2D.Init.Abilities
         {
             IsCasting = true;
             yield return new WaitForSeconds(timeDelay);
-            TimeCastingLeft = timeCasting - timeDelay;
+            CastTimeRemaining = timeCasting - timeDelay;
 
-            while (TimeCastingLeft >= 0)
+            while (CastTimeRemaining >= 0)
             {
                 yield return new WaitForSeconds(timeDelay);
-                TimeCastingLeft -= timeDelay;
+                CastTimeRemaining -= timeDelay;
             }
 
             if (IsCasting)
@@ -124,7 +124,7 @@ namespace Base2D.Init.Abilities
             Create(location, rotation);
 
             unit.Action.Type = System.ActionSystem.ActionType.None;
-            TimeCoolDownLeft = BaseCoolDown;
+            CooldownRemaining = BaseCoolDown;
         }
 
         protected override bool Condition()

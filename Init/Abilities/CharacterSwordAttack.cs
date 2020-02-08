@@ -17,7 +17,7 @@ namespace Base2D.Init.Abilities
         {
             unit = u;
             BaseCoolDown = 10 / unit.Attribute.AttackSpeed;
-            BaseCastingTime = 0.25f;
+            BaseCastTime = 0.25f;
 
             Casting += (sender, e) =>
             {
@@ -69,13 +69,13 @@ namespace Base2D.Init.Abilities
             location = location + (Vector2)(rotation * Vector2.left * 2);
             Create(location, rotation);
             unit.Action.Type = System.ActionSystem.ActionType.None;
-            TimeCoolDownLeft = BaseCoolDown;
+            CooldownRemaining = BaseCoolDown;
         }
 
         protected override bool Condition()
         {
             return !Active ||
-                TimeCoolDownLeft > 0 ||
+                CooldownRemaining > 0 ||
                 IsCasting ||
                 unit.Action.Type == System.ActionSystem.ActionType.CastAbility ||
                 unit.Action.Type == System.ActionSystem.ActionType.Attack;

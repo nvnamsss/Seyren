@@ -18,12 +18,11 @@ namespace Base2D.Init.Abilities
         private GameObject go;
         public ActionConditionHandler RunCondition { get; }
 
-        public ActionType ActionType => throw new global::System.NotImplementedException();
+        public ActionType ActionType { get; }
 
         public MagicFlame(Unit u) : base(u, 0.2f, 1, 1)
         {
-            BaseCoolDown = 1;
-            BaseCastingTime = 0.2f;
+            ActionType = ActionType.CastAbility;
             go = Resources.Load<GameObject>(magicFlamePath);
             Casting += (s, e) =>
             {
@@ -65,7 +64,7 @@ namespace Base2D.Init.Abilities
             missile.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
             missile.MaxHit = 100000;
             missile.Owner = Caster;
-            missile.transform.position = Caster.transform.position;
+            missile.transform.position = location;
             missile.HitCondition = (s, obj) =>
             {
                 Unit u = obj.GetComponent<Unit>();
@@ -91,7 +90,7 @@ namespace Base2D.Init.Abilities
         protected override bool Condition()
         {
             return !(!Active ||
-                TimeCoolDownLeft > 0 ||
+                CooldownRemaining > 0 ||
                 IsCasting);
         }
 

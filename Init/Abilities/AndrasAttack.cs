@@ -20,7 +20,7 @@ namespace Base2D.Init.Abilities
         {
             unit = u;
             BaseCoolDown = unit.Attribute.AttackSpeed;
-            BaseCastingTime = 0.4f;
+            BaseCastTime = 0.4f;
             controller = Resources.Load<RuntimeAnimatorController>(ancientEnergyPath);
             hitList = new Dictionary<Unit, int>();
         }
@@ -86,13 +86,13 @@ namespace Base2D.Init.Abilities
             Create(location, rotation);
 
             unit.Action.Type = System.ActionSystem.ActionType.None;
-            TimeCoolDownLeft = BaseCoolDown;
+            CooldownRemaining = BaseCoolDown;
         }
 
         protected override bool Condition()
         {
             return !Active ||
-                TimeCoolDownLeft > 0 ||
+                CooldownRemaining > 0 ||
                 IsCasting ||
                 unit.Action.Type == System.ActionSystem.ActionType.CastAbility ||
                 unit.Action.Type == System.ActionSystem.ActionType.Attack;

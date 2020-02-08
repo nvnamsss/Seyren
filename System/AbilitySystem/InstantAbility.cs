@@ -10,7 +10,7 @@ namespace Base2D.System.AbilitySystem
         protected abstract override bool Condition();
 
         protected abstract void DoCastAbility();
-        public InstantAbility(Unit caster, float cooldown, int level) : base(caster, 0, cooldown, 1)
+        public InstantAbility(Unit caster, float cooldown, int level) : base(caster, cooldown, 1)
         {
             CastType = CastType.Instant;
         }
@@ -22,19 +22,19 @@ namespace Base2D.System.AbilitySystem
                 return false;
             }
 
-            cooldownCoroutine = Caster.StartCoroutine(Casted(TimeDelay, BaseCoolDown));
+            cooldownCoroutine = Caster.StartCoroutine(Casted(CooldownInterval, BaseCoolDown));
             return true;
         }
 
         protected virtual IEnumerator Casted(float timeDelay, float cooldown)
         {
             DoCastAbility();
-            TimeCoolDownLeft = cooldown - timeDelay;
+            CooldownRemaining = cooldown - timeDelay;
 
-            while (TimeCoolDownLeft >= 0)
+            while (CooldownRemaining >= 0)
             {
                 yield return new WaitForSeconds(timeDelay);
-                TimeCoolDownLeft -= timeDelay;
+                CooldownRemaining -= timeDelay;
             }
             yield break;
         }

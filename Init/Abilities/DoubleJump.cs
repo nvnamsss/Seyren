@@ -27,7 +27,7 @@ namespace Base2D.Init.Abilities
 
         protected override bool Condition()
         {
-            return TimeCoolDownLeft > 0;
+            return CooldownRemaining > 0;
         }
     }
 }

@@ -22,17 +22,18 @@ namespace Base2D.System.AbilitySystem
         /// time between every Channel process  <br></br>
         /// This Interval is using for Channel method
         /// </summary>
-        public float Interval { get; set; }
+        public float ChannelInterval { get; set; }
         public float ChannelTime { get; set; }
-        public float ChannelTimeLeft { get; set; }
+        public float ChannelTimeRemaining { get; set; }
         public float TotalChannelTime;
         protected Coroutine channelCoroutine;
         protected Coroutine cooldownCoroutine;
         public ChannelAbility(Unit caster, float channelTime, float interval, float cooldown, int level) : 
-            base(caster, channelTime, cooldown, level)
+            base(caster, cooldown, level)
         {
             CastType = CastType.Channel;
-            Interval = interval;
+            ChannelInterval = interval;
+            ChannelTime = channelTime;
             TotalChannelTime = 0;
         }
 
@@ -44,7 +45,7 @@ namespace Base2D.System.AbilitySystem
             }
 
             ChannelStart?.Invoke(this);
-            channelCoroutine = Caster.StartCoroutine(Channel(Interval, ChannelTime));
+            channelCoroutine = Caster.StartCoroutine(Channel(ChannelInterval, ChannelTime));
             return true;
         }
 
@@ -53,18 +54,18 @@ namespace Base2D.System.AbilitySystem
         protected IEnumerator Channel(float interval, float channelTime)
         {
             IsChanneling = true;
-            ChannelTimeLeft = channelTime;
+            ChannelTimeRemaining = channelTime;
             TotalChannelTime = 0;
 
-            while (ChannelTimeLeft >= 0)
+            while (ChannelTimeRemaining >= 0)
             {
                 yield return new WaitForSeconds(interval);
                 DoChannelAbility();
-                ChannelTimeLeft -= interval;
+                ChannelTimeRemaining -= interval;
                 TotalChannelTime += interval;
             }
 
-            cooldownCoroutine = Caster.StartCoroutine(Casted(TimeDelay, BaseCoolDown));
+            cooldownCoroutine = Caster.StartCoroutine(Casted(CooldownInterval, BaseCoolDown));
             yield break;
         }
 
@@ -73,12 +74,12 @@ namespace Base2D.System.AbilitySystem
             ChannelEnd?.Invoke(this);
             Active = false;
             IsChanneling = false;
-            TimeCoolDownLeft = cooldown - timeDelay;
+            CooldownRemaining = cooldown - timeDelay;
 
-            while (TimeCoolDownLeft >= 0)
+            while (CooldownRemaining >= 0)
             {
                 yield return new WaitForSeconds(timeDelay);
-                TimeCoolDownLeft -= timeDelay;
+                CooldownRemaining -= timeDelay;
             }
             Active = true;
         }
