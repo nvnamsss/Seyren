@@ -1,4 +1,5 @@
 ﻿using Base2D.System.AbilitySystem;
+using Base2D.System.ActionSystem;
 using Base2D.System.UnitSystem.EventData;
 using Base2D.System.UnitSystem.Projectiles;
 using Base2D.System.UnitSystem.Units;
@@ -9,18 +10,24 @@ using UnityEngine;
 
 namespace Base2D.Init.Abilities
 {
-    public class AncientSlam : ActiveAbility
+    public class AncientSlam : ActiveAbility, IAction
     {
         public static readonly int Id = 0x65678301;
-        private Unit unit;
         private Sprite sprite;
         private RuntimeAnimatorController controller;
         private Dictionary<Unit, int> hitList;
         private static string ancientEnergyPath = "Effect/AncientEnergy/AncientEnergy";
 
+        public ActionConditionHandler RunCondition { get; }
+
+        public ActionType ActionType => ActionType.CastAbility;
+        public event ActionHandler ActionStart;
+        public event ActionHandler ActionEnd;
+        private GameObject go;
+        private bool actionRun;
+
         public AncientSlam(Unit u) : base(u, 2, 10, 1)
         {
-            unit = u;
             BaseCoolDown = 10;
             BaseCastingTime = 2;
             controller = Resources.Load<RuntimeAnimatorController>(ancientEnergyPath);
@@ -28,12 +35,33 @@ namespace Base2D.Init.Abilities
 
             Casting += (sender, e) =>
             {
-                unit.Action.Animator.SetBool("Spell", true);
+                Caster.Action.Animator.SetBool("Spell", true);
             };
 
             Casted += (sender) =>
             {
-                unit.Action.Animator.SetBool("Spell", false);
+                Caster.Action.Animator.SetBool("Spell", false);
+            };
+
+            ActionStart += (s) =>
+            {
+                actionRun = true;
+                Caster.Action.Animator.SetBool("Spell", true);
+            };
+
+            ActionEnd += (s) =>
+            {
+                actionRun = false;
+                Caster.Action.Animator.SetBool("Spell", false);
+            };
+
+            RunCondition = (action) =>
+            {
+                if (action.ActionType == ActionType.CastAbility)
+                {
+                    return false;
+                }
+                return true;
             };
         }
 
@@ -48,9 +76,9 @@ namespace Base2D.Init.Abilities
             for (int loop = 0; loop < 7; loop++)
             {
                 float rad = (angle * Mathf.Deg2Rad);
-                Vector2 location = unit.transform.position;
+                Vector2 location = Caster.transform.position;
                 location.y -= 1;
-                Quaternion rotation = unit.transform.rotation;
+                Quaternion rotation = Caster.transform.rotation;
                 Vector2 direction = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
 
                 MissileProjectile missile = MissileProjectile.Create("Ancient Slam - Energy",
@@ -66,7 +94,7 @@ namespace Base2D.Init.Abilities
                 missile.Direction = direction;
                 missile.transform.localScale = new Vector3(3, 3, 1);
                 missile.MaxHit = 100000;
-                missile.Owner = unit;
+                missile.Owner = Caster;
                 missile.OnHit += (sender, e) =>
                 {
                     Unit u = e.GetComponent<Unit>();
@@ -77,40 +105,49 @@ namespace Base2D.Init.Abilities
             }
         }
 
-        private void HitCondition(Projectile projectile, ConditionEventArgs<GameObject> e)
+        private bool HitCondition(Projectile projectile, GameObject obj)
         {
-            Unit u = e.Object.GetComponent<Unit>();
+            Unit u = obj.GetComponent<Unit>();
             if (u == null)
             {
-                e.Match = false;
-                return;
+                return false;
             }
 
             if (hitList.ContainsKey(u))
             {
-                e.Match = false;
-                return;
+                return false;
             }
 
-            e.Match = projectile.Owner.IsEnemy(u);
+            return projectile.Owner.IsEnemy(u);
         }
 
         protected override void DoCastAbility()
         {
-            unit.Action.Animator.SetBool("Spell", false);
-
             Create();
-            unit.Action.Type = System.ActionSystem.ActionType.None;
-            TimeCoolDownLeft = BaseCoolDown;
+            if (actionRun)
+                Revoke();
         }
 
         protected override bool Condition()
         {
-            return !Active ||
+            return !(!Active ||
                 TimeCoolDownLeft > 0 ||
-                IsCasting ||
-                unit.Action.Type == System.ActionSystem.ActionType.CastAbility ||
-                unit.Action.Type == System.ActionSystem.ActionType.Attack;
+                IsCasting);
+        }
+
+        public void Invoke()
+        {
+            bool cast = Cast();
+            if (cast)
+            {
+                ActionStart?.Invoke(this);
+            }
+        }
+
+        public void Revoke()
+        {
+            ActionEnd?.Invoke(this);
+            Caster.StopCoroutine(castCoroutine);
         }
     }
 }

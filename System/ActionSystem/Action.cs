@@ -8,6 +8,7 @@ namespace Base2D.System.ActionSystem
     [DisallowMultipleComponent]
     public class Action : MonoBehaviour
     {
+        public static readonly IAction Free = new FreeAction();
         public struct ActionData
         {
             public string name;
@@ -30,50 +31,63 @@ namespace Base2D.System.ActionSystem
         }
 
         public ActionType Type { get; set; }
+        public IAction CurrentAction => _currentAction;
         public Animator Animator { get; set; }
-        public ActionData CurrentAction => _currentAction;
-        private Queue<ActionData> _queue;
-        private ActionData _currentAction;
+        private Queue<IAction> _queue;
+        private volatile IAction _currentAction;
+        Action()
+        {
+            _currentAction = Free;
+        }
         private void Awake()
         {
             Animator = GetComponent<Animator>();
-            _queue = new Queue<ActionData>();
+            _queue = new Queue<IAction>();
         }
 
         private void FixedUpdate()
         {
-            _currentAction.time -= Time.fixedDeltaTime;
-            if (_currentAction.time <= 0)
-            {
-                RemoveAction();
-            }
         }
 
         public void Play(IAction action)
         {
-            action.EndAction += (s) =>
+            bool run = action.RunCondition(_currentAction);
+            if (run)
             {
-                RemoveAction();
-            };
-            action.Invoke();
+                action.ActionEnd += ActionCompleteCallback;
+                action.ActionStart += ActionStartCallback;
+                action.Invoke();
+            }
         }
 
-        public void PlayQueue(ActionData action)
+        private void ActionStartCallback(IAction s)
         {
-            _queue.Enqueue(action);
-            enabled = true;
+            _currentAction = s;
+            s.ActionStart -= ActionStartCallback;
         }
-        
-        public void RemoveAction()
+
+        private void ActionCompleteCallback(IAction s)
         {
-            if (_queue.Count > 0)
-            {
-                _currentAction = _queue.Dequeue();
-            }
-            else
-            {   
-                enabled = false;
-            }
+            _currentAction = Free;
+            s.ActionEnd -= ActionCompleteCallback;
         }
+        //public void Queue(IAction action)
+        //{
+        //    _queue.Enqueue(action);
+        //    enabled = true;
+        //}
+
+        //public IAction Dequeue()
+        //{
+        //    if (_queue.Count > 0)
+        //    {
+        //        return _queue.Dequeue();
+        //    }
+        //    else
+        //    {
+        //        enabled = false;
+        //        return Free;
+        //    }
+        //}
     }
 }

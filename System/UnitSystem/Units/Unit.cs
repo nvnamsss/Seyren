@@ -230,6 +230,11 @@ namespace Base2D.System.UnitSystem.Units
             }
 
             float forwardDot = Vector2.Dot(forward, direction);
+            if (forwardDot == 0)
+            {
+                float angle = Vector2.SignedAngle(forward, direction);
+                forwardDot = angle > 0 ? -1 : 1;
+            }
             Vector2 f = forward * forwardDot;
             Quaternion q1 = Quaternion.FromToRotation(forward, f);
             Quaternion q2 = Quaternion.FromToRotation(f, direction);

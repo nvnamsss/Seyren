@@ -24,6 +24,7 @@ namespace Base2D.System.UnitSystem.Projectiles
         public override void Move()
         {
             Vector2 velocity = Direction * (float)Speed * Time.deltaTime;
+            Look(Direction);
             Body.AddForce(velocity, ForceMode2D.Impulse);
         }
 

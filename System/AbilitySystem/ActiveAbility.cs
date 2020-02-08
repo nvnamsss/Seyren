@@ -23,9 +23,10 @@ namespace Base2D.System.AbilitySystem
         protected Coroutine cooldownCoroutine;
         protected abstract void DoCastAbility();
         public ActiveAbility(Unit caster, float castTime, float cooldown, int level) :
-            base(caster, castTime, cooldown, level)
+            base(caster, Time.fixedDeltaTime, cooldown, level)
         {
             CastType = CastType.Active;
+            BaseCastingTime = castTime;
         }
 
         public override bool Cast()
@@ -51,6 +52,7 @@ namespace Base2D.System.AbilitySystem
         {
             IsCasting = true;
             TimeCastingLeft = timeCasting;
+            Debug.Log("Start");
 
             while (TimeCastingLeft >= 0)
             {
@@ -60,6 +62,7 @@ namespace Base2D.System.AbilitySystem
 
             if (IsCasting)
             {
+                Debug.Log("Done");
                 IsCasting = false;
                 DoCastAbility();
                 cooldownCoroutine = Caster.StartCoroutine(CastedProcess(TimeDelay, BaseCoolDown));
@@ -68,6 +71,7 @@ namespace Base2D.System.AbilitySystem
 
         protected virtual IEnumerator CastedProcess(float timeDelay, float timeCoolDown)
         {
+            var wait = new WaitForSeconds(timeDelay);
             Casted?.Invoke(this);
             Active = false;
             IsCasting = false;
@@ -75,7 +79,7 @@ namespace Base2D.System.AbilitySystem
 
             while (TimeCoolDownLeft >= 0)
             {
-                yield return new WaitForSeconds(timeDelay);
+                yield return wait;
                 TimeCoolDownLeft -= timeDelay;
             }
             Active = true;

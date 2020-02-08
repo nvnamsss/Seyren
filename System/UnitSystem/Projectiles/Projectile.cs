@@ -79,10 +79,30 @@ namespace Base2D.System.UnitSystem.Projectiles
             }
 
             float forwardDot = Vector2.Dot(forward, direction);
+            if (forwardDot == 0)
+            {
+                float angle = Vector2.SignedAngle(forward, direction);
+                forwardDot = angle > 0 ? -1 : 1;
+            }
             Vector2 f = forward * forwardDot;
             Quaternion q1 = Quaternion.FromToRotation(forward, f);
             Quaternion q2 = Quaternion.FromToRotation(f, direction);
             transform.rotation = q2 * q1;
+        }
+
+        public void Look(Vector2 forward, Vector2 upward, Vector2 direction)
+        {
+
+        }
+
+        public void Rotate(float xDegree, float yDegree, float zDegree)
+        {
+            Vector3 euler = transform.rotation.eulerAngles;
+            euler.x += xDegree;
+            euler.y += yDegree;
+            euler.z += zDegree;
+
+            transform.rotation = Quaternion.Euler(euler);
         }
 
         protected virtual void Awake()

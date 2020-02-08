@@ -10,20 +10,21 @@ namespace Base2D.Init.Abilities
     public class MagicFlame : ActiveAbility, IAction
     {
         public static readonly int Id = 0x77707601;
-        public MissileProjectile Projectile;
-        private Sprite sprite;
-        private RuntimeAnimatorController controller;
         private static string magicFlamePath = "Effect/MagicFlame/MagicFlame";
-
-        public event ActionHandler StartAction;
-        public event ActionHandler EndAction;
+        
+        public event ActionHandler ActionStart;
+        public event ActionHandler ActionEnd;
         private bool actionRun;
+        private GameObject go;
+        public ActionConditionHandler RunCondition { get; }
+
+        public ActionType ActionType => throw new global::System.NotImplementedException();
+
         public MagicFlame(Unit u) : base(u, 0.2f, 1, 1)
         {
-            controller = Resources.Load<RuntimeAnimatorController>(magicFlamePath);
             BaseCoolDown = 1;
             BaseCastingTime = 0.2f;
-           
+            go = Resources.Load<GameObject>(magicFlamePath);
             Casting += (s, e) =>
             {
             };
@@ -32,34 +33,39 @@ namespace Base2D.Init.Abilities
             {
             };
 
-            StartAction += (s) =>
+            ActionStart += (s) =>
             {
                 actionRun = true;
                 Caster.Action.Animator.SetBool("Spell", true);
             };
 
-            EndAction += (s) =>
+            ActionEnd += (s) =>
             {
                 actionRun = false;
                 Caster.Action.Animator.SetBool("Spell", false);
+            };
+
+            RunCondition = (action) =>
+            {
+                if (action == this || action.ActionType == ActionType.CastAbility)
+                {
+                    return false;
+                }   
+                return true;
             };
         }
 
         public GameObject Create(Vector2 location, Quaternion rotation)
         {
-            Vector3 euler = rotation.eulerAngles;
-            MissileProjectile missile = MissileProjectile.Create("missile",
-                location,
-                Quaternion.Euler(0, 0, euler.y == 180 ? 90 : -90),
-                sprite,
-                controller,
-                10,
-                2);
+            Vector2 direction = Caster.transform.rotation * Caster.Forward;
+            MissileProjectile missile = MissileProjectile.Create<CapsuleCollider2D>(direction, go);
+            missile.Speed = 10;
+            missile.Forward = new Vector2(0, -1);
+            missile.Collider.isTrigger = true;
             missile.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
-            //missile.Collider.size = new Vector2(1, 2);
-            missile.Direction = euler.y == 180 ? new Vector2(1, 0) : new Vector2(-1, 0);
             missile.MaxHit = 100000;
             missile.Owner = Caster;
+            missile.transform.position = Caster.transform.position;
             missile.HitCondition = (s, obj) =>
             {
                 Unit u = obj.GetComponent<Unit>();
@@ -91,17 +97,16 @@ namespace Base2D.Init.Abilities
 
         public void Invoke()
         {
-            StartAction?.Invoke(this);
             bool cast = Cast();
-            if (!cast)
+            if (cast)
             {
-                Revoke();
+                ActionStart?.Invoke(this);
             }
         }
 
         public void Revoke()
         {
-            EndAction?.Invoke(this);
+            ActionEnd?.Invoke(this);
             Caster.StopCoroutine(castCoroutine);
         }
     }

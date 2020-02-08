@@ -10,8 +10,18 @@ namespace Base2D.System.ActionSystem
     public enum ActionType
     {
         None = 0,
-        Moving = 1,
+        Walk,
+        Run = 1,
+        Jump,
+        Dash,
+        Roll,
         Attack = 2,
+        Defense,
         CastAbility = 4,
+        Channel,
+        Interact,
+        Dance,
+        Sit,
+        Grab,
     }
 }
