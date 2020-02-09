@@ -55,17 +55,19 @@ namespace Base2D.System.AbilitySystem
             var wait = new WaitForSeconds(delayTime);
             IsCasting = true;
             CastTimeRemaining = castTime;
-            Debug.Log("Start " + Time.timeScale);
-
+#if UNITY_EDITOR
+            Debug.Log("[ActiveAbility] - " + Caster.name + " Casting ability " + GetType().Name);
+#endif
             while (CastTimeRemaining > 0)
             {
                 yield return wait;
                 CastTimeRemaining -= delayTime;
             }
-
+#if UNITY_EDITOR
+            Debug.Log("[ActiveAbility] - " + Caster.name + " Casting ability " + GetType().Name);
+#endif
             if (IsCasting)
             {
-                Debug.Log("Done");
                 IsCasting = false;
                 DoCastAbility();
                 cooldownCoroutine = Caster.StartCoroutine(CastedProcess(CooldownInterval, BaseCoolDown));

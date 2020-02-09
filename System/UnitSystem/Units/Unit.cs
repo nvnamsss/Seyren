@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEditor;
+using System.Collections;
 
 namespace Base2D.System.UnitSystem.Units
 {
@@ -200,6 +201,10 @@ namespace Base2D.System.UnitSystem.Units
             return false;
         }
 
+        /// <summary>
+        /// Move unit follow direction
+        /// </summary>
+        /// <param name="direction"></param>
         public virtual void Move(Vector2 direction)
         {
             if (!Active)
@@ -216,6 +221,34 @@ namespace Base2D.System.UnitSystem.Units
             Vector2 translate = direction * Attribute.MovementSpeed;
             transform.position += (Vector3)translate;
         }
+
+        /// <summary>
+        /// Move unit follow direction for a time
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <param name="time"></param>
+        public virtual void Move(Vector2 direction, int tick, float delay)
+        {
+            if (!Active)
+            {
+                return;
+            }
+
+            StartCoroutine(MoveTo(direction, tick, delay));
+        }
+        
+        private IEnumerator MoveTo(Vector2 direction, int tick, float delay)
+        {
+            WaitForSeconds wait = new WaitForSeconds(delay);
+            while (tick > 0)
+            {
+                yield return wait;
+                tick -= 1;
+                Move(direction);
+            }
+
+        }
+
 
         public void Look(Vector2 direction)
         {

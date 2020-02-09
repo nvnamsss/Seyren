@@ -67,8 +67,6 @@ namespace Base2D.System.AbilitySystem
                 }
             }
         }
-
-
         public int Level
         {
             get

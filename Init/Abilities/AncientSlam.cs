@@ -63,6 +63,11 @@ namespace Base2D.Init.Abilities
                 }
                 return true;
             };
+
+            RunCondition += (action) =>
+            {
+                return false;
+            };
         }
 
         public GameObject Create(Vector2 location, Quaternion rotation)

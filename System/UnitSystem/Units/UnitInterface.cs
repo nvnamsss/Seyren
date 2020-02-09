@@ -62,6 +62,42 @@ namespace Base2D.System.UnitSystem.Units
             }
         }
 
+        public static GameObject CreateShadow(Unit u, float transparent)
+        {
+            GameObject go = new GameObject(u.name + "- shadow");
+            go.transform.position = Vector3.zero;
+            SpriteRenderer[] objs = u.gameObject.GetComponentsInChildren<SpriteRenderer>(false);
+            
+            for (int loop = 0; loop < objs.Length; loop++)
+            {
+                //SpriteRenderer renderer = objs[loop].GetComponent<SpriteRenderer>();
+                SpriteRenderer renderer = objs[loop];
+                GameObject child = new GameObject(renderer.name);
+                SpriteRenderer cr = child.AddComponent<SpriteRenderer>();
+
+                cr.sprite = renderer.sprite;
+                cr.sortingOrder = renderer.sortingOrder;
+                cr.flipX = renderer.flipX;
+                cr.flipY = renderer.flipY;
+                cr.material = renderer.material;
+                cr.drawMode = renderer.drawMode;
+                cr.sortingLayerID = renderer.sortingLayerID;
+                cr.spriteSortPoint = renderer.spriteSortPoint;
+                cr.maskInteraction = renderer.maskInteraction;
+                //cr.sprite = renderer.sprite;
+                child.transform.position = renderer.transform.position;
+                child.transform.rotation = renderer.transform.rotation;
+                child.transform.localScale = renderer.transform.lossyScale;
+                child.transform.SetParent(go.transform);
+
+                Color color = cr.material.color;
+                color.a *= 0.6f;
+                cr.material.color = color;
+            }
+
+            return go;
+        }
+        
         public static UnityEngine.GameObject CreateUnit()
         {
             return null;
