@@ -29,5 +29,10 @@ namespace Base2D.Init.Abilities
         {
             return CooldownRemaining > 0;
         }
+
+        protected override bool UnlockCondition()
+        {
+            return true;
+        }
     }
 }

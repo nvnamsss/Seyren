@@ -47,10 +47,10 @@ namespace Base2D.Init.Abilities
 
         protected override void DoCastAbility()
         {
-            Vector2 direction = Caster.transform.rotation * Caster.Forward * Time.fixedDeltaTime * Caster.Attribute.MovementSpeed * 3;
-            Caster.Move(direction, 10, 0.04f);
+            Vector2 direction = Caster.transform.rotation * Caster.Forward * Time.fixedDeltaTime * Caster.Attribute.MovementSpeed * 1.4f;
+            Caster.Move(direction, 10, 0.02f);
             //Caster.Body.AddForce(direction * 1000, ForceMode2D.Impulse);
-            Caster.StartCoroutine(DashEffect(5, 0.08f));
+            Caster.StartCoroutine(DashEffect(5, 0.04f));
         }
 
         private GameObject CreateClone()
@@ -75,6 +75,11 @@ namespace Base2D.Init.Abilities
                 GameObject clone = CreateClone();
                 Object.Destroy(clone, delay * 3);
             }
+        }
+
+        protected override bool UnlockCondition()
+        {
+            return true;
         }
     }
 }

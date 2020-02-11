@@ -80,5 +80,10 @@ namespace Base2D.Init.Abilities
                 unit.Action.Type == System.ActionSystem.ActionType.CastAbility ||
                 unit.Action.Type == System.ActionSystem.ActionType.Attack;
         }
+
+        protected override bool UnlockCondition()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

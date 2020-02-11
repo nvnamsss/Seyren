@@ -34,6 +34,11 @@ namespace Base2D.Init.Abilities
             return true;
         }
 
+        protected override bool UnlockCondition()
+        {
+            return true;
+        }
+
         private void DummyCondition(Dummy dummy, ConditionEventArgs<Unit> e)
         {
             e.Match = e.Object.IsEnemy(Caster);

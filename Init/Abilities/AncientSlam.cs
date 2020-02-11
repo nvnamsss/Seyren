@@ -154,5 +154,10 @@ namespace Base2D.Init.Abilities
             ActionEnd?.Invoke(this);
             Caster.StopCoroutine(castCoroutine);
         }
+
+        protected override bool UnlockCondition()
+        {
+            return true;
+        }
     }
 }

@@ -131,5 +131,10 @@ namespace Base2D.Init.Abilities
         {
             throw new NotImplementedException();
         }
+
+        protected override bool UnlockCondition()
+        {
+            return true;
+        }
     }
 }
