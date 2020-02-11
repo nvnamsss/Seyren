@@ -59,6 +59,12 @@ namespace Base2D.System.AbilitySystem
             set
             {
                 bool original = _active;
+                bool unlock = UnlockCondition();
+                if (!unlock)
+                {
+                    return;
+                }
+
                 _active = value;
 
                 if (_active != original)
@@ -88,7 +94,7 @@ namespace Base2D.System.AbilitySystem
         public virtual bool UnlockAbility()
         {
             Active = true;
-
+            
             return Active;
         }
 
@@ -112,6 +118,7 @@ namespace Base2D.System.AbilitySystem
         /// </summary>
         /// <returns></returns>
         protected abstract bool Condition();
+        protected abstract bool UnlockCondition();
     }
 
 }
