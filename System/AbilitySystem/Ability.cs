@@ -14,6 +14,7 @@ namespace Base2D.System.AbilitySystem
     [Serializable]
     public abstract class Ability
     {
+        public static readonly Ability DoNothing = AbilityDoNothing.Instance;
         public static float MaxInterval = 4;
         public static float MinInterval = 1;
         public delegate void StatusChangedHandler(Ability sender);

@@ -14,11 +14,16 @@ namespace Base2D.System.AbilitySystem
     /// </summary>
     public class AbilityCollection : IEnumerable
     {
+        public int Count => abilities.Count;
         private Dictionary<int, Ability> abilities;
         public AbilityCollection()
         {
             abilities = new Dictionary<int, Ability>();
         }
+        /// <summary>
+        /// Initialize with a collection, all abilites in param will be copied
+        /// </summary>
+        /// <param name="collection"></param>
         public AbilityCollection(AbilityCollection collection)
         {
             Dictionary<int, Ability> sample = collection.GetEnumerator() as Dictionary<int, Ability>;
@@ -28,6 +33,14 @@ namespace Base2D.System.AbilitySystem
         {
             return abilities.GetEnumerator();
         }
+
+        /// <summary>
+        /// Get ability in collection with id return
+        /// <see cref="Ability.DoNothing"/>
+        /// if ability is not contained
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Ability if contained otherwise return <see cref="Ability.DoNothing"></see></returns>
         public Ability this[int id]
         {
             get
@@ -37,7 +50,7 @@ namespace Base2D.System.AbilitySystem
                     return abilities[id];
                 }
 
-                return null;
+                return Ability.DoNothing;
             }
         }
 
@@ -73,6 +86,11 @@ namespace Base2D.System.AbilitySystem
             return true;
         }
 
+        /// <summary>
+        /// Remove ability out of collection
+        /// </summary>
+        /// <param name="ability"></param>
+        /// <returns></returns>
         public bool Remove(Ability ability)
         {
             var props = ability.GetType().GetFields();
