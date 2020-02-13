@@ -9,7 +9,7 @@ namespace Base2D.System.QuestSystem
     /// <summary>
     /// Represents a quest in game
     /// </summary>
-    public class Quest
+    public class Quest : HierarchyCondition<Quest>
     {
         /// <summary>
         /// Quest's name
