@@ -2,7 +2,7 @@ using Base2D.System.AbilitySystem;
 using Base2D.System.UnitSystem.Units;
 using UnityEngine;
 
-namespace Base2D.Init.Abilities
+namespace Base2D.Example.Abilities
 {
     public class DoubleJump : InstantAbility
     {

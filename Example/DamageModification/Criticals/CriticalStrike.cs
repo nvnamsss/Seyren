@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Base2D.Init.DamageModification
+namespace Base2D.Example.DamageModification
 {
     public class CriticalStrike : CriticalInfo
     {

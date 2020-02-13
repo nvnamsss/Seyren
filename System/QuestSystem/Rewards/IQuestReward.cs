@@ -8,6 +8,6 @@ namespace Base2D.System.QuestSystem
 {
     public interface IQuestReward
     {
-        bool Reward();
+        object Reward();
     }
 }

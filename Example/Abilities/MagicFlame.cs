@@ -5,7 +5,7 @@ using Base2D.System.UnitSystem.Units;
 using System.Collections;
 using UnityEngine;
 
-namespace Base2D.Init.Abilities
+namespace Base2D.Example.Abilities
 {
     public class MagicFlame : ActiveAbility, IAction
     {

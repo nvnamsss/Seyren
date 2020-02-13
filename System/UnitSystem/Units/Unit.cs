@@ -1,4 +1,4 @@
-﻿using Base2D.Init.DamageModification;
+﻿using Base2D.Example.DamageModification;
 using Base2D.System.TerrainSystem;
 using Base2D.System.ActionSystem;
 using Base2D.System.DamageSystem;

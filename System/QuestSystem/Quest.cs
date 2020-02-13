@@ -9,8 +9,11 @@ namespace Base2D.System.QuestSystem
     /// <summary>
     /// Represents a quest in game
     /// </summary>
-    public class Quest : HierarchyCondition<Quest>
+    public class Quest
     {
+        public delegate void QuestStateHandler(Quest sender);
+        public event QuestStateHandler Completed;
+        public event QuestStateHandler Failed;
         /// <summary>
         /// Quest's name
         /// </summary>
@@ -23,5 +26,17 @@ namespace Base2D.System.QuestSystem
         /// Quest's reward
         /// </summary>
         public IQuestReward Reward;
+        public HierarchyCondition<Quest> PreQuestRequire;
+        public Quest(string questName, string content)
+        {
+            PreQuestRequire = new HierarchyCondition<Quest>(this);
+            Name = questName;
+            Content = content;
+        }
+
+        public void Cancel()
+        {
+            Failed?.Invoke(this);
+        }
     }
 }

@@ -4,7 +4,7 @@ using Base2D.System.UnitSystem.EventData;
 using Base2D.System.UnitSystem.Units;
 using UnityEngine;
 
-namespace Base2D.Init.Abilities
+namespace Base2D.Example.Abilities
 {
     public class DevotionAura : AuraAbility
     {

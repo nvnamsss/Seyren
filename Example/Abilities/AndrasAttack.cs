@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Base2D.Init.Abilities
+namespace Base2D.Example.Abilities
 {
     public class AndrasAttack : ActiveAbility
     {
