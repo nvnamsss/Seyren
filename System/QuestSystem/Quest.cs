@@ -22,10 +22,6 @@ namespace Base2D.System.QuestSystem
         /// Quest's content
         /// </summary>
         public string Content;
-        /// <summary>
-        /// Quest's reward
-        /// </summary>
-        public IQuestReward Reward;
         public HierarchyCondition<Quest> PreQuestRequire;
         public Quest(string questName, string content)
         {
