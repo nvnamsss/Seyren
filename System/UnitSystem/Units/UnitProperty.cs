@@ -26,7 +26,6 @@ namespace Base2D.System.UnitSystem.Units
         public event DyingHandler Dying;
         public event DiedHandler Died;
         public event TakeDamageHandler TakeDamage;
-
         public Player Player { get; set; }
         public int CustomValue { get; set; }
         public bool Targetable { get; set; }
