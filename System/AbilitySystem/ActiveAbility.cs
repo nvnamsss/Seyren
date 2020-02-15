@@ -1,4 +1,5 @@
-﻿using Base2D.System.UnitSystem.Units;
+﻿using Base2D.System.Generic;
+using Base2D.System.UnitSystem.Units;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,10 +12,8 @@ namespace Base2D.System.AbilitySystem
 {
     public abstract class ActiveAbility : Ability
     {
-        public delegate void CastingSpellHandler(ActiveAbility sender, CastingSpellEventArgs e);
-        public delegate void CastedSpellHandler(ActiveAbility sender);
-        public event CastingSpellHandler Casting;
-        public event CastedSpellHandler Casted;
+        public event GameEventHandler<ActiveAbility, CastingSpellEventArgs> Casting;
+        public event GameEventHandler<ActiveAbility> Casted;
         public float BaseCastTime { get; set; }
         public float CastTimeRemaining { get; set; }
         public bool IsCasting { get; set; }

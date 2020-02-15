@@ -1,4 +1,5 @@
-﻿using Base2D.System.UnitSystem.Units;
+﻿using Base2D.System.Generic;
+using Base2D.System.UnitSystem.Units;
 using System.Collections;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ namespace Base2D.System.AbilitySystem
 {
     public abstract class InstantAbility : Ability
     {
+        public event GameEventHandler<InstantAbility> Casted;
         protected Coroutine cooldownCoroutine;
         protected abstract override bool Condition();
 
@@ -22,11 +24,12 @@ namespace Base2D.System.AbilitySystem
                 return false;
             }
 
-            cooldownCoroutine = Caster.StartCoroutine(Casted(CooldownInterval, BaseCoolDown));
+            Casted?.Invoke(this);
+            cooldownCoroutine = Caster.StartCoroutine(CastedProcess(CooldownInterval, BaseCoolDown));
             return true;
         }
 
-        protected virtual IEnumerator Casted(float timeDelay, float cooldown)
+        protected virtual IEnumerator CastedProcess(float timeDelay, float cooldown)
         {
             DoCastAbility();
             CooldownRemaining = cooldown - timeDelay;

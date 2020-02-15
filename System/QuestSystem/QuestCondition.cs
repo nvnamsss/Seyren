@@ -32,6 +32,7 @@ namespace Base2D.System.QuestSystem
 #endif
             maxProgress = maxProgress < 0 ? 1 : maxProgress;
             MaxProgress = maxProgress;
+            _currentProgress = 0;
         }
 
         /// <summary>
@@ -141,6 +142,8 @@ namespace Base2D.System.QuestSystem
 
         private void ProcessIncrease()
         {
+            Debug.Log("Hi mom");
+            
             _currentProgress += 1;
             if (_currentProgress == MaxProgress)
             {
