@@ -8,9 +8,9 @@ namespace Base2D.System.QuestSystem
     /// <summary>
     /// Represents a condition for a quest, manage progress
     /// </summary>
-    public class QuestCondition
+    public class QuestCondition : IQuestCondition
     {
-        public event GameEventHandler<QuestCondition> Completed;
+        public event GameEventHandler<IQuestCondition> Completed;
         public bool IsCompleted => CurrentProgress == MaxProgress;
         public int MaxProgress { get; }
         public int CurrentProgress => _currentProgress;

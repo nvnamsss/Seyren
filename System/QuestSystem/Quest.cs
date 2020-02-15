@@ -23,14 +23,13 @@ namespace Base2D.System.QuestSystem
         /// </summary>
         public string Content;
         public HierarchyCondition<Quest> PreQuestRequire;
-        public QuestCondition Condition;
-        public QuestConditionCollection Conditions;
-        public Quest(string questName, string content)
+        public IQuestCondition Condition;
+        public Quest(string questName, string content, IQuestCondition condition)
         {
             PreQuestRequire = new HierarchyCondition<Quest>(this);
             Name = questName;
             Content = content;
-            Conditions = new QuestConditionCollection();
+            Condition = condition;
         }
 
         public void Cancel()
