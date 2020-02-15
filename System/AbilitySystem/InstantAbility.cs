@@ -36,6 +36,7 @@ namespace Base2D.System.AbilitySystem
                 yield return new WaitForSeconds(timeDelay);
                 CooldownRemaining -= timeDelay;
             }
+
             yield break;
         }
     }

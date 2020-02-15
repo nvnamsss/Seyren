@@ -11,21 +11,26 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using System;
+using Base2D.System.Generic;
 
 namespace Base2D.System.UnitSystem.Units
 {
     public partial class Unit : MonoBehaviour, IObject, IAttribute
     {
+        [Obsolete("DyingHandler is currenly deprecated, use EventHandler<TSender, TEvent> instead")]
         public delegate void DyingHandler(Unit sender, UnitDyingEventArgs e);
+        [Obsolete("DyingHandler is currenly deprecated, use EventHandler<TSender, TEvent> instead")]
         public delegate void DiedHandler(Unit sender, UnitDiedEventArgs e);
+        [Obsolete("DyingHandler is currenly deprecated, use EventHandler<TSender, TEvent> instead")]
         public delegate void TakeDamageHandler(Unit sender, TakeDamageEventArgs e);
+        [Obsolete("DyingHandler is currenly deprecated, use EventHandler<TSender, TEvent> instead")]
         public delegate void StateChangedHandler(Unit sender, StateChangedEventArgs e);
+        [Obsolete("DyingHandler is currenly deprecated, use EventHandler<TSender, TEvent> instead")]
         public delegate void StatusChangedHandler(Unit sender, StatusChangedEventArgs e);
-        public event StateChangedHandler StateChanged;
-        public event StatusChangedHandler StatusChanged;
-        public event DyingHandler Dying;
-        public event DiedHandler Died;
-        public event TakeDamageHandler TakeDamage;
+        public event GameEventHandler<Unit, StateChangedEventArgs> StateChanged;
+        public event GameEventHandler<Unit, UnitDyingEventArgs> Dying;
+        public event GameEventHandler<Unit, UnitDiedEventArgs>  Died;
+        public event GameEventHandler<Unit, TakeDamageEventArgs> TakeDamage;
         public Player Player { get; set; }
         public int CustomValue { get; set; }
         public bool Targetable { get; set; }
@@ -101,7 +106,7 @@ namespace Base2D.System.UnitSystem.Units
             }
             set
             {
-                StateChangedHandler state = StateChanged;
+                GameEventHandler<Unit, StateChangedEventArgs> state = StateChanged;
                 StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.Hp, _currentHp, value);
                 if (state != null)
                 {
@@ -123,7 +128,7 @@ namespace Base2D.System.UnitSystem.Units
             }
             set
             {
-                StateChangedHandler state = StateChanged;
+                GameEventHandler<Unit, StateChangedEventArgs> state = StateChanged;
                 StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.Mp, _currentMp, value);
                 if (state != null)
                 {
@@ -142,7 +147,7 @@ namespace Base2D.System.UnitSystem.Units
             }
             set
             {
-                StateChangedHandler state = StateChanged;
+                GameEventHandler<Unit, StateChangedEventArgs> state = StateChanged;
                 StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.Shield, _currentShield, value);
                 if (state != null)
                 {
@@ -161,7 +166,7 @@ namespace Base2D.System.UnitSystem.Units
             }
             set
             {
-                StateChangedHandler state = StateChanged;
+                GameEventHandler<Unit, StateChangedEventArgs> state = StateChanged;
                 StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.MagicalShield, _currentMShield, value);
                 if (state != null)
                 {
@@ -179,7 +184,7 @@ namespace Base2D.System.UnitSystem.Units
             }
             set
             {
-                StateChangedHandler state = StateChanged;
+                GameEventHandler<Unit, StateChangedEventArgs> state = StateChanged;
                 StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.PhysicalShield, _currentPShield, value);
                 if (state != null)
                 {

@@ -8,6 +8,8 @@ using Base2D.System.UnitSystem.Units;
 using Base2D.System.UnitSystem;
 using UnityEngine;
 using System;
+using static Base2D.System.UnitSystem.Units.Unit;
+using Base2D.System.Generic;
 
 namespace Base2D.System.AbilitySystem
 {
@@ -23,7 +25,7 @@ namespace Base2D.System.AbilitySystem
         /// <summary>
         /// Trigger when ability cooldown is done and ability is ready to use
         /// </summary>
-        public event CooldownCompletedHandler CooldownCompleted;
+        public event GameEventHandler<Ability> CooldownCompleted;
         public CastType CastType { get; protected set; }
         public float BaseCoolDown { get; set; }
         /// <summary>
@@ -44,6 +46,7 @@ namespace Base2D.System.AbilitySystem
                 if (original > 0 && _cooldownRemaining <= 0)
                 {
                     CooldownCompleted?.Invoke(this);
+                    Debug.Log("cooldown completed");
                 }
             }
         }

@@ -11,6 +11,7 @@ using System.IO;
 using UnityEngine;
 using UnityEditor;
 using System.Collections;
+using Base2D.System.Generic;
 
 namespace Base2D.System.UnitSystem.Units
 {
@@ -73,7 +74,7 @@ namespace Base2D.System.UnitSystem.Units
                 Debug.Log("Invulnerable");
                 return;
             }
-            
+
             DamageInfo damageInfo = new DamageInfo(source, this);
 
             damageInfo.TriggerType = trigger;
@@ -155,7 +156,7 @@ namespace Base2D.System.UnitSystem.Units
         public void Kill(Unit killer)
         {
             Active = false;
-            DyingHandler dying = Dying;
+            GameEventHandler<Unit, UnitDyingEventArgs> dying = Dying;
             UnitDyingEventArgs udinge = new UnitDyingEventArgs();
             if (dying != null)
             {
@@ -167,7 +168,7 @@ namespace Base2D.System.UnitSystem.Units
                 return;
             }
 
-            DiedHandler died = Died;
+            GameEventHandler<Unit, UnitDiedEventArgs> died = Died;
 
             UnitDiedEventArgs udede = new UnitDiedEventArgs(killer);
             if (died != null)
@@ -236,7 +237,7 @@ namespace Base2D.System.UnitSystem.Units
 
             StartCoroutine(MoveTo(direction, tick, delay));
         }
-        
+
         private IEnumerator MoveTo(Vector2 direction, int tick, float delay)
         {
             WaitForSeconds wait = new WaitForSeconds(delay);
@@ -317,25 +318,30 @@ namespace Base2D.System.UnitSystem.Units
                 StandOn = GroundType.Unknown;
         }
 
-        public void OnCollisionEnter2D(Collision2D other) {
-            if(other.transform.tag == "GrassGround"){
-            StandOn = GroundType.Grass;
-            _currentJump = JumpTimes;
+        public void OnCollisionEnter2D(Collision2D other)
+        {
+            if (other.transform.tag == "GrassGround")
+            {
+                StandOn = GroundType.Grass;
+                _currentJump = JumpTimes;
             }
-            else if(other.transform.tag == "HardGround"){
-            StandOn = GroundType.Ground;
-            _currentJump = JumpTimes;
+            else if (other.transform.tag == "HardGround")
+            {
+                StandOn = GroundType.Ground;
+                _currentJump = JumpTimes;
             }
-            else if(other.transform.tag == "Enemy"){
-            StandOn = GroundType.Ground;
-            _currentJump = JumpTimes;
+            else if (other.transform.tag == "Enemy")
+            {
+                StandOn = GroundType.Ground;
+                _currentJump = JumpTimes;
             }
-            
+
         }
 
-        public void OnCollisionExit2D(Collision2D other) {
-                StandOn = GroundType.Unknown;
-            
+        public void OnCollisionExit2D(Collision2D other)
+        {
+            StandOn = GroundType.Unknown;
+
         }
     }
 
