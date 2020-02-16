@@ -7,7 +7,4 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.Base2D.System.QuestSystem
 {
-    public class ComplexQuestCondition : QuestCondition
-    {
-    }
 }

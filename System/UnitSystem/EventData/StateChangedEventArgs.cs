@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Base2D.System.UnitSystem.EventData
 {
-    public class StateChangedEventArgs
+    public class StateChangeEventArgs
     {
         public UnitState State { get; }
         public float OldValue { get; }
         public float NewValue { get; }
 
-        public StateChangedEventArgs(UnitState state, float oldValue, float newValue)
+        public StateChangeEventArgs(UnitState state, float oldValue, float newValue)
         {
             State = state;
             OldValue = oldValue;

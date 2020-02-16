@@ -198,10 +198,11 @@ namespace Base2D.System.QuestSystem
         public HierarchyCondition(TAttactor attactor)
         {
             Attactor = attactor;
-            Progress = 0;
             Ancestor = new List<HierarchyCondition<TAttactor>>();
             Descendant = new List<HierarchyCondition<TAttactor>>();
             UnlockCondition = () => true;
+            _progress = 0;
+            unlocked = false;
         }
 
         /// <summary>
@@ -245,7 +246,7 @@ namespace Base2D.System.QuestSystem
             }
 
             unlocked = true;
-            UnlockSuccess?.Invoke(this);
+            //UnlockSuccess?.Invoke(this);
             return true;
         }
     }

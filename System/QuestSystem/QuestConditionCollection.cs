@@ -11,7 +11,7 @@ namespace Base2D.System.QuestSystem
     public class QuestConditionCollection : IQuestCondition, IEnumerable
     {
         public event GameEventHandler<IQuestCondition> Completed;
-
+        public bool Active { get; set; }
         public int CurrentProgress => _currentProgress;
         public int MaxProgress => Conditions.Count;
 
@@ -31,6 +31,11 @@ namespace Base2D.System.QuestSystem
 
         protected void ProgressComplete(IQuestCondition s)
         {
+            if (!Active)
+            {
+                return;
+            }
+
             _currentProgress += 1;
             if (_currentProgress == MaxProgress)
             {

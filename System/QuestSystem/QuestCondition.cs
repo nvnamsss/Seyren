@@ -11,6 +11,7 @@ namespace Base2D.System.QuestSystem
     public class QuestCondition : IQuestCondition
     {
         public event GameEventHandler<IQuestCondition> Completed;
+        public bool Active { get; set; }
         public bool IsCompleted => CurrentProgress == MaxProgress;
         public int MaxProgress { get; }
         public int CurrentProgress => _currentProgress;
@@ -142,8 +143,11 @@ namespace Base2D.System.QuestSystem
 
         private void ProcessIncrease()
         {
-            Debug.Log("Hi mom");
-            
+            if (!Active)
+            {
+                return;
+            }
+
             _currentProgress += 1;
             if (_currentProgress == MaxProgress)
             {

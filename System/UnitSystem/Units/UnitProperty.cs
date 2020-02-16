@@ -24,13 +24,29 @@ namespace Base2D.System.UnitSystem.Units
         [Obsolete("DyingHandler is currenly deprecated, use EventHandler<TSender, TEvent> instead")]
         public delegate void TakeDamageHandler(Unit sender, TakeDamageEventArgs e);
         [Obsolete("DyingHandler is currenly deprecated, use EventHandler<TSender, TEvent> instead")]
-        public delegate void StateChangedHandler(Unit sender, StateChangedEventArgs e);
+        public delegate void StateChangedHandler(Unit sender, StateChangeEventArgs e);
         [Obsolete("DyingHandler is currenly deprecated, use EventHandler<TSender, TEvent> instead")]
         public delegate void StatusChangedHandler(Unit sender, StatusChangedEventArgs e);
-        public event GameEventHandler<Unit, StateChangedEventArgs> StateChanged;
+        /// <summary>
+        /// Determine unit state like Hp, Mp, Shield is changing
+        /// </summary>
+        public event GameEventHandler<Unit, StateChangeEventArgs> StateChanging;
+        /// <summary>
+        /// Determine unit is going to die
+        /// </summary>
         public event GameEventHandler<Unit, UnitDyingEventArgs> Dying;
+        /// <summary>
+        /// Determine unit is killed by some one
+        /// </summary>
         public event GameEventHandler<Unit, UnitDiedEventArgs>  Died;
-        public event GameEventHandler<Unit, TakeDamageEventArgs> TakeDamage;
+        /// <summary>
+        /// Determine unit is took damage
+        /// </summary>
+        public event GameEventHandler<Unit, TakeDamageEventArgs> TookDamage;
+        /// <summary>
+        /// Determine unit killing another one
+        /// </summary>
+        public event GameEventHandler<Unit, Unit> Killing;
         public Player Player { get; set; }
         public int CustomValue { get; set; }
         public bool Targetable { get; set; }
@@ -106,8 +122,8 @@ namespace Base2D.System.UnitSystem.Units
             }
             set
             {
-                GameEventHandler<Unit, StateChangedEventArgs> state = StateChanged;
-                StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.Hp, _currentHp, value);
+                GameEventHandler<Unit, StateChangeEventArgs> state = StateChanging;
+                StateChangeEventArgs sce = new StateChangeEventArgs(UnitState.Hp, _currentHp, value);
                 if (state != null)
                 {
                     state.Invoke(this, sce);
@@ -128,8 +144,8 @@ namespace Base2D.System.UnitSystem.Units
             }
             set
             {
-                GameEventHandler<Unit, StateChangedEventArgs> state = StateChanged;
-                StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.Mp, _currentMp, value);
+                GameEventHandler<Unit, StateChangeEventArgs> state = StateChanging;
+                StateChangeEventArgs sce = new StateChangeEventArgs(UnitState.Mp, _currentMp, value);
                 if (state != null)
                 {
                     state.Invoke(this, sce);
@@ -147,8 +163,8 @@ namespace Base2D.System.UnitSystem.Units
             }
             set
             {
-                GameEventHandler<Unit, StateChangedEventArgs> state = StateChanged;
-                StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.Shield, _currentShield, value);
+                GameEventHandler<Unit, StateChangeEventArgs> state = StateChanging;
+                StateChangeEventArgs sce = new StateChangeEventArgs(UnitState.Shield, _currentShield, value);
                 if (state != null)
                 {
                     state.Invoke(this, sce);
@@ -166,8 +182,8 @@ namespace Base2D.System.UnitSystem.Units
             }
             set
             {
-                GameEventHandler<Unit, StateChangedEventArgs> state = StateChanged;
-                StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.MagicalShield, _currentMShield, value);
+                GameEventHandler<Unit, StateChangeEventArgs> state = StateChanging;
+                StateChangeEventArgs sce = new StateChangeEventArgs(UnitState.MagicalShield, _currentMShield, value);
                 if (state != null)
                 {
                     state.Invoke(this, sce);
@@ -184,8 +200,8 @@ namespace Base2D.System.UnitSystem.Units
             }
             set
             {
-                GameEventHandler<Unit, StateChangedEventArgs> state = StateChanged;
-                StateChangedEventArgs sce = new StateChangedEventArgs(UnitState.PhysicalShield, _currentPShield, value);
+                GameEventHandler<Unit, StateChangeEventArgs> state = StateChanging;
+                StateChangeEventArgs sce = new StateChangeEventArgs(UnitState.PhysicalShield, _currentPShield, value);
                 if (state != null)
                 {
                     state.Invoke(this, sce);

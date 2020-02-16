@@ -141,9 +141,9 @@ namespace Base2D.System.UnitSystem.Units
             }
 
             CurrentHp = CurrentHp - damageInfo.DamageAmount;
-            if (TakeDamage != null)
+            if (TookDamage != null)
             {
-                TakeDamage.Invoke(this, new TakeDamageEventArgs(damageInfo));
+                TookDamage.Invoke(this, new TakeDamageEventArgs(damageInfo));
             }
             damageSource = source;
             //TakeDamage?.Invoke(this, new TakeDamageEventArgs(damageInfo));
@@ -169,12 +169,13 @@ namespace Base2D.System.UnitSystem.Units
             }
 
             GameEventHandler<Unit, UnitDiedEventArgs> died = Died;
-
             UnitDiedEventArgs udede = new UnitDiedEventArgs(killer);
             if (died != null)
             {
                 died.Invoke(this, udede);
             }
+
+            Killing?.Invoke(killer, this);
         }
 
         public bool Jump()

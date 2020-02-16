@@ -116,7 +116,7 @@ public class HUDManager : MonoBehaviour
     return null;
 }
 
-    public void UpdateHealthNMana(Unit character, StateChangedEventArgs e){
+    public void UpdateHealthNMana(Unit character, StateChangeEventArgs e){
         if(e.State == Base2D.System.UnitSystem.UnitState.Hp)
         {
             takeDamage(e.NewValue);
