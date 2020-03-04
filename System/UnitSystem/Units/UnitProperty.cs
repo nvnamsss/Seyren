@@ -46,7 +46,7 @@ namespace Base2D.System.UnitSystem.Units
         public Dictionary<string, Sprite> Sprites { get; set; }
         public AbilityCollection Ability;
         public Dictionary<int, Ability> Abilites { get; set; }
-        public int a;
+        public List<Ability> a;
         public Attribute Attribute
         {
             get

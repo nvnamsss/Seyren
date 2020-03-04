@@ -38,7 +38,6 @@ namespace Base2D.Editor
                 //collection.Add(new Dash(unit));
                 //collection.count += 1;
                 unit.Ability.Add(new Dash(unit));
-                unit.a = 3;
                 property.FindPropertyRelative("editorAbilities").InsertArrayElementAtIndex(0);
                 property.FindPropertyRelative("editorAbilities").GetArrayElementAtIndex(0).intValue = Dash.Id;
                 property.serializedObject.ApplyModifiedProperties();
