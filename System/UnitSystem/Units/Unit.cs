@@ -17,11 +17,20 @@ namespace Base2D.System.UnitSystem.Units
 {
     public partial class Unit : MonoBehaviour, IObject, IAttribute
     {
-        public Unit()
+        protected Unit()
         {
             JumpTimes = 1;
             Modification = new ModificationInfos();
             Attribute = new Attribute();
+            //if (Ability == null)
+            //{
+            //    Ability = new AbilitySystem.AbilityCollection();
+            //    Ability.owner = this;
+            //    Debug.Log("Hi mom");
+            //}
+            //else
+            //{
+            //}
         }
 
         void Awake()

@@ -44,7 +44,9 @@ namespace Base2D.System.UnitSystem.Units
         public ModificationInfos Modification { get; set; }
         public IAttachable Attach { get; set; }
         public Dictionary<string, Sprite> Sprites { get; set; }
+        public AbilityCollection Ability;
         public Dictionary<int, Ability> Abilites { get; set; }
+        public int a;
         public Attribute Attribute
         {
             get

@@ -1,4 +1,5 @@
 ﻿using Base2D.System.AbilitySystem;
+using Base2D.System.UnitSystem.Units;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,14 +13,24 @@ namespace Base2D.System.AbilitySystem
     /// <summary>
     /// Represents set of abilities
     /// </summary>
+    /// 
+    [Serializable]
     public class AbilityCollection : IEnumerable
     {
+        public Unit owner;
         public int Count => abilities.Count;
         private Dictionary<int, Ability> abilities;
         public AbilityCollection()
         {
             abilities = new Dictionary<int, Ability>();
         }
+#if UNITY_EDITOR
+        /// <summary>
+        /// editor only, using to indicate count of ability is added
+        /// </summary>
+        [SerializeField]
+        public int count;
+#endif
         /// <summary>
         /// Initialize with a collection, all abilites in param will be copied
         /// </summary>

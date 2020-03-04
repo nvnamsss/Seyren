@@ -27,9 +27,6 @@ namespace Base2D.Example.Quests
             "If not, go and prove!";
         public BeginnerPath()
         {
-            WhoYouAre = new Quest(WhoYouAreName, WhoYouAreContent);
-            CantTouchMe = new Quest(CantTouchMeName, CantTouchMeContent);
-            FirstStepToTheWorld = new Quest(FirstStepToTheWorldName, FirstStepToTheWorldContent);
         }
     }
 }
