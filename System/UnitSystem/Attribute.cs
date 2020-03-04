@@ -21,7 +21,6 @@ namespace Base2D.System.UnitSystem
             }
             set
             {
-                StackTrace trace = new StackTrace();
                 _strength = value;
             }
         }

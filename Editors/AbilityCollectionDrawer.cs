@@ -19,6 +19,10 @@ namespace Base2D.Editor
             EditorGUI.indentLevel = 0;
             EditorGUI.PropertyField(position, property.FindPropertyRelative("count"), GUIContent.none);
             
+            if (property.serializedObject.hasModifiedProperties)
+            {
+                Debug.Log("a");
+            }
             if (collection == null)
             {
                 collection = property.serializedObject.targetObject.GetType().GetField("Ability").GetValue(property.serializedObject.targetObject) as AbilityCollection;
@@ -28,18 +32,24 @@ namespace Base2D.Editor
             {
                 unit = property.serializedObject.targetObject as Unit;
             }
-
+            //EditorGUI.PropertyField(p, property.FindPropertyRelative("count"), GUIContent.none);
             if (GUI.Button(new Rect(50, 50, 25, 25), "+"))
             {
                 //collection.Add(new Dash(unit));
                 //collection.count += 1;
                 unit.Ability.Add(new Dash(unit));
                 unit.a = 3;
+                property.FindPropertyRelative("editorAbilities").InsertArrayElementAtIndex(0);
+                property.FindPropertyRelative("editorAbilities").GetArrayElementAtIndex(0).intValue = Dash.Id;
+                property.serializedObject.ApplyModifiedProperties();
+                property.FindPropertyRelative("count").intValue = 7;
+                //unit.GetType().GetField("a").SetValue(unit, 4);
             }
 
             EditorGUI.indentLevel = indent;
 
             EditorGUI.EndProperty();
+
         }
 
     }
