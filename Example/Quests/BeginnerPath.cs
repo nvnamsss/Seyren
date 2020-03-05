@@ -33,6 +33,7 @@ namespace Base2D.Example.Quests
             "If not, go and prove!";
         public BeginnerPath()
         {
+<<<<<<< HEAD
             receiver.Abilites.Add(Dash.Id, new Dash(receiver));
             receiver.Abilites[Dash.Id].UnlockAbility();
             CantTouchMeCondition.Register(receiver.Abilites[Dash.Id], "Casted");
@@ -54,6 +55,8 @@ namespace Base2D.Example.Quests
             FirstStepToTheWorld = new Quest(FirstStepToTheWorldName, FirstStepToTheWorldContent, FirstStepToTheWorldCondition);
             FirstStepToTheWorld.AssignToQuest(CantTouchMe); //First step to the world can only do when Cant touch me have done
 
+=======
+>>>>>>> 96b64c5c063db4f7f848b0456e042a5a09b7eace
         }
     }
 }

@@ -96,6 +96,7 @@ namespace Base2D.System.AbilitySystem
         public Vector3 PointTarget;
         protected bool _active;
         protected float _cooldownRemaining;
+        [SerializeField]
         protected int _level;
         public virtual bool UnlockAbility()
         {

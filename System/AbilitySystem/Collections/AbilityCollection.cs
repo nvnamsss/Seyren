@@ -1,4 +1,5 @@
 ﻿using Base2D.System.AbilitySystem;
+using Base2D.System.UnitSystem.Units;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -13,14 +14,25 @@ namespace Base2D.System.AbilitySystem
     /// <summary>
     /// Represents set of abilities
     /// </summary>
-    public class AbilityCollection : IEnumerable
+    /// 
+    [Serializable]
+    public class AbilityCollection : IEnumerable, ISerializationCallbackReceiver
     {
+        public Unit owner;
         public int Count => abilities.Count;
         private readonly ConcurrentDictionary<int, Ability> abilities;
         public AbilityCollection()
         {
             abilities = new ConcurrentDictionary<int, Ability>();
         }
+#if UNITY_EDITOR
+        public List<int> editorAbilities = new List<int>();
+        /// <summary>
+        /// editor only, using to indicate count of ability is added
+        /// </summary>
+        [SerializeField]
+        public int count;
+#endif
         /// <summary>
         /// Initialize with a collection, all abilites in param will be copied
         /// </summary>
@@ -120,5 +132,22 @@ namespace Base2D.System.AbilitySystem
             return true;
         }
 
+        public void OnBeforeSerialize()
+        {
+        }
+
+        public void OnAfterDeserialize()
+        {
+            //if (editorAbilities != null)
+            //{
+            //    for (int loop = 0; loop < editorAbilities.Count; loop++)
+            //    {
+            //        Add(editorAbilities[loop]);
+            //    }
+            //}
+
+
+            count = count + 1;
+        }
     }
 }

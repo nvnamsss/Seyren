@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEditor;
+using System.Diagnostics;
+
 namespace Base2D.System.UnitSystem
 {
     [Serializable]

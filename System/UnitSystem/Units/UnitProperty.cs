@@ -60,8 +60,13 @@ namespace Base2D.System.UnitSystem.Units
         public ModificationInfos Modification { get; set; }
         public IAttachable Attach { get; set; }
         public Dictionary<string, Sprite> Sprites { get; set; }
+<<<<<<< HEAD
         public AbilityCollection Ability { get; set; }
+=======
+        public AbilityCollection Ability;
+>>>>>>> 96b64c5c063db4f7f848b0456e042a5a09b7eace
         public Dictionary<int, Ability> Abilites { get; set; }
+        public List<Ability> a;
         public Attribute Attribute
         {
             get
