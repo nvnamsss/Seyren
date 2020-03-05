@@ -1,6 +1,7 @@
 ﻿using Base2D.System.AbilitySystem;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,10 +16,10 @@ namespace Base2D.System.AbilitySystem
     public class AbilityCollection : IEnumerable
     {
         public int Count => abilities.Count;
-        private Dictionary<int, Ability> abilities;
+        private readonly ConcurrentDictionary<int, Ability> abilities;
         public AbilityCollection()
         {
-            abilities = new Dictionary<int, Ability>();
+            abilities = new ConcurrentDictionary<int, Ability>();
         }
         /// <summary>
         /// Initialize with a collection, all abilites in param will be copied
@@ -27,7 +28,7 @@ namespace Base2D.System.AbilitySystem
         public AbilityCollection(AbilityCollection collection)
         {
             Dictionary<int, Ability> sample = collection.GetEnumerator() as Dictionary<int, Ability>;
-            abilities = new Dictionary<int, Ability>(sample);
+            abilities = new ConcurrentDictionary<int, Ability>(sample);
         }
         public IEnumerator GetEnumerator()
         {
@@ -35,7 +36,7 @@ namespace Base2D.System.AbilitySystem
         }
 
         /// <summary>
-        /// Get ability in collection with id return
+        /// Get ability in collection by id
         /// <see cref="Ability.DoNothing"/>
         /// if ability is not contained
         /// </summary>
@@ -80,9 +81,11 @@ namespace Base2D.System.AbilitySystem
             {
                 return false;
             }
-
-            abilities.Add(id, ability);
-            abilities[id].UnlockAbility();
+            
+            if (abilities.TryAdd(id, ability))
+            {
+                abilities[id].UnlockAbility();
+            }
             return true;
         }
 
@@ -103,7 +106,7 @@ namespace Base2D.System.AbilitySystem
                 }
             }
 
-            bool removed = abilities.Remove(id);
+            bool removed = abilities.TryRemove(id, out _);
             if (!removed)
             {
 #if UNITY_EDITOR

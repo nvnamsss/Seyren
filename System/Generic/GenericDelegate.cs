@@ -10,12 +10,5 @@ namespace Base2D.System.Generic
     public delegate void GameEventHandler<TSender>(TSender s);
     public delegate void GameEventHandler<TSender, TEvent>(TSender s, TEvent e);
 
-    public class CancelableEventArgs : EventArgs
-    {
-        public bool Cancel;
-        public CancelableEventArgs()
-        {
-            Cancel = false;
-        }
-    }
+    
 }

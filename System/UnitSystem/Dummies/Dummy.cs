@@ -13,6 +13,10 @@ using UnityEngine;
 
 namespace Base2D.System.UnitSystem.Dummies
 {
+    /// <summary>
+    /// Represents a fake unit they can help to make many unit based features
+    /// 
+    /// </summary>
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(Rigidbody2D))]
     public partial class Dummy : MonoBehaviour, IAttribute, IObject

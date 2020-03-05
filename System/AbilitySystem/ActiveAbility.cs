@@ -13,7 +13,7 @@ namespace Base2D.System.AbilitySystem
     public abstract class ActiveAbility : Ability
     {
         public event GameEventHandler<ActiveAbility, CastingSpellEventArgs> Casting;
-        public event GameEventHandler<ActiveAbility> Casted;
+        public event GameEventHandler<ActiveAbility> CastCompleted;
         public float BaseCastTime { get; set; }
         public float CastTimeRemaining { get; set; }
         public bool IsCasting { get; set; }
@@ -76,7 +76,7 @@ namespace Base2D.System.AbilitySystem
         protected virtual IEnumerator CastedProcess(float delayTime, float cooldownTime)
         {
             var wait = new WaitForSeconds(delayTime);
-            Casted?.Invoke(this);
+            CastCompleted?.Invoke(this);
             Active = false;
             IsCasting = false;
             CooldownRemaining = cooldownTime - delayTime;

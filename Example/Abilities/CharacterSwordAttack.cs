@@ -24,7 +24,7 @@ namespace Base2D.Example.Abilities
 
             };
 
-            Casted += (sender) =>
+            CastCompleted += (sender) =>
             {
 
             };

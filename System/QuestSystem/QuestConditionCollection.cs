@@ -19,6 +19,7 @@ namespace Base2D.System.QuestSystem
         private int _currentProgress;
         public QuestConditionCollection()
         {
+            Active = true;
             _currentProgress = 0;
             Conditions = new List<QuestCondition>();
         }

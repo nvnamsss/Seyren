@@ -38,7 +38,7 @@ namespace Base2D.Example.Abilities
                 Caster.Action.Animator.SetBool("Spell", true);
             };
 
-            Casted += (sender) =>
+            CastCompleted += (sender) =>
             {
                 Caster.Action.Animator.SetBool("Spell", false);
             };

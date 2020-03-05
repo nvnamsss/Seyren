@@ -10,6 +10,8 @@ namespace Base2D.System.QuestSystem
     /// </summary>
     public class QuestCondition : IQuestCondition
     {
+        public delegate bool MatchHandler<TSender>(TSender e);
+        public delegate bool MatchHandler<TSender, TEvent>(TSender s, TEvent e);
         public event GameEventHandler<IQuestCondition> Completed;
         public bool Active { get; set; }
         public bool IsCompleted => CurrentProgress == MaxProgress;
@@ -28,10 +30,11 @@ namespace Base2D.System.QuestSystem
         /// <param name="maxProgress">must positive</param>
         public QuestCondition(int maxProgress)
         {
+            Active = true;
 #if UNITY_EDITOR
             if (maxProgress < 0) Debug.LogWarning("QuestCondition: progress is negative");
 #endif
-            maxProgress = maxProgress < 0 ? 1 : maxProgress;
+            maxProgress = maxProgress < 1 ? 1 : maxProgress;
             MaxProgress = maxProgress;
             _currentProgress = 0;
         }
@@ -106,6 +109,83 @@ namespace Base2D.System.QuestSystem
             e.AddEventHandler(o, registerHandler);
         }
 
+        /// <summary>
+        /// Register an event of an object.
+        /// <see cref="QuestCondition.ProcessIncrease"/>
+        /// will triggering if attach event
+        /// <see cref="GameEventHandler{TSender, TEvent}"/>
+        /// which is matched by
+        /// <see cref="MatchHandler{TSender, TEvent}"/>
+        /// match is trigger <br></br>
+        /// </summary>
+        /// <typeparam name="TSender">Sender type</typeparam>
+        /// <typeparam name="TEvent">Event type</typeparam>
+        /// <param name="o">sender instace</param>
+        /// <param name="eventName">event name</param>
+        /// <param name="match">condition for event</param>
+        public void Register<TSender, TEvent>(TSender o, string eventName, MatchHandler<TSender, TEvent> match)
+        {
+            GameEventHandler<TSender, TEvent> gameEvent = (s, e) =>
+            {
+                if (match(s, e))
+                {
+                    ProcessIncrease(s, e);
+                }
+            };
+
+            Register(o, eventName, gameEvent);
+        }
+
+        /// <summary>
+        /// Register an event of an object.
+        /// <see cref="QuestCondition.ProcessIncrease"/>
+        /// will triggering if attach event
+        /// <see cref="GameEventHandler{TSender}"/>
+        /// which is matched by
+        /// <see cref="MatchHandler{TSender}"/>
+        /// match is trigger <br></br>
+        /// </summary>
+        /// <typeparam name="TSender">Sender type</typeparam>
+        /// <param name="o">sender instace</param>
+        /// <param name="eventName">event name</param>
+        /// <param name="match">condition for event</param>
+        public void Register<TSender>(TSender o, string eventName, MatchHandler<TSender> match)
+        {
+            GameEventHandler<TSender> gameEvent = (s) =>
+            {
+                if (match(s))
+                {
+                    ProcessIncrease(s);
+                }
+            };
+
+            Register(o, eventName, gameEvent);
+        }
+
+        private void Register(object o, string eventName, Delegate handler)
+        {
+            EventInfo eventInfo = o.GetType().GetEvent(eventName);
+            if (registerEvent != null)
+            {
+#if UNITY_EDITOR
+                Debug.LogWarning("QuestCondition: " + "event " + eventName + " of " + o + " is existed.");
+#endif
+                return;
+            }
+
+            if (eventInfo == null)
+            {
+#if UNITY_EDITOR
+                Debug.LogError("QuestCondition: " + "event " + eventName + " of " + o + " is invalid. Must be an existed event which is implemented from GameEventHandler");
+#endif
+                return;
+            }
+
+            registerObject = o;
+            registerEvent = eventName;
+            registerHandler = handler;
+            eventInfo.AddEventHandler(o, handler);
+        }
 
         protected void Unregister()
         {

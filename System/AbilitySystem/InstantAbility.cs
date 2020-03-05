@@ -25,13 +25,13 @@ namespace Base2D.System.AbilitySystem
             }
 
             Casted?.Invoke(this);
+            DoCastAbility();
             cooldownCoroutine = Caster.StartCoroutine(CastedProcess(CooldownInterval, BaseCoolDown));
             return true;
         }
 
         protected virtual IEnumerator CastedProcess(float timeDelay, float cooldown)
         {
-            DoCastAbility();
             CooldownRemaining = cooldown - timeDelay;
 
             while (CooldownRemaining >= 0)

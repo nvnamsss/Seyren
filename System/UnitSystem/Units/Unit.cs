@@ -29,6 +29,7 @@ namespace Base2D.System.UnitSystem.Units
             Body = GetComponent<Rigidbody2D>();
             Collider = GetComponent<Collider2D>();
             Action = gameObject.AddComponent<Action>();
+            Ability = new AbilitySystem.AbilityCollection();
             Abilites = new Dictionary<int, AbilitySystem.Ability>();
             Active = true;
             Attribute = BaseAttribute + Attribute.zero;

@@ -53,7 +53,7 @@ namespace Base2D.System.QuestSystem
             if (condition != null)
             {
                 Condition = condition;
-                Condition.Completed += ConditionCompleted;
+                Condition.Completed += OnConditionCompleted;
             }
 #if UNITY_EDITOR
             else
@@ -76,18 +76,26 @@ namespace Base2D.System.QuestSystem
             Active = QuestRequire.Unlocked;
         }
 
+        /// <summary>
+        /// Cancel this quest
+        /// </summary>
         public void Cancel()
         {
+            Active = false;
             Failed?.Invoke(this);
-            Condition.Completed -= ConditionCompleted;
+            Condition.Completed -= OnConditionCompleted;
         }
 
-        private void ConditionCompleted(IQuestCondition s)
+        private void OnConditionCompleted(IQuestCondition s)
         {
             Completed?.Invoke(this);
-            Condition.Completed -= ConditionCompleted;
+            Condition.Completed -= OnConditionCompleted;
         }
 
+        /// <summary>
+        /// called when quest is completed
+        /// </summary>
+        /// <param name="s"></param>
         private void OnQuestCompleted(Quest s)
         {
             QuestRequire.Unlock();

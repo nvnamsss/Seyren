@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Base2D.System.ForceSystem
 {
+    [Serializable]
     public class Force
     {
         public static List<Force> Forces { get; } = new List<Force>();
@@ -30,6 +31,8 @@ namespace Base2D.System.ForceSystem
 
         public bool MakeAlliance(Force force)
         {
+            //if (force == null) return false;
+
             if (!Alliances.ContainsKey(force.Name) && force != this)
             {
                 Alliances.Add(force.Name, force);
@@ -44,6 +47,8 @@ namespace Base2D.System.ForceSystem
 
         public bool MakeEnemy(Force force)
         {
+            //if (force == null) return false;
+
             if (!Enemies.ContainsKey(force.Name) && force != this)
             {
                 Enemies.Add(force.Name, force);

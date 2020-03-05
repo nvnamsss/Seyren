@@ -36,21 +36,24 @@ namespace Base2D.Example.Quests
             receiver.Abilites.Add(Dash.Id, new Dash(receiver));
             receiver.Abilites[Dash.Id].UnlockAbility();
             CantTouchMeCondition.Register(receiver.Abilites[Dash.Id], "Casted");
-            receiver.Killing += (s, e) => 
-            {
-                if (e.name.Contains("Skeleton"))
-                {
-                    FirstStepToTheWorldCondition.ProcessIncrease<Unit, Unit>(s, e);
-                }
-            };
-            //WhoYouAre = new Quest(WhoYouAreName, WhoYouAreContent);
             CantTouchMe = new Quest(CantTouchMeName, CantTouchMeContent, CantTouchMeCondition);
             CantTouchMe.Completed += (s) =>
             {
                 Debug.Log(s.Name + " completed");
             };
 
+            FirstStepToTheWorldCondition.Register<Unit, Unit>(receiver, "Killing", (killing, killed) =>
+            {
+                if (killed.name.Contains("Skeleton"))
+                {
+                    return true;
+                }
+
+                return false;
+            });
             FirstStepToTheWorld = new Quest(FirstStepToTheWorldName, FirstStepToTheWorldContent, FirstStepToTheWorldCondition);
+            FirstStepToTheWorld.AssignToQuest(CantTouchMe); //First step to the world can only do when Cant touch me have done
+
         }
     }
 }

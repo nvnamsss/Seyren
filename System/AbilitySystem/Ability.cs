@@ -19,9 +19,11 @@ namespace Base2D.System.AbilitySystem
         public static readonly Ability DoNothing = AbilityDoNothing.Instance;
         public static float MaxInterval = 4;
         public static float MinInterval = 1;
+        [Obsolete("Ability delegate is obsoleted")]
         public delegate void StatusChangedHandler(Ability sender);
+        [Obsolete("Ability delegate is obsoleted")]
         public delegate void CooldownCompletedHandler(Ability sender);
-        public event StatusChangedHandler StatusChanged;
+        public event GameEventHandler<Ability> StatusChanged;
         /// <summary>
         /// Trigger when ability cooldown is done and ability is ready to use
         /// </summary>
@@ -118,7 +120,7 @@ namespace Base2D.System.AbilitySystem
 
         public abstract bool Cast();
         /// <summary>
-        /// Ability will be casted if condition is true
+        /// Ability will be cast if condition is true
         /// </summary>
         /// <returns></returns>
         protected abstract bool Condition();
