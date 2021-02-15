@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Base2D.System
+namespace Seyren.System
 {
     [Serializable]
     public class DictionaryIntAndInt : SerializableDictionary<int, int>

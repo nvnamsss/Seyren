@@ -1,10 +1,10 @@
-﻿using Base2D.Example.Abilities;
-using Base2D.System.AbilitySystem;
-using Base2D.System.UnitSystem.Units;
+﻿using Seyren.Example.Abilities;
+using Seyren.System.Abilities;
+using Seyren.System.Units;
 using UnityEditor;
 using UnityEngine;
 
-namespace Base2D.Editor
+namespace Seyren.Editor
 {
     [CustomPropertyDrawer(typeof(AbilityCollection))]
     public class AbilityCollectionDrawer : PropertyDrawer
@@ -27,7 +27,7 @@ namespace Base2D.Editor
             {
                 collection = property.serializedObject.targetObject.GetType().GetField("Ability").GetValue(property.serializedObject.targetObject) as AbilityCollection;
             }
-
+            
             if (unit == null)
             {
                 unit = property.serializedObject.targetObject as Unit;

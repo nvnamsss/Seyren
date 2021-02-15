@@ -1,7 +1,7 @@
 ﻿
 using System.IO;
 
-namespace Base2D.Utils
+namespace Seyren.Utils
 {
     public static class FileUtils
     {

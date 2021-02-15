@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Base2D.Utils
+namespace Seyren.Utils
 {
     public static class RotationUtils
     {
