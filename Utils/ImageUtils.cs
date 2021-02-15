@@ -1,6 +1,6 @@
 ﻿using sd = System.Drawing;
 using si = System.IO;
-namespace Base2D.Utils
+namespace Seyren.Utils
 {
     public static class ImageUtils
     {
