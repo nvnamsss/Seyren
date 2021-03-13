@@ -35,8 +35,8 @@ namespace Seyren.System.Units.Projectiles
                 return;
             }
             Body.velocity = new Vector2(0, 0);
-            Vector3 velocity = (_target.transform.position - transform.position).normalized * Speed;
-            Vector3 rotation = Utils.RotationUtils.AngleBetween(transform.position, _target.transform.position);
+            Vector3 velocity = (_target.position - transform.position).normalized * Speed;
+            Vector3 rotation = Utils.RotationUtils.AngleBetween(transform.position, _target.position);
             Body.AddForce(velocity, ForceMode2D.Impulse);
             transform.rotation = Quaternion.Euler(rotation.x, rotation.y, rotation.z);
         }

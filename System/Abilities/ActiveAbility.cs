@@ -12,81 +12,78 @@ namespace Seyren.System.Abilities
 {
     public abstract class ActiveAbility : Ability
     {
-        public event GameEventHandler<ActiveAbility, CastingSpellEventArgs> Casting;
-        public event GameEventHandler<ActiveAbility> CastCompleted;
-        public float BaseCastTime { get; set; }
-        public float CastTimeRemaining { get; set; }
-        public bool IsCasting { get; set; }
-        public BreakType BreakType { get; set; }
-        public float CastInterval { get; set; }
-        protected Coroutine castCoroutine;
+        // public event GameEventHandler<ActiveAbility, CastingSpellEventArgs> Casting;
+        // public event GameEventHandler<ActiveAbility> CastCompleted;
+        // public float BaseCastTime { get; set; }
+        // public float CastTimeRemaining { get; set; }
+        // public bool IsCasting { get; set; }
+        // public float CastInterval { get; set; }
+        // protected Coroutine castCoroutine;
         protected Coroutine cooldownCoroutine;
         protected abstract void DoCastAbility();
-        public ActiveAbility(Unit caster, float castTime, float cooldown, int level) :
-            base(caster, cooldown, level)
+        public ActiveAbility(float castTime, float cooldown, int level) :
+            base(cooldown, level)
         {
             CastType = CastType.Active;
-            BaseCastTime = castTime;
-            CastInterval = castTime;
         }
 
-        public override bool Cast()
-        {
-            if (!Condition())
-            {
-                return false;
-            }
+        // public override bool Cast()
+        // {
+        //     if (!Condition())
+        //     {
+        //         return false;
+        //     }
 
-            CastingSpellEventArgs cing = new CastingSpellEventArgs();
-            Casting?.Invoke(this, cing);
+        //     // CastingSpellEventArgs cing = new CastingSpellEventArgs();
+        //     // Casting?.Invoke(this, cing);
 
-            if (cing.Cancel)
-            {
-                return false;
-            }
+        //     // if (cing.Cancel)
+        //     // {
+        //     //     return false;
+        //     // }
 
-            castCoroutine = Caster.StartCoroutine(CastingProcess(CastInterval, BaseCastTime));
-            return true;
-        }
+        //     // castCoroutine = Caster.StartCoroutine(CastingProcess(CastInterval, BaseCastTime));
+        //     return true;
+        // }
 
-        protected virtual IEnumerator CastingProcess(float delayTime, float castTime)
-        {
-            var wait = new WaitForSeconds(delayTime);
-            IsCasting = true;
-            CastTimeRemaining = castTime;
-#if UNITY_EDITOR
-            Debug.Log("[ActiveAbility] - " + Caster.name + " Casting ability " + GetType().Name);
-#endif
-            while (CastTimeRemaining > 0)
-            {
-                yield return wait;
-                CastTimeRemaining -= delayTime;
-            }
-#if UNITY_EDITOR
-            Debug.Log("[ActiveAbility] - " + Caster.name + " Casting ability " + GetType().Name);
-#endif
-            if (IsCasting)
-            {
-                IsCasting = false;
-                DoCastAbility();
-                cooldownCoroutine = Caster.StartCoroutine(CastedProcess(CooldownInterval, BaseCoolDown));
-            }
-        }
+//         protected virtual IEnumerator CastingProcess(float delayTime, float castTime)
+//         {
+//             var wait = new WaitForSeconds(delayTime);
+//             IsCasting = true;
+//             CastTimeRemaining = castTime;
+// #if UNITY_EDITOR
+//             Debug.Log("[ActiveAbility] - " + Caster.name + " Casting ability " + GetType().Name);
+// #endif
+//             while (CastTimeRemaining > 0)
+//             {
+//                 yield return wait;
+//                 CastTimeRemaining -= delayTime;
+//             }
+// #if UNITY_EDITOR
+//             Debug.Log("[ActiveAbility] - " + Caster.name + " Casting ability " + GetType().Name);
+// #endif
+//             if (IsCasting)
+//             {
+//                 IsCasting = false;
+//                 DoCastAbility();
+//                 cooldownCoroutine = Caster.StartCoroutine(CastedProcess(CooldownInterval, BaseCoolDown));
+//             }
+//         }
 
-        protected virtual IEnumerator CastedProcess(float delayTime, float cooldownTime)
-        {
-            var wait = new WaitForSeconds(delayTime);
-            CastCompleted?.Invoke(this);
-            Active = false;
-            IsCasting = false;
-            CooldownRemaining = cooldownTime - delayTime;
+//         protected virtual IEnumerator CastedProcess(float delayTime, float cooldownTime)
+//         {
+//             var wait = new WaitForSeconds(delayTime);
+//             CastCompleted?.Invoke(this);
+//             Active = false;
+//             IsCasting = false;
+//             CooldownRemaining = cooldownTime - delayTime;
 
-            while (CooldownRemaining >= 0)
-            {
-                yield return wait;
-                CooldownRemaining -= delayTime;
-            }
-            Active = true;
-        }
+//             while (CooldownRemaining >= 0)
+//             {
+//                 yield return wait;
+//                 CooldownRemaining -= delayTime;
+//             }
+//             Active = true;
+//         }
     }
 }

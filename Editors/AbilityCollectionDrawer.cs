@@ -1,4 +1,4 @@
-﻿using Seyren.Example.Abilities;
+﻿using Seyren.Examples.Abilities;
 using Seyren.System.Abilities;
 using Seyren.System.Units;
 using UnityEditor;
@@ -27,17 +27,13 @@ namespace Seyren.Editor
             {
                 collection = property.serializedObject.targetObject.GetType().GetField("Ability").GetValue(property.serializedObject.targetObject) as AbilityCollection;
             }
-            
-            if (unit == null)
-            {
-                unit = property.serializedObject.targetObject as Unit;
-            }
+ 
             //EditorGUI.PropertyField(p, property.FindPropertyRelative("count"), GUIContent.none);
             if (GUI.Button(new Rect(50, 50, 25, 25), "+"))
             {
                 //collection.Add(new Dash(unit));
                 //collection.count += 1;
-                unit.Ability.Add(new Dash(unit));
+                // unit.Ability.Add(new Dash(unit));
                 property.FindPropertyRelative("editorAbilities").InsertArrayElementAtIndex(0);
                 property.FindPropertyRelative("editorAbilities").GetArrayElementAtIndex(0).intValue = Dash.Id;
                 property.serializedObject.ApplyModifiedProperties();

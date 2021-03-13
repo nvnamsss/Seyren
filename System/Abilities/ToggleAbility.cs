@@ -38,34 +38,9 @@ namespace Seyren.System.Abilities
         protected Coroutine cooldownCoroutine;
         protected abstract void DoCastAbility();
 
-        public ToggleAbility(Unit caster) : base(caster, 0, 1)
+        public ToggleAbility() : base(0, 1)
         {
             _isOn = true;
-        }
-
-        public override bool Cast()
-        {
-            if (!Condition())
-            {
-                return false;
-            }
-
-            IsOn = !IsOn;
-            cooldownCoroutine = Caster.StartCoroutine(Casted(CooldownInterval, BaseCoolDown));
-            return true;
-        }
-
-        protected virtual IEnumerator Casted(float timeDelay, float cooldown)
-        {
-            DoCastAbility();
-            CooldownRemaining = cooldown - timeDelay;
-
-            while (CooldownRemaining >= 0)
-            {
-                yield return new WaitForSeconds(timeDelay);
-                CooldownRemaining -= timeDelay;
-            }
-            yield break;
         }
     }
 }

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Seyren.System.Generics;
 
 namespace Seyren.System.Actions
 {
-    public delegate void ActionHandler(IAction sender);
     /// <summary>
     /// 
     /// </summary>
@@ -15,8 +15,8 @@ namespace Seyren.System.Actions
     public delegate bool ActionConditionHandler(IAction current);
     public interface IAction
     {
-        event ActionHandler ActionStart;
-        event ActionHandler ActionEnd;
+        event GameEventHandler<IAction> ActionStart;
+        event GameEventHandler<IAction> ActionEnd;
         /// <summary>
         /// Condition to play action
         /// </summary>
@@ -29,6 +29,7 @@ namespace Seyren.System.Actions
         /// <summary>
         /// End action
         /// </summary>
-        void Revoke();  
+        bool Break();
+        void Constraint(IAction action);
     }
 }

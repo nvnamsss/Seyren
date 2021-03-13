@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Seyren.Example.DamageModification
+namespace Seyren.Examples.DamageModification
 {
     public class CriticalStrike : CriticalInfo
     {

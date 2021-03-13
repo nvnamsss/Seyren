@@ -3,79 +3,36 @@ using System.Collections;
 using Seyren.System.Actions;
 using Seyren.System.Buffs;
 using Seyren.System.Units;
+using Seyren.System.Generics;
 using UnityEngine;
 using System;
-using static Seyren.System.Units.Unit;
-using Seyren.System.Generics;
 
 namespace Seyren.System.Abilities
 {
-    [Serializable]
     public abstract class Ability
     {
-        public static readonly Ability DoNothing = AbilityDoNothing.Instance;
-        public static float MaxInterval = 4;
-        public static float MinInterval = 1;
-        [Obsolete("Ability delegate is obsoleted")]
-        public delegate void StatusChangedHandler(Ability sender);
-        [Obsolete("Ability delegate is obsoleted")]
-        public delegate void CooldownCompletedHandler(Ability sender);
-        public event GameEventHandler<Ability> StatusChanged;
+        public static Error CooldownError { get; } = new Error("ability is cooldownling");
+        public static Error ConditionError { get; } = new Error("condition is not satisfying");
+
         /// <summary>
         /// Trigger when ability cooldown is done and ability is ready to use
         /// </summary>
-        public event GameEventHandler<Ability> CooldownCompleted;
         public CastType CastType { get; protected set; }
-        public float BaseCoolDown { get; set; }
+        public float Cooldown { get; set; }
+        public string abilityName;
         /// <summary>
         /// Time between every process for cooldown of an ability <br></br>
         /// </summary>
-        public float CooldownInterval { get; set; }
+        // public float CooldownInterval { get; set; }
         public float CooldownRemaining
         {
             get
             {
-                return _cooldownRemaining;
-            }
-            set
-            {
-                float original = _cooldownRemaining;
-                _cooldownRemaining = value;
-
-                if (original > 0 && _cooldownRemaining <= 0)
-                {
-                    CooldownCompleted?.Invoke(this);
-                    Debug.Log("cooldown completed");
-                }
+                return (nextCooldown - DateTimeOffset.Now.ToUnixTimeMilliseconds()) / 1000;
             }
         }
+        protected long nextCooldown;
         public float ManaCost { get; set; }
-        /// <summary>
-        /// Status of ability
-        /// </summary>
-        public bool Active
-        {
-            get
-            {
-                return _active;
-            }
-            set
-            {
-                bool original = _active;
-                bool unlock = UnlockCondition();
-                if (!unlock)
-                {
-                    return;
-                }
-
-                _active = value;
-
-                if (_active != original)
-                {
-                    StatusChanged?.Invoke(this);
-                }
-            }
-        }
         public int Level
         {
             get
@@ -84,45 +41,71 @@ namespace Seyren.System.Abilities
             }
             set
             {
+                if (value < 0)
+                {
+                    Debug.Log($"ability {abilityName} level cannot be set to {value}");
+                    return;
+                }
+
                 _level = value;
             }
         }
-        [SerializeField]
-        public Unit Caster;
-        public Unit Target;
-        public Vector3 PointTarget;
-        protected bool _active;
-        protected float _cooldownRemaining;
+
         [SerializeField]
         protected int _level;
-        public virtual bool UnlockAbility()
-        {
-            Active = true;
-            
-            return Active;
-        }
 
-        public Ability(Unit caster, float cooldown, int level)
+        public Ability(float cooldown, int level)
         {
-            Caster = caster;
-            if (cooldown > MaxInterval)
-                CooldownInterval = MaxInterval / 10;
-            else if (cooldown < MinInterval)
-                CooldownInterval = cooldown;
-            else
-                CooldownInterval = cooldown / 10;
-            BaseCoolDown = cooldown;
-            CooldownRemaining = 0;
+            Cooldown = cooldown;
             _level = level;
         }
 
-        public abstract bool Cast();
+        public Error Cast(Unit by)
+        {
+            if (CooldownRemaining > 0) return CooldownError;
+            Error err = Condition(by);
+            if (err != null) return err;
+
+            onCast(by);
+            nextCooldown = DateTimeOffset.Now.ToUnixTimeMilliseconds() + (long)(Cooldown * 1000);
+            return null;
+        }
+
+        public Error Cast(Unit by, Unit target)
+        {
+            if (CooldownRemaining > 0) return CooldownError;
+            Error err = Condition(by, target);
+            if (err != null) return err;
+
+            onCast(by, target);
+            nextCooldown = DateTimeOffset.Now.ToUnixTimeMilliseconds() + (long)(Cooldown * 1000);
+
+            return null;
+        }
+
+        public Error Cast(Unit by, Vector3 location)
+        {
+            if (CooldownRemaining > 0) return CooldownError;
+            Error err = Condition(by, location);
+            if (err != null) return err;
+
+            onCast(by, location);
+            nextCooldown = DateTimeOffset.Now.ToUnixTimeMilliseconds() + (long)(Cooldown * 1000);
+
+            return null;
+        }
+
+        protected abstract void onCast(Unit by);
+        protected abstract void onCast(Unit by, Unit target);
+        protected abstract void onCast(Unit by, Vector3 target);
+
         /// <summary>
         /// Ability will be cast if condition is true
         /// </summary>
         /// <returns></returns>
-        protected abstract bool Condition();
-        protected abstract bool UnlockCondition();
+        protected abstract Error Condition(Unit by);
+        protected abstract Error Condition(Unit by, Unit target);
+        protected abstract Error Condition(Unit by, Vector3 target);
     }
 
 }

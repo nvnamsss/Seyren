@@ -1,55 +1,48 @@
-﻿using Seyren.System.Units;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections;
 using UnityEngine;
 
 namespace Seyren.System.Abilities
 {
     public abstract class AuraAbility : Ability
     {
-        public float AoE;
-        public float Interval;
-        public AuraAbility(Unit caster, float aoe, int level) : base(caster, 0, level)
+        public bool active;
+        public float aoe;
+        public float interval;
+        public AuraAbility(float aoe, int level) : base(0, level)
         {
-            AoE = aoe;
+            this.aoe = aoe;
             ManaCost = 0;
-            StatusChanged += StatusChangedCallback;
         }
 
-        protected abstract override bool Condition();
         protected abstract void AuraInterval();
-        public override bool Cast()
-        {
-            if (!Condition())
-            {
-                return false;
-            }
+        // public override bool Cast()
+        // {
+        //     if (!Condition())
+        //     {
+        //         return false;
+        //     }
 
-            Caster.StartCoroutine(OnActive(Interval));
+        //     // Caster.StartCoroutine(OnActive(interval));
 
-            return true;
-        }
+        //     return true;
+        // }
 
         protected virtual IEnumerator OnActive(float interval)
         {
-            while (base.Active)
+            while (active)
             {
                 yield return new WaitForSeconds(interval);
                 AuraInterval();
-                CooldownRemaining -= interval;
+                // CooldownRemaining -= interval;
             }
         }
 
         protected void StatusChangedCallback(Ability sender)
         {
-            if (sender.Active)
-            {
-                sender.Cast();
-            }
+            // if (sender.Active)
+            // {
+            //     sender.Cast();
+            // }
         }
     }
 }

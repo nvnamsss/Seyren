@@ -4,19 +4,18 @@ using Seyren.System.Units.Dummies;
 using Seyren.System.Units;
 using System.Collections;
 using UnityEngine;
+using Seyren.System.Generics;
 
-namespace Seyren.Example.Abilities
+namespace Seyren.Examples.Abilities
 {
-    public class Dash : InstantAbility, IAction
+    public class Dash : InstantAbility
     {
         public static readonly int Id = 0x68658301;
         public ActionConditionHandler RunCondition { get; }
 
         public ActionType ActionType { get; }
 
-        public event ActionHandler ActionStart;
-        public event ActionHandler ActionEnd;
-        public Dash(Unit u) : base(u, 1, 1)
+        public Dash(Unit u) : base(1, 1)
         {
             ActionType = ActionType.Dash;
             RunCondition += (s) =>
@@ -25,43 +24,17 @@ namespace Seyren.Example.Abilities
             };
         }
 
-        public void Invoke()
-        {
-            bool cast = Cast();
-            if (cast)
-            {
-                ActionStart?.Invoke(this);
-            }
-        }
-
-        public void Revoke()
-        {
-            ActionEnd?.Invoke(this);
-        }
-
-        protected override bool Condition()
-        {
-            return !(!Active ||
-                CooldownRemaining > 0);
-        } 
-
-        protected override void DoCastAbility()
-        {
-            Vector2 direction = Caster.transform.rotation * Caster.Forward * Time.fixedDeltaTime * Caster.Attribute.MovementSpeed * 1.4f;
-            Caster.Move(direction, 10, 0.02f);
-            //Caster.Body.AddForce(direction * 1000, ForceMode2D.Impulse);
-            Caster.StartCoroutine(DashEffect(5, 0.04f));
-        }
+   
 
         private GameObject CreateClone()
         {
-            GameObject go = Unit.CreateShadow(Caster, 0.6f);
+            // GameObject go = Unit.CreateShadow(Caster, 0.6f);
             //Renderer renderer = go.GetComponent<Renderer>();
             //Color color = renderer.material.color;
             //color.a *= 0.6f;
             //renderer.material.color = color;
-
-            return go;
+    
+            return null;
         }
 
         private IEnumerator DashEffect(int tick, float delay)
@@ -77,9 +50,41 @@ namespace Seyren.Example.Abilities
             }
         }
 
-        protected override bool UnlockCondition()
+
+
+        protected override void DoCastAbility()
         {
-            return true;
+            throw new global::System.NotImplementedException();
+        }
+
+        protected override void onCast(Unit by)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        protected override void onCast(Unit by, Unit target)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        protected override void onCast(Unit by, Vector3 target)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        protected override Error Condition(Unit by)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        protected override Error Condition(Unit by, Unit target)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        protected override Error Condition(Unit by, Vector3 target)
+        {
+            throw new global::System.NotImplementedException();
         }
     }
 }

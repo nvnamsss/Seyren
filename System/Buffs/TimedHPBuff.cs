@@ -22,12 +22,12 @@ namespace Seyren.System.Buffs
         public override void Activate()
         {
             hpBuff = (ScriptableHPBuff)buff;
-            unit.Attribute.MaxHp += hpBuff.HPIncrease;
+            // unit.Attribute.MaxHp += hpBuff.HPIncrease;
         }
 
         public override void End()
         {
-            unit.Attribute.MaxHp -= hpBuff.HPIncrease;
+            // unit.Attribute.MaxHp -= hpBuff.HPIncrease;
         }
     }
 }

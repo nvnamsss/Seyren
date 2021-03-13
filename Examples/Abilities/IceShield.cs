@@ -6,19 +6,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
+using Seyren.System.Generics;
 
-namespace Seyren.Example.Abilities
+namespace Seyren.Examples.Abilities
 {
     public class IceShield : ToggleAbility
     {
         private Dummy shield;
-        public IceShield(Unit caster) : base(caster)
+        public IceShield(Unit caster) : base()
         {
         }
 
-        protected override bool Condition()
+        protected override Error Condition(Unit by)
         {
-            return true;
+            throw new NotImplementedException();
+        }
+
+        protected override Error Condition(Unit by, Unit target)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Error Condition(Unit by, Vector3 target)
+        {
+            throw new NotImplementedException();
         }
 
         protected override void DoCastAbility()
@@ -26,9 +38,20 @@ namespace Seyren.Example.Abilities
 
         }
 
-        protected override bool UnlockCondition()
+        protected override void onCast(Unit by)
         {
-            return true;
+            throw new NotImplementedException();
         }
+
+        protected override void onCast(Unit by, Unit target)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void onCast(Unit by, Vector3 target)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

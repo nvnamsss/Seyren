@@ -1,4 +1,4 @@
-﻿using Seyren.Example.Abilities;
+﻿using Seyren.Examples.Abilities;
 using Seyren.System.Quests;
 using Seyren.System.Units;
 using System;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Seyren.Example.Quests
+namespace Seyren.Examples.Quests
 {
     /// <summary>
     /// Example for a Quest that lead beginner familiarize with the game
@@ -33,9 +33,9 @@ namespace Seyren.Example.Quests
             "If not, go and prove!";
         public BeginnerPath()
         {
-            receiver.Abilites.Add(Dash.Id, new Dash(receiver));
-            receiver.Abilites[Dash.Id].UnlockAbility();
-            CantTouchMeCondition.Register(receiver.Abilites[Dash.Id], "Casted");
+            // receiver.Abilites.Add(Dash.Id, new Dash(receiver));
+            // receiver.Abilites[Dash.Id].UnlockAbility();
+            // CantTouchMeCondition.Register(receiver.Abilites[Dash.Id], "Casted");
             CantTouchMe = new Quest(CantTouchMeName, CantTouchMeContent, CantTouchMeCondition);
             CantTouchMe.Completed += (s) =>
             {

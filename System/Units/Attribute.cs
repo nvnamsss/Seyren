@@ -9,11 +9,73 @@ using System.Diagnostics;
 
 namespace Seyren.System.Units
 {
+    public class BaseInt
+    {
+        public int Base;
+        public int Incr;
+        public int Total => Base + Incr;
+        public BaseInt(int b, int i) {
+            Base = b;
+            Incr = i;
+        }
+
+        public int Amplify(float percent) {
+
+            return Total;
+        }
+
+        public int Increase(int value) {
+            return Total;
+        }
+    }
+
+    public struct BaseFloat {
+        public float Base;
+        public float Incr;
+        public float Total => Base + Incr;
+        public BaseFloat(int b, int i) {
+            Base = b;
+            Incr = i;
+        }
+
+        public float Amplify(float percent) {
+            Incr = Base * percent / 100;
+            return Total;
+        }
+
+        public float Increase(int value) {
+            Incr += value;
+            return Total;
+        }
+
+        public static BaseFloat operator +(BaseFloat lhs, BaseFloat rhs) {
+            lhs.Base += rhs.Base;
+            lhs.Incr += rhs.Incr;
+            return lhs;           
+        }
+        public static BaseFloat operator -(BaseFloat lhs, BaseFloat rhs) {
+            lhs.Base -= rhs.Base;
+            lhs.Incr -= rhs.Incr;
+            return lhs;
+        }
+
+        public static BaseFloat operator +(BaseFloat lhs, float rhs) {
+            lhs.Base += rhs;
+            return lhs;
+        }
+
+        public static BaseFloat operator -(BaseFloat lhs, float rhs) {
+            return lhs + (-rhs);
+        }
+
+
+    }
+    
     [Serializable]
     public class Attribute 
     {
         public int DataType { get; set; }
-        public float Strength
+        public BaseFloat Strength
         {
             get
             {
@@ -24,7 +86,7 @@ namespace Seyren.System.Units
                 _strength = value;
             }
         }
-        public float Agility
+        public BaseFloat Agility
         {
             get
             {
@@ -35,7 +97,7 @@ namespace Seyren.System.Units
                 _agility = value;
             }
         }
-        public float Intelligent
+        public BaseFloat Intelligent
         {
             get
             {
@@ -46,7 +108,7 @@ namespace Seyren.System.Units
                 _intelligent = value;
             }
         }
-        public float AttackDamage
+        public BaseFloat AttackDamage
         {
             get
             {
@@ -57,7 +119,7 @@ namespace Seyren.System.Units
                 _attackDamage = value;
             }
         }
-        public float MDamageAmplified
+        public BaseFloat MDamageAmplified
         {
             get
             {
@@ -68,7 +130,7 @@ namespace Seyren.System.Units
                 _mDamageAmplified = value;
             }
         }
-        public float MaxHp
+        public BaseFloat MaxHp
         {
             get
             {
@@ -79,7 +141,7 @@ namespace Seyren.System.Units
                 _maxHp = value; 
             }
         }
-        public float MaxMp
+        public BaseFloat MaxMp
         {
             get
             {
@@ -90,7 +152,7 @@ namespace Seyren.System.Units
                 _maxMp = value;
             }
         }
-        public float HpRegen
+        public BaseFloat HpRegen
         {
             get
             {
@@ -101,7 +163,7 @@ namespace Seyren.System.Units
                 _hpRegen = value;
             }
         }
-        public float MpRegen
+        public BaseFloat MpRegen
         {
             get
             {
@@ -178,15 +240,15 @@ namespace Seyren.System.Units
                 _mpRegenPercent = value;
             }
         }
-        public float Armor
+        public BaseFloat Defense
         {
             get
             {
-                return _armor;
+                return _defense;
             }
             set
             {
-                _armor = value;
+                _defense = value;
             }
         }
         public float MArmor
@@ -200,7 +262,7 @@ namespace Seyren.System.Units
                 _mArmor = value;
             }
         }
-        public float AttackRange
+        public BaseFloat AttackRange
         {
             get
             {
@@ -211,7 +273,7 @@ namespace Seyren.System.Units
                 _attackRange = value;
             }
         }
-        public float CastRange
+        public BaseFloat CastRange
         {
             get
             {
@@ -222,7 +284,7 @@ namespace Seyren.System.Units
                 _castRange = value;
             }
         }
-        public float MovementSpeed
+        public BaseFloat MovementSpeed
         {
             get
             {
@@ -233,7 +295,7 @@ namespace Seyren.System.Units
                 _movementSpeed = value;
             }
         }
-        public float AttackSpeed
+        public BaseFloat AttackSpeed
         {
             get
             {
@@ -244,7 +306,7 @@ namespace Seyren.System.Units
                 _attackSpeed = value;
             }
         }
-        public float JumpSpeed
+        public BaseFloat JumpSpeed
         {
             get
             {
@@ -257,25 +319,25 @@ namespace Seyren.System.Units
         }
 
         [SerializeField]
-        private float _strength;
+        private BaseFloat _strength;
         [SerializeField]
-        private float _agility;
+        private BaseFloat _agility;
         [SerializeField]
-        private float _intelligent;
+        private BaseFloat _intelligent;
         [Header("Attack Settings")]
         [SerializeField]
-        private float _attackDamage;
+        private BaseFloat _attackDamage;
         [SerializeField]
-        private float _mDamageAmplified;
+        private BaseFloat _mDamageAmplified;
         [SerializeField]
         [Header("State Settings")]
-        private float _maxHp;
+        private BaseFloat _maxHp;
         [SerializeField]
-        private float _maxMp;
+        private BaseFloat _maxMp;
         [SerializeField]
-        private float _hpRegen;
+        private BaseFloat _hpRegen;
         [SerializeField]
-        private float _mpRegen;
+        private BaseFloat _mpRegen;
         [SerializeField]
         private float _shieldRegen;
         [SerializeField]
@@ -289,83 +351,83 @@ namespace Seyren.System.Units
         [SerializeField]
         private float _mpRegenPercent;
         [SerializeField]
-        private float _armor;
+        private BaseFloat _defense;
         [SerializeField]
         private float _mArmor;
         [Header("Speed Settings")]
         [SerializeField]
-        private float _attackRange;
+        private BaseFloat _attackRange;
         [SerializeField]
-        private float _castRange;
+        private BaseFloat _castRange;
         [SerializeField]
-        private float _movementSpeed;
+        private BaseFloat _movementSpeed;
         [SerializeField]
-        private float _attackSpeed;
+        private BaseFloat _attackSpeed;
         [SerializeField]
-        private float _jumpSpeed;
+        private BaseFloat _jumpSpeed;
 
         public static Attribute zero => new Attribute();
         public static Attribute operator +(Attribute lhs, Attribute rhs)
         {
-            lhs.Strength += rhs.Strength;
-            lhs.Agility += rhs.Agility;
-            lhs.Intelligent += rhs.Intelligent;
+            // lhs.Strength += rhs.Strength;
+            // lhs.Agility += rhs.Agility;
+            // lhs.Intelligent += rhs.Intelligent;
 
-            lhs.AttackDamage += rhs.AttackDamage;
-            lhs.MDamageAmplified += rhs.MDamageAmplified;
+            // lhs.AttackDamage += rhs.AttackDamage;
+            // lhs.MDamageAmplified += rhs.MDamageAmplified;
 
-            lhs.MaxHp += rhs.MaxHp;
-            lhs.MaxMp += rhs.MaxMp;
-            lhs.HpRegen += rhs.HpRegen;
-            lhs.MpRegen += rhs.MpRegen;
-            lhs.ShieldRegen += rhs.ShieldRegen;
-            lhs.MShieldRegen += rhs.MShieldRegen;
-            lhs.PShield += rhs.PShield;
-            lhs.MpRegenPercent += rhs.MpRegenPercent;
-            lhs.HpRegenPercent += rhs.HpRegenPercent;
-            lhs.MpRegenPercent += rhs.MpRegenPercent;
+            // lhs.MaxHp += rhs.MaxHp;
+            // lhs.MaxMp += rhs.MaxMp;
+            // lhs.HpRegen += rhs.HpRegen;
+            // lhs.MpRegen += rhs.MpRegen;
+            // lhs.ShieldRegen += rhs.ShieldRegen;
+            // lhs.MShieldRegen += rhs.MShieldRegen;
+            // lhs.PShield += rhs.PShield;
+            // lhs.MpRegenPercent += rhs.MpRegenPercent;
+            // lhs.HpRegenPercent += rhs.HpRegenPercent;
+            // lhs.MpRegenPercent += rhs.MpRegenPercent;
 
-            lhs.Armor += rhs.Armor;
-            lhs.MArmor += rhs.MArmor;
+            // lhs.Defense += rhs.Defense;
+            // lhs.MArmor += rhs.MArmor;
 
-            lhs.AttackRange += rhs.AttackRange;
-            lhs.CastRange += rhs.CastRange;
+            // lhs.AttackRange += rhs.AttackRange;
+            // lhs.CastRange += rhs.CastRange;
 
-            lhs.MovementSpeed += rhs.MovementSpeed;
-            lhs.AttackSpeed += rhs.AttackSpeed;
-            lhs.JumpSpeed += rhs.JumpSpeed;
+            // lhs.MovementSpeed += rhs.MovementSpeed;
+            // lhs.AttackSpeed += rhs.AttackSpeed;
+            // lhs.JumpSpeed += rhs.JumpSpeed;
             return lhs;
         }
 
         public static Attribute operator -(Attribute lhs, Attribute rhs)
         {
-            lhs.Strength -= rhs.Strength;
-            lhs.Agility -= rhs.Agility;
-            lhs.Intelligent -= rhs.Intelligent;
+            // lhs.Strength -= rhs.Strength;
+            // lhs.Agility -= rhs.Agility;
+            // lhs.Intelligent -= rhs.Intelligent;
 
-            lhs.AttackDamage -= rhs.AttackDamage;
-            lhs.MDamageAmplified -= rhs.MDamageAmplified;
+            // lhs.AttackDamage -= rhs.AttackDamage;
+            // lhs.MDamageAmplified -= rhs.MDamageAmplified;
 
-            lhs.MaxHp -= rhs.MaxHp;
-            lhs.MaxMp -= rhs.MaxMp;
-            lhs.HpRegen -= rhs.HpRegen;
-            lhs.MpRegen -= rhs.MpRegen;
-            lhs.ShieldRegen -= rhs.ShieldRegen;
-            lhs.MShieldRegen -= rhs.MShieldRegen;
-            lhs.PShield -= rhs.PShield;
-            lhs.MpRegenPercent -= rhs.MpRegenPercent;
-            lhs.HpRegenPercent -= rhs.HpRegenPercent;
-            lhs.MpRegenPercent -= rhs.MpRegenPercent;
+            // lhs.MaxHp -= rhs.MaxHp;
+            // lhs.MaxMp -= rhs.MaxMp;
+            // lhs.HpRegen -= rhs.HpRegen;
+            // lhs.MpRegen -= rhs.MpRegen;
+            // lhs.ShieldRegen -= rhs.ShieldRegen;
+            // lhs.MShieldRegen -= rhs.MShieldRegen;
+            // lhs.PShield -= rhs.PShield;
+            // lhs.MpRegenPercent -= rhs.MpRegenPercent;
+            // lhs.HpRegenPercent -= rhs.HpRegenPercent;
+            // lhs.MpRegenPercent -= rhs.MpRegenPercent;
 
-            lhs.Armor -= rhs.Armor;
-            lhs.MArmor -= rhs.MArmor;
+            // lhs.Defense -= rhs.Defense;
+            // lhs.MArmor -= rhs.MArmor;
 
-            lhs.AttackRange -= rhs.AttackRange;
-            lhs.CastRange -= rhs.CastRange;
+            // lhs.AttackRange -= rhs.AttackRange;
+            // lhs.CastRange -= rhs.CastRange;
 
-            lhs.MovementSpeed -= rhs.MovementSpeed;
-            lhs.AttackSpeed -= rhs.AttackSpeed;
-            lhs.JumpSpeed -= rhs.JumpSpeed;
+            // lhs.MovementSpeed -= rhs.MovementSpeed;
+            // lhs.AttackSpeed -= rhs.AttackSpeed;
+            // lhs.JumpSpeed -= rhs.JumpSpeed;
             return lhs;
         }
 

@@ -1,5 +1,6 @@
 ﻿using Seyren.System.Abilities;
 using Seyren.System.Actions;
+using Seyren.System.Generics;
 using Seyren.System.Units;
 using Seyren.System.Units.Projectiles;
 using System;
@@ -7,9 +8,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Seyren.Example.Abilities
+namespace Seyren.Examples.Abilities
 {
-    public class AncientSlam : ActiveAbility, IAction
+    public class AncientSlam : ActiveAbility
     {
         public static readonly int Id = 0x65678301;
         private Sprite sprite;
@@ -20,53 +21,13 @@ namespace Seyren.Example.Abilities
         public ActionConditionHandler RunCondition { get; }
 
         public ActionType ActionType => ActionType.CastAbility;
-        public event ActionHandler ActionStart;
-        public event ActionHandler ActionEnd;
+
         private GameObject go;
         private bool actionRun;
 
-        public AncientSlam(Unit u) : base(u, 2, 10, 1)
+        public AncientSlam(Unit u) : base( 2, 10, 1)
         {
-            BaseCoolDown = 10;
-            BaseCastTime = 2;
-            controller = Resources.Load<RuntimeAnimatorController>(ancientEnergyPath);
-            hitList = new Dictionary<Unit, int>();
-
-            Casting += (sender, e) =>
-            {
-                Caster.Action.Animator.SetBool("Spell", true);
-            };
-
-            CastCompleted += (sender) =>
-            {
-                Caster.Action.Animator.SetBool("Spell", false);
-            };
-
-            ActionStart += (s) =>
-            {
-                actionRun = true;
-                Caster.Action.Animator.SetBool("Spell", true);
-            };
-
-            ActionEnd += (s) =>
-            {
-                actionRun = false;
-                Caster.Action.Animator.SetBool("Spell", false);
-            };
-
-            RunCondition = (action) =>
-            {
-                if (action.ActionType == ActionType.CastAbility)
-                {
-                    return false;
-                }
-                return true;
-            };
-
-            RunCondition += (action) =>
-            {
-                return false;
-            };
+         
         }
 
         public GameObject Create(Vector2 location, Quaternion rotation)
@@ -76,37 +37,37 @@ namespace Seyren.Example.Abilities
 
         public void Create()
         {
-            float angle = 180;
-            for (int loop = 0; loop < 7; loop++)
-            {
-                float rad = (angle * Mathf.Deg2Rad);
-                Vector2 location = Caster.transform.position;
-                location.y -= 1;
-                Quaternion rotation = Caster.transform.rotation;
-                Vector2 direction = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
+            // float angle = 180;
+            // for (int loop = 0; loop < 7; loop++)
+            // {
+            //     float rad = (angle * Mathf.Deg2Rad);
+            //     Vector2 location = Caster.transform.position;
+            //     location.y -= 1;
+            //     Quaternion rotation = Caster.transform.rotation;
+            //     Vector2 direction = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
 
-                MissileProjectile missile = MissileProjectile.Create("Ancient Slam - Energy",
-                    location,
-                    rotation,
-                    sprite,
-                    controller,
-                    10,
-                    2);
-                missile.HitCondition = HitCondition;
-                missile.BaseHitDelay = 0;
-                //missile.Collider.size = new Vector2(0.86f, 0.86f);
-                missile.Direction = direction;
-                missile.transform.localScale = new Vector3(3, 3, 1);
-                missile.MaxHit = 100000;
-                missile.Owner = Caster;
-                missile.OnHit += (sender, e) =>
-                {
-                    Unit u = e.GetComponent<Unit>();
-                    hitList.Add(u, 0);
-                    u.Damage(sender.Owner, System.Damages.DamageType.Physical);
-                };
-                angle = angle - 30;
-            }
+            //     MissileProjectile missile = MissileProjectile.Create("Ancient Slam - Energy",
+            //         location,
+            //         rotation,
+            //         sprite,
+            //         controller,
+            //         10,
+            //         2);
+            //     missile.HitCondition = HitCondition;
+            //     missile.BaseHitDelay = 0;
+            //     //missile.Collider.size = new Vector2(0.86f, 0.86f);
+            //     missile.Direction = direction;
+            //     missile.transform.localScale = new Vector3(3, 3, 1);
+            //     missile.MaxHit = 100000;
+            //     missile.Owner = Caster;
+            //     missile.OnHit += (sender, e) =>
+            //     {
+            //         Unit u = e.GetComponent<Unit>();
+            //         hitList.Add(u, 0);
+            //         u.Damage(sender.Owner, System.Damages.DamageType.Physical);
+            //     };
+            //     angle = angle - 30;
+            // }
         }
 
         private bool HitCondition(Projectile projectile, GameObject obj)
@@ -127,36 +88,39 @@ namespace Seyren.Example.Abilities
 
         protected override void DoCastAbility()
         {
-            Create();
-            if (actionRun)
-                Revoke();
+            throw new NotImplementedException();
         }
 
-        protected override bool Condition()
+        protected override void onCast(Unit by)
         {
-            return !(!Active ||
-                CooldownRemaining > 0 ||
-                IsCasting);
+            throw new NotImplementedException();
         }
 
-        public void Invoke()
+        protected override void onCast(Unit by, Unit target)
         {
-            bool cast = Cast();
-            if (cast)
-            {
-                ActionStart?.Invoke(this);
-            }
+            throw new NotImplementedException();
         }
 
-        public void Revoke()
+        protected override void onCast(Unit by, Vector3 target)
         {
-            ActionEnd?.Invoke(this);
-            Caster.StopCoroutine(castCoroutine);
+            // pick every unit in range then apply a function
+            throw new NotImplementedException();
         }
 
-        protected override bool UnlockCondition()
+
+        protected override Error Condition(Unit by)
         {
-            return true;
+            throw new NotImplementedException();
+        }
+
+        protected override Error Condition(Unit by, Unit target)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Error Condition(Unit by, Vector3 target)
+        {
+            throw new NotImplementedException();
         }
     }
 }

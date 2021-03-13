@@ -1,26 +1,27 @@
-﻿using Seyren.System.Abilities;
+using Seyren.System.Abilities;
 using Seyren.System.Units.Dummies;
 using Seyren.System.Units;
 using UnityEngine;
+using Seyren.System.Generics;
 
-namespace Seyren.Example.Abilities
+namespace Seyren.Examples.Abilities
 {
     public class DevotionAura : AuraAbility
     {
         public static readonly int Id = 0x68696501;
         private Dummy dummy;
-        public DevotionAura(Unit caster, float aoe, int level) : base(caster, aoe, level)
+        public DevotionAura(Unit caster, float aoe, int level) : base(aoe, level)
         {
-            GameObject go = Resources.Load<GameObject>("DevotionAura");
-            dummy = Dummy.Create<CircleCollider2D>(go);
-            dummy.Owner = Caster;
-            CircleCollider2D collider = dummy.Collider as CircleCollider2D;
-            collider.radius = AoE;
-            dummy.Collider.isTrigger = true;
-            dummy.Body.constraints = RigidbodyConstraints2D.FreezeAll;
+            // GameObject go = Resources.Load<GameObject>("DevotionAura");
+            // dummy = Dummy.Create<CircleCollider2D>(go);
+            // dummy.Owner = Caster;
+            // CircleCollider2D collider = dummy.Collider as CircleCollider2D;
+            // collider.radius = base.aoe;
+            // dummy.Collider.isTrigger = true;
+            // dummy.Body.constraints = RigidbodyConstraints2D.FreezeAll;
 
-            dummy.UnitIn += UnitInCallback;
-            dummy.UnitOut += UnitOutCallback;
+            // dummy.UnitIn += UnitInCallback;
+            // dummy.UnitOut += UnitOutCallback;
         }
 
         protected override void AuraInterval()
@@ -28,29 +29,37 @@ namespace Seyren.Example.Abilities
     
         }
 
-        protected override bool Condition()
+        protected override Error Condition(Unit by)
         {
-            return true;
+            throw new global::System.NotImplementedException();
         }
 
-        protected override bool UnlockCondition()
+        protected override Error Condition(Unit by, Unit target)
         {
-            return true;
+            throw new global::System.NotImplementedException();
         }
 
-        private void DummyCondition(Dummy dummy, ConditionEventArgs<Unit> e)
+        protected override Error Condition(Unit by, Vector3 target)
         {
-            e.Match = e.Object.IsEnemy(Caster);
+            throw new global::System.NotImplementedException();
         }
 
-        private void UnitInCallback(Dummy sender, Unit triggerUnit)
+        protected override void onCast(Unit by)
         {
-            triggerUnit.Attribute.Armor += 3;
+            throw new global::System.NotImplementedException();
         }
 
-        private void UnitOutCallback(Dummy sender, Unit triggerUnit)
+        protected override void onCast(Unit by, Unit target)
         {
-            triggerUnit.Attribute.Armor -= 3;
+            throw new global::System.NotImplementedException();
         }
+
+        protected override void onCast(Unit by, Vector3 target)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+
+
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Seyren.System.Generics;
 
 namespace Seyren.System.Actions
 {
@@ -16,13 +17,14 @@ namespace Seyren.System.Actions
 
         public ActionType ActionType { get; }
 
-        public event ActionHandler ActionStart;
-        public event ActionHandler ActionEnd;
 
         public FreeAction()
         {
             ActionType = ActionType.None;
         }
+
+        public event GameEventHandler<IAction> ActionStart;
+        public event GameEventHandler<IAction> ActionEnd;
 
         public void Invoke()
         {
@@ -32,6 +34,16 @@ namespace Seyren.System.Actions
         public void Revoke()
         {
             ActionEnd?.Invoke(this);
+        }
+
+        public bool Break()
+        {
+            return true;
+        }
+
+        public void Constraint(IAction action)
+        {
+            throw new NotImplementedException();
         }
     }
 }

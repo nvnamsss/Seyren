@@ -1,8 +1,9 @@
 using Seyren.System.Abilities;
+using Seyren.System.Generics;
 using Seyren.System.Units;
 using UnityEngine;
 
-namespace Seyren.Example.Abilities
+namespace Seyren.Examples.Abilities
 {
     public class DoubleJump : InstantAbility
     {
@@ -10,29 +11,46 @@ namespace Seyren.Example.Abilities
         public Unit unit;
         public GameObject Effect;
         private static string cyclonePath = "Effect/Cyclone/Cyclone_Effect";
-        public DoubleJump(Unit u) : base(u, 1.0f, 1)
+        public DoubleJump(Unit u) : base(1.0f, 1)
         {
             Effect = Resources.Load<GameObject>(cyclonePath);
             unit = u;
-            BaseCoolDown = 1.0f;
+            Cooldown = 1.0f;
+        }
+
+        protected override void onCast(Unit by)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        protected override void onCast(Unit by, Unit target)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        protected override void onCast(Unit by, Vector3 target)
+        {
+            throw new global::System.NotImplementedException();
         }
 
         protected override void DoCastAbility()
         {
-            Vector2 force = new Vector2(0, 0.8f * unit.Attribute.JumpSpeed);
-            unit.Body.AddForce(force, ForceMode2D.Impulse);
-            GameObject effect = Object.Instantiate(Effect, unit.transform.position, unit.transform.rotation);
-            Object.Destroy(effect, 0.5f);
+            throw new global::System.NotImplementedException();
         }
 
-        protected override bool Condition()
+        protected override Error Condition(Unit by)
         {
-            return CooldownRemaining > 0;
+            throw new global::System.NotImplementedException();
         }
 
-        protected override bool UnlockCondition()
+        protected override Error Condition(Unit by, Unit target)
         {
-            return true;
+            throw new global::System.NotImplementedException();
+        }
+
+        protected override Error Condition(Unit by, Vector3 target)
+        {
+            throw new global::System.NotImplementedException();
         }
     }
 }

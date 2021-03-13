@@ -1,4 +1,4 @@
-﻿using Seyren.Example.DamageModification;
+﻿using Seyren.Examples.DamageModification;
 using Seyren.System.Terrains;
 using Seyren.System.Abilities;
 using Seyren.System.Actions;
@@ -34,18 +34,10 @@ namespace Seyren.System.Units
         Invulnerable,
         SpellImmunity,
     }
-    public partial class Unit : MonoBehaviour, IObject, IAttribute
+    public partial class Unit : IObject, IAttribute
     {
-        [Obsolete("DyingHandler is currenly deprecated, use EventHandler<TSender, TEvent> instead")]
-        public delegate void DyingHandler(Unit sender, UnitDyingEventArgs e);
-        [Obsolete("DyingHandler is currenly deprecated, use EventHandler<TSender, TEvent> instead")]
-        public delegate void DiedHandler(Unit sender, UnitDiedEventArgs e);
-        [Obsolete("DyingHandler is currenly deprecated, use EventHandler<TSender, TEvent> instead")]
-        public delegate void TakeDamageHandler(Unit sender, TakeDamageEventArgs e);
-        [Obsolete("DyingHandler is currenly deprecated, use EventHandler<TSender, TEvent> instead")]
-        public delegate void StateChangedHandler(Unit sender, StateChangeEventArgs e);
-        [Obsolete("DyingHandler is currenly deprecated, use EventHandler<TSender, TEvent> instead")]
-        public delegate void StatusChangedHandler(Unit sender, StatusChangedEventArgs e);
+        public event GameEventHandler<Unit, UnitMovedEventArgs> Moved; 
+        public event GameEventHandler<Unit, UnitRotatedEventArgs> Rotated;
         /// <summary>
         /// Determine unit state like Hp, Mp, Shield is changing
         /// </summary>
@@ -67,6 +59,9 @@ namespace Seyren.System.Units
         /// </summary>
         public event GameEventHandler<Unit, Unit> Killing;
         public Player Player { get; set; }
+        public Vector3 position;
+        public Quaternion rotation;
+        public string name;
         public int CustomValue { get; set; }
         public bool Targetable { get; set; }
         public bool Invulnerable { get; set; }
@@ -79,8 +74,8 @@ namespace Seyren.System.Units
         public ModificationInfos Modification { get; set; }
         public IAttachable Attach { get; set; }
         public Dictionary<string, Sprite> Sprites { get; set; }
-        public AbilityCollection Ability { get; set; }
-        public Dictionary<int, Ability> Abilites { get; set; }
+        // public AbilityCollection Ability { get; set; }
+        // public Dictionary<int, Ability> Abilites { get; set; }
         public List<Ability> a;
         public Attribute Attribute
         {
@@ -93,20 +88,7 @@ namespace Seyren.System.Units
                 _attribute = value;
             }
         }
-        public Attribute BaseAttribute
-        {
-            get
-            {
-                return _baseAttribute;
-            }
-            set
-            {
-                _baseAttribute = Attribute;
-            }
-        }
-        public Actions.Action Action { get; set; }
-
-
+  
         public GroundType StandOn;
         public Vector2 Forward
         {
@@ -243,8 +225,7 @@ namespace Seyren.System.Units
                 _jumpTimes = value;
             }
         }
-        public Rigidbody2D Body;
-        public Collider2D Collider;
+
         public bool Active;
         public float TimeScale;
         [SerializeField]

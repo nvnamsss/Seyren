@@ -1,23 +1,23 @@
 ﻿using UnityEngine;
 
-namespace Seyren.System.Items
-{
-    public class Weapon : Item
-    {
-        void OnAwake(){
-            this.itemType = ItemType.Weapon;
-        }
+// namespace Seyren.System.Items
+// {
+//     public class Weapon : Item
+//     {
+//         void OnAwake(){
+//             this.itemType = ItemType.Weapon;
+//         }
 
-        public WeaponType weaponType;
+//         public WeaponType weaponType;
 
-        public override void Use(){
-            EquipmentManager.instance.Equip(this);
-            RemoveFromInventory(this);
-        }
-    }
+//         public override void Use(){
+//             EquipmentManager.instance.Equip(this);
+//             RemoveFromInventory(this);
+//         }
+//     }
 
-    public enum WeaponType{
-        Sword,
-        Spear
-    }
-}
+//     public enum WeaponType{
+//         Sword,
+//         Spear
+//     }
+// }

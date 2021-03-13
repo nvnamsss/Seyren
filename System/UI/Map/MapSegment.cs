@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Seyren.System.UISystem.Map
+namespace Seyren.System.UI
 {
     public class MapSegment:MonoBehaviour      
     {

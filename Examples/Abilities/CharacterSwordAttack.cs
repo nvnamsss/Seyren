@@ -4,8 +4,9 @@ using Seyren.System.Units;
 using System;
 using System.Collections;
 using UnityEngine;
+using Seyren.System.Generics;
 
-namespace Seyren.Example.Abilities
+namespace Seyren.Examples.Abilities
 {
     public class CharacterSwordAttack : ActiveAbility
     {
@@ -13,21 +14,9 @@ namespace Seyren.Example.Abilities
         public Unit unit;
         private Sprite sprite;
         private RuntimeAnimatorController controller;
-        public CharacterSwordAttack(Unit u) : base(u, 0.25f, 10 / u.Attribute.AttackSpeed, 1)
+        public CharacterSwordAttack(Unit u) : base( 0.25f, 10 / u.Attribute.AttackSpeed.Total, 1)
         {
-            unit = u;
-            BaseCoolDown = 10 / unit.Attribute.AttackSpeed;
-            BaseCastTime = 0.25f;
 
-            Casting += (sender, e) =>
-            {
-
-            };
-
-            CastCompleted += (sender) =>
-            {
-
-            };
         }
         public GameObject Create(Vector2 location, Quaternion rotation)
         {
@@ -47,7 +36,6 @@ namespace Seyren.Example.Abilities
                 if (u != null && unit.IsEnemy(u))
                 {
                     Debug.Log("Damage");
-                    u.Damage(missile.Owner, System.Damages.DamageType.Physical);
                 }
                 else
                 {
@@ -58,32 +46,71 @@ namespace Seyren.Example.Abilities
             return missile.gameObject;
         }
 
-
-
-        protected override void DoCastAbility()
+        public override bool Equals(object obj)
         {
-            //unit.Action.Animator.SetTrigger("end-atk1");
-            Vector2 location = unit.transform.position;
-            Quaternion rotation = unit.transform.rotation;
-
-            location = location + (Vector2)(rotation * Vector2.left * 2);
-            Create(location, rotation);
-            unit.Action.Type = System.Actions.ActionType.None;
-            CooldownRemaining = BaseCoolDown;
+            return base.Equals(obj);
         }
 
-        protected override bool Condition()
+        public override int GetHashCode()
         {
-            return !Active ||
-                CooldownRemaining > 0 ||
-                IsCasting ||
-                unit.Action.Type == System.Actions.ActionType.CastAbility ||
-                unit.Action.Type == System.Actions.ActionType.Attack;
+            return base.GetHashCode();
         }
 
-        protected override bool UnlockCondition()
+        public override string ToString()
+        {
+            return base.ToString();
+        }
+
+        protected override Error Condition(Unit by)
         {
             throw new NotImplementedException();
         }
+
+        protected override Error Condition(Unit by, Unit target)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Error Condition(Unit by, Vector3 target)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void DoCastAbility()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void onCast(Unit by)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void onCast(Unit by, Unit target)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void onCast(Unit by, Vector3 target)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+        // protected override void DoCastAbility()
+        // {
+        //     //unit.Action.Animator.SetTrigger("end-atk1");
+        //     Vector2 location = unit.transform.position;
+        //     Quaternion rotation = unit.transform.rotation;
+
+        //     location = location + (Vector2)(rotation * Vector2.left * 2);
+        //     Create(location, rotation);
+        //     unit.Action.Type = System.Actions.ActionType.None;
+        //     CooldownRemaining = Cooldown;
+        // }
+
+
+
     }
 }
