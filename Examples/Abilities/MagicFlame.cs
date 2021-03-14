@@ -17,7 +17,6 @@ namespace Seyren.Examples.Abilities
         private GameObject go;
         public ActionConditionHandler RunCondition { get; }
 
-        public ActionType ActionType { get; }
 
         public MagicFlame(Unit u) : base( 0.2f, 1, 1)
         {
@@ -80,6 +79,26 @@ namespace Seyren.Examples.Abilities
         }
 
         protected override Error Condition(Unit by, Vector3 target)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public override long CastTime(Unit unit)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public override IAction Action(Unit by)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public override IAction Action(Unit by, Unit target)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public override IAction Action(Unit by, Vector3 target)
         {
             throw new global::System.NotImplementedException();
         }

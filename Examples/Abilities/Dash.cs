@@ -13,11 +13,9 @@ namespace Seyren.Examples.Abilities
         public static readonly int Id = 0x68658301;
         public ActionConditionHandler RunCondition { get; }
 
-        public ActionType ActionType { get; }
 
         public Dash(Unit u) : base(1, 1)
         {
-            ActionType = ActionType.Dash;
             RunCondition += (s) =>
             {
                 return true;
@@ -83,6 +81,26 @@ namespace Seyren.Examples.Abilities
         }
 
         protected override Error Condition(Unit by, Vector3 target)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public override long CastTime(Unit unit)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public override IAction Action(Unit by)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public override IAction Action(Unit by, Unit target)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public override IAction Action(Unit by, Vector3 target)
         {
             throw new global::System.NotImplementedException();
         }

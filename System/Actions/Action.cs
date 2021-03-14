@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,42 +7,38 @@ using Seyren.System.Generics;
 
 namespace Seyren.System.Actions
 {
-    public class ActionPipeline : IAction
+    public class Action : IAction
     {
+        IThing thing;
+        public Action() {
+
+        }
+
         public ActionConditionHandler RunCondition => throw new NotImplementedException();
 
         public event GameEventHandler<IAction> ActionStart;
         public event GameEventHandler<IAction> ActionEnd;
 
-        IEnumerable<IThing> things;
-        bool broke;
-        public ActionPipeline(IEnumerable<IThing> things) {
-            this.things = things;
-        }
-
         public bool Break()
         {
-            broke = true;
-            return broke;
+            throw new NotImplementedException();
         }
 
         public bool Constraint(IAction action)
         {
-            return false;
+            throw new NotImplementedException();
         }
 
         public IEnumerable<IThing> Do(params object[] obj)
         {
-            foreach (IThing thing in things)
-            {
-                if (!broke) break;
-                yield return thing;
-            }
+            yield return thing;
         }
 
         public void Invoke()
         {
             throw new NotImplementedException();
         }
+
+        
     }
 }

@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Seyren.System.Actions;
+using System.Threading.Tasks;
+using Seyren.System.Units;
+using System.Threading;
 
 namespace Seyren.Examples.Actions
 {
@@ -29,67 +32,79 @@ namespace Seyren.Examples.Actions
         {
         }
 
-        public Work DoAction(Do action) {
+        public void DoAction(IAction action, params object[] obj) {
+            // check for the constraint
+            if (CurrentAction.Constraint(action)) return;
+
             // do the action
-            delayAction.Invoke();
-
-            // do the animation
-            animator.Play("attack", 0);
-
-            // do the real work
-            action.Invoke();
-
-            Work work = new Work();
-            work.animator = animator;
-            work.action = this;
-
-            return work;
-        }
-
-
-        public Work Channel(Do action) {
-            return null;
-        }
-
-        public void Play(IAction action)
-        {
-            bool run = action.RunCondition(_currentAction);
-            if (run)
+            _currentAction = action;
+            foreach (IThing thing in action.Do(obj))
             {
-                action.ActionEnd += ActionCompleteCallback;
-                action.ActionStart += ActionStartCallback;
-                action.Invoke();
+                thing.Do(obj);                
             }
         }
 
-        private void ActionStartCallback(IAction s)
-        {
-            _currentAction = s;
-            s.ActionStart -= ActionStartCallback;
+    }
+
+    public class DelayThing : IThing
+    {
+        int delay;
+
+        public DelayThing(int delay) {
+            this.delay = delay;
         }
 
-        private void ActionCompleteCallback(IAction s)
-        {
-            _currentAction = Free;
-            s.ActionEnd -= ActionCompleteCallback;
-        }
-        //public void Queue(IAction action)
-        //{
-        //    _queue.Enqueue(action);
-        //    enabled = true;
-        //}
 
-        //public IAction Dequeue()
-        //{
-        //    if (_queue.Count > 0)
-        //    {
-        //        return _queue.Dequeue();
-        //    }
-        //    else
-        //    {
-        //        enabled = false;
-        //        return Free;
-        //    }
-        //}
+        public async void Do(params object[] obj)
+        {
+            await Task.Delay(delay);
+        }
+    }
+
+    public class AnimationThing : IThing
+    {
+        string name;
+        private Animator animator;
+        public AnimationThing(string name) {
+            this.name = name;
+        }
+
+        public void Do(params object[] obj)
+        {
+            Action a = (obj[0] as Action);
+            a.animator.Play(name);
+        }
+    }
+
+    public class DoThing : IThing
+    {
+        public delegate void ThingToDo();
+        ThingToDo action;
+
+        public DoThing(ThingToDo action) {
+            this.action = action;
+        }
+
+        public void Do(params object[] obj)
+        {
+            action();
+        }
+    }
+
+    
+    public class OrderMovingThing : IThing
+    {
+        Unit unit;
+        Unit target;
+
+        public OrderMovingThing(Unit unit, Unit target) {
+            this.unit = unit;
+            this.target = target;
+        }
+
+        public void Do(params object[] obj)
+        {
+            // order a unit to reach a target in range
+        }
     }
 }

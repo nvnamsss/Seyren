@@ -1,4 +1,5 @@
-﻿using Seyren.System.Abilities;
+﻿using Seyren.Examples.Actions;
+using Seyren.System.Abilities;
 using Seyren.System.Actions;
 using Seyren.System.Generics;
 using Seyren.System.Units;
@@ -20,14 +21,15 @@ namespace Seyren.Examples.Abilities
 
         public ActionConditionHandler RunCondition { get; }
 
-        public ActionType ActionType => ActionType.CastAbility;
-
         private GameObject go;
         private bool actionRun;
 
-        public AncientSlam(Unit u) : base( 2, 10, 1)
+        public event GameEventHandler<IAction> ActionStart;
+        public event GameEventHandler<IAction> ActionEnd;
+
+        public AncientSlam(Unit u) : base(2, 10, 1)
         {
-         
+
         }
 
         public GameObject Create(Vector2 location, Quaternion rotation)
@@ -119,6 +121,32 @@ namespace Seyren.Examples.Abilities
         }
 
         protected override Error Condition(Unit by, Vector3 target)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override long CastTime(Unit unit)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IAction Action(Unit by)
+        {
+            return new ActionPipeline(new IThing[] {
+                new AnimationThing("cast phase 1"),
+                new DelayThing(100),
+                new AnimationThing("cast phase 2"),
+                new DelayThing(200),
+                new AnimationThing("release"),
+            });
+        }
+
+        public override IAction Action(Unit by, Unit target)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IAction Action(Unit by, Vector3 target)
         {
             throw new NotImplementedException();
         }

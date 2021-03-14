@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Seyren.System.Actions;
 using Seyren.System.Generics;
 
-namespace Seyren.System.Actions
+namespace Seyren.Examples.Actions
 {
     /// <summary>
     /// An action to free an unit,
@@ -41,7 +42,12 @@ namespace Seyren.System.Actions
             return true;
         }
 
-        public void Constraint(IAction action)
+        public bool Constraint(IAction action)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IThing> Do(params object[] obj)
         {
             throw new NotImplementedException();
         }

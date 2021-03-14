@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Seyren.System.Generics;
+using Seyren.System.Actions;
 
 namespace Seyren.Examples.Abilities
 {
@@ -19,6 +20,26 @@ namespace Seyren.Examples.Abilities
 
         public AndrasAttack(float castTime, float cooldown, int level) : base(castTime, cooldown, level)
         {
+        }
+
+        public override IAction Action(Unit by)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IAction Action(Unit by, Unit target)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IAction Action(Unit by, Vector3 target)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override long CastTime(Unit unit)
+        {
+            throw new NotImplementedException();
         }
 
         public override bool Equals(object obj)

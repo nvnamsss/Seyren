@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Seyren.System.Generics;
+using Seyren.System.Actions;
 
 namespace Seyren.Examples.Abilities
 {
@@ -16,6 +17,26 @@ namespace Seyren.Examples.Abilities
         private Dummy shield;
         public IceShield(Unit caster) : base()
         {
+        }
+
+        public override IAction Action(Unit by)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IAction Action(Unit by, Unit target)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IAction Action(Unit by, Vector3 target)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override long CastTime(Unit unit)
+        {
+            throw new NotImplementedException();
         }
 
         protected override Error Condition(Unit by)

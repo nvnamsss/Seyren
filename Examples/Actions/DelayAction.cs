@@ -1,9 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
+using Seyren.System.Actions;
 using Seyren.System.Generics;
 
-namespace Seyren.System.Actions
+namespace Seyren.Examples.Actions
 {
+    public enum DelayState {
+        Delay,
+        Done,
+        Broken
+    }
+
     public class DelayAction : IAction
     {
         public ActionConditionHandler RunCondition => throw new global::System.NotImplementedException();
@@ -13,9 +21,13 @@ namespace Seyren.System.Actions
         public event GameEventHandler<IAction> ActionStart;
         public event GameEventHandler<IAction> ActionEnd;
         private ManualResetEvent sync;
+        public DelayState State => state;
+
         public long delay;
         public bool breakable;
         private long delayTo;
+        private DelayState state;
+
         public DelayAction(long delay, bool breakable) {
             this.breakable = breakable;
         }
@@ -24,8 +36,14 @@ namespace Seyren.System.Actions
         {
             if (!breakable) return false;
 
+            state = DelayState.Broken;
             delayTo = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             return true;
+        }
+
+        public void Invoke(long delay) {
+            this.delay = delay;
+            Invoke();
         }
 
         public void Invoke()
@@ -34,18 +52,26 @@ namespace Seyren.System.Actions
                 return;
             }
 
+            state = DelayState.Delay;
+
             delayTo = DateTimeOffset.Now.ToUnixTimeMilliseconds() + 10;
             sync.Set();
             // spin here
             while (true) {
                 if (delayTo >= DateTimeOffset.Now.ToUnixTimeMilliseconds()) {
+                    state = DelayState.Done;
                     break;
                 }
             }
 
             sync.Reset();
         }
-        public void Constraint(IAction action)
+        public bool Constraint(IAction action)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IThing> Do(params object[] obj)
         {
             throw new NotImplementedException();
         }

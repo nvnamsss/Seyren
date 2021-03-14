@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Seyren.System.Abilities;
+using Seyren.System.Actions;
+using Seyren.System.Generics;
 using Seyren.System.Terrains;
 using Seyren.System.Units;
 using UnityEngine;
@@ -21,35 +23,45 @@ namespace Seyren.Examples.Actions
         {
             unit = new Unit();
             unit.Attribute.MovementSpeed = new BaseFloat(1, 0);
-            unit.Moved += (u, e) => {
+            unit.Moved += (u, e) =>
+            {
                 transform.position = e.NewPosition;
             };
         }
 
         public void Cast(Ability ability)
         {
-            if (ability.CooldownRemaining > 0) return;
-            action.DoAction(() => {
-                ability.Cast(unit);
-                Debug.Log("Cast");
-            });
+            Error err = ability.CanCast(unit);
+            if (err != null) return;
+
+            // if (ability.CooldownRemaining > 0) return;
+            IAction a = ability.Action(unit);
+            
+            action.DoAction(a);
+
+            // action.DoAction(() =>
+            // {
+            //     ability.Cast(unit);
+            //     Debug.Log("Cast");
+            // }, ability.CastTime(unit)); // cast time
         }
 
         public void Attack()
         {
             long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            if (lastAttack < now) return;
-
+            if (lastAttack > now)
+            {
+                Debug.Log("attack is cooldown");
+                return;
+            }
+            // attack
             lastAttack = now;
-            action.DoAction(() => {
-                // cast attack ability
-                Debug.Log("Attack");
-            });
         }
 
         private void FixedUpdate()
         {
-            StartCoroutine(MoveTo(Vector3.right, 10, Time.deltaTime));
+            // StartCoroutine(MoveTo(Vector3.right, 10, Time.deltaTime));
+            Attack();
         }
 
         private void Update()
@@ -73,8 +85,9 @@ namespace Seyren.Examples.Actions
                 unit.Move(to);
             }
         }
-        
-        private IEnumerator Rotate(Quaternion quaternion, int tick, float delay) {
+
+        private IEnumerator Rotate(Quaternion quaternion, int tick, float delay)
+        {
             WaitForSeconds wait = new WaitForSeconds(delay);
             while (tick > 0)
             {
@@ -82,7 +95,7 @@ namespace Seyren.Examples.Actions
                 tick -= 1;
             }
         }
-        
+
         public void cancelWork()
         {
             for (int loop = 0; loop < works.Count; loop++)

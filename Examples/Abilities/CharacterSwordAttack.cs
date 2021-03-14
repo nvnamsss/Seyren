@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using Seyren.System.Generics;
+using Seyren.System.Actions;
 
 namespace Seyren.Examples.Abilities
 {
@@ -18,6 +19,27 @@ namespace Seyren.Examples.Abilities
         {
 
         }
+
+        public override IAction Action(Unit by)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IAction Action(Unit by, Unit target)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IAction Action(Unit by, Vector3 target)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override long CastTime(Unit unit)
+        {
+            return 0;
+        }
+
         public GameObject Create(Vector2 location, Quaternion rotation)
         {
             MissileProjectile missile = MissileProjectile.Create("CharacterSwordAttack",
@@ -78,21 +100,25 @@ namespace Seyren.Examples.Abilities
 
         protected override void DoCastAbility()
         {
+            Debug.Log("Character sword attack");
             throw new NotImplementedException();
         }
 
         protected override void onCast(Unit by)
         {
+            Debug.Log("Character sword attack");
             throw new NotImplementedException();
         }
 
         protected override void onCast(Unit by, Unit target)
         {
+            Debug.Log("Character sword attack");
             throw new NotImplementedException();
         }
 
         protected override void onCast(Unit by, Vector3 target)
         {
+            Debug.Log("Character sword attack");
             throw new NotImplementedException();
         }
 

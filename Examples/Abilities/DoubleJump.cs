@@ -1,4 +1,5 @@
 using Seyren.System.Abilities;
+using Seyren.System.Actions;
 using Seyren.System.Generics;
 using Seyren.System.Units;
 using UnityEngine;
@@ -49,6 +50,26 @@ namespace Seyren.Examples.Abilities
         }
 
         protected override Error Condition(Unit by, Vector3 target)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public override long CastTime(Unit unit)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public override IAction Action(Unit by)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public override IAction Action(Unit by, Unit target)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public override IAction Action(Unit by, Vector3 target)
         {
             throw new global::System.NotImplementedException();
         }

@@ -60,6 +60,8 @@ namespace Seyren.System.Abilities
             _level = level;
         }
 
+        public abstract long CastTime(Unit unit);
+
         public Error Cast(Unit by)
         {
             if (CooldownRemaining > 0) return CooldownError;
@@ -83,6 +85,18 @@ namespace Seyren.System.Abilities
             return null;
         }
 
+        public Error CanCast(Unit by) {
+            return Condition(by);
+        }
+
+        public Error CanCast(Unit unit, Unit target) {
+            return Condition(unit ,target);
+        }
+
+        public Error CanCast(Unit by, Vector3 target) {
+            return Condition(by, target);
+        }
+
         public Error Cast(Unit by, Vector3 location)
         {
             if (CooldownRemaining > 0) return CooldownError;
@@ -95,6 +109,10 @@ namespace Seyren.System.Abilities
             return null;
         }
 
+        public abstract IAction Action(Unit by);
+        public abstract IAction Action(Unit by, Unit target);
+        public abstract IAction Action(Unit by, Vector3 target);
+        
         protected abstract void onCast(Unit by);
         protected abstract void onCast(Unit by, Unit target);
         protected abstract void onCast(Unit by, Vector3 target);

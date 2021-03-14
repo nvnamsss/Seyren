@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Seyren.System.Actions
+namespace Seyren.Examples.Actions
 {
     [Flags]
     public enum ActionType

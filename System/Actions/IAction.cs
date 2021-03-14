@@ -21,15 +21,15 @@ namespace Seyren.System.Actions
         /// Condition to play action
         /// </summary>
         ActionConditionHandler RunCondition { get; }
-        ActionType ActionType { get; }
         /// <summary>
         /// Start action
         /// </summary>
-        void Invoke();
-        /// <summary>
-        /// End action
-        /// </summary>
+        IEnumerable<IThing> Do(params object[] obj);
         bool Break();
-        void Constraint(IAction action);
+        bool Constraint(IAction action);
+    }
+
+    public interface IThing {
+        void Do(params object[] obj);
     }
 }

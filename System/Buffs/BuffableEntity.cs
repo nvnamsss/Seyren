@@ -3,7 +3,6 @@ using Seyren.System.Actions;
 using System.Collections.Generic;
 using UnityEngine;
 using Seyren.System.Buffs.ScriptableObject;
-using Seyren.System.Actions.BreakAtion;
 
 namespace Seyren.System.Buffs
 {

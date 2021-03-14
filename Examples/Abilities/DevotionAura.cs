@@ -3,6 +3,7 @@ using Seyren.System.Units.Dummies;
 using Seyren.System.Units;
 using UnityEngine;
 using Seyren.System.Generics;
+using Seyren.System.Actions;
 
 namespace Seyren.Examples.Abilities
 {
@@ -22,6 +23,26 @@ namespace Seyren.Examples.Abilities
 
             // dummy.UnitIn += UnitInCallback;
             // dummy.UnitOut += UnitOutCallback;
+        }
+
+        public override IAction Action(Unit by)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public override IAction Action(Unit by, Unit target)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public override IAction Action(Unit by, Vector3 target)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public override long CastTime(Unit unit)
+        {
+            throw new global::System.NotImplementedException();
         }
 
         protected override void AuraInterval()
