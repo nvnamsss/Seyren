@@ -85,7 +85,7 @@ namespace Seyren.Examples.Abilities
                 return false;
             }
 
-            return projectile.Owner.IsEnemy(u);
+            return Unit.IsEnemy(projectile.Owner, u);
         }
 
         protected override void DoCastAbility()

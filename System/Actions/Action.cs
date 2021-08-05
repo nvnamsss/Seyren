@@ -24,7 +24,7 @@ namespace Seyren.System.Actions
             throw new NotImplementedException();
         }
 
-        public bool Constraint(IAction action)
+        public Error Constraint(IAction action)
         {
             throw new NotImplementedException();
         }

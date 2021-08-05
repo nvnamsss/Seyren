@@ -26,7 +26,7 @@ namespace Seyren.System.Actions
         /// </summary>
         IEnumerable<IThing> Do(params object[] obj);
         bool Break();
-        bool Constraint(IAction action);
+        Error Constraint(IAction action);
     }
 
     public interface IThing {

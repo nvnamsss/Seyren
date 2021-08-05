@@ -17,7 +17,7 @@ namespace Seyren.System.Units.Dummies
     /// </summary>
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(Rigidbody2D))]
-    public partial class Dummy : MonoBehaviour, IAttribute, IObject
+    public partial class Dummy : MonoBehaviour, IAttribute, IUnit
     {
         Dummy()
         {

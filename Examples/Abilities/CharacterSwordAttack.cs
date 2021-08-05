@@ -6,6 +6,7 @@ using System.Collections;
 using UnityEngine;
 using Seyren.System.Generics;
 using Seyren.System.Actions;
+using Seyren.Examples.Actions;
 
 namespace Seyren.Examples.Abilities
 {
@@ -14,7 +15,6 @@ namespace Seyren.Examples.Abilities
         public static readonly int Id = 0x67658401;
         public Unit unit;
         private Sprite sprite;
-        private RuntimeAnimatorController controller;
         public CharacterSwordAttack(Unit u) : base( 0.25f, 10 / u.Attribute.AttackSpeed.Total, 1)
         {
 
@@ -32,7 +32,13 @@ namespace Seyren.Examples.Abilities
 
         public override IAction Action(Unit by, Vector3 target)
         {
-            throw new NotImplementedException();
+            return new ActionPipeline(new IThing[] {
+                new AnimationThing("attack"),
+                new DelayThing(10),
+                new DoThing(() => {
+                    Cast(by, target);        
+                })
+            });
         }
 
         public override long CastTime(Unit unit)
@@ -42,30 +48,30 @@ namespace Seyren.Examples.Abilities
 
         public GameObject Create(Vector2 location, Quaternion rotation)
         {
-            MissileProjectile missile = MissileProjectile.Create("CharacterSwordAttack",
-                location,
-                rotation,
-                sprite,
-                controller,
-                0,
-                0.4f);
-            //missile.Collider.size = new Vector2(2.4f, 2.4f);
-            missile.MaxHit = 10000000;
-            missile.Owner = unit;
-            missile.OnHit += (sender, e) =>
-            {
-                Unit u = e.GetComponent<Unit>();
-                if (u != null && unit.IsEnemy(u))
-                {
-                    Debug.Log("Damage");
-                }
-                else
-                {
-                    Debug.Log("Cannot damage");
-                }
-            };
+            return null;
+            // MissileProjectile missile = MissileProjectile.Create("CharacterSwordAttack",
+            //     location,
+            //     rotation,
+            //     sprite,
+            //     0,
+            //     0.4f);
+            // //missile.Collider.size = new Vector2(2.4f, 2.4f);
+            // missile.MaxHit = 10000000;
+            // missile.Owner = unit;
+            // missile.OnHit += (sender, e) =>
+            // {
+            //     Unit u = e.GetComponent<Unit>();
+            //     if (u != null && unit.IsEnemy(u))
+            //     {
+            //         Debug.Log("Damage");
+            //     }
+            //     else
+            //     {
+            //         Debug.Log("Cannot damage");
+            //     }
+            // };
 
-            return missile.gameObject;
+            // return missile.gameObject;
         }
 
         public override bool Equals(object obj)

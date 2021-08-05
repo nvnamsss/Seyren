@@ -4,6 +4,7 @@ using Seyren.System.Actions;
 using System.Threading.Tasks;
 using Seyren.System.Units;
 using System.Threading;
+using Seyren.System.Generics;
 
 namespace Seyren.Examples.Actions
 {
@@ -12,12 +13,10 @@ namespace Seyren.Examples.Actions
     {
         public delegate void Do();
         public static readonly IAction Free = new FreeAction();
-        public ActionType Type { get; set; }
         public IAction CurrentAction => _currentAction;
         public Animator animator;
-        private DelayAction delayAction;
-        private Queue<IAction> _queue;
         private volatile IAction _currentAction;
+        private Unit unit;
         Action()
         {
             _currentAction = Free;
@@ -25,23 +24,25 @@ namespace Seyren.Examples.Actions
         private void Awake()
         {
             animator = GetComponent<Animator>();
-            _queue = new Queue<IAction>();
         }
 
         private void FixedUpdate()
         {
         }
 
-        public void DoAction(IAction action, params object[] obj) {
+        public Error DoAction(IAction action, params object[] obj) {
             // check for the constraint
-            if (CurrentAction.Constraint(action)) return;
+            Error error = CurrentAction.Constraint(action);
+            if (error != null) return error;
 
-            // do the action
+            // do the actionq
             _currentAction = action;
             foreach (IThing thing in action.Do(obj))
             {
                 thing.Do(obj);                
             }
+
+            return null;
         }
 
     }

@@ -26,9 +26,9 @@ namespace Seyren.System.Actions
             return broke;
         }
 
-        public bool Constraint(IAction action)
+        public Error Constraint(IAction action)
         {
-            return false;
+            return null;
         }
 
         public IEnumerable<IThing> Do(params object[] obj)

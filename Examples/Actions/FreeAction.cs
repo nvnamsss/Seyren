@@ -42,7 +42,7 @@ namespace Seyren.Examples.Actions
             return true;
         }
 
-        public bool Constraint(IAction action)
+        public Error Constraint(IAction action)
         {
             throw new NotImplementedException();
         }

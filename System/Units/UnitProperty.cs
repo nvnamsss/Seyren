@@ -15,7 +15,7 @@ using Seyren.System.Generics;
 
 namespace Seyren.System.Units
 {
-    public enum UnitState
+    public enum StateValue
     {
         Hp,
         Mp,
@@ -28,13 +28,20 @@ namespace Seyren.System.Units
     public enum UnitStatus
     {
         None,
+        Moving,
         Slow,
         Knockback,
         Stun,
+        Freeze,
+        Burning,
+        Shocked,
+        Poisoned,
+        Stonerize,
+        Silence,
         Invulnerable,
         SpellImmunity,
     }
-    public partial class Unit : IObject, IAttribute
+    public partial class Unit : IUnit, IAttribute
     {
         public event GameEventHandler<Unit, UnitMovedEventArgs> Moved; 
         public event GameEventHandler<Unit, UnitRotatedEventArgs> Rotated;
@@ -58,18 +65,17 @@ namespace Seyren.System.Units
         /// Determine unit killing another one
         /// </summary>
         public event GameEventHandler<Unit, Unit> Killing;
+        public long ID {get;}
         public Player Player { get; set; }
         public Vector3 position;
         public Quaternion rotation;
         public string name;
-        public int CustomValue { get; set; }
         public bool Targetable { get; set; }
         public bool Invulnerable { get; set; }
         public float Size { get; set; }
         public float Height { get; set; }
         public float AnimationSpeed { get; set; }
         public float TurnSpeed { get; set; }
-        public Color VertexColor { get; set; }
         public Unit Owner { get; set; }
         public ModificationInfos Modification { get; set; }
         public IAttachable Attach { get; set; }
@@ -126,7 +132,7 @@ namespace Seyren.System.Units
             set
             {
                 GameEventHandler<Unit, StateChangeEventArgs> state = StateChanging;
-                StateChangeEventArgs sce = new StateChangeEventArgs(UnitState.Hp, _currentHp, value);
+                StateChangeEventArgs sce = new StateChangeEventArgs(StateValue.Hp, _currentHp, value);
                 if (state != null)
                 {
                     state.Invoke(this, sce);
@@ -148,7 +154,7 @@ namespace Seyren.System.Units
             set
             {
                 GameEventHandler<Unit, StateChangeEventArgs> state = StateChanging;
-                StateChangeEventArgs sce = new StateChangeEventArgs(UnitState.Mp, _currentMp, value);
+                StateChangeEventArgs sce = new StateChangeEventArgs(StateValue.Mp, _currentMp, value);
                 if (state != null)
                 {
                     state.Invoke(this, sce);
@@ -167,7 +173,7 @@ namespace Seyren.System.Units
             set
             {
                 GameEventHandler<Unit, StateChangeEventArgs> state = StateChanging;
-                StateChangeEventArgs sce = new StateChangeEventArgs(UnitState.Shield, _currentShield, value);
+                StateChangeEventArgs sce = new StateChangeEventArgs(StateValue.Shield, _currentShield, value);
                 if (state != null)
                 {
                     state.Invoke(this, sce);
@@ -186,7 +192,7 @@ namespace Seyren.System.Units
             set
             {
                 GameEventHandler<Unit, StateChangeEventArgs> state = StateChanging;
-                StateChangeEventArgs sce = new StateChangeEventArgs(UnitState.MagicalShield, _currentMShield, value);
+                StateChangeEventArgs sce = new StateChangeEventArgs(StateValue.MagicalShield, _currentMShield, value);
                 if (state != null)
                 {
                     state.Invoke(this, sce);
@@ -204,7 +210,7 @@ namespace Seyren.System.Units
             set
             {
                 GameEventHandler<Unit, StateChangeEventArgs> state = StateChanging;
-                StateChangeEventArgs sce = new StateChangeEventArgs(UnitState.PhysicalShield, _currentPShield, value);
+                StateChangeEventArgs sce = new StateChangeEventArgs(StateValue.PhysicalShield, _currentPShield, value);
                 if (state != null)
                 {
                     state.Invoke(this, sce);
@@ -225,6 +231,15 @@ namespace Seyren.System.Units
                 _jumpTimes = value;
             }
         }
+
+        public bool IsHidden { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool IsInvulnerable { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public Vector3 Location => throw new NotImplementedException();
+
+        public Quaternion Rotation => throw new NotImplementedException();
+
+        public Force Force => throw new NotImplementedException();
 
         public bool Active;
         public float TimeScale;
@@ -255,6 +270,36 @@ namespace Seyren.System.Units
         protected Vector2 _forward;
         protected Unit damageSource;
         public ModificationInfos info;
+
+        public bool Kill()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Error Kill(IUnit by)
+        {
+            throw new NotImplementedException();
+        }
+
+        Error IUnit.Move(Vector3 location)
+        {
+            throw new NotImplementedException();
+        }
+
+        Error IUnit.Look(Quaternion quaternion)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Error Damage(DamageInfo damage)
+        {
+            throw new NotImplementedException();
+        }
+
+        Error IObject.Kill()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

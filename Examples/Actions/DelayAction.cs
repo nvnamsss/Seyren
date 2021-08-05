@@ -66,7 +66,7 @@ namespace Seyren.Examples.Actions
 
             sync.Reset();
         }
-        public bool Constraint(IAction action)
+        public Error Constraint(IAction action)
         {
             throw new NotImplementedException();
         }

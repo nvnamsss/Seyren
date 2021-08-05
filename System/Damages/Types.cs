@@ -6,6 +6,15 @@ using System.Threading.Tasks;
 
 namespace Seyren.System.Damages
 {
+        [Flags]
+    public enum DamageType
+    {
+        Physical = 1,
+        Magical = 2,
+        Pure = 4,
+        OverTime = 8,
+    }
+
     public enum StackType
     {
         None,

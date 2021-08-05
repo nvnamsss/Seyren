@@ -19,6 +19,7 @@ namespace Seyren.Examples.Actions
         public Queue<int> pending;
 
         private long lastAttack;
+        private ResetableTicker movingCoroutine;
         private void Awake()
         {
             unit = new Unit();
@@ -27,6 +28,8 @@ namespace Seyren.Examples.Actions
             {
                 transform.position = e.NewPosition;
             };
+            movingCoroutine = new ResetableTicker(10, null);
+            // StartCoroutine(MoveTo(Vector3.right, 10, Time.deltaTime));
         }
 
         public void Cast(Ability ability)
@@ -36,7 +39,7 @@ namespace Seyren.Examples.Actions
 
             // if (ability.CooldownRemaining > 0) return;
             IAction a = ability.Action(unit);
-            
+
             action.DoAction(a);
 
             // action.DoAction(() =>
@@ -60,6 +63,35 @@ namespace Seyren.Examples.Actions
 
         private void FixedUpdate()
         {
+            if (!movingCoroutine.Ended)
+            {
+                Debug.Log("bbb");
+                movingCoroutine.onTick = () =>
+                {
+                    Vector3 to = unit.position + Vector3.right * unit.Attribute.MovementSpeed.Total;
+                    unit.Move(to);
+                };
+                movingCoroutine.Reset();
+                // StartCoroutine(MoveTo(Vector3.right, 10, Time.deltaTime));
+            } else {
+                action.DoAction(new ActionPipeline(new IThing[] {
+                    new AnimationThing("move"),
+                }));
+
+                Debug.Log("aaa");
+                movingCoroutine = new ResetableTicker(10, () => {
+                    Vector3 to = unit.position + Vector3.right * unit.Attribute.MovementSpeed.Total;
+                    unit.Move(to);
+                });
+                movingCoroutine.Reset();
+                StartCoroutine(movingCoroutine.Start(Time.deltaTime));
+            }
+            // action.DoAction(new ActionPipeline(new IThing[] {
+            //     new AnimationThing("move"),
+            //     new DoThing(() => {
+            //         StartCoroutine(MoveTo(Vector3.right, 10, Time.deltaTime));
+            //     }),   
+            // }));
             // StartCoroutine(MoveTo(Vector3.right, 10, Time.deltaTime));
             Attack();
         }
@@ -84,6 +116,8 @@ namespace Seyren.Examples.Actions
                 Vector3 to = unit.position + direction * unit.Attribute.MovementSpeed.Total;
                 unit.Move(to);
             }
+
+            movingCoroutine = null;
         }
 
         private IEnumerator Rotate(Quaternion quaternion, int tick, float delay)
@@ -137,4 +171,41 @@ namespace Seyren.Examples.Actions
         }
     }
 
+    public class ResetableTicker
+    {
+        public delegate void OnTick();
+        public bool Ended => current == 0;
+        public OnTick onTick;
+        int tick;
+        int current;
+        public ResetableTicker(int tick, OnTick onTick)
+        {
+            this.tick = tick;
+            this.current = 0;
+            this.onTick = onTick;
+        }
+
+        public void Reset()
+        {
+            current = tick;
+        }
+
+        public void End() {
+            current = 0;
+        }
+
+        public IEnumerator Start(float delay)
+        {
+            WaitForSeconds wait = new WaitForSeconds(delay);
+            while (current > 0)
+            {
+                yield return wait;
+                current -= 1;
+                onTick?.Invoke();
+                // Vector3 to = unit.position + direction * unit.Attribute.MovementSpeed.Total;
+                // unit.Move(to);
+            }
+
+        }
+    }
 }

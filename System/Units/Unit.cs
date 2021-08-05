@@ -14,7 +14,7 @@ using Seyren.System.Generics;
 
 namespace Seyren.System.Units
 {
-    public partial class Unit : IObject, IAttribute
+    public partial class Unit : IUnit, IAttribute
     {
         public Unit()
         {
@@ -47,10 +47,6 @@ namespace Seyren.System.Units
             //UpdateGrounding();
         }
 
-        public bool IsEnemy(Unit unit)
-        {
-            return Player.Force.IsEnemy(unit.Player.Force);
-        }
         
         /// <summary>
         /// Kill this unit

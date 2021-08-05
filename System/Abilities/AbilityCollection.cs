@@ -14,7 +14,7 @@ namespace Seyren.System.Abilities
     [Serializable]
     public class AbilityCollection : IEnumerable, ISerializationCallbackReceiver
     {
-        public Unit owner;
+        public IUnit owner;
         public int Count => abilities.Count;
         private readonly ConcurrentDictionary<int, Ability> abilities;
         public AbilityCollection()

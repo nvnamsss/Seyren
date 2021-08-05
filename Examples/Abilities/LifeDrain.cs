@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Seyren.Examples.Abilities
 {
-    public class LifeDrain : ChannelAbility, IAction
+    public class LifeDrain : ChannelAbility
     {
         public LifeDrain(float channelTime, float interval, float cooldown, int level) : base(channelTime, interval, cooldown, level)
         {

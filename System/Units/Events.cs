@@ -31,11 +31,11 @@ namespace Seyren.System.Units
     }
     public class StateChangeEventArgs
     {
-        public UnitState State { get; }
+        public StateValue State { get; }
         public float OldValue { get; }
         public float NewValue { get; }
 
-        public StateChangeEventArgs(UnitState state, float oldValue, float newValue)
+        public StateChangeEventArgs(StateValue state, float oldValue, float newValue)
         {
             State = state;
             OldValue = oldValue;

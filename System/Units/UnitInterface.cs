@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Seyren.System.Units
 {
-    public partial class Unit : IObject, IAttribute
+    public partial class Unit : IUnit, IAttribute
     {
         public static Unit Create(string name, Vector3 location, Quaternion rotation, Sprite sprite)
         {
