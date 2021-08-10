@@ -5,8 +5,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Seyren.System.Generics;
+using Seyren.System.Actions;
 
-namespace Seyren.Example.Abilities
+namespace Seyren.Examples.Abilities
 {
     public class AndrasAttack : ActiveAbility
     {
@@ -15,92 +17,79 @@ namespace Seyren.Example.Abilities
         private Sprite sprite;
         private RuntimeAnimatorController controller;
         private Dictionary<Unit, int> hitList;
-        private static string ancientEnergyPath = "Effect/AncientEnergy/AncientEnergy";
-        public AndrasAttack(Unit u) : base(u, 0.4f, u.Attribute.AttackSpeed, 1)
+
+        public AndrasAttack(float castTime, float cooldown, int level) : base(castTime, cooldown, level)
         {
-            unit = u;
-            BaseCoolDown = unit.Attribute.AttackSpeed;
-            BaseCastTime = 0.4f;
-            controller = Resources.Load<RuntimeAnimatorController>(ancientEnergyPath);
-            hitList = new Dictionary<Unit, int>();
         }
 
-        public GameObject Create(Vector2 location, Quaternion rotation)
+        public override IAction Action(Unit by)
         {
-            MissileProjectile missile = MissileProjectile.Create("AndrasAttack",
-                location,
-                rotation,
-                sprite,
-                controller,
-                0,
-                0.5f);
-            missile.BaseHitDelay = 0;
-            missile.Collider.isTrigger = true;
-            //missile.Collider.autoTiling = true;
-            //missile.Collider.size = new Vector2(0.86f, 0.86f);
-            missile.transform.localScale = new Vector3(3, 3, 1);
-            missile.MaxHit = 100;
-            missile.Owner = unit;
-            missile.OnHit += (sender, e) =>
-            {
-                Unit u = e.GetComponent<Unit>();
-                if (u == null)
-                {
-                    return;
-                }
+            throw new NotImplementedException();
+        }
 
-                Debug.Log(u);
-                if (hitList.ContainsKey(u))
-                {
-                    return;
-                }
-                else
-                {
-                    hitList.Add(u, 0);
-                }
+        public override IAction Action(Unit by, Unit target)
+        {
+            throw new NotImplementedException();
+        }
 
-                if (sender.Owner.IsEnemy(u))
-                {
-                    u.Damage(sender.Owner, System.Damages.DamageType.Physical);
-                }
-                else
-                {
-                    sender.ResetHit();
-                    Debug.Log("Cannot damage");
-                }
-            };
+        public override IAction Action(Unit by, Vector3 target)
+        {
+            throw new NotImplementedException();
+        }
 
-            return missile.gameObject;
+        public override long CastTime(Unit unit)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
+        }
+
+        protected override Error Condition(Unit by)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Error Condition(Unit by, Unit target)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Error Condition(Unit by, Vector3 target)
+        {
+            throw new NotImplementedException();
         }
 
         protected override void DoCastAbility()
         {
-            unit.Action.Animator.SetBool("Attack", false);
-
-            Vector2 location = unit.transform.position;
-            Quaternion rotation = unit.transform.rotation;
-
-            location = location + (Vector2)(rotation * Vector2.left * 3);
-            location.y -= 1;
-
-            Create(location, rotation);
-
-            unit.Action.Type = System.Actions.ActionType.None;
-            CooldownRemaining = BaseCoolDown;
+            throw new NotImplementedException();
         }
 
-        protected override bool Condition()
+        protected override void onCast(Unit by)
         {
-            return !Active ||
-                CooldownRemaining > 0 ||
-                IsCasting ||
-                unit.Action.Type == System.Actions.ActionType.CastAbility ||
-                unit.Action.Type == System.Actions.ActionType.Attack;
+            throw new NotImplementedException();
         }
 
-        protected override bool UnlockCondition()
+        protected override void onCast(Unit by, Unit target)
         {
-            return true;
+            throw new NotImplementedException();
+        }
+
+        protected override void onCast(Unit by, Vector3 target)
+        {
+            throw new NotImplementedException();
         }
     }
 }

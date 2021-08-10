@@ -1,25 +1,25 @@
 using UnityEngine;
 
-namespace Seyren.System.Items{
-    class ItemPickup: MonoBehaviour{
+// namespace Seyren.System.Items{
+//     class ItemPickup: MonoBehaviour{
 
-        public Item item;
+//         public Item item;
 
-        public void Start(){
+//         public void Start(){
 
-        }
-        void OnTriggerEnter2D(Collider2D other) {
-            if (other.tag == "Player"){
-                Pickup();
-            }
-        }
+//         }
+//         void OnTriggerEnter2D(Collider2D other) {
+//             if (other.tag == "Player"){
+//                 Pickup();
+//             }
+//         }
           
-        void Pickup(){
+//         void Pickup(){
 
-            bool isPickedUp = InventoryManager.instance.pickUp(item);
+//             bool isPickedUp = InventoryManager.instance.pickUp(item);
 
-            if(isPickedUp)
-                Destroy(gameObject);
-        }
-    }
-}
+//             if(isPickedUp)
+//                 Destroy(gameObject);
+//         }
+//     }
+// }

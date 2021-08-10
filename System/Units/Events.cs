@@ -5,16 +5,37 @@ using System.Text;
 using System.Threading.Tasks;
 using Seyren.System.Damages;
 using Seyren.System.Units;
+using UnityEngine;
 
 namespace Seyren.System.Units
 {
+    public class UnitMovedEventArgs
+    {
+        public Vector3 OldPosition { get; }
+        public Vector3 NewPosition { get; }
+
+        public UnitMovedEventArgs(Vector3 oldPosition, Vector3 newPosition)
+        {
+            OldPosition = oldPosition;
+            NewPosition = newPosition;
+        }
+    }
+
+    public class UnitRotatedEventArgs {
+        public Quaternion OldRotation {get;}
+        public Quaternion NewRotation {get;}
+        public UnitRotatedEventArgs(Quaternion oldRotation, Quaternion newRotation) {
+            OldRotation = oldRotation;
+            NewRotation = newRotation;
+        }
+    }
     public class StateChangeEventArgs
     {
-        public UnitState State { get; }
+        public StateValue State { get; }
         public float OldValue { get; }
         public float NewValue { get; }
 
-        public StateChangeEventArgs(UnitState state, float oldValue, float newValue)
+        public StateChangeEventArgs(StateValue state, float oldValue, float newValue)
         {
             State = state;
             OldValue = oldValue;
@@ -22,7 +43,7 @@ namespace Seyren.System.Units
         }
     }
 
-        public class StatusChangedEventArgs : EventArgs
+    public class StatusChangedEventArgs : EventArgs
     {
         public UnitStatus Status { get; }
         public StatusChangedEventArgs(UnitStatus status)
@@ -31,7 +52,7 @@ namespace Seyren.System.Units
         }
     }
 
-        public class TakeDamageEventArgs
+    public class TakeDamageEventArgs
     {
         public DamageInfo Info { get; }
         public TakeDamageEventArgs(DamageInfo info)
@@ -40,7 +61,7 @@ namespace Seyren.System.Units
         }
     }
 
-        public class UnitDiedEventArgs
+    public class UnitDiedEventArgs
     {
         public Unit Killer { get; }
 
@@ -50,7 +71,7 @@ namespace Seyren.System.Units
         }
     }
 
-        public class UnitDyingEventArgs
+    public class UnitDyingEventArgs
     {
         public bool Cancel { get; set; }
 
@@ -60,7 +81,7 @@ namespace Seyren.System.Units
         }
     }
 
-       public class ConditionEventArgs<T> : EventArgs
+    public class ConditionEventArgs<T> : EventArgs
     {
         public T Object { get; }
         public bool Match { get; set; }

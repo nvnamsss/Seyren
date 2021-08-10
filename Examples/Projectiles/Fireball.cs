@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Proj = Seyren.System.Units.Projectiles;
-namespace Seyren.Example.Projectiles
+namespace Seyren.Examples.Projectiles
 {
     public static partial class Projectile
     {

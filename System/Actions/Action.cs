@@ -1,92 +1,44 @@
-﻿using UnityEngine;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Seyren.System.Generics;
 
 namespace Seyren.System.Actions
 {
-    [DisallowMultipleComponent]
-    public class Action : MonoBehaviour
+    public class Action : IAction
     {
-        public static readonly IAction Free = new FreeAction();
-        public struct ActionData
-        {
-            public string name;
-            public float time;
-            public bool breakable;
-            public IAction action;
+        IThing thing;
+        public Action() {
 
-            public ActionData(string name, float time, bool breakable, IAction action)
-            {
-                this.name = name;
-                this.time = time;
-                this.breakable = breakable;
-                this.action = action;
-            }
-
-            public ActionData(float time, bool breakable, IAction action) : this(string.Empty, time, breakable, action)
-            {
-                
-            }
         }
 
-        public ActionType Type { get; set; }
-        public IAction CurrentAction => _currentAction;
-        public Animator Animator { get; set; }
-        private Queue<IAction> _queue;
-        private volatile IAction _currentAction;
-        Action()
+        public ActionConditionHandler RunCondition => throw new NotImplementedException();
+
+        public event GameEventHandler<IAction> ActionStart;
+        public event GameEventHandler<IAction> ActionEnd;
+
+        public bool Break()
         {
-            _currentAction = Free;
-        }
-        private void Awake()
-        {
-            Animator = GetComponent<Animator>();
-            _queue = new Queue<IAction>();
+            throw new NotImplementedException();
         }
 
-        private void FixedUpdate()
+        public Error Constraint(IAction action)
         {
+            throw new NotImplementedException();
         }
 
-        public void Play(IAction action)
+        public IEnumerable<IThing> Do(params object[] obj)
         {
-            bool run = action.RunCondition(_currentAction);
-            if (run)
-            {
-                action.ActionEnd += ActionCompleteCallback;
-                action.ActionStart += ActionStartCallback;
-                action.Invoke();
-                
-            }
+            yield return thing;
         }
 
-        private void ActionStartCallback(IAction s)
+        public void Invoke()
         {
-            _currentAction = s;
-            s.ActionStart -= ActionStartCallback;
+            throw new NotImplementedException();
         }
 
-        private void ActionCompleteCallback(IAction s)
-        {
-            _currentAction = Free;
-            s.ActionEnd -= ActionCompleteCallback;
-        }
-        //public void Queue(IAction action)
-        //{
-        //    _queue.Enqueue(action);
-        //    enabled = true;
-        //}
-
-        //public IAction Dequeue()
-        //{
-        //    if (_queue.Count > 0)
-        //    {
-        //        return _queue.Dequeue();
-        //    }
-        //    else
-        //    {
-        //        enabled = false;
-        //        return Free;
-        //    }
-        //}
+        
     }
 }

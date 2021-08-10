@@ -1,22 +1,15 @@
-﻿using Seyren.System.Abilities;
+﻿using Seyren.System.Generics;
 using Seyren.System.Units;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Seyren.System.Abilities
 {
     public abstract class ChannelAbility : Ability
     {
-        public delegate void ChannelHandler(ChannelAbility sender);
-        public event ChannelHandler ChannelStart;
-        public event ChannelHandler ChannelEnd;
-
-        public BreakType BreakType { get; set; }
+        public event GameEventHandler<ChannelAbility> ChannelStart;
+        public event GameEventHandler<ChannelAbility> ChannelEnd;
         public bool IsChanneling { get; set; }
         /// <summary>
         /// time between every Channel process  <br></br>
@@ -27,9 +20,8 @@ namespace Seyren.System.Abilities
         public float ChannelTimeRemaining { get; set; }
         public float TotalChannelTime;
         protected Coroutine channelCoroutine;
-        protected Coroutine cooldownCoroutine;
-        public ChannelAbility(Unit caster, float channelTime, float interval, float cooldown, int level) : 
-            base(caster, cooldown, level)
+        public ChannelAbility(float channelTime, float interval, float cooldown, int level) : 
+            base(cooldown, level)
         {
             CastType = CastType.Channel;
             ChannelInterval = interval;
@@ -37,25 +29,40 @@ namespace Seyren.System.Abilities
             TotalChannelTime = 0;
         }
 
-        public override bool Cast()
-        {
-            if (!Condition())
-            {
-                return false;
-            }
 
-            ChannelStart?.Invoke(this);
-            channelCoroutine = Caster.StartCoroutine(Channel(ChannelInterval, ChannelTime));
-            return true;
+        // public override bool Cast()
+        // {
+        //     if (!Condition())
+        //     {
+        //         return false;
+        //     }
+
+        //     ChannelStart?.Invoke(this);
+        //     // channelCoroutine = Caster.StartCoroutine(Channel(ChannelInterval, ChannelTime));
+        //     return true;
+        // }
+        protected override void onCast(Unit by)
+        {
+            throw new NotImplementedException();
         }
 
-        protected abstract override bool Condition();
+        protected override void onCast(Unit by, Unit target)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void onCast(Unit by, Vector3 target)
+        {
+            throw new NotImplementedException();
+        }
+        
         protected abstract void DoChannelAbility();
         protected IEnumerator Channel(float interval, float channelTime)
         {
             IsChanneling = true;
             ChannelTimeRemaining = channelTime;
             TotalChannelTime = 0;
+            ChannelStart?.Invoke(this);
 
             while (ChannelTimeRemaining >= 0)
             {
@@ -65,23 +72,9 @@ namespace Seyren.System.Abilities
                 TotalChannelTime += interval;
             }
 
-            cooldownCoroutine = Caster.StartCoroutine(Casted(CooldownInterval, BaseCoolDown));
+            ChannelEnd?.Invoke(this);
             yield break;
         }
 
-        protected IEnumerator Casted(float timeDelay, float cooldown)
-        {
-            ChannelEnd?.Invoke(this);
-            Active = false;
-            IsChanneling = false;
-            CooldownRemaining = cooldown - timeDelay;
-
-            while (CooldownRemaining >= 0)
-            {
-                yield return new WaitForSeconds(timeDelay);
-                CooldownRemaining -= timeDelay;
-            }
-            Active = true;
-        }
     }
 }

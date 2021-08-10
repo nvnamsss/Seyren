@@ -4,114 +4,103 @@ using Seyren.System.Units.Projectiles;
 using Seyren.System.Units;
 using System.Collections;
 using UnityEngine;
+using Seyren.System.Generics;
 
-namespace Seyren.Example.Abilities
+namespace Seyren.Examples.Abilities
 {
-    public class MagicFlame : ActiveAbility, IAction
+    public class MagicFlame : ActiveAbility
     {
         public static readonly int Id = 0x77707601;
         private static string magicFlamePath = "Effect/MagicFlame/MagicFlame";
         
-        public event ActionHandler ActionStart;
-        public event ActionHandler ActionEnd;
         private bool actionRun;
         private GameObject go;
         public ActionConditionHandler RunCondition { get; }
 
-        public ActionType ActionType { get; }
 
-        public MagicFlame(Unit u) : base(u, 0.2f, 1, 1)
+        public MagicFlame(Unit u) : base( 0.2f, 1, 1)
         {
-            ActionType = ActionType.CastAbility;
-            go = Resources.Load<GameObject>(magicFlamePath);
-            Casting += (s, e) =>
-            {
-            };
 
-            CastCompleted += (s) =>
-            {
-            };
-
-            ActionStart += (s) =>
-            {
-                actionRun = true;
-                Caster.Action.Animator.SetBool("Spell", true);
-            };
-
-            ActionEnd += (s) =>
-            {
-                actionRun = false;
-                Caster.Action.Animator.SetBool("Spell", false);
-            };
-
-            RunCondition = (action) =>
-            {
-                if (action == this || action.ActionType == ActionType.CastAbility)
-                {
-                    return false;
-                }   
-                return true;
-            };
         }
 
         public GameObject Create(Vector2 location, Quaternion rotation)
         {
-            Vector2 direction = Caster.transform.rotation * Caster.Forward;
-            MissileProjectile missile = MissileProjectile.Create<CapsuleCollider2D>(direction, go);
-            missile.Speed = 10;
-            missile.Forward = new Vector2(0, -1);
-            missile.Collider.isTrigger = true;
-            missile.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
-            missile.MaxHit = 100000;
-            missile.Owner = Caster;
-            missile.transform.position = location;
-            missile.HitCondition = (s, obj) =>
-            {
-                Unit u = obj.GetComponent<Unit>();
-                return u != null && Caster.IsEnemy(u);
-            };
+            // Vector2 direction = Caster.transform.rotation * Caster.Forward;
+            // MissileProjectile missile = MissileProjectile.Create<CapsuleCollider2D>(direction, go);
+            // missile.Speed = 10;
+            // missile.Forward = new Vector2(0, -1);
+            // missile.Collider.isTrigger = true;
+            // missile.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
+            // missile.MaxHit = 100000;
+            // missile.Owner = Caster;
+            // missile.transform.position = location;
+            // missile.HitCondition = (s, obj) =>
+            // {
+            //     Unit u = obj.GetComponent<Unit>();
+            //     return u != null && Caster.IsEnemy(u);
+            // };
 
-            missile.OnHit += (s, e) =>
-            {
-                Unit u = e.GetComponent<Unit>();
-                u.Damage(missile.Owner, System.Damages.DamageType.Physical);
-            };
+            // missile.OnHit += (s, e) =>
+            // {
+            //     Unit u = e.GetComponent<Unit>();
+            //     u.Damage(missile.Owner, System.Damages.DamageType.Physical);
+            // };
 
-            return missile.gameObject;
+            return null;
+        }
+        protected override void onCast(Unit by)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        protected override void onCast(Unit by, Unit target)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        protected override void onCast(Unit by, Vector3 target)
+        {
+            throw new global::System.NotImplementedException();
         }
 
         protected override void DoCastAbility()
         {
-            Create(Caster.transform.position, Caster.transform.rotation);
-            if (actionRun)
-                Revoke();
+            throw new global::System.NotImplementedException();
         }
 
-        protected override bool Condition()
+        protected override Error Condition(Unit by)
         {
-            return !(!Active ||
-                CooldownRemaining > 0 ||
-                IsCasting);
+            throw new global::System.NotImplementedException();
         }
 
-        public void Invoke()
+        protected override Error Condition(Unit by, Unit target)
         {
-            bool cast = Cast();
-            if (cast)
-            {
-                ActionStart?.Invoke(this);
-            }
+            throw new global::System.NotImplementedException();
         }
 
-        public void Revoke()
+        protected override Error Condition(Unit by, Vector3 target)
         {
-            ActionEnd?.Invoke(this);
-            Caster.StopCoroutine(castCoroutine);
+            throw new global::System.NotImplementedException();
         }
 
-        protected override bool UnlockCondition()
+        public override long CastTime(Unit unit)
         {
-            return true;
+            throw new global::System.NotImplementedException();
+        }
+
+        public override IAction Action(Unit by)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public override IAction Action(Unit by, Unit target)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public override IAction Action(Unit by, Vector3 target)
+        {
+            throw new global::System.NotImplementedException();
         }
     }
 }

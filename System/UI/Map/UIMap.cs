@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Seyren.System.UISystem.Map
+namespace Seyren.System.UI
 {
     public class UIMap: MonoBehaviour
     {

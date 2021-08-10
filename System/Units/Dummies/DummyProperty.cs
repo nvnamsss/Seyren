@@ -1,4 +1,6 @@
 ﻿using Seyren.System.Damages;
+using Seyren.System.Forces;
+using Seyren.System.Generics;
 using Seyren.System.Units;
 using Seyren.System.Units.Projectiles;
 using System.Collections.Generic;
@@ -6,7 +8,7 @@ using UnityEngine;
 
 namespace Seyren.System.Units.Dummies
 {
-    public partial class Dummy : MonoBehaviour, IAttribute, IObject
+    public partial class Dummy : MonoBehaviour, IAttribute, IUnit
     {
         public delegate bool AffectConditionHandler<T>(Dummy sender, T obj);
         public delegate void UnitAffectedHandler(Dummy sender, Unit affected);
@@ -51,11 +53,52 @@ namespace Seyren.System.Units.Dummies
         public List<Projectile> AffectedProjectiles;
         public List<Dummy> AffectedDummies;
         public Unit Owner { get; set; }
+        public bool IsHidden { get => throw new global::System.NotImplementedException(); set => throw new global::System.NotImplementedException(); }
+        public bool IsInvulnerable { get => throw new global::System.NotImplementedException(); set => throw new global::System.NotImplementedException(); }
+
+        public Vector3 Location => throw new global::System.NotImplementedException();
+
+        public Quaternion Rotation => throw new global::System.NotImplementedException();
+
+        public long ID => throw new global::System.NotImplementedException();
+
+        public Force Force => throw new global::System.NotImplementedException();
+
         public Rigidbody2D Body;
         public Collider2D Collider;
         [SerializeField]
         protected Vector2 _forward;
         [SerializeField]
         protected bool _active;
+
+        public bool Kill()
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public Error Kill(IUnit by)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public Error Move(Vector3 location)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public Error Look(Quaternion quaternion)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public Error Damage(DamageInfo damage)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        Error IObject.Kill()
+        {
+            throw new global::System.NotImplementedException();
+        }
     }
 }

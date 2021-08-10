@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Seyren.System.Units;
 using UnityEngine;
@@ -37,32 +37,32 @@ namespace Seyren.Editor
         void Start()
         {
             unit = GetComponent<Unit>();
-            attribute.Strength = Strength;
-            attribute.Agility = Agility;
-            attribute.Intelligent = Intelligent;
+            // attribute.Strength = Strength;
+            // attribute.Agility = Agility;
+            // attribute.Intelligent = Intelligent;
 
-            attribute.AttackDamage = AttackDamage;
-            attribute.MDamageAmplified = MDamageAmplified;
+            // attribute.AttackDamage = AttackDamage;
+            // attribute.MDamageAmplified = MDamageAmplified;
 
-            attribute.MaxHp = MaxHp;
-            attribute.MaxMp = MaxMp;
-            attribute.HpRegen = HpRegen;
-            attribute.MpRegen = MpRegen;
-            attribute.ShieldRegen = ShieldRegen;
-            attribute.MShieldRegen = MShieldRegen;
-            attribute.PShield = PShield;
-            attribute.HpRegenPercent = HpRegenPercent;
-            attribute.MpRegenPercent = MpRegenPercent;
+            // attribute.MaxHp = MaxHp;
+            // attribute.MaxMp = MaxMp;
+            // attribute.HpRegen = HpRegen;
+            // attribute.MpRegen = MpRegen;
+            // attribute.ShieldRegen = ShieldRegen;
+            // attribute.MShieldRegen = MShieldRegen;
+            // attribute.PShield = PShield;
+            // attribute.HpRegenPercent = HpRegenPercent;
+            // attribute.MpRegenPercent = MpRegenPercent;
 
-            attribute.Armor = Armor;
-            attribute.MArmor = MArmor;
+            // attribute.Defense = Armor;
+            // attribute.MArmor = MArmor;
 
-            attribute.AttackRange = AttackRange;
-            attribute.CastRange = CastRange;
+            // attribute.AttackRange = AttackRange;
+            // attribute.CastRange = CastRange;
 
-            attribute.MovementSpeed = MovementSpeed;
-            attribute.AttackSpeed = AttackSpeed;
-            attribute.JumpSpeed = JumpSpeed;
+            // attribute.MovementSpeed = MovementSpeed;
+            // attribute.AttackSpeed = AttackSpeed;
+            // attribute.JumpSpeed = JumpSpeed;
         }
     }
 }

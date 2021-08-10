@@ -1,12 +1,8 @@
-﻿using Seyren.System.Abilities;
-using Seyren.System.Units;
+﻿using Seyren.System.Units;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Seyren.System.Abilities
@@ -18,7 +14,7 @@ namespace Seyren.System.Abilities
     [Serializable]
     public class AbilityCollection : IEnumerable, ISerializationCallbackReceiver
     {
-        public Unit owner;
+        public IUnit owner;
         public int Count => abilities.Count;
         private readonly ConcurrentDictionary<int, Ability> abilities;
         public AbilityCollection()
@@ -63,7 +59,7 @@ namespace Seyren.System.Abilities
                     return abilities[id];
                 }
 
-                return Ability.DoNothing;
+                return null;
             }
         }
 
@@ -94,10 +90,10 @@ namespace Seyren.System.Abilities
                 return false;
             }
             
-            if (abilities.TryAdd(id, ability))
-            {
-                abilities[id].UnlockAbility();
-            }
+            // if (abilities.TryAdd(id, ability))
+            // {
+            //     abilities[id].UnlockAbility();
+            // }
             return true;
         }
 
@@ -127,8 +123,8 @@ namespace Seyren.System.Abilities
                 return false;
             }
             
-            abilities[id].UnlockAbility();
-            abilities[id].Active = false;
+            // abilities[id].UnlockAbility();
+            // abilities[id].Active = false;
             return true;
         }
 

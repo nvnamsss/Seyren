@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Seyren.System.Units.Dummies
 {
-    public partial class Dummy : MonoBehaviour, IAttribute, IObject
+    public partial class Dummy : MonoBehaviour, IAttribute, IUnit
     {
         public static GameObject Create()
         {

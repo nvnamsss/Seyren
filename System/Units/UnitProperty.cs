@@ -1,4 +1,4 @@
-﻿using Seyren.Example.DamageModification;
+﻿using Seyren.Examples.DamageModification;
 using Seyren.System.Terrains;
 using Seyren.System.Abilities;
 using Seyren.System.Actions;
@@ -15,7 +15,7 @@ using Seyren.System.Generics;
 
 namespace Seyren.System.Units
 {
-    public enum UnitState
+    public enum StateValue
     {
         Hp,
         Mp,
@@ -28,24 +28,23 @@ namespace Seyren.System.Units
     public enum UnitStatus
     {
         None,
+        Moving,
         Slow,
         Knockback,
         Stun,
+        Freeze,
+        Burning,
+        Shocked,
+        Poisoned,
+        Stonerize,
+        Silence,
         Invulnerable,
         SpellImmunity,
     }
-    public partial class Unit : MonoBehaviour, IObject, IAttribute
+    public partial class Unit : IUnit, IAttribute
     {
-        [Obsolete("DyingHandler is currenly deprecated, use EventHandler<TSender, TEvent> instead")]
-        public delegate void DyingHandler(Unit sender, UnitDyingEventArgs e);
-        [Obsolete("DyingHandler is currenly deprecated, use EventHandler<TSender, TEvent> instead")]
-        public delegate void DiedHandler(Unit sender, UnitDiedEventArgs e);
-        [Obsolete("DyingHandler is currenly deprecated, use EventHandler<TSender, TEvent> instead")]
-        public delegate void TakeDamageHandler(Unit sender, TakeDamageEventArgs e);
-        [Obsolete("DyingHandler is currenly deprecated, use EventHandler<TSender, TEvent> instead")]
-        public delegate void StateChangedHandler(Unit sender, StateChangeEventArgs e);
-        [Obsolete("DyingHandler is currenly deprecated, use EventHandler<TSender, TEvent> instead")]
-        public delegate void StatusChangedHandler(Unit sender, StatusChangedEventArgs e);
+        public event GameEventHandler<Unit, UnitMovedEventArgs> Moved; 
+        public event GameEventHandler<Unit, UnitRotatedEventArgs> Rotated;
         /// <summary>
         /// Determine unit state like Hp, Mp, Shield is changing
         /// </summary>
@@ -66,21 +65,23 @@ namespace Seyren.System.Units
         /// Determine unit killing another one
         /// </summary>
         public event GameEventHandler<Unit, Unit> Killing;
+        public long ID {get;}
         public Player Player { get; set; }
-        public int CustomValue { get; set; }
+        public Vector3 position;
+        public Quaternion rotation;
+        public string name;
         public bool Targetable { get; set; }
         public bool Invulnerable { get; set; }
         public float Size { get; set; }
         public float Height { get; set; }
         public float AnimationSpeed { get; set; }
         public float TurnSpeed { get; set; }
-        public Color VertexColor { get; set; }
         public Unit Owner { get; set; }
         public ModificationInfos Modification { get; set; }
         public IAttachable Attach { get; set; }
         public Dictionary<string, Sprite> Sprites { get; set; }
-        public AbilityCollection Ability { get; set; }
-        public Dictionary<int, Ability> Abilites { get; set; }
+        // public AbilityCollection Ability { get; set; }
+        // public Dictionary<int, Ability> Abilites { get; set; }
         public List<Ability> a;
         public Attribute Attribute
         {
@@ -93,20 +94,7 @@ namespace Seyren.System.Units
                 _attribute = value;
             }
         }
-        public Attribute BaseAttribute
-        {
-            get
-            {
-                return _baseAttribute;
-            }
-            set
-            {
-                _baseAttribute = Attribute;
-            }
-        }
-        public Actions.Action Action { get; set; }
-
-
+  
         public GroundType StandOn;
         public Vector2 Forward
         {
@@ -144,7 +132,7 @@ namespace Seyren.System.Units
             set
             {
                 GameEventHandler<Unit, StateChangeEventArgs> state = StateChanging;
-                StateChangeEventArgs sce = new StateChangeEventArgs(UnitState.Hp, _currentHp, value);
+                StateChangeEventArgs sce = new StateChangeEventArgs(StateValue.Hp, _currentHp, value);
                 if (state != null)
                 {
                     state.Invoke(this, sce);
@@ -166,7 +154,7 @@ namespace Seyren.System.Units
             set
             {
                 GameEventHandler<Unit, StateChangeEventArgs> state = StateChanging;
-                StateChangeEventArgs sce = new StateChangeEventArgs(UnitState.Mp, _currentMp, value);
+                StateChangeEventArgs sce = new StateChangeEventArgs(StateValue.Mp, _currentMp, value);
                 if (state != null)
                 {
                     state.Invoke(this, sce);
@@ -185,7 +173,7 @@ namespace Seyren.System.Units
             set
             {
                 GameEventHandler<Unit, StateChangeEventArgs> state = StateChanging;
-                StateChangeEventArgs sce = new StateChangeEventArgs(UnitState.Shield, _currentShield, value);
+                StateChangeEventArgs sce = new StateChangeEventArgs(StateValue.Shield, _currentShield, value);
                 if (state != null)
                 {
                     state.Invoke(this, sce);
@@ -204,7 +192,7 @@ namespace Seyren.System.Units
             set
             {
                 GameEventHandler<Unit, StateChangeEventArgs> state = StateChanging;
-                StateChangeEventArgs sce = new StateChangeEventArgs(UnitState.MagicalShield, _currentMShield, value);
+                StateChangeEventArgs sce = new StateChangeEventArgs(StateValue.MagicalShield, _currentMShield, value);
                 if (state != null)
                 {
                     state.Invoke(this, sce);
@@ -222,7 +210,7 @@ namespace Seyren.System.Units
             set
             {
                 GameEventHandler<Unit, StateChangeEventArgs> state = StateChanging;
-                StateChangeEventArgs sce = new StateChangeEventArgs(UnitState.PhysicalShield, _currentPShield, value);
+                StateChangeEventArgs sce = new StateChangeEventArgs(StateValue.PhysicalShield, _currentPShield, value);
                 if (state != null)
                 {
                     state.Invoke(this, sce);
@@ -243,8 +231,16 @@ namespace Seyren.System.Units
                 _jumpTimes = value;
             }
         }
-        public Rigidbody2D Body;
-        public Collider2D Collider;
+
+        public bool IsHidden { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool IsInvulnerable { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public Vector3 Location => throw new NotImplementedException();
+
+        public Quaternion Rotation => throw new NotImplementedException();
+
+        public Force Force => throw new NotImplementedException();
+
         public bool Active;
         public float TimeScale;
         [SerializeField]
@@ -274,6 +270,36 @@ namespace Seyren.System.Units
         protected Vector2 _forward;
         protected Unit damageSource;
         public ModificationInfos info;
+
+        public bool Kill()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Error Kill(IUnit by)
+        {
+            throw new NotImplementedException();
+        }
+
+        Error IUnit.Move(Vector3 location)
+        {
+            throw new NotImplementedException();
+        }
+
+        Error IUnit.Look(Quaternion quaternion)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Error Damage(DamageInfo damage)
+        {
+            throw new NotImplementedException();
+        }
+
+        Error IObject.Kill()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

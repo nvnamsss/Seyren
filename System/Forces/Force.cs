@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Seyren.System.Units;
 
 namespace Seyren.System.Forces
 {
@@ -61,6 +62,10 @@ namespace Seyren.System.Forces
             return false;
         }
 
+        public static bool IsEnemy(IUnit a, IUnit b) {
+            return a.Force.IsEnemy(b.Force);
+        }
+        
         public static Force CreateForce(string name)
         {
             Force force = new Force(name);

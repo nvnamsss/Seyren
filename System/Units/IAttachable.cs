@@ -12,7 +12,6 @@ namespace Seyren.System.Units
         IAttachable AttactedObject { get; }
         List<IAttachable> Attachments { get; set; }
         AttachStatus Status { get; set; }
-        Vector2 RelatedV2 { get; set; }
         Quaternion Rotation { get; set; }
         float ZIndex { get; set; }
 

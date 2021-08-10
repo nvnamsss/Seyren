@@ -7,31 +7,35 @@ using UnityEngine;
 
 namespace Seyren.System.Units
 {
-    public partial class Unit : MonoBehaviour, IObject, IAttribute
+    public partial class Unit : IUnit, IAttribute
     {
         public static Unit Create(string name, Vector3 location, Quaternion rotation, Sprite sprite)
         {
-            GameObject go = CreateObject(name, location, rotation, sprite);
-            var unit = go.AddComponent<Unit>();
-
+            Unit unit = new Unit();
             return unit;
+            // GameObject go = CreateObject(name, location, rotation, sprite);
+            // var unit = go.AddComponent<Unit>();
+
+            // return unit;
         }
 
         public static Unit Create(GameObject go)
         {
-            GameObject g = Instantiate(go);
-            Unit unit = g.AddComponent<Unit>();
-
+            Unit unit = new Unit();
             return unit;
+            // GameObject g = Instantiate(go);
+            // Unit unit = g.AddComponent<Unit>();
+
+            // return unit;
         }
 
         public static Unit Create<TCollider2D>(GameObject go) where TCollider2D : Collider2D
         {
-            GameObject g = Instantiate(go);
-            TCollider2D collider = g.GetComponent<TCollider2D>();
-            if (collider == null) g.AddComponent<TCollider2D>();
-            Unit unit = g.AddComponent<Unit>();
-
+            // GameObject g = Instantiate(go);
+            // TCollider2D collider = g.GetComponent<TCollider2D>();
+            // if (collider == null) g.AddComponent<TCollider2D>();
+            // Unit unit = g.AddComponent<Unit>();
+            Unit unit = new Unit();
             return unit;
         }
 
@@ -64,40 +68,41 @@ namespace Seyren.System.Units
 
         public static GameObject CreateShadow(Unit u, float transparent)
         {
-            GameObject go = new GameObject(u.name + "- shadow");
-            go.transform.position = Vector3.zero;
-            SpriteRenderer[] objs = u.gameObject.GetComponentsInChildren<SpriteRenderer>(false);
-            
-            for (int loop = 0; loop < objs.Length; loop++)
-            {
-                //SpriteRenderer renderer = objs[loop].GetComponent<SpriteRenderer>();
-                SpriteRenderer renderer = objs[loop];
-                GameObject child = new GameObject(renderer.name);
-                SpriteRenderer cr = child.AddComponent<SpriteRenderer>();
+            return null;
+            // GameObject go = new GameObject(u.name + "- shadow");
+            // go.transform.position = Vector3.zero;
+            // SpriteRenderer[] objs = u.gameObject.GetComponentsInChildren<SpriteRenderer>(false);
 
-                cr.sprite = renderer.sprite;
-                cr.sortingOrder = renderer.sortingOrder;
-                cr.flipX = renderer.flipX;
-                cr.flipY = renderer.flipY;
-                cr.material = renderer.material;
-                cr.drawMode = renderer.drawMode;
-                cr.sortingLayerID = renderer.sortingLayerID;
-                cr.spriteSortPoint = renderer.spriteSortPoint;
-                cr.maskInteraction = renderer.maskInteraction;
-                //cr.sprite = renderer.sprite;
-                child.transform.position = renderer.transform.position;
-                child.transform.rotation = renderer.transform.rotation;
-                child.transform.localScale = renderer.transform.lossyScale;
-                child.transform.SetParent(go.transform);
+            // for (int loop = 0; loop < objs.Length; loop++)
+            // {
+            //     //SpriteRenderer renderer = objs[loop].GetComponent<SpriteRenderer>();
+            //     SpriteRenderer renderer = objs[loop];
+            //     GameObject child = new GameObject(renderer.name);
+            //     SpriteRenderer cr = child.AddComponent<SpriteRenderer>();
 
-                Color color = cr.material.color;
-                color.a *= 0.6f;
-                cr.material.color = color;
-            }
+            //     cr.sprite = renderer.sprite;
+            //     cr.sortingOrder = renderer.sortingOrder;
+            //     cr.flipX = renderer.flipX;
+            //     cr.flipY = renderer.flipY;
+            //     cr.material = renderer.material;
+            //     cr.drawMode = renderer.drawMode;
+            //     cr.sortingLayerID = renderer.sortingLayerID;
+            //     cr.spriteSortPoint = renderer.spriteSortPoint;
+            //     cr.maskInteraction = renderer.maskInteraction;
+            //     //cr.sprite = renderer.sprite;
+            //     child.transform.position = renderer.transform.position;
+            //     child.transform.rotation = renderer.transform.rotation;
+            //     child.transform.localScale = renderer.transform.lossyScale;
+            //     child.transform.SetParent(go.transform);
 
-            return go;
+            //     Color color = cr.material.color;
+            //     color.a *= 0.6f;
+            //     cr.material.color = color;
+            // }
+
+            // return go;
         }
-        
+
         public static UnityEngine.GameObject CreateUnit()
         {
             return null;

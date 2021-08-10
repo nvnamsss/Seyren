@@ -30,16 +30,19 @@ namespace Seyren.System.Damages
         public bool CanEvade { get; set; }
         public bool CanReduce { get; set; }
 
+        public Dictionary<DamageType, float> damages;
         public float rawDamage;
         public float increasedDamage;
+        public float criticalDamage;
         public float reducedDamage;
+        public float blockedDamage;
+        public bool evaded;
 
         public DamageInfo(Unit source, Unit target)
         {
             Source = source;
             Target  = target;
         }
-
 
         public float CalculateDamage()
         {
