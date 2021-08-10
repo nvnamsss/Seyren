@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using DS.Expression;
 
 namespace DSA
 {
@@ -59,8 +58,6 @@ namespace DSA
                 value -= items[last].C;
             }
             return value;
-
-            return s.Evaluate(timestamp);
         }
 
         public void Save(float value)
