@@ -24,7 +24,7 @@ namespace Seyren.Examples.Actions
         {
             unit = new Unit();
             unit.Attribute.MovementSpeed = new BaseFloat(1, 0);
-            unit.Moved += (u, e) =>
+            unit.OnMoved += (u, e) =>
             {
                 transform.position = e.NewPosition;
             };
@@ -68,7 +68,7 @@ namespace Seyren.Examples.Actions
                 Debug.Log("bbb");
                 movingCoroutine.onTick = () =>
                 {
-                    Vector3 to = unit.position + Vector3.right * unit.Attribute.MovementSpeed.Total;
+                    Vector3 to = unit.Location + Vector3.right * unit.Attribute.MovementSpeed.Total;
                     unit.Move(to);
                 };
                 movingCoroutine.Reset();
@@ -80,7 +80,7 @@ namespace Seyren.Examples.Actions
 
                 Debug.Log("aaa");
                 movingCoroutine = new ResetableTicker(10, () => {
-                    Vector3 to = unit.position + Vector3.right * unit.Attribute.MovementSpeed.Total;
+                    Vector3 to = unit.Location + Vector3.right * unit.Attribute.MovementSpeed.Total;
                     unit.Move(to);
                 });
                 movingCoroutine.Reset();
@@ -113,7 +113,7 @@ namespace Seyren.Examples.Actions
             {
                 yield return wait;
                 tick -= 1;
-                Vector3 to = unit.position + direction * unit.Attribute.MovementSpeed.Total;
+                Vector3 to = unit.Location + direction * unit.Attribute.MovementSpeed.Total;
                 unit.Move(to);
             }
 

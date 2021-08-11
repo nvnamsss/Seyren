@@ -11,13 +11,16 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections;
 using Seyren.System.Generics;
+using System.Threading;
 
 namespace Seyren.System.Units
 {
     public partial class Unit : IUnit, IAttribute
     {
+        private static long id;
         public Unit()
         {
+            UnitID = Interlocked.Increment(ref id);
             JumpTimes = 1;
             Modification = new ModificationInfos();
             Attribute = new Attribute();
@@ -58,13 +61,14 @@ namespace Seyren.System.Units
             if (CurrentHp < 0) Kill(source);
         }
 
-        public virtual void Move(Vector3 location) {
-            Vector3 old = position;
-            position = location;
-            Moved?.Invoke(this, new UnitMovedEventArgs(old, position));
+        public Error Move(Vector3 location) {
+            Vector3 old = _position;
+            this._position = location;
+            OnMoved?.Invoke(this, new UnitMovedEventArgs(old, _position));
+            return null;
         }
 
-        public virtual void Look(Quaternion q) {
+        public void Look(Quaternion q) {
             Quaternion old = rotation;
             rotation = q;
             Rotated?.Invoke(this, new UnitRotatedEventArgs(old, rotation));
