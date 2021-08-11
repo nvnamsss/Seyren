@@ -18,21 +18,35 @@ namespace Seyren.System.Units
     public partial class Unit : IUnit, IAttribute
     {
         private static long id;
-        public Unit()
+        public Unit() : this(Interlocked.Increment(ref id))
         {
-            UnitID = Interlocked.Increment(ref id);
+        }
+
+        Unit(long uid)
+        {
+            UnitID = uid;
             JumpTimes = 1;
             Modification = new ModificationInfos();
             Attribute = new Attribute();
         }
-        
+
+        public Error Damage(DamageInfo damageInfo)
+        {
+            Error err = null;
+            CurrentHp -= damageInfo.DamageAmount;
+            OnDamaged?.Invoke(this, new TakeDamageEventArgs(damageInfo));
+            if (CurrentHp < 0) err = Kill(this);
+
+            return err;
+        }
+
         /// <summary>
         /// Kill this unit
         /// </summary>
         /// <param name="killer"></param>
-        public void Kill(Unit killer)
+        public Error Kill(IUnit by)
         {
-            Active = false;
+            State = 0;
             GameEventHandler<Unit, UnitDyingEventArgs> dying = Dying;
             UnitDyingEventArgs udinge = new UnitDyingEventArgs();
             if (dying != null)
@@ -42,38 +56,34 @@ namespace Seyren.System.Units
 
             if (udinge.Cancel)
             {
-                return;
+                return new Error($"kill unit is cancel due to {udinge.CancelReason}");
             }
 
             GameEventHandler<Unit, UnitDiedEventArgs> died = Died;
-            UnitDiedEventArgs udede = new UnitDiedEventArgs(killer);
+            UnitDiedEventArgs udede = new UnitDiedEventArgs(by);
             if (died != null)
             {
                 died.Invoke(this, udede);
             }
 
-            Killing?.Invoke(killer, this);
+            return null;
         }
 
-        public void Damage(Unit source, float damage)
+        public Error Move(Vector3 location)
         {
-            CurrentHp -= damage;
-            if (CurrentHp < 0) Kill(source);
-        }
-
-        public Error Move(Vector3 location) {
             Vector3 old = _position;
             this._position = location;
             OnMoved?.Invoke(this, new UnitMovedEventArgs(old, _position));
             return null;
         }
 
-        public void Look(Quaternion q) {
+        public Error Look(Quaternion quaternion)
+        {
             Quaternion old = rotation;
-            rotation = q;
+            rotation = quaternion;
             Rotated?.Invoke(this, new UnitRotatedEventArgs(old, rotation));
+            return null;
         }
-
     }
 
 }

@@ -54,7 +54,7 @@ namespace Seyren.System.Damages
                 }
             }
 
-            target.Damage(source, damage);
+            target.Damage(damageInfo);
             //TakeDamage?.Invoke(this, new TakeDamageEventArgs(damageInfo));
         }
     }

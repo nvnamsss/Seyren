@@ -24,6 +24,9 @@ namespace Seyren.System.Units.Dummies
         public event ProjectileAffectedHandler ProjectileIn;
         public event ProjectileAffectedHandler ProjectileOut;
         public event GameEventHandler<IUnit, Vector3> OnMoved;
+        public event GameEventHandler<IUnit, UnitDyingEventArgs> OnDying;
+        public event GameEventHandler<IUnit, UnitDiedEventArgs> OnDied;
+        public event GameEventHandler<Unit, TakeDamageEventArgs> OnDamaged;
 
         public int CustomValue { get; set; }
         public bool Targetable { get; set; }
@@ -110,9 +113,6 @@ namespace Seyren.System.Units.Dummies
             throw new global::System.NotImplementedException();
         }
 
-        Error IObject.Kill()
-        {
-            throw new global::System.NotImplementedException();
-        }
+
     }
 }

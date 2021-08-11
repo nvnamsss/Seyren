@@ -60,25 +60,18 @@ namespace Seyren.System.Units
         /// <summary>
         /// Determine unit is took damage
         /// </summary>
-        public event GameEventHandler<Unit, TakeDamageEventArgs> TookDamage;
-        /// <summary>
-        /// Determine unit killing another one
-        /// </summary>
-        public event GameEventHandler<Unit, Unit> Killing;
+        public event GameEventHandler<IUnit, UnitDyingEventArgs> OnDying;
+        public event GameEventHandler<IUnit, UnitDiedEventArgs> OnDied;
+        public event GameEventHandler<Unit, TakeDamageEventArgs> OnDamaged;
 
         public long UnitID { get; }
         public Player Player { get; set; }
         public Quaternion rotation;
         public string name;
-        public bool Targetable { get; set; }
-        public bool Invulnerable { get; set; }
-        public float Height { get; set; }
-        public float AnimationSpeed { get; set; }
-        public float TurnSpeed { get; set; }
         public Unit Owner { get; set; }
         public ModificationInfos Modification { get; set; }
         public IAttachable Attach { get; set; }
-        public Dictionary<string, Sprite> Sprites { get; set; }
+        public GroundType StandOn;        
         // public AbilityCollection Ability { get; set; }
         // public Dictionary<int, Ability> Abilites { get; set; }
         public List<Ability> a;
@@ -94,12 +87,6 @@ namespace Seyren.System.Units
             }
         }
 
-        public GroundType StandOn;
-        public Vector2 Forward
-        {
-            get => _forward;
-            set => _forward = value;
-        }
         public UnitStatus UnitStatus
         {
             get
@@ -109,17 +96,6 @@ namespace Seyren.System.Units
             set
             {
                 _unitStatus = value;
-            }
-        }
-        public bool IsFly
-        {
-            get
-            {
-                return _isFly;
-            }
-            set
-            {
-                _isFly = value;
             }
         }
         public float CurrentHp
@@ -236,9 +212,9 @@ namespace Seyren.System.Units
 
         public Vector3 Location => _position;
 
-        public Quaternion Rotation => throw new NotImplementedException();
+        public Quaternion Rotation => rotation;
 
-        public Force Force => throw new NotImplementedException();
+        public Force Force {get;}
 
         public Vector3 Size {
             get {
@@ -249,15 +225,17 @@ namespace Seyren.System.Units
             }
         }
 
-        public bool Active;
-        public float TimeScale;
+        IUnit IUnit.Owner => throw new NotImplementedException();
+
+        public int State;
         protected Vector3 _position;
         protected Vector3 _size;
+        protected Quaternion _rotation;
         [SerializeField]
         protected Attribute _attribute;
         [SerializeField]
         protected Attribute _baseAttribute;
-        protected Unit _owner;
+        public IUnit _owner;
         [SerializeField]
         protected bool _isFly;
         [SerializeField]
@@ -276,35 +254,9 @@ namespace Seyren.System.Units
         protected int _currentJump;
         [SerializeField]
         protected UnitStatus _unitStatus;
-        [SerializeField]
-        protected Vector2 _forward;
         protected Unit damageSource;
-        public ModificationInfos info;
+        public ModificationInfos modification;
 
-        public bool Kill()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Error Kill(IUnit by)
-        {
-            throw new NotImplementedException();
-        }
-
-        Error IUnit.Look(Quaternion quaternion)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Error Damage(DamageInfo damage)
-        {
-            throw new NotImplementedException();
-        }
-
-        Error IObject.Kill()
-        {
-            throw new NotImplementedException();
-        }
     }
 
 }

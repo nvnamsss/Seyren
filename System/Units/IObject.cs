@@ -15,7 +15,6 @@ namespace Seyren.System.Units
     {
         bool IsHidden { get; set; }
         bool IsInvulnerable { get; set; }
-        Error Kill();
     }
 }
 

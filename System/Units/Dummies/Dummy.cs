@@ -19,6 +19,8 @@ namespace Seyren.System.Units.Dummies
     [RequireComponent(typeof(Rigidbody2D))]
     public partial class Dummy : MonoBehaviour, IAttribute, IUnit
     {
+        IUnit IUnit.Owner => throw new NotImplementedException();
+
         Dummy()
         {
             AffectedUnits = new List<Unit>();
