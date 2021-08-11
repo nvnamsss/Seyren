@@ -23,13 +23,14 @@ namespace Seyren.System.Units.Dummies
         public event DummyAffectedHandler DummyOut;
         public event ProjectileAffectedHandler ProjectileIn;
         public event ProjectileAffectedHandler ProjectileOut;
+        public event GameEventHandler<IUnit, Vector3> OnMoved;
 
         public int CustomValue { get; set; }
         public bool Targetable { get; set; }
         public bool Invulnerable { get; set; }
 
         public bool IsFly { get; set; }
-        public float Size { get; set; }
+        public Vector3 Size { get; set; }
         public float Height { get; set; }
         public float AnimationSpeed { get; set; }
         public float TurnSpeed { get; set; }
@@ -60,7 +61,7 @@ namespace Seyren.System.Units.Dummies
 
         public Quaternion Rotation => throw new global::System.NotImplementedException();
 
-        public long ID => throw new global::System.NotImplementedException();
+        public long UnitID => throw new global::System.NotImplementedException();
 
         public Force Force => throw new global::System.NotImplementedException();
 
@@ -70,6 +71,19 @@ namespace Seyren.System.Units.Dummies
         protected Vector2 _forward;
         [SerializeField]
         protected bool _active;
+
+        event GameEventHandler<IUnit, UnitMovedEventArgs> IUnit.OnMoved
+        {
+            add
+            {
+                throw new global::System.NotImplementedException();
+            }
+
+            remove
+            {
+                throw new global::System.NotImplementedException();
+            }
+        }
 
         public bool Kill()
         {

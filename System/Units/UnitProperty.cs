@@ -43,7 +43,7 @@ namespace Seyren.System.Units
     }
     public partial class Unit : IUnit, IAttribute
     {
-        public event GameEventHandler<Unit, UnitMovedEventArgs> Moved; 
+        public event GameEventHandler<IUnit, UnitMovedEventArgs> OnMoved;
         public event GameEventHandler<Unit, UnitRotatedEventArgs> Rotated;
         /// <summary>
         /// Determine unit state like Hp, Mp, Shield is changing
@@ -65,14 +65,13 @@ namespace Seyren.System.Units
         /// Determine unit killing another one
         /// </summary>
         public event GameEventHandler<Unit, Unit> Killing;
-        public long ID {get;}
+
+        public long UnitID { get; }
         public Player Player { get; set; }
-        public Vector3 position;
         public Quaternion rotation;
         public string name;
         public bool Targetable { get; set; }
         public bool Invulnerable { get; set; }
-        public float Size { get; set; }
         public float Height { get; set; }
         public float AnimationSpeed { get; set; }
         public float TurnSpeed { get; set; }
@@ -94,7 +93,7 @@ namespace Seyren.System.Units
                 _attribute = value;
             }
         }
-  
+
         public GroundType StandOn;
         public Vector2 Forward
         {
@@ -235,14 +234,25 @@ namespace Seyren.System.Units
         public bool IsHidden { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool IsInvulnerable { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public Vector3 Location => throw new NotImplementedException();
+        public Vector3 Location => _position;
 
         public Quaternion Rotation => throw new NotImplementedException();
 
         public Force Force => throw new NotImplementedException();
 
+        public Vector3 Size {
+            get {
+                return _size;
+            }
+            set {
+                _size = value;
+            }
+        }
+
         public bool Active;
         public float TimeScale;
+        protected Vector3 _position;
+        protected Vector3 _size;
         [SerializeField]
         protected Attribute _attribute;
         [SerializeField]
@@ -277,11 +287,6 @@ namespace Seyren.System.Units
         }
 
         public Error Kill(IUnit by)
-        {
-            throw new NotImplementedException();
-        }
-
-        Error IUnit.Move(Vector3 location)
         {
             throw new NotImplementedException();
         }

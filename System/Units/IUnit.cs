@@ -6,7 +6,8 @@ using UnityEngine;
 
 namespace Seyren.System.Units {
     public interface IUnit : IObject{
-        long ID {get;}
+        event GameEventHandler<IUnit, UnitMovedEventArgs> OnMoved;
+        long UnitID {get;}
         Force Force {get;}
         Error Kill(IUnit by);
         Error Move(Vector3 location);

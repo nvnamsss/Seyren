@@ -5,13 +5,16 @@ using UnityEngine;
 
 namespace Seyren.System.Units
 {
-    public interface IObject
+    public interface ICoordinate {
+        Vector3 Location { get; }
+        Vector3 Size { get; set; }
+        Quaternion Rotation { get; }
+    }
+
+    public interface IObject : ICoordinate
     {
         bool IsHidden { get; set; }
-        bool IsInvulnerable {get; set;}
-        Vector3 Location { get; }
-
-        Quaternion Rotation {get;}
+        bool IsInvulnerable { get; set; }
         Error Kill();
     }
 }
