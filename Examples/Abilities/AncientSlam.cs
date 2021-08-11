@@ -1,6 +1,7 @@
 ﻿using Seyren.Examples.Actions;
 using Seyren.System.Abilities;
 using Seyren.System.Actions;
+using Seyren.System.Forces;
 using Seyren.System.Generics;
 using Seyren.System.Units;
 using Seyren.System.Units.Projectiles;
@@ -85,7 +86,7 @@ namespace Seyren.Examples.Abilities
                 return false;
             }
 
-            return Unit.IsEnemy(projectile.Owner, u);
+            return Force.IsEnemy(projectile.Owner, u);
         }
 
         protected override void DoCastAbility()

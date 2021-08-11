@@ -63,9 +63,9 @@ namespace Seyren.System.Units
 
     public class UnitDiedEventArgs
     {
-        public Unit Killer { get; }
+        public IUnit Killer { get; }
 
-        public UnitDiedEventArgs(Unit killer)
+        public UnitDiedEventArgs(IUnit killer)
         {
             Killer = killer;
         }
@@ -74,7 +74,7 @@ namespace Seyren.System.Units
     public class UnitDyingEventArgs
     {
         public bool Cancel { get; set; }
-
+        public string CancelReason {get;set;}
         public UnitDyingEventArgs()
         {
             Cancel = false;
