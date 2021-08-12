@@ -2,6 +2,7 @@
 using Seyren.System.Units;
 using System;
 using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Seyren.System.Abilities
@@ -19,44 +20,45 @@ namespace Seyren.System.Abilities
         public float ChannelTime { get; set; }
         public float ChannelTimeRemaining { get; set; }
         public float TotalChannelTime;
-        protected Coroutine channelCoroutine;
-        public ChannelAbility(float channelTime, float interval, float cooldown, int level) : 
-            base(cooldown, level)
+        private long lastChannelTime;
+        public ChannelAbility(int level) :
+            base(level)
         {
             CastType = CastType.Channel;
-            ChannelInterval = interval;
-            ChannelTime = channelTime;
             TotalChannelTime = 0;
         }
 
 
-        // public override bool Cast()
-        // {
-        //     if (!Condition())
-        //     {
-        //         return false;
-        //     }
-
-        //     ChannelStart?.Invoke(this);
-        //     // channelCoroutine = Caster.StartCoroutine(Channel(ChannelInterval, ChannelTime));
-        //     return true;
-        // }
-        protected override void onCast(Unit by)
+        public void Cancel()
         {
-            throw new NotImplementedException();
+            IsChanneling = false;
         }
 
-        protected override void onCast(Unit by, Unit target)
+        protected override void onCast()
         {
-            throw new NotImplementedException();
+            ChannelAsync(ChannelInterval, ChannelTime);
         }
 
-        protected override void onCast(Unit by, Vector3 target)
-        {
-            throw new NotImplementedException();
-        }
-        
         protected abstract void DoChannelAbility();
+        protected async void ChannelAsync(float interval, float channelTime)
+        {
+            int linterval = (int)(interval * 1000);
+            IsChanneling = true;
+            ChannelStart?.Invoke(this);
+
+            while (IsChanneling && ChannelTimeRemaining >= 0)
+            {
+                DoChannelAbility();
+                await Task.Delay(linterval);
+                ChannelTimeRemaining -= interval;
+                TotalChannelTime += interval;
+            }
+
+            ChannelEnd?.Invoke(this);
+            IsChanneling = false;
+        }
+
+
         protected IEnumerator Channel(float interval, float channelTime)
         {
             IsChanneling = true;
@@ -64,7 +66,7 @@ namespace Seyren.System.Abilities
             TotalChannelTime = 0;
             ChannelStart?.Invoke(this);
 
-            while (ChannelTimeRemaining >= 0)
+            while (IsChanneling && ChannelTimeRemaining >= 0)
             {
                 yield return new WaitForSeconds(interval);
                 DoChannelAbility();
@@ -73,6 +75,7 @@ namespace Seyren.System.Abilities
             }
 
             ChannelEnd?.Invoke(this);
+            IsChanneling = false;
             yield break;
         }
 

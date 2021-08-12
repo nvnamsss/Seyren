@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Seyren.System.States;
 using Seyren.System.Damages;
 using Seyren.System.Units;
 using UnityEngine;
 
 namespace Seyren.System.Units.Projectiles
 {
-    public abstract partial class Projectile : MonoBehaviour, IAttribute
+    public abstract partial class Projectile : MonoBehaviour
     {
         public delegate void HitExceedHandler(Projectile sender);
         public delegate void TimeExpiredHandler(Projectile sender);
@@ -26,7 +27,7 @@ namespace Seyren.System.Units.Projectiles
         public bool IsPenetrate { get; set; }
         public Unit Owner { get; set; }
         public Attribute Attribute { get; set; }
-        public ModificationInfos Modification { get; set; }
+        public Modification Modification { get; set; }
 
         public float TimeExpire
         {

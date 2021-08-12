@@ -12,7 +12,6 @@ namespace Seyren.System.Damages
         Physical = 1,
         Magical = 2,
         Pure = 4,
-        OverTime = 8,
     }
 
     public enum StackType

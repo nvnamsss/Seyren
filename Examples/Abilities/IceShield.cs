@@ -15,7 +15,7 @@ namespace Seyren.Examples.Abilities
     public class IceShield : ToggleAbility
     {
         private Dummy shield;
-        public IceShield(Unit caster) : base()
+        public IceShield(Unit caster) : base(1)
         {
         }
 
@@ -30,11 +30,6 @@ namespace Seyren.Examples.Abilities
         }
 
         public override IAction Action(Unit by, Vector3 target)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override long CastTime(Unit unit)
         {
             throw new NotImplementedException();
         }
@@ -56,23 +51,12 @@ namespace Seyren.Examples.Abilities
 
         protected override void DoCastAbility()
         {
-
-        }
-
-        protected override void onCast(Unit by)
-        {
             throw new NotImplementedException();
         }
 
-        protected override void onCast(Unit by, Unit target)
+        protected override void onCast()
         {
             throw new NotImplementedException();
         }
-
-        protected override void onCast(Unit by, Vector3 target)
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }

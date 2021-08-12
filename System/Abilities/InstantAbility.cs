@@ -10,8 +10,9 @@ namespace Seyren.System.Abilities
         public event GameEventHandler<InstantAbility> Casted;
 
         protected abstract void DoCastAbility();
-        public InstantAbility(float cooldown, int level) : base(cooldown, 1)
+        public InstantAbility(float cooldown, int level) : base(1)
         {
+            Cooldown = cooldown;
             CastType = CastType.Instant;
         }
         

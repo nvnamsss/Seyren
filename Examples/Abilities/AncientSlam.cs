@@ -28,65 +28,14 @@ namespace Seyren.Examples.Abilities
         public event GameEventHandler<IAction> ActionStart;
         public event GameEventHandler<IAction> ActionEnd;
 
-        public AncientSlam(Unit u) : base(2, 10, 1)
+        public AncientSlam(Unit u) : base(1)
         {
 
         }
 
-        public GameObject Create(Vector2 location, Quaternion rotation)
+        protected override void DoWhenCasting()
         {
-            return null;
-        }
-
-        public void Create()
-        {
-            // float angle = 180;
-            // for (int loop = 0; loop < 7; loop++)
-            // {
-            //     float rad = (angle * Mathf.Deg2Rad);
-            //     Vector2 location = Caster.transform.position;
-            //     location.y -= 1;
-            //     Quaternion rotation = Caster.transform.rotation;
-            //     Vector2 direction = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
-
-            //     MissileProjectile missile = MissileProjectile.Create("Ancient Slam - Energy",
-            //         location,
-            //         rotation,
-            //         sprite,
-            //         controller,
-            //         10,
-            //         2);
-            //     missile.HitCondition = HitCondition;
-            //     missile.BaseHitDelay = 0;
-            //     //missile.Collider.size = new Vector2(0.86f, 0.86f);
-            //     missile.Direction = direction;
-            //     missile.transform.localScale = new Vector3(3, 3, 1);
-            //     missile.MaxHit = 100000;
-            //     missile.Owner = Caster;
-            //     missile.OnHit += (sender, e) =>
-            //     {
-            //         Unit u = e.GetComponent<Unit>();
-            //         hitList.Add(u, 0);
-            //         u.Damage(sender.Owner, System.Damages.DamageType.Physical);
-            //     };
-            //     angle = angle - 30;
-            // }
-        }
-
-        private bool HitCondition(Projectile projectile, GameObject obj)
-        {
-            Unit u = obj.GetComponent<Unit>();
-            if (u == null)
-            {
-                return false;
-            }
-
-            if (hitList.ContainsKey(u))
-            {
-                return false;
-            }
-
-            return Force.IsEnemy(projectile.Owner, u);
+            throw new NotImplementedException();
         }
 
         protected override void DoCastAbility()
@@ -94,22 +43,20 @@ namespace Seyren.Examples.Abilities
             throw new NotImplementedException();
         }
 
-        protected override void onCast(Unit by)
+        public override IAction Action(Unit by)
         {
             throw new NotImplementedException();
         }
 
-        protected override void onCast(Unit by, Unit target)
+        public override IAction Action(Unit by, Unit target)
         {
             throw new NotImplementedException();
         }
 
-        protected override void onCast(Unit by, Vector3 target)
+        public override IAction Action(Unit by, Vector3 target)
         {
-            // pick every unit in range then apply a function
             throw new NotImplementedException();
         }
-
 
         protected override Error Condition(Unit by)
         {
@@ -122,32 +69,6 @@ namespace Seyren.Examples.Abilities
         }
 
         protected override Error Condition(Unit by, Vector3 target)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override long CastTime(Unit unit)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override IAction Action(Unit by)
-        {
-            return new ActionPipeline(new IThing[] {
-                new AnimationThing("cast phase 1"),
-                new DelayThing(100),
-                new AnimationThing("cast phase 2"),
-                new DelayThing(200),
-                new AnimationThing("release"),
-            });
-        }
-
-        public override IAction Action(Unit by, Unit target)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override IAction Action(Unit by, Vector3 target)
         {
             throw new NotImplementedException();
         }

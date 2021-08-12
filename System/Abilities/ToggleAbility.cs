@@ -35,10 +35,9 @@ namespace Seyren.System.Abilities
         }
 
         protected bool _isOn;
-        protected Coroutine cooldownCoroutine;
         protected abstract void DoCastAbility();
 
-        public ToggleAbility() : base(0, 1)
+        public ToggleAbility(int level) : base(level)
         {
             _isOn = true;
         }

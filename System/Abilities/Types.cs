@@ -6,16 +6,28 @@ using System.Threading.Tasks;
 
 namespace Seyren.System.Abilities
 {
-    public enum TargetingType
+    public enum UnitTargetingType
     {
-        NoTarget,
-        UnitTarget,
-        PointTarget,
-        UnitOrPointTarget,
-        AreaTarget,
+        Self,
+        Allied,
+        Enemy,
     }
 
-        [Flags]
+    public enum AffectType {
+        Point,
+        Area,
+    }
+
+
+    public enum TargetingType
+    {
+        NoTarget = 1,
+        UnitTarget = 2,
+        PointTarget = 4,
+        UnitOrPointTarget = UnitTarget | PointTarget,
+    }
+
+    [Flags]
     public enum BreakType
     {
         CannotBreak = 1,

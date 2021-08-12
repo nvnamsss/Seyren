@@ -17,7 +17,7 @@ namespace Seyren.System.Units.Dummies
     /// </summary>
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(Rigidbody2D))]
-    public partial class Dummy : MonoBehaviour, IAttribute, IUnit
+    public partial class Dummy : MonoBehaviour, IUnit
     {
         IUnit IUnit.Owner => throw new NotImplementedException();
 
@@ -26,7 +26,7 @@ namespace Seyren.System.Units.Dummies
             AffectedUnits = new List<Unit>();
             AffectedDummies = new List<Dummy>();
             AffectedProjectiles= new List<Projectile >();
-            Modification = new ModificationInfos();
+            Modification = new Modification();
             UnitCondition = (s, u) => true;
             ProjectileCondition = (s, p) => true;
             DummyCondition = (s, d) => true;

@@ -22,70 +22,7 @@ namespace Seyren.Examples.Abilities
             };
         }
 
-   
-
-        private GameObject CreateClone()
-        {
-            // GameObject go = Unit.CreateShadow(Caster, 0.6f);
-            //Renderer renderer = go.GetComponent<Renderer>();
-            //Color color = renderer.material.color;
-            //color.a *= 0.6f;
-            //renderer.material.color = color;
-    
-            return null;
-        }
-
-        private IEnumerator DashEffect(int tick, float delay)
-        {
-            WaitForSeconds wait = new WaitForSeconds(delay);
-
-            while (tick > 0)
-            {
-                yield return wait;
-                tick -= 1;
-                GameObject clone = CreateClone();
-                Object.Destroy(clone, delay * 3);
-            }
-        }
-
-
-
         protected override void DoCastAbility()
-        {
-            throw new global::System.NotImplementedException();
-        }
-
-        protected override void onCast(Unit by)
-        {
-            throw new global::System.NotImplementedException();
-        }
-
-        protected override void onCast(Unit by, Unit target)
-        {
-            throw new global::System.NotImplementedException();
-        }
-
-        protected override void onCast(Unit by, Vector3 target)
-        {
-            throw new global::System.NotImplementedException();
-        }
-
-        protected override Error Condition(Unit by)
-        {
-            throw new global::System.NotImplementedException();
-        }
-
-        protected override Error Condition(Unit by, Unit target)
-        {
-            throw new global::System.NotImplementedException();
-        }
-
-        protected override Error Condition(Unit by, Vector3 target)
-        {
-            throw new global::System.NotImplementedException();
-        }
-
-        public override long CastTime(Unit unit)
         {
             throw new global::System.NotImplementedException();
         }
@@ -101,6 +38,26 @@ namespace Seyren.Examples.Abilities
         }
 
         public override IAction Action(Unit by, Vector3 target)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        protected override void onCast()
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        protected override Error Condition(Unit by)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        protected override Error Condition(Unit by, Unit target)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        protected override Error Condition(Unit by, Vector3 target)
         {
             throw new global::System.NotImplementedException();
         }

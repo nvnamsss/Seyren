@@ -1,6 +1,8 @@
-﻿using Seyren.System.Damages;
+﻿using Seyren.System.Abilities;
+using Seyren.System.Damages;
 using Seyren.System.Forces;
 using Seyren.System.Generics;
+using Seyren.System.States;
 using Seyren.System.Units;
 using Seyren.System.Units.Projectiles;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using UnityEngine;
 
 namespace Seyren.System.Units.Dummies
 {
-    public partial class Dummy : MonoBehaviour, IAttribute, IUnit
+    public partial class Dummy : MonoBehaviour, IUnit
     {
         public delegate bool AffectConditionHandler<T>(Dummy sender, T obj);
         public delegate void UnitAffectedHandler(Dummy sender, Unit affected);
@@ -50,7 +52,7 @@ namespace Seyren.System.Units.Dummies
         }
         public Attribute Attribute { get; set; }
 
-        public ModificationInfos Modification { get; set; }
+        public Modification Modification { get; set; }
         public float HitDelay { get; set; }
         public float TimeExpired { get; set; }
         public List<Unit> AffectedUnits;
@@ -67,6 +69,12 @@ namespace Seyren.System.Units.Dummies
         public long UnitID => throw new global::System.NotImplementedException();
 
         public Force Force => throw new global::System.NotImplementedException();
+
+        public State State => throw new global::System.NotImplementedException();
+
+
+        public ObjectStatus ObjectStatus { get => throw new global::System.NotImplementedException(); set => throw new global::System.NotImplementedException(); }
+        IAttribute IUnit.Attribute { get => throw new global::System.NotImplementedException(); set => throw new global::System.NotImplementedException(); }
 
         public Rigidbody2D Body;
         public Collider2D Collider;
@@ -113,6 +121,9 @@ namespace Seyren.System.Units.Dummies
             throw new global::System.NotImplementedException();
         }
 
-
+        public Error Cast(Ability ability)
+        {
+            throw new global::System.NotImplementedException();
+        }
     }
 }

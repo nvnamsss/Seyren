@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace Seyren.System.Damages
 {
-    public static class Function
+    public static class DamageEngine
     {
-        public static void Damage(Unit source, Unit target, float damage, DamageType type, TriggerType trigger)
+        public static void Damage(IUnit source, IUnit target, float damage, DamageType type, TriggerType trigger)
         {
-            if ((target.UnitStatus | UnitStatus.Invulnerable) == target.UnitStatus)
+            if ((target.ObjectStatus | ObjectStatus.Invulnerable) == target.ObjectStatus)
             {
                 Debug.Log("Invulnerable");
                 return;
@@ -26,12 +26,12 @@ namespace Seyren.System.Damages
             damageInfo.DamageType = type;
             damageInfo.CalculateDamage();
 
-            if (target.CurrentShield > 0 || target.CurrentPShield > 0 || target.CurrentMShield > 0)
+            if (target.State.CurrentShield > 0 || target.State.CurrentPShield > 0 || target.State.CurrentMShield > 0)
             {
                 if (damageInfo.DamageType == DamageType.Physical)
                 {
-                    float min = Mathf.Min(target.CurrentPShield, damageInfo.DamageAmount);
-                    target.CurrentPShield -= min;
+                    float min = Mathf.Min(target.State.CurrentPShield, damageInfo.DamageAmount);
+                    target.State.CurrentPShield -= min;
                     damageInfo.DamageAmount -= min;
 
                     UnityEngine.Debug.Log("Physical shield prevent: " + min);
@@ -39,15 +39,15 @@ namespace Seyren.System.Damages
 
                 if (damageInfo.DamageType == DamageType.Magical)
                 {
-                    float min = Mathf.Min(target.CurrentMShield, damageInfo.DamageAmount);
-                    target.CurrentMShield -= min;
+                    float min = Mathf.Min(target.State.CurrentMShield, damageInfo.DamageAmount);
+                    target.State.CurrentMShield -= min;
                     damageInfo.DamageAmount -= min;
                 }
 
                 if (damageInfo.DamageAmount > 0)
                 {
-                    float min = Mathf.Min(target.CurrentShield, damageInfo.DamageAmount);
-                    target.CurrentShield -= min;
+                    float min = Mathf.Min(target.State.CurrentShield, damageInfo.DamageAmount);
+                    target.State.CurrentShield -= min;
                     damageInfo.DamageAmount -= min;
 
                     UnityEngine.Debug.Log("Shield prevent: " + min);

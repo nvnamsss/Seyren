@@ -40,14 +40,9 @@ namespace Seyren.Examples.Abilities
             throw new global::System.NotImplementedException();
         }
 
-        public override long CastTime(Unit unit)
-        {
-            throw new global::System.NotImplementedException();
-        }
-
         protected override void AuraInterval()
         {
-    
+            throw new global::System.NotImplementedException();
         }
 
         protected override Error Condition(Unit by)
@@ -65,22 +60,9 @@ namespace Seyren.Examples.Abilities
             throw new global::System.NotImplementedException();
         }
 
-        protected override void onCast(Unit by)
+        protected override void onCast()
         {
             throw new global::System.NotImplementedException();
         }
-
-        protected override void onCast(Unit by, Unit target)
-        {
-            throw new global::System.NotImplementedException();
-        }
-
-        protected override void onCast(Unit by, Vector3 target)
-        {
-            throw new global::System.NotImplementedException();
-        }
-
-
-
     }
 }
