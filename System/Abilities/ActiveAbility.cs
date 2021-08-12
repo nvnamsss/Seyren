@@ -12,78 +12,86 @@ namespace Seyren.System.Abilities
 {
     public abstract class ActiveAbility : Ability
     {
-        // public event GameEventHandler<ActiveAbility, CastingSpellEventArgs> Casting;
-        // public event GameEventHandler<ActiveAbility> CastCompleted;
-        // public float BaseCastTime { get; set; }
+        protected enum CooldownType
+        {
+            WhenCasting,
+            WhenCancelled,
+            WhenCast,
+
+        }
+
+        // public event GameEventHandler<ActiveAbility, CastingSpellEventArgs> OnCasting;
+        // public event GameEventHandler<ActiveAbility> OnCast;
+        public float castTime;
         // public float CastTimeRemaining { get; set; }
         // public bool IsCasting { get; set; }
         // public float CastInterval { get; set; }
-        // protected Coroutine castCoroutine;
-        protected Coroutine cooldownCoroutine;
+        // bool cancel;
+        bool casting;
+        protected CooldownType cooldownType;
+        protected abstract void DoWhenCasting();
         protected abstract void DoCastAbility();
-        public ActiveAbility(float castTime, float cooldown, int level) :
-            base(cooldown, level)
+        public ActiveAbility(int level) : base(level)
         {
             CastType = CastType.Active;
+            casting = false;
+            // cancel = false;
         }
 
-        // public override bool Cast()
-        // {
-        //     if (!Condition())
-        //     {
-        //         return false;
-        //     }
+        public void Cancel()
+        {
+            // cancel = true;
+            casting = false;
+            if (cooldownType == CooldownType.WhenCancelled)
+            {
+                cooldown();
+            }
+        }
 
-        //     // CastingSpellEventArgs cing = new CastingSpellEventArgs();
-        //     // Casting?.Invoke(this, cing);
+        public override Error Cast(Unit by)
+        {
+            abilityTarget = AbilityTarget.NoTarget(by);
+            onCast();
+            return null;
+        }
 
-        //     // if (cing.Cancel)
-        //     // {
-        //     //     return false;
-        //     // }
+        public override Error Cast(Unit by, Unit target)
+        {
+            abilityTarget = AbilityTarget.UnitTarget(by, target);
+            onCast();
+            return null;
+        }
+        public override Error Cast(Unit by, Vector3 location)
+        {
+            abilityTarget = AbilityTarget.PointTarget(by, location);
+            onCast();
+            return null;
+        }
 
-        //     // castCoroutine = Caster.StartCoroutine(CastingProcess(CastInterval, BaseCastTime));
-        //     return true;
-        // }
+        protected override async void onCast()
+        {
+            casting = true;
+            int c = (int)(castTime * 1000);
+            if (cooldownType == CooldownType.WhenCasting)
+            {
+                cooldown();
+            }
+            DoWhenCasting();
 
-//         protected virtual IEnumerator CastingProcess(float delayTime, float castTime)
-//         {
-//             var wait = new WaitForSeconds(delayTime);
-//             IsCasting = true;
-//             CastTimeRemaining = castTime;
-// #if UNITY_EDITOR
-//             Debug.Log("[ActiveAbility] - " + Caster.name + " Casting ability " + GetType().Name);
-// #endif
-//             while (CastTimeRemaining > 0)
-//             {
-//                 yield return wait;
-//                 CastTimeRemaining -= delayTime;
-//             }
-// #if UNITY_EDITOR
-//             Debug.Log("[ActiveAbility] - " + Caster.name + " Casting ability " + GetType().Name);
-// #endif
-//             if (IsCasting)
-//             {
-//                 IsCasting = false;
-//                 DoCastAbility();
-//                 cooldownCoroutine = Caster.StartCoroutine(CastedProcess(CooldownInterval, BaseCoolDown));
-//             }
-//         }
+            if (!casting) return;
+            await Task.Delay(c);
+            if (!casting) return;
 
-//         protected virtual IEnumerator CastedProcess(float delayTime, float cooldownTime)
-//         {
-//             var wait = new WaitForSeconds(delayTime);
-//             CastCompleted?.Invoke(this);
-//             Active = false;
-//             IsCasting = false;
-//             CooldownRemaining = cooldownTime - delayTime;
+            DoCastAbility();
+            if (cooldownType == CooldownType.WhenCast)
+            {
+                cooldown();
+            }
+        }
 
-//             while (CooldownRemaining >= 0)
-//             {
-//                 yield return wait;
-//                 CooldownRemaining -= delayTime;
-//             }
-//             Active = true;
-//         }
+        protected void cooldown()
+        {
+            nextCooldown = DateTimeOffset.Now.ToUnixTimeMilliseconds() + (long)(Cooldown * 1000);
+        }
     }
 }

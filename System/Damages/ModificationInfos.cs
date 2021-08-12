@@ -12,14 +12,14 @@ using UnityEngine;
 namespace Seyren.System.Damages
 {
     [Serializable]
-    public class ModificationInfos
+    public class Modification
     {
         public PrePassiveInfos PrePassive { get; }
         public CriticalInfos Critical { get; }
         public EvasionInfos Evasion { get; }
         public ReductionInfos Reduction { get; }
         public PostPassiveInfos PostPassive { get; }
-        public ModificationInfos()
+        public Modification()
         {
             PrePassive = new PrePassiveInfos();
             Critical = new CriticalInfos();
@@ -28,7 +28,7 @@ namespace Seyren.System.Damages
             PostPassive = new PostPassiveInfos();
         }
 
-        public void Add(ModificationInfos modification)
+        public void Add(Modification modification)
         {
             foreach (var item in Critical)
             {
@@ -36,7 +36,7 @@ namespace Seyren.System.Damages
             }
         }
 
-        public void Remove(ModificationInfos modification)
+        public void Remove(Modification modification)
         {
 
         }

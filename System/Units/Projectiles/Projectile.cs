@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Seyren.System.Units.Projectiles
 {
-    public abstract partial class Projectile : MonoBehaviour, IAttribute
+    public abstract partial class Projectile : MonoBehaviour
     {
         protected Projectile()
         {

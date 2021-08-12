@@ -41,7 +41,7 @@ namespace Seyren.Examples.Items {
                 return false;
             }
 
-            by.CurrentHp += 1000;
+            // by.CurrentHp += 1000;
             return true;
         }
 
@@ -60,7 +60,7 @@ namespace Seyren.Examples.Items {
     {
         protected override bool consume(Unit by)
         {
-            by.CurrentMp += 1000;
+            // by.CurrentMp += 1000;
             return true;
         }
 

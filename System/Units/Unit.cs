@@ -1,21 +1,14 @@
-﻿using Seyren.Examples.DamageModification;
-using Seyren.System.Terrains;
-using Seyren.System.Actions;
-using Seyren.System.Damages;
-using Seyren.System.Damages.Critical;
-using Seyren.System.Damages.Evasion;
-using Seyren.System.Units.Projectiles;
-using System.Collections.Generic;
-using System.IO;
+﻿using Seyren.System.Damages;
+using Seyren.System.States;
 using UnityEngine;
-using UnityEditor;
-using System.Collections;
 using Seyren.System.Generics;
 using System.Threading;
+using Seyren.System.Abilities;
 
 namespace Seyren.System.Units
 {
-    public partial class Unit : IUnit, IAttribute
+    
+    public partial class Unit : IUnit
     {
         private static long id;
         public Unit() : this(Interlocked.Increment(ref id))
@@ -26,16 +19,16 @@ namespace Seyren.System.Units
         {
             UnitID = uid;
             JumpTimes = 1;
-            Modification = new ModificationInfos();
+            Modification = new Modification();
             Attribute = new Attribute();
         }
 
         public Error Damage(DamageInfo damageInfo)
         {
             Error err = null;
-            CurrentHp -= damageInfo.DamageAmount;
+            State.CurrentHp -= damageInfo.DamageAmount;
             OnDamaged?.Invoke(this, new TakeDamageEventArgs(damageInfo));
-            if (CurrentHp < 0) err = Kill(this);
+            if (State.CurrentHp < 0) err = Kill(this);
 
             return err;
         }
@@ -46,7 +39,7 @@ namespace Seyren.System.Units
         /// <param name="killer"></param>
         public Error Kill(IUnit by)
         {
-            State = 0;
+            status = 0;
             GameEventHandler<Unit, UnitDyingEventArgs> dying = Dying;
             UnitDyingEventArgs udinge = new UnitDyingEventArgs();
             if (dying != null)
@@ -83,6 +76,11 @@ namespace Seyren.System.Units
             rotation = quaternion;
             Rotated?.Invoke(this, new UnitRotatedEventArgs(old, rotation));
             return null;
+        }
+
+        public Error Cast(Ability ability)
+        {
+            return ability.Cast(this);
         }
     }
 

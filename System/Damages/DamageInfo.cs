@@ -15,8 +15,8 @@ namespace Seyren.System.Damages
 {
     public class DamageInfo: IModifier
     {
-        public Unit Source { get; set; }
-        public Unit Target { get; set; }
+        public IUnit Source { get; set; }
+        public IUnit Target { get; set; }
         public TriggerType TriggerType { get; set; }
         public DamageType DamageType { get; set; }
         public ModificationStatus DamageStatus { get; set; }
@@ -38,7 +38,7 @@ namespace Seyren.System.Damages
         public float blockedDamage;
         public bool evaded;
 
-        public DamageInfo(Unit source, Unit target)
+        public DamageInfo(IUnit source, IUnit target)
         {
             Source = source;
             Target  = target;

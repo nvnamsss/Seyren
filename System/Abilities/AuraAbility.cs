@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Seyren.System.Abilities
@@ -8,7 +9,7 @@ namespace Seyren.System.Abilities
         public bool active;
         public float aoe;
         public float interval;
-        public AuraAbility(float aoe, int level) : base(0, level)
+        public AuraAbility(float aoe, int level) : base(level)
         {
             this.aoe = aoe;
             ManaCost = 0;
@@ -26,6 +27,15 @@ namespace Seyren.System.Abilities
 
         //     return true;
         // }
+
+        protected virtual async void OnActiveAsync(float interval) {
+            int delay = (int)(interval * 1000);
+            while (active) {
+                AuraInterval();
+                await Task.Delay(delay);
+            }
+        }
+
 
         protected virtual IEnumerator OnActive(float interval)
         {

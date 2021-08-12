@@ -1,30 +1,13 @@
-﻿using Seyren.Examples.DamageModification;
-using Seyren.System.Terrains;
-using Seyren.System.Abilities;
-using Seyren.System.Actions;
+﻿using Seyren.System.Terrains;
 using Seyren.System.Damages;
-using Seyren.System.Damages.Critical;
-using Seyren.System.Damages.Evasion;
 using Seyren.System.Forces;
-using Seyren.System.Units;
-using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
-using System;
 using Seyren.System.Generics;
+using Seyren.System.States;
 
 namespace Seyren.System.Units
 {
-    public enum StateValue
-    {
-        Hp,
-        Mp,
-        Shield,
-        MagicalShield,
-        PhysicalShield,
-    }
 
-    [Flags]
     public enum UnitStatus
     {
         None,
@@ -41,7 +24,7 @@ namespace Seyren.System.Units
         Invulnerable,
         SpellImmunity,
     }
-    public partial class Unit : IUnit, IAttribute
+    public partial class Unit : IUnit
     {
         public event GameEventHandler<IUnit, UnitMovedEventArgs> OnMoved;
         public event GameEventHandler<Unit, UnitRotatedEventArgs> Rotated;
@@ -68,132 +51,12 @@ namespace Seyren.System.Units
         public Player Player { get; set; }
         public Quaternion rotation;
         public string name;
-        public Unit Owner { get; set; }
-        public ModificationInfos Modification { get; set; }
         public IAttachable Attach { get; set; }
-        public GroundType StandOn;        
+        public Modification Modification { get; set; }
+        public GroundType StandOn;
         // public AbilityCollection Ability { get; set; }
         // public Dictionary<int, Ability> Abilites { get; set; }
-        public List<Ability> a;
-        public Attribute Attribute
-        {
-            get
-            {
-                return _attribute;
-            }
-            set
-            {
-                _attribute = value;
-            }
-        }
-
-        public UnitStatus UnitStatus
-        {
-            get
-            {
-                return _unitStatus;
-            }
-            set
-            {
-                _unitStatus = value;
-            }
-        }
-        public float CurrentHp
-        {
-            get
-            {
-                return _currentHp;
-            }
-            set
-            {
-                GameEventHandler<Unit, StateChangeEventArgs> state = StateChanging;
-                StateChangeEventArgs sce = new StateChangeEventArgs(StateValue.Hp, _currentHp, value);
-                if (state != null)
-                {
-                    state.Invoke(this, sce);
-                }
-
-                _currentHp = sce.NewValue;
-                if (_currentHp <= 0)
-                {
-                    Kill(damageSource);
-                }
-            }
-        }
-        public float CurrentMp
-        {
-            get
-            {
-                return _currentMp;
-            }
-            set
-            {
-                GameEventHandler<Unit, StateChangeEventArgs> state = StateChanging;
-                StateChangeEventArgs sce = new StateChangeEventArgs(StateValue.Mp, _currentMp, value);
-                if (state != null)
-                {
-                    state.Invoke(this, sce);
-                }
-
-                _currentMp = sce.NewValue;
-            }
-        }
-
-        public float CurrentShield
-        {
-            get
-            {
-                return _currentShield;
-            }
-            set
-            {
-                GameEventHandler<Unit, StateChangeEventArgs> state = StateChanging;
-                StateChangeEventArgs sce = new StateChangeEventArgs(StateValue.Shield, _currentShield, value);
-                if (state != null)
-                {
-                    state.Invoke(this, sce);
-                }
-
-                _currentShield = sce.NewValue;
-            }
-        }
-
-        public float CurrentMShield
-        {
-            get
-            {
-                return _currentMShield;
-            }
-            set
-            {
-                GameEventHandler<Unit, StateChangeEventArgs> state = StateChanging;
-                StateChangeEventArgs sce = new StateChangeEventArgs(StateValue.MagicalShield, _currentMShield, value);
-                if (state != null)
-                {
-                    state.Invoke(this, sce);
-                }
-
-                _currentMShield = sce.NewValue;
-            }
-        }
-        public float CurrentPShield
-        {
-            get
-            {
-                return _currentPShield;
-            }
-            set
-            {
-                GameEventHandler<Unit, StateChangeEventArgs> state = StateChanging;
-                StateChangeEventArgs sce = new StateChangeEventArgs(StateValue.PhysicalShield, _currentPShield, value);
-                if (state != null)
-                {
-                    state.Invoke(this, sce);
-                }
-
-                _currentPShield = sce.NewValue;
-            }
-        }
+        public IAttribute Attribute { get; set; }
 
         public int JumpTimes
         {
@@ -207,27 +70,43 @@ namespace Seyren.System.Units
             }
         }
 
-        public bool IsHidden { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool IsInvulnerable { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public Vector3 Location => _position;
 
         public Quaternion Rotation => rotation;
 
-        public Force Force {get;}
+        public Force Force { get; }
 
-        public Vector3 Size {
-            get {
+        public Vector3 Size
+        {
+            get
+            {
                 return _size;
             }
-            set {
+            set
+            {
                 _size = value;
             }
         }
 
-        IUnit IUnit.Owner => throw new NotImplementedException();
+        public IUnit Owner => _owner;
+        public UnitStatus UnitStatus
+        {
+            get
+            {
+                return _unitStatus;
+            }
+            set
+            {
+                _unitStatus = value;
+            }
+        }
+        public State State => _state;
 
-        public int State;
+        public ObjectStatus ObjectStatus { get => throw new global::System.NotImplementedException(); set => throw new global::System.NotImplementedException(); }
+
+        protected State _state;
+
+        public int status;
         protected Vector3 _position;
         protected Vector3 _size;
         protected Quaternion _rotation;
@@ -255,7 +134,7 @@ namespace Seyren.System.Units
         [SerializeField]
         protected UnitStatus _unitStatus;
         protected Unit damageSource;
-        public ModificationInfos modification;
+        public Modification modification;
 
     }
 

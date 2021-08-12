@@ -14,11 +14,10 @@ namespace Seyren.Examples.Abilities
     {
         public static readonly int Id = 0x65686501;
         private Unit unit;
-        private Sprite sprite;
         private RuntimeAnimatorController controller;
         private Dictionary<Unit, int> hitList;
 
-        public AndrasAttack(float castTime, float cooldown, int level) : base(castTime, cooldown, level)
+        public AndrasAttack(int level) : base(level)
         {
         }
 
@@ -35,26 +34,6 @@ namespace Seyren.Examples.Abilities
         public override IAction Action(Unit by, Vector3 target)
         {
             throw new NotImplementedException();
-        }
-
-        public override long CastTime(Unit unit)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
-        public override string ToString()
-        {
-            return base.ToString();
         }
 
         protected override Error Condition(Unit by)
@@ -77,17 +56,7 @@ namespace Seyren.Examples.Abilities
             throw new NotImplementedException();
         }
 
-        protected override void onCast(Unit by)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void onCast(Unit by, Unit target)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void onCast(Unit by, Vector3 target)
+        protected override void DoWhenCasting()
         {
             throw new NotImplementedException();
         }

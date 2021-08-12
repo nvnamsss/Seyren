@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Seyren.System.Abilities;
 using Seyren.System.Actions;
 using Seyren.System.Generics;
+using Seyren.System.States;
 using Seyren.System.Terrains;
 using Seyren.System.Units;
 using UnityEngine;
@@ -23,7 +24,7 @@ namespace Seyren.Examples.Actions
         private void Awake()
         {
             unit = new Unit();
-            unit.Attribute.MovementSpeed = new BaseFloat(1, 0);
+            unit.Attribute.SetBaseFloat("MovementSpeed", 1);
             unit.OnMoved += (u, e) =>
             {
                 transform.position = e.NewPosition;
@@ -68,7 +69,7 @@ namespace Seyren.Examples.Actions
                 Debug.Log("bbb");
                 movingCoroutine.onTick = () =>
                 {
-                    Vector3 to = unit.Location + Vector3.right * unit.Attribute.MovementSpeed.Total;
+                    Vector3 to = unit.Location + Vector3.right * unit.Attribute.GetBaseFloat("MovementSpeed").Total;
                     unit.Move(to);
                 };
                 movingCoroutine.Reset();
@@ -80,7 +81,7 @@ namespace Seyren.Examples.Actions
 
                 Debug.Log("aaa");
                 movingCoroutine = new ResetableTicker(10, () => {
-                    Vector3 to = unit.Location + Vector3.right * unit.Attribute.MovementSpeed.Total;
+                    Vector3 to = unit.Location + Vector3.right * unit.Attribute.GetBaseFloat("MovementSpeed").Total;
                     unit.Move(to);
                 });
                 movingCoroutine.Reset();
@@ -113,7 +114,7 @@ namespace Seyren.Examples.Actions
             {
                 yield return wait;
                 tick -= 1;
-                Vector3 to = unit.Location + direction * unit.Attribute.MovementSpeed.Total;
+                Vector3 to = unit.Location + direction * unit.Attribute.GetBaseFloat("MovementSpeed").Total;
                 unit.Move(to);
             }
 

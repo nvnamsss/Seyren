@@ -19,42 +19,7 @@ namespace Seyren.Examples.Abilities
             Cooldown = 1.0f;
         }
 
-        protected override void onCast(Unit by)
-        {
-            throw new global::System.NotImplementedException();
-        }
-
-        protected override void onCast(Unit by, Unit target)
-        {
-            throw new global::System.NotImplementedException();
-        }
-
-        protected override void onCast(Unit by, Vector3 target)
-        {
-            throw new global::System.NotImplementedException();
-        }
-
         protected override void DoCastAbility()
-        {
-            throw new global::System.NotImplementedException();
-        }
-
-        protected override Error Condition(Unit by)
-        {
-            throw new global::System.NotImplementedException();
-        }
-
-        protected override Error Condition(Unit by, Unit target)
-        {
-            throw new global::System.NotImplementedException();
-        }
-
-        protected override Error Condition(Unit by, Vector3 target)
-        {
-            throw new global::System.NotImplementedException();
-        }
-
-        public override long CastTime(Unit unit)
         {
             throw new global::System.NotImplementedException();
         }
@@ -70,6 +35,26 @@ namespace Seyren.Examples.Abilities
         }
 
         public override IAction Action(Unit by, Vector3 target)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        protected override void onCast()
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        protected override Error Condition(Unit by)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        protected override Error Condition(Unit by, Unit target)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        protected override Error Condition(Unit by, Vector3 target)
         {
             throw new global::System.NotImplementedException();
         }

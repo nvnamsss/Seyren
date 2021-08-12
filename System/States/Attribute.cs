@@ -1,78 +1,190 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEditor;
-using System.Diagnostics;
 
-namespace Seyren.System.Units
+namespace Seyren.System.States
 {
     public class BaseInt
     {
+        public static BaseInt Zero = new BaseInt(0, 0);
+
         public int Base;
         public int Incr;
         public int Total => Base + Incr;
-        public BaseInt(int b, int i) {
+        public BaseInt(int b, int i)
+        {
             Base = b;
             Incr = i;
         }
 
-        public int Amplify(float percent) {
+        public int Amplify(float percent)
+        {
 
             return Total;
         }
 
-        public int Increase(int value) {
+        public int Increase(int value)
+        {
             return Total;
         }
     }
 
-    public struct BaseFloat {
+    public struct BaseFloat
+    {
+        public static BaseFloat Zero = new BaseFloat(0, 0);
         public float Base;
         public float Incr;
         public float Total => Base + Incr;
-        public BaseFloat(int b, int i) {
+        public BaseFloat(float b, float i)
+        {
             Base = b;
             Incr = i;
         }
 
-        public float Amplify(float percent) {
+        public float Amplify(float percent)
+        {
             Incr = Base * percent / 100;
             return Total;
         }
 
-        public float Increase(int value) {
+        public float Increase(float value)
+        {
             Incr += value;
             return Total;
         }
 
-        public static BaseFloat operator +(BaseFloat lhs, BaseFloat rhs) {
+        public static BaseFloat operator +(BaseFloat lhs, BaseFloat rhs)
+        {
             lhs.Base += rhs.Base;
             lhs.Incr += rhs.Incr;
-            return lhs;           
+            return lhs;
         }
-        public static BaseFloat operator -(BaseFloat lhs, BaseFloat rhs) {
+        public static BaseFloat operator -(BaseFloat lhs, BaseFloat rhs)
+        {
             lhs.Base -= rhs.Base;
             lhs.Incr -= rhs.Incr;
             return lhs;
         }
 
-        public static BaseFloat operator +(BaseFloat lhs, float rhs) {
+        public static BaseFloat operator +(BaseFloat lhs, float rhs)
+        {
             lhs.Base += rhs;
             return lhs;
         }
 
-        public static BaseFloat operator -(BaseFloat lhs, float rhs) {
+        public static BaseFloat operator -(BaseFloat lhs, float rhs)
+        {
             return lhs + (-rhs);
         }
 
 
     }
-    
+
+    public interface IAttribute
+    {
+        BaseFloat GetBaseFloat(string name);
+        BaseInt GetBaseInt(string name);
+        BaseInt AddBaseInt(string name, int val);
+        BaseFloat AddBaseFloat(string name, float val);
+        BaseFloat SetBaseFloat(string name, float val);
+        BaseInt SetBaseInt(string name, int val);
+    }
+
+    public class DefinelessAttribute : IAttribute
+    {
+
+        Dictionary<string, BaseFloat> baseFloats;
+        Dictionary<string, BaseInt> baseInts;
+        Dictionary<string, int> ints;
+        Dictionary<string, float> floats;
+
+        public DefinelessAttribute()
+        {
+            baseFloats = new Dictionary<string, BaseFloat>();
+            baseInts = new Dictionary<string, BaseInt>();
+            ints = new Dictionary<string, int>();
+            floats = new Dictionary<string, float>();
+        }
+
+        public BaseFloat AddBaseFloat(string name, float val)
+        {
+            if (!baseFloats.ContainsKey(name))
+            {
+                baseFloats.Add(name, new BaseFloat(0, val));
+                return baseFloats[name];
+            }
+
+            BaseFloat bf = baseFloats[name];
+            bf.Increase(val);
+            baseFloats[name] = bf;
+
+            return bf;
+        }
+
+        public BaseInt AddBaseInt(string name, int val)
+        {
+            if (!baseInts.ContainsKey(name))
+            {
+                baseInts.Add(name, new BaseInt(0, val));
+                return baseInts[name];
+            }
+
+            BaseInt bi = baseInts[name];
+            bi.Increase(val);
+            baseInts[name] = bi;
+
+            return bi;
+        }
+
+        public BaseFloat GetBaseFloat(string name)
+        {
+            if (!baseFloats.ContainsKey(name))
+            {
+                return BaseFloat.Zero;
+            }
+            return baseFloats[name];
+        }
+
+        public BaseInt GetBaseInt(string name)
+        {
+            if (!baseInts.ContainsKey(name))
+            {
+                return BaseInt.Zero;
+            }
+            return baseInts[name];
+        }
+
+        public BaseFloat SetBaseFloat(string name, float val)
+        {
+            if (!baseFloats.ContainsKey(name))
+            {
+                baseFloats.Add(name, new BaseFloat(val, 0));
+                return baseFloats[name];
+            }
+
+            BaseFloat bf = baseFloats[name];
+            bf.Base = val;
+            baseFloats[name] = bf;
+            return bf;
+
+        }
+
+        public BaseInt SetBaseInt(string name, int val)
+        {
+            if (!baseInts.ContainsKey(name))
+            {
+                baseInts.Add(name, new BaseInt(val, 0));
+                return baseInts[name];
+            }
+            BaseInt bi = baseInts[name];
+            bi.Base = val;
+            baseInts[name] = bi;
+            return bi;
+        }
+    }
+
     [Serializable]
-    public class Attribute 
+    public class Attribute : IAttribute
     {
         public int DataType { get; set; }
         public BaseFloat Strength
@@ -138,7 +250,7 @@ namespace Seyren.System.Units
             }
             set
             {
-                _maxHp = value; 
+                _maxHp = value;
             }
         }
         public BaseFloat MaxMp
@@ -306,17 +418,6 @@ namespace Seyren.System.Units
                 _attackSpeed = value;
             }
         }
-        public BaseFloat JumpSpeed
-        {
-            get
-            {
-                return _jumpSpeed;
-            }
-            set
-            {
-                _jumpSpeed = value;
-            }
-        }
 
         [SerializeField]
         private BaseFloat _strength;
@@ -431,5 +532,143 @@ namespace Seyren.System.Units
             return lhs;
         }
 
+        public BaseFloat GetBaseFloat(string name)
+        {
+            switch (name)
+            {
+                case "Strength":
+                    return Strength;
+                case "Intelligent":
+                    return Intelligent;
+                case "Agility":
+                    return Agility;
+                case "HpRegen":
+                    return HpRegen;
+                case "MpRegen":
+                    return MpRegen;
+                case "CastRange":
+                    return CastRange;
+                case "AttackRange":
+                    return AttackRange;
+                case "AttackDamage":
+                    return AttackDamage;
+                case "MaxHp":
+                    return MaxHp;
+                case "MaxMp":
+                    return MaxMp;
+                case "MovementSpeed":
+                    return MovementSpeed;
+                case "MDamageAmplified":
+                    return MDamageAmplified;
+            }
+
+            return BaseFloat.Zero;
+        }
+
+        public BaseInt GetBaseInt(string name)
+        {
+            return BaseInt.Zero;
+        }
+
+        public BaseInt AddBaseInt(string name, int val)
+        {
+            return BaseInt.Zero;
+        }
+
+        public BaseFloat AddBaseFloat(string name, float val)
+        {
+            switch (name)
+            {
+                case "Strength":
+                    _strength.Increase(val);
+                    return Strength;
+                case "Intelligent":
+                    _intelligent.Increase(val);
+                    return Intelligent;
+                case "Agility":
+                    _agility.Increase(val);
+                    return Agility;
+                case "HpRegen":
+                    _hpRegen.Increase(val);
+                    return HpRegen;
+                case "MpRegen":
+                    _mpRegen.Increase(val);
+                    return MpRegen;
+                case "CastRange":
+                    _castRange.Increase(val);
+                    return CastRange;
+                case "AttackRange":
+                    _attackDamage.Increase(val);
+                    return AttackRange;
+                case "AttackDamage":
+                    _attackDamage.Increase(val);
+                    return AttackDamage;
+                case "MaxHp":
+                    _maxHp.Increase(val);
+                    return MaxHp;
+                case "MaxMp":
+                    _agility.Increase(val);
+                    return MaxMp;
+                case "MovementSpeed":
+                    _movementSpeed.Increase(val);
+                    return MovementSpeed;
+                case "MDamageAmplified":
+                    _mDamageAmplified.Increase(val);
+                    return MDamageAmplified;
+            }
+
+            return BaseFloat.Zero;
+        }
+
+        public BaseFloat SetBaseFloat(string name, float val)
+        {
+            switch (name)
+            {
+                case "Strength":
+                    _strength.Base = val;
+                    return Strength;
+                case "Intelligent":
+                    _intelligent.Base = val;
+                    return Intelligent;
+                case "Agility":
+                    _agility.Base = val;
+                    return Agility;
+                case "HpRegen":
+                    _hpRegen.Base = val;
+
+                    return HpRegen;
+                case "MpRegen":
+                    _mpRegen.Base = val;
+                    return MpRegen;
+                case "CastRange":
+                    _castRange.Base = val;
+                    return CastRange;
+                case "AttackRange":
+                    _attackDamage.Base = val;
+                    return AttackRange;
+                case "AttackDamage":
+                    _attackDamage.Base = val;
+                    return AttackDamage;
+                case "MaxHp":
+                    _maxHp.Base = val;
+                    return MaxHp;
+                case "MaxMp":
+                    _agility.Base = val;
+                    return MaxMp;
+                case "MovementSpeed":
+                    _movementSpeed.Base = val;
+                    return MovementSpeed;
+                case "MDamageAmplified":
+                    _mDamageAmplified.Base = val;
+                    return MDamageAmplified;
+            }
+
+            return BaseFloat.Zero;
+        }
+
+        public BaseInt SetBaseInt(string name, int val)
+        {
+            return BaseInt.Zero;
+        }
     }
 }
