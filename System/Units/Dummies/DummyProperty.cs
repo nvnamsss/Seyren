@@ -1,4 +1,5 @@
 ﻿using Seyren.System.Abilities;
+using Seyren.System.Actions;
 using Seyren.System.Damages;
 using Seyren.System.Forces;
 using Seyren.System.Generics;
@@ -75,6 +76,8 @@ namespace Seyren.System.Units.Dummies
 
         public ObjectStatus ObjectStatus { get => throw new global::System.NotImplementedException(); set => throw new global::System.NotImplementedException(); }
         IAttribute IUnit.Attribute { get => throw new global::System.NotImplementedException(); set => throw new global::System.NotImplementedException(); }
+
+        public ActionCollection Actions => throw new global::System.NotImplementedException();
 
         public Rigidbody2D Body;
         public Collider2D Collider;

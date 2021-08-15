@@ -18,6 +18,9 @@ namespace Seyren.Examples.Actions
 
         public ActionType ActionType { get; }
 
+        int IAction.ActionType => throw new NotImplementedException();
+
+        public bool IsCompleted => throw new NotImplementedException();
 
         public FreeAction()
         {
@@ -26,6 +29,7 @@ namespace Seyren.Examples.Actions
 
         public event GameEventHandler<IAction> ActionStart;
         public event GameEventHandler<IAction> ActionEnd;
+        public event GameEventHandler<IAction> ActionBroke;
 
         public void Invoke()
         {
@@ -48,6 +52,21 @@ namespace Seyren.Examples.Actions
         }
 
         public IEnumerable<IThing> Do(params object[] obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsAffectedBy(int actionType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Error Run()
+        {
+            throw new NotImplementedException();
+        }
+
+        Error IAction.RunCondition()
         {
             throw new NotImplementedException();
         }

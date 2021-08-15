@@ -19,32 +19,37 @@ namespace Seyren.Examples.Abilities
         {
         }
 
-        public override IAction Action(Unit by)
+        public override IAction Action(IUnit by)
         {
             throw new NotImplementedException();
         }
 
-        public override IAction Action(Unit by, Unit target)
+        public override IAction Action(IUnit by, IUnit target)
         {
             throw new NotImplementedException();
         }
 
-        public override IAction Action(Unit by, Vector3 target)
+        public override IAction Action(IUnit by, Vector3 target)
         {
             throw new NotImplementedException();
         }
 
-        protected override Error Condition(Unit by)
+        public override Ability Clone()
         {
             throw new NotImplementedException();
         }
 
-        protected override Error Condition(Unit by, Unit target)
+        protected override Error Condition(IUnit by)
         {
             throw new NotImplementedException();
         }
 
-        protected override Error Condition(Unit by, Vector3 target)
+        protected override Error Condition(IUnit by, IUnit target)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Error Condition(IUnit by, Vector3 target)
         {
             throw new NotImplementedException();
         }

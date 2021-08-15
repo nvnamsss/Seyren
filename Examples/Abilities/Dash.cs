@@ -27,17 +27,17 @@ namespace Seyren.Examples.Abilities
             throw new global::System.NotImplementedException();
         }
 
-        public override IAction Action(Unit by)
+        public override IAction Action(IUnit by)
         {
             throw new global::System.NotImplementedException();
         }
 
-        public override IAction Action(Unit by, Unit target)
+        public override IAction Action(IUnit by, IUnit target)
         {
             throw new global::System.NotImplementedException();
         }
 
-        public override IAction Action(Unit by, Vector3 target)
+        public override IAction Action(IUnit by, Vector3 target)
         {
             throw new global::System.NotImplementedException();
         }
@@ -47,17 +47,22 @@ namespace Seyren.Examples.Abilities
             throw new global::System.NotImplementedException();
         }
 
-        protected override Error Condition(Unit by)
+        protected override Error Condition(IUnit by)
         {
             throw new global::System.NotImplementedException();
         }
 
-        protected override Error Condition(Unit by, Unit target)
+        protected override Error Condition(IUnit by, IUnit target)
         {
             throw new global::System.NotImplementedException();
         }
 
-        protected override Error Condition(Unit by, Vector3 target)
+        protected override Error Condition(IUnit by, Vector3 target)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public override Ability Clone()
         {
             throw new global::System.NotImplementedException();
         }

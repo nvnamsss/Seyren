@@ -10,18 +10,13 @@ namespace Seyren.System.Actions
     public enum ActionType
     {
         None = 0,
-        Walk,
-        Run = 1,
-        Jump,
-        Dash,
-        Roll,
-        Attack = 2,
-        Defense,
-        CastAbility = 4,
-        Channel,
-        Interact,
-        Dance,
-        Sit,
-        Grab,
+        Moving = 1 >> 1,
+        Dashing = 1 >> 2,
+        Rolling = 1 >> 3,
+        Attacking = 1 >> 4,
+        Defending = 1 >> 5,
+        Casting = 1 >> 6,
+        Channeling = 1 >> 7,
+        Interacting = 1 >> 8,
     }
 }

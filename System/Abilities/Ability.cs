@@ -106,16 +106,16 @@ namespace Seyren.System.Abilities
         }
 
         protected AbilityTarget abilityTarget;
-        public virtual Error Cast(Unit by)
+        public virtual Error Cast(IUnit by)
         {
             abilityTarget = AbilityTarget.NoTarget(by);
             onCast();
             nextCooldown = DateTimeOffset.Now.ToUnixTimeMilliseconds() + (long)(Cooldown * 1000);
             return null;
         }
-
-        public virtual Error Cast(Unit by, Unit target)
+        public virtual Error Cast(IUnit by, IUnit target)
         {
+            Debug.Log("Cast");
             abilityTarget = AbilityTarget.UnitTarget(by, target);
             onCast();
             nextCooldown = DateTimeOffset.Now.ToUnixTimeMilliseconds() + (long)(Cooldown * 1000);
@@ -123,8 +123,9 @@ namespace Seyren.System.Abilities
             return null;
         }
 
-        public virtual Error Cast(Unit by, Vector3 location)
+        public virtual Error Cast(IUnit by, Vector3 location)
         {
+            Debug.Log("Cast");
             abilityTarget = AbilityTarget.PointTarget(by, location);
             onCast();
             nextCooldown = DateTimeOffset.Now.ToUnixTimeMilliseconds() + (long)(Cooldown * 1000);
@@ -132,7 +133,7 @@ namespace Seyren.System.Abilities
             return null;
         }
 
-        public Error CanCast(Unit by)
+        public Error CanCast(IUnit by)
         {
             if (Targeting != TargetingType.NoTarget)
             {
@@ -143,7 +144,7 @@ namespace Seyren.System.Abilities
             return Condition(by);
         }
 
-        public Error CanCast(Unit unit, Unit target)
+        public Error CanCast(IUnit unit, IUnit target)
         {
             if ((Targeting | TargetingType.UnitTarget) != Targeting)
             {
@@ -164,9 +165,9 @@ namespace Seyren.System.Abilities
             return Condition(by, target);
         }
 
-        public abstract IAction Action(Unit by);
-        public abstract IAction Action(Unit by, Unit target);
-        public abstract IAction Action(Unit by, Vector3 target);
+        public abstract IAction Action(IUnit by);
+        public abstract IAction Action(IUnit by, IUnit target);
+        public abstract IAction Action(IUnit by, Vector3 target);
 
         protected abstract void onCast();
         // protected abstract void onCast(Unit by);
@@ -177,9 +178,10 @@ namespace Seyren.System.Abilities
         /// Ability will be cast if condition is true
         /// </summary>
         /// <returns></returns>
-        protected abstract Error Condition(Unit by);
-        protected abstract Error Condition(Unit by, Unit target);
-        protected abstract Error Condition(Unit by, Vector3 target);
+        protected abstract Error Condition(IUnit by);
+        protected abstract Error Condition(IUnit by, IUnit target);
+        protected abstract Error Condition(IUnit by, Vector3 target);
+        public abstract Ability Clone();
     }
 
 }

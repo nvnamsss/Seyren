@@ -37,10 +37,10 @@ namespace Seyren.Examples.Actions
 
             // do the actionq
             _currentAction = action;
-            foreach (IThing thing in action.Do(obj))
-            {
-                thing.Do(obj);                
-            }
+            // foreach (IThing thing in action.Do(obj))
+            // {
+            //     thing.Do(obj);                
+            // }
 
             return null;
         }
