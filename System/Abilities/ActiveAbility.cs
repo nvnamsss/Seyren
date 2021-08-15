@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -14,79 +15,82 @@ namespace Seyren.System.Abilities
     {
         protected enum CooldownType
         {
-            WhenCasting,
-            WhenCancelled,
-            WhenCast,
-
+            WhenCasting = 1 >> 1,
+            WhenCancelled = 1 >> 2,
+            WhenCast = 1 >> 3,
         }
 
-        // public event GameEventHandler<ActiveAbility, CastingSpellEventArgs> OnCasting;
-        // public event GameEventHandler<ActiveAbility> OnCast;
         public float castTime;
-        // public float CastTimeRemaining { get; set; }
-        // public bool IsCasting { get; set; }
-        // public float CastInterval { get; set; }
-        // bool cancel;
-        bool casting;
+        protected bool casting;
+
+
         protected CooldownType cooldownType;
         protected abstract void DoWhenCasting();
         protected abstract void DoCastAbility();
+        Task task;
+        CancellationTokenSource tokenSource;
         public ActiveAbility(int level) : base(level)
         {
             CastType = CastType.Active;
             casting = false;
+            tokenSource = new CancellationTokenSource();
+
             // cancel = false;
         }
 
         public void Cancel()
         {
-            // cancel = true;
+            tokenSource.Cancel();
             casting = false;
-            if (cooldownType == CooldownType.WhenCancelled)
+            if ((cooldownType | CooldownType.WhenCancelled) == cooldownType)
             {
                 cooldown();
             }
         }
 
-        public override Error Cast(Unit by)
+        public override Error Cast(IUnit by)
         {
             abilityTarget = AbilityTarget.NoTarget(by);
             onCast();
             return null;
         }
 
-        public override Error Cast(Unit by, Unit target)
+        public override Error Cast(IUnit by, IUnit target)
         {
             abilityTarget = AbilityTarget.UnitTarget(by, target);
             onCast();
             return null;
         }
-        public override Error Cast(Unit by, Vector3 location)
+        public override Error Cast(IUnit by, Vector3 location)
         {
             abilityTarget = AbilityTarget.PointTarget(by, location);
             onCast();
             return null;
         }
 
-        protected override async void onCast()
+        protected override void onCast()
         {
             casting = true;
             int c = (int)(castTime * 1000);
-            if (cooldownType == CooldownType.WhenCasting)
-            {
-                cooldown();
-            }
-            DoWhenCasting();
 
-            if (!casting) return;
-            await Task.Delay(c);
-            if (!casting) return;
-
-            DoCastAbility();
-            if (cooldownType == CooldownType.WhenCast)
+            task = Task.Run(async () =>
             {
-                cooldown();
-            }
+                if ((cooldownType | CooldownType.WhenCasting) == cooldownType)
+                {
+                    cooldown();
+                }
+                DoWhenCasting();
+
+                await Task.Delay(1000);
+                if (!casting) return;
+                DoCastAbility();
+                if (cooldownType == CooldownType.WhenCast)
+                {
+                    cooldown();
+                }
+                casting = false;
+            }, tokenSource.Token);
+
         }
 
         protected void cooldown()

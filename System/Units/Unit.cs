@@ -21,6 +21,8 @@ namespace Seyren.System.Units
             JumpTimes = 1;
             Modification = new Modification();
             Attribute = new Attribute();
+            _actions = new Actions.ActionCollection();
+            _state = new State();
         }
 
         public Error Damage(DamageInfo damageInfo)

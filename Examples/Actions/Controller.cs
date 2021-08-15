@@ -75,9 +75,9 @@ namespace Seyren.Examples.Actions
                 movingCoroutine.Reset();
                 // StartCoroutine(MoveTo(Vector3.right, 10, Time.deltaTime));
             } else {
-                action.DoAction(new ActionPipeline(new IThing[] {
-                    new AnimationThing("move"),
-                }));
+                // action.DoAction(new ActionPipeline(new IThing[] {
+                //     new AnimationThing("move"),
+                // }));
 
                 Debug.Log("aaa");
                 movingCoroutine = new ResetableTicker(10, () => {

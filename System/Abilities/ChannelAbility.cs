@@ -9,6 +9,7 @@ namespace Seyren.System.Abilities
 {
     public abstract class ChannelAbility : Ability
     {
+        private static float defaultInterval = 0.04f;
         public event GameEventHandler<ChannelAbility> ChannelStart;
         public event GameEventHandler<ChannelAbility> ChannelEnd;
         public bool IsChanneling { get; set; }
@@ -36,26 +37,33 @@ namespace Seyren.System.Abilities
 
         protected override void onCast()
         {
+            if (ChannelInterval <= 0) {
+                ChannelInterval = defaultInterval;
+            }
+            ChannelTimeRemaining = ChannelTime;
+            TotalChannelTime = 0;
             ChannelAsync(ChannelInterval, ChannelTime);
         }
 
         protected abstract void DoChannelAbility();
         protected async void ChannelAsync(float interval, float channelTime)
         {
+            Debug.Log("Do channel async");
+
             int linterval = (int)(interval * 1000);
             IsChanneling = true;
             ChannelStart?.Invoke(this);
-
-            while (IsChanneling && ChannelTimeRemaining >= 0)
+            for (float i = ChannelTimeRemaining; i >= 0; i = i - interval)
             {
+                if (!IsChanneling) break;
                 DoChannelAbility();
                 await Task.Delay(linterval);
-                ChannelTimeRemaining -= interval;
+                Debug.Log("Do channel ability");
                 TotalChannelTime += interval;
             }
-
+            
             ChannelEnd?.Invoke(this);
-            IsChanneling = false;
+            IsChanneling = false;   
         }
 
 

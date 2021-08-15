@@ -4,6 +4,7 @@ using Seyren.System.Forces;
 using UnityEngine;
 using Seyren.System.Generics;
 using Seyren.System.States;
+using Seyren.System.Actions;
 
 namespace Seyren.System.Units
 {
@@ -102,8 +103,10 @@ namespace Seyren.System.Units
         }
         public State State => _state;
 
-        public ObjectStatus ObjectStatus { get => throw new global::System.NotImplementedException(); set => throw new global::System.NotImplementedException(); }
+        public ObjectStatus ObjectStatus { get; set; }
 
+        public ActionCollection Actions => _actions;
+        protected ActionCollection _actions;
         protected State _state;
 
         public int status;

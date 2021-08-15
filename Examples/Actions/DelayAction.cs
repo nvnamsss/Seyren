@@ -20,8 +20,14 @@ namespace Seyren.Examples.Actions
 
         public event GameEventHandler<IAction> ActionStart;
         public event GameEventHandler<IAction> ActionEnd;
+        public event GameEventHandler<IAction> ActionBroke;
+
         private ManualResetEvent sync;
         public DelayState State => state;
+
+        int IAction.ActionType => throw new NotImplementedException();
+
+        public bool IsCompleted => throw new NotImplementedException();
 
         public long delay;
         public bool breakable;
@@ -72,6 +78,21 @@ namespace Seyren.Examples.Actions
         }
 
         public IEnumerable<IThing> Do(params object[] obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsAffectedBy(int actionType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Error Run()
+        {
+            throw new NotImplementedException();
+        }
+
+        Error IAction.RunCondition()
         {
             throw new NotImplementedException();
         }

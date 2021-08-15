@@ -1,5 +1,6 @@
 using System;
 using Seyren.System.Abilities;
+using Seyren.System.Actions;
 using Seyren.System.Damages;
 using Seyren.System.Forces;
 using Seyren.System.Generics;
@@ -26,6 +27,7 @@ namespace Seyren.System.Units
         IUnit Owner { get; }
         Force Force { get; }
         State State { get; }
+        ActionCollection Actions {get;}
         Modification Modification { get; }
         States.IAttribute Attribute { get;set; }
 

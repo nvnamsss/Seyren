@@ -9,15 +9,19 @@ namespace Seyren.System.Actions
 {
     public class ActionPipeline : IAction
     {
-        public ActionConditionHandler RunCondition => throw new NotImplementedException();
+
+        public int ActionType => throw new NotImplementedException();
+
+        public bool IsCompleted => throw new NotImplementedException();
+
+        public ActionConditionHandler RunCondition { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public event GameEventHandler<IAction> ActionStart;
         public event GameEventHandler<IAction> ActionEnd;
+        public event GameEventHandler<IAction> ActionBroke;
 
-        IEnumerable<IThing> things;
         bool broke;
-        public ActionPipeline(IEnumerable<IThing> things) {
-            this.things = things;
+        public ActionPipeline() {
         }
 
         public bool Break()
@@ -31,16 +35,17 @@ namespace Seyren.System.Actions
             return null;
         }
 
-        public IEnumerable<IThing> Do(params object[] obj)
+        public Error Run()
         {
-            foreach (IThing thing in things)
-            {
-                if (!broke) break;
-                yield return thing;
-            }
+            throw new NotImplementedException();
         }
 
-        public void Invoke()
+        bool IAction.IsAffectedBy(int actionType)
+        {
+            throw new NotImplementedException();
+        }
+
+        Error IAction.RunCondition()
         {
             throw new NotImplementedException();
         }
