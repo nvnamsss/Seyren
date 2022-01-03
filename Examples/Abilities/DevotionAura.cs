@@ -4,15 +4,18 @@ using Seyren.System.Units;
 using UnityEngine;
 using Seyren.System.Generics;
 using Seyren.System.Actions;
+using System.Collections.Generic;
 
 namespace Seyren.Examples.Abilities
 {
     public class DevotionAura : AuraAbility
     {
         public static readonly int Id = 0x68696501;
-        private Dummy dummy;
+        HashSet<IUnit> affect;
+        Vector3 position;
         public DevotionAura(Unit caster, float aoe, int level) : base(aoe, level)
         {
+            affect = new HashSet<IUnit>();
         }
 
         public override IAction Action(IUnit by)
@@ -37,27 +40,23 @@ namespace Seyren.Examples.Abilities
 
         protected override void AuraInterval()
         {
-            throw new global::System.NotImplementedException();
+           List<IUnit> picked = TestAuraAbility.universe.PickUnitsInRange(position, aoe);
+           
         }
 
         protected override Error Condition(IUnit by)
         {
-            throw new global::System.NotImplementedException();
+            return null;
         }
 
         protected override Error Condition(IUnit by, IUnit target)
         {
-            throw new global::System.NotImplementedException();
+            return null;
         }
 
         protected override Error Condition(IUnit by, Vector3 target)
         {
-            throw new global::System.NotImplementedException();
-        }
-
-        protected override void onCast()
-        {
-            throw new global::System.NotImplementedException();
+            return null;
         }
     }
 }
