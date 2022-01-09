@@ -27,7 +27,7 @@ namespace Seyren.System.Units
     }
     public partial class Unit : IUnit
     {
-        public event GameEventHandler<IUnit, UnitMovedEventArgs> OnMoved;
+        public event GameEventHandler<IUnit, MovedEventArgs> OnMoved;
         public event GameEventHandler<Unit, UnitRotatedEventArgs> Rotated;
         /// <summary>
         /// Determine unit state like Hp, Mp, Shield is changing
@@ -58,18 +58,6 @@ namespace Seyren.System.Units
         // public AbilityCollection Ability { get; set; }
         // public Dictionary<int, Ability> Abilites { get; set; }
         public IAttribute Attribute { get; set; }
-
-        public int JumpTimes
-        {
-            get
-            {
-                return _jumpTimes;
-            }
-            set
-            {
-                _jumpTimes = value;
-            }
-        }
 
         public Vector3 Location => _position;
 
@@ -139,6 +127,18 @@ namespace Seyren.System.Units
         protected Unit damageSource;
         public Modification modification;
 
+        event GameEventHandler<IUnit, TakeDamageEventArgs> IUnit.OnDamaged
+        {
+            add
+            {
+                throw new global::System.NotImplementedException();
+            }
+
+            remove
+            {
+                throw new global::System.NotImplementedException();
+            }
+        }
     }
 
 }

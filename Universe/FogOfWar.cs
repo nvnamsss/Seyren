@@ -251,7 +251,6 @@ namespace Seyren.Universe
         public Vector3 gridSize;
         public Vector3 pivot;
         public int version;
-        QuadTree<Doodad> doodadTree;
         public FogOfWar(int w, int h, Vector3 gridSize)
         {
             this.width = w;
@@ -264,16 +263,6 @@ namespace Seyren.Universe
             pivot = new Vector3(-wd2 * gridSize.x, 0, -hd2 * gridSize.z);
             fogs = new Fog[w, h];
             Bounds bounds = new Bounds(Vector3.zero, new Vector3(w, h, 0));
-            doodadTree = new QuadTree<Doodad>(bounds);
-            for (int loop = -wd2; loop < wd2; loop++)
-            {
-                for (int loop2 = -hd2; loop2 < hd2; loop2++)
-                {
-                    float x = loop * gridSize.x + gridSize.x / 2;
-                    float z = loop2 * gridSize.z + gridSize.z / 2;
-                    fogs[loop + wd2, loop2 + hd2] = new Fog(new Vector3(x, 0, z), gridSize);
-                }
-            }
         }
 
         public void AddDoodad(Doodad doodad)

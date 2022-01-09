@@ -41,7 +41,7 @@ namespace Seyren.Universe
             unitTree.RemoveItem(unit);
         }
 
-        private void UpdateUnitTree(IUnit unit, UnitMovedEventArgs args)
+        private void UpdateUnitTree(IUnit unit, MovedEventArgs args)
         {
             unitTree.UpdateItem(unit, args.OldPosition);
         }

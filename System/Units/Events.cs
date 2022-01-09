@@ -9,12 +9,12 @@ using UnityEngine;
 
 namespace Seyren.System.Units
 {
-    public class UnitMovedEventArgs
+    public class MovedEventArgs
     {
         public Vector3 OldPosition { get; }
         public Vector3 NewPosition { get; }
 
-        public UnitMovedEventArgs(Vector3 oldPosition, Vector3 newPosition)
+        public MovedEventArgs(Vector3 oldPosition, Vector3 newPosition)
         {
             OldPosition = oldPosition;
             NewPosition = newPosition;
