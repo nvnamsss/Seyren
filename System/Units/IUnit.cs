@@ -11,7 +11,7 @@ namespace Seyren.System.Units
 {
     public interface IUnit : IObject
     {
-        event GameEventHandler<IUnit, UnitMovedEventArgs> OnMoved;
+        event GameEventHandler<IUnit, MovedEventArgs> OnMoved;
         /// <summary>
         /// Determine unit is going to die
         /// </summary>
@@ -20,7 +20,7 @@ namespace Seyren.System.Units
         /// Determine unit is killed by some one
         /// </summary>
         event GameEventHandler<IUnit, UnitDiedEventArgs> OnDied;
-        event GameEventHandler<Unit, TakeDamageEventArgs> OnDamaged;
+        event GameEventHandler<IUnit, TakeDamageEventArgs> OnDamaged;
 
 
         long UnitID { get; }

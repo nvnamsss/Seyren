@@ -7,7 +7,6 @@ using Seyren.System.Abilities;
 
 namespace Seyren.System.Units
 {
-    
     public partial class Unit : IUnit
     {
         private static long id;
@@ -18,7 +17,6 @@ namespace Seyren.System.Units
         Unit(long uid)
         {
             UnitID = uid;
-            JumpTimes = 1;
             Modification = new Modification();
             Attribute = new Attribute();
             _actions = new Actions.ActionCollection();
@@ -68,7 +66,7 @@ namespace Seyren.System.Units
         {
             Vector3 old = _position;
             this._position = location;
-            OnMoved?.Invoke(this, new UnitMovedEventArgs(old, _position));
+            OnMoved?.Invoke(this, new MovedEventArgs(old, _position));
             return null;
         }
 

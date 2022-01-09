@@ -86,7 +86,21 @@ namespace Seyren.System.Units.Dummies
         [SerializeField]
         protected bool _active;
 
-        event GameEventHandler<IUnit, UnitMovedEventArgs> IUnit.OnMoved
+   
+        event GameEventHandler<IUnit, TakeDamageEventArgs> IUnit.OnDamaged
+        {
+            add
+            {
+                throw new global::System.NotImplementedException();
+            }
+
+            remove
+            {
+                throw new global::System.NotImplementedException();
+            }
+        }
+
+        event GameEventHandler<IUnit, MovedEventArgs> IUnit.OnMoved
         {
             add
             {
