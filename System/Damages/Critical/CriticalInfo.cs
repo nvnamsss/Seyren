@@ -40,7 +40,7 @@ namespace Seyren.System.Damages.Critical
         private bool _canCritical;
         [SerializeField]
         private bool _canReduce;
-        public virtual void Trigger(DamageInfo damageInfo)
+        public virtual void Trigger(Damage damageInfo)
         {
             float chance = UnityEngine.Random.Range(0, 100);
             Debug.Log(Name + ":" + chance);
@@ -59,6 +59,6 @@ namespace Seyren.System.Damages.Critical
             Critical(damageInfo, chance <= Chance, chance);
         }
 
-        public abstract void Critical(DamageInfo info, bool success, float chance);
+        public abstract void Critical(Damage info, bool success, float chance);
     }
 }

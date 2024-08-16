@@ -14,6 +14,6 @@ namespace Seyren.System.Damages
         List<T> Stacks { get; set; }
         StackType StackType { get; }
 
-        void Trigger(DamageInfo info);
+        void Trigger(Damage info);
     }
 }

@@ -15,7 +15,7 @@ namespace Seyren.System.Damages.PostPassive
         public List<PostPassiveInfo> Stacks { get; set; }
         public StackType StackType { get; set; }
 
-        public virtual void Trigger(DamageInfo info)
+        public virtual void Trigger(Damage info)
         {
             Triggered(info);
         }
@@ -23,6 +23,6 @@ namespace Seyren.System.Damages.PostPassive
         /// <summary>
         /// Doing something when post passive is triggered
         /// </summary>
-        public abstract void Triggered(DamageInfo info);
+        public abstract void Triggered(Damage info);
     }
 }

@@ -9,6 +9,13 @@ using UnityEngine;
 
 namespace Seyren.System.Units
 {
+    public enum UnitType {
+        Enemy,
+        Hero,
+        Neutral,
+        Structure,
+    }
+
     public interface IUnit : IObject
     {
         event GameEventHandler<IUnit, MovedEventArgs> OnMoved;
@@ -21,20 +28,29 @@ namespace Seyren.System.Units
         /// </summary>
         event GameEventHandler<IUnit, UnitDiedEventArgs> OnDied;
         event GameEventHandler<IUnit, TakeDamageEventArgs> OnDamaged;
+        
+        /// <summary>
+        /// Unit ID to determint the type of unit
+        /// </summary>
+        string UnitID { get; }
+        /// <summary>
+        /// Reference ID to determine the instance id of unit
+        /// </summary>
+        string ReferenceID { get; }
 
-
-        long UnitID { get; }
+        
         IUnit Owner { get; }
         Force Force { get; }
-        State State { get; }
-        ActionCollection Actions {get;}
-        Modification Modification { get; }
-        States.IAttribute Attribute { get;set; }
+        // State State { get; }
+        // ActionCollection Actions {get;}
+        // Modification Modification { get; }
+        // States.IAttribute Attribute { get;set; }
 
-        Error Kill(IUnit by);
+        // Error Kill(IUnit by);
         Error Move(Vector3 location);
         Error Look(Quaternion quaternion);
-        Error Damage(DamageInfo damage);
-        Error Cast(Ability ability);
+        // Error DamageTarget(Damage damage);
+        // Error Cast(Ability ability);
+        AbilityV2 GetAbility(string abilityID);
     }
 }

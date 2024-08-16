@@ -10,6 +10,11 @@ namespace Seyren.System.Units
     public partial class Unit : IUnit
     {
         private static long id;
+
+        public string ReferenceID => throw new global::System.NotImplementedException();
+
+        string IUnit.UnitID => throw new global::System.NotImplementedException();
+
         public Unit() : this(Interlocked.Increment(ref id))
         {
         }
@@ -23,7 +28,7 @@ namespace Seyren.System.Units
             _state = new State();
         }
 
-        public Error Damage(DamageInfo damageInfo)
+        public Error DamageTarget(Damage damageInfo)
         {
             Error err = null;
             State.CurrentHp -= damageInfo.DamageAmount;
@@ -81,6 +86,11 @@ namespace Seyren.System.Units
         public Error Cast(Ability ability)
         {
             return ability.Cast(this);
+        }
+
+        public AbilityV2 GetAbility(string abilityID)
+        {
+            throw new global::System.NotImplementedException();
         }
     }
 

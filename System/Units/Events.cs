@@ -42,8 +42,8 @@ namespace Seyren.System.Units
 
     public class TakeDamageEventArgs
     {
-        public DamageInfo Info { get; }
-        public TakeDamageEventArgs(DamageInfo info)
+        public Damage Info { get; }
+        public TakeDamageEventArgs(Damage info)
         {
             Info = info;
         }

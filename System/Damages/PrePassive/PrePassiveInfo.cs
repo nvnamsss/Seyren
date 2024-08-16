@@ -20,7 +20,7 @@ namespace Seyren.System.Damages.PrePassive
             Stacks = new List<PrePassiveInfo>();
         }
 
-        public virtual void Trigger(DamageInfo info)
+        public virtual void Trigger(Damage info)
         {
             Triggered(info);
         }
@@ -28,6 +28,6 @@ namespace Seyren.System.Damages.PrePassive
         /// <summary>
         /// Doing something when post passive is triggered
         /// </summary>
-        public abstract void Triggered(DamageInfo info);
+        public abstract void Triggered(Damage info);
     }
 }
