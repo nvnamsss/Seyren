@@ -1,0 +1,6 @@
+{
+	"dependencies": {
+	  "com.voidstudio.seyren": "file:../Seyren/com.voidstudio.seyren"
+	}
+  }
+  
