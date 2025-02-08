@@ -18,11 +18,11 @@ namespace Seyren.System.Units
         Vector3 Size { get; set; }
         Quaternion Rotation { get; }
     }
+    
     public interface IAttachable
     {
         IAttachable AttactedObject { get; }
         List<IAttachable> Attachments { get; set; }
-        AttachStatus Status { get; set; }
         Quaternion Rotation { get; set; }
         float ZIndex { get; set; }
 

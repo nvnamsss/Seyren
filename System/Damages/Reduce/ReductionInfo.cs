@@ -17,12 +17,12 @@ namespace Seyren.System.Damages.Reduce
         public bool CanCritical { get; set; }
         public bool CanReduce { get; set; }
 
-        public void Trigger(DamageInfo info)
+        public void Trigger(Damage info)
         {
             Reduced(info);
         }
 
-        public void Reduced(DamageInfo damageInfo)
+        public void Reduced(Damage damageInfo)
         {
 
         }

@@ -14,5 +14,12 @@ namespace Seyren.System.Damages.Critical
         {
             _modification = new Dictionary<int, CriticalInfo>();
         }
+
+        public void Trigger(Damage damage) {
+            foreach (var critical in _modification.Values)
+            {
+                critical.Trigger(damage);
+            }
+        }
     }
 }

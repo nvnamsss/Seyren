@@ -35,10 +35,15 @@ namespace Seyren.System.States
         public float Base;
         public float Incr;
         public float Total => Base + Incr;
-        public BaseFloat(float b, float i)
+
+        public BaseFloat(float baseValue) : this(baseValue, 0) {
+
+        }
+        
+        public BaseFloat(float baseValue, float increasedValue)
         {
-            Base = b;
-            Incr = i;
+            Base = baseValue;
+            Incr = increasedValue;
         }
 
         public float Amplify(float percent)

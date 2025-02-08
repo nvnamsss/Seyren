@@ -18,12 +18,12 @@ namespace Seyren.System.Damages.Evasion
         public bool CanCritical { get; set; }
         public bool CanReduce { get; set; }
 
-        public virtual void Trigger(DamageInfo damageInfo)
+        public virtual void Trigger(Damage damageInfo)
         {
             float chance = UnityEngine.Random.Range(0, 100);
             Evaded(damageInfo, chance < Chance, chance);
         }
 
-        public abstract void Evaded(DamageInfo info, bool success, float chance);
+        public abstract void Evaded(Damage info, bool success, float chance);
     }
 }

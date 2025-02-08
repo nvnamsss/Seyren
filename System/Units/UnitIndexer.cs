@@ -37,6 +37,9 @@ namespace Seyren.System.Units
             return this;
         }
 
+        public void AddUnit(IUnit unit) {
+            
+        }
         public Unit Create()
         {
             Unit unit;
@@ -50,9 +53,6 @@ namespace Seyren.System.Units
                 }
             }
             unit = new Unit();
-            if (recycleWhenUnitDied) {
-                unit.OnDied += RecycleUnit;
-            }
 
             OnUnitCreated?.Invoke(unit);
             bool ok = id2unit.TryAdd(unit.UnitID, unit);
@@ -66,20 +66,6 @@ namespace Seyren.System.Units
             return unit;
         }
 
-        public void Remove(IUnit unit)
-        {
-            Error err;
-#if UNITY_EDITOR
-            if ((err = unit.Kill(null)) != null)
-            {
-                Debug.Log($"remove unit error: {err.Message()}");
-            }
-#endif
-            id2unit.TryRemove(unit.UnitID, out _);
-        }
 
-        private void RecycleUnit(IUnit unit, UnitDiedEventArgs e) {
-            unitBin.Enqueue(unit.UnitID);
-        }
     }
 }

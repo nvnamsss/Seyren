@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Seyren.Algorithms;
-using Seyren.System.Spatial;
 using Seyren.System.Units;
 using UnityEngine;
 
@@ -211,6 +210,7 @@ namespace Seyren.Universe
             doodads = new List<Doodad>();
         }
 
+    
         public void MarkBlocked()
         {
             reveal = 128;
