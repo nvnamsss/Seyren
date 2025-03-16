@@ -1,0 +1,3 @@
+[submodule ".co-guidelines"]
+	path = .co-guidelines
+	url = https://github.com/nvnamsss/.co-guidelines

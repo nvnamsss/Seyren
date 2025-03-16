@@ -4,6 +4,7 @@ using UnityEngine;
 using Seyren.System.Generics;
 using System.Threading;
 using Seyren.System.Abilities;
+using System.Collections.Generic;
 
 namespace Seyren.System.Units
 {
@@ -22,7 +23,6 @@ namespace Seyren.System.Units
         Unit(long uid)
         {
             UnitID = uid;
-            Modification = new Modification();
             Attribute = new Attribute();
             _actions = new Actions.ActionCollection();
             _state = new State();
@@ -31,7 +31,7 @@ namespace Seyren.System.Units
         public Error DamageTarget(Damage damageInfo)
         {
             Error err = null;
-            State.CurrentHp -= damageInfo.DamageAmount;
+            State.CurrentHp -= damageInfo.FinalDamage();
             OnDamaged?.Invoke(this, new TakeDamageEventArgs(damageInfo));
             if (State.CurrentHp < 0) err = Kill(this);
 
@@ -89,6 +89,31 @@ namespace Seyren.System.Units
         }
 
         public AbilityV2 GetAbility(string abilityID)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public List<IModifier> GetModifiers()
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public List<IResistance> GetResistances()
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public bool IsImmune()
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public List<IOnHitEffect> GetOnHitEffects()
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public void InflictDamage(Damage damage)
         {
             throw new global::System.NotImplementedException();
         }

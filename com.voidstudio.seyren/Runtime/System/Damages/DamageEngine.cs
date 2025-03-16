@@ -1,61 +1,115 @@
-// using Seyren.System.Units;
-// using UnityEngine;
+using Seyren.System.Units;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 
-// namespace Seyren.System.Damages
-// {
-//     public static class DamageEngine
-//     {
-//         public static void DamageTarget(IUnit source, IUnit target, float damage, DamageType type, TriggerType trigger)
-//         {
-//             if ((target.ObjectStatus | ObjectStatus.Invulnerable) == target.ObjectStatus)
-//             {
-//                 Debug.Log("Invulnerable");
-//                 return;
-//             }
+namespace Seyren.System.Damages
+{
+    /// <summary>
+    /// The DamageEngine handles damage calculation and application according to the following flow:
+    /// 1. Create Damage Event from a damage source
+    /// 2. Apply pre-hit modifiers if any
+    /// 3. Calculate base damage
+    /// 4. Apply defense calculations if target has defense
+    /// 5. Apply damage resistance if target has resistance
+    /// 6. Calculate final damage value
+    /// 7. Trigger 1st phase on-hit effects
+    /// 8. Check if target is immune
+    /// 9. Apply damage to target
+    /// 10. Check if target is still alive
+    /// 11. Trigger death event if target died, or update target state if alive
+    /// 12. Trigger on-hit effects
+    /// 13. End damage process
+    /// </summary>
+    public static class DamageEngine
+    {
+        // Events for damage system hooks
+        public static event EventHandler<DamageEventArgs> OnDamageCreated;
+        public static event EventHandler<DamageEventArgs> OnPreHitModifiersApplied;
+        public static event EventHandler<DamageEventArgs> OnDamageCalculated;
+        public static event EventHandler<DamageEventArgs> OnFirstPhaseEffects;
+        public static event EventHandler<DamageEventArgs> OnDamageApplied;
+        public static event EventHandler<DamageEventArgs> OnDeathTriggered;
+        public static event EventHandler<DamageEventArgs> OnHitEffectsTriggered;
 
-//             Damage damageInfo = new Damage(source, target);
+        /// <summary>
+        /// Main entry point for damage calculation and application
+        /// </summary>
+        public static Damage DamageTarget(IUnit source, IUnit target, float baseDamage, DamageType type, TriggerType triggerType)
+        {
+            // Step 1: Create Damage Event
+            Damage damage = new Damage
+            {
+                Source = source,
+                Target = target,
+                BaseDamage = baseDamage,
+                DamageType = type,
+                TriggerType = triggerType
+            };
+            
+            // Exit if target is invulnerable
+            if ((target.ObjectStatus & ObjectStatus.Invulnerable) == ObjectStatus.Invulnerable)
+            {
+                Debug.Log($"Target {target} is invulnerable, no damage applied");
+                return damage;
+            }
 
-//             damageInfo.TriggerType = trigger;
-//             damageInfo.PrePassive = source.Modification.PrePassive;
-//             damageInfo.Critical = source.Modification.Critical;
-//             damageInfo.Evasion = target.Modification.Evasion;
-//             damageInfo.Reduction = target.Modification.Reduction;
-//             damageInfo.PostPassive = source.Modification.PostPassive;
+            // Check and apply pre-hit modifiers
+            ApplyPreHitModifiers(damage, source.GetModifiers());
+            // Mitigate damage
+            ApplyDamageResistance(damage, target.GetResistances());
 
-//             damageInfo.DamageAmount = damage;
-//             damageInfo.DamageType = type;
-//             damageInfo.CalculateDamage();
+            // Apply damage to target
+            target.InflictDamage(damage);
 
-//             if (target.State.CurrentShield > 0 || target.State.CurrentPShield > 0 || target.State.CurrentMShield > 0)
-//             {
-//                 if (damageInfo.DamageType == DamageType.Physical)
-//                 {
-//                     float min = Mathf.Min(target.State.CurrentPShield, damageInfo.DamageAmount);
-//                     target.State.CurrentPShield -= min;
-//                     damageInfo.DamageAmount -= min;
+            if (damage.TriggerOnHitEffect) {
+                TriggerOnHitEffects(target, source.GetOnHitEffects());
+            }
 
-//                     UnityEngine.Debug.Log("Physical shield prevent: " + min);
-//                 }
+            // End damage process
+            return damage;
+        }
 
-//                 if (damageInfo.DamageType == DamageType.Magical)
-//                 {
-//                     float min = Mathf.Min(target.State.CurrentMShield, damageInfo.DamageAmount);
-//                     target.State.CurrentMShield -= min;
-//                     damageInfo.DamageAmount -= min;
-//                 }
+        #region Implementation of each step
+        
+        private static void ApplyPreHitModifiers(Damage damageInfo, List<IModifier> modifiers)
+        {
+            for (int i = 0; i < modifiers.Count; i++)
+            {
+                modifiers[i].Apply(damageInfo);
+            }
+        }
 
-//                 if (damageInfo.DamageAmount > 0)
-//                 {
-//                     float min = Mathf.Min(target.State.CurrentShield, damageInfo.DamageAmount);
-//                     target.State.CurrentShield -= min;
-//                     damageInfo.DamageAmount -= min;
 
-//                     UnityEngine.Debug.Log("Shield prevent: " + min);
-//                 }
-//             }
+        private static void ApplyDamageResistance(Damage damageInfo, List<IResistance> resistances)
+        {
+            for (int i = 0; i < resistances.Count; i++)
+            {
+                resistances[i].Apply(damageInfo);
+            }
+        }
+ 
+        
+        private static void TriggerOnHitEffects(IUnit target, List<IOnHitEffect> onHitEffects)
+        {
+            // Apply on-hit effects
+            foreach (var effect in onHitEffects)
+            {
+                effect.Trigger(target);
+            }
+        }
+        
+        #endregion
+    }
 
-//             target.DamageTarget(damageInfo);
-//             //TakeDamage?.Invoke(this, new TakeDamageEventArgs(damageInfo));
-//         }
-//     }
-// }
+    // Event args for damage events
+    public class DamageEventArgs : EventArgs
+    {
+        public Damage DamageInfo { get; }
+
+        public DamageEventArgs(Damage damageInfo)
+        {
+            DamageInfo = damageInfo;
+        }
+    }
+}

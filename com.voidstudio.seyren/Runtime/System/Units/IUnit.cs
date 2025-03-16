@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Seyren.System.Abilities;
 using Seyren.System.Actions;
 using Seyren.System.Damages;
@@ -52,5 +53,10 @@ namespace Seyren.System.Units
         // Error DamageTarget(Damage damage);
         // Error Cast(Ability ability);
         AbilityV2 GetAbility(string abilityID);
+        List<IModifier> GetModifiers();
+        List<IResistance> GetResistances();
+        List<IOnHitEffect> GetOnHitEffects();
+        void InflictDamage(Damage damage);
+        bool IsImmune();
     }
 }

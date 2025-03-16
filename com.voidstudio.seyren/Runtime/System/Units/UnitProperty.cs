@@ -52,7 +52,6 @@ namespace Seyren.System.Units
         public Quaternion rotation;
         public string name;
         public IAttachable Attach { get; set; }
-        public Modification Modification { get; set; }
         // public AbilityCollection Ability { get; set; }
         // public Dictionary<int, Ability> Abilites { get; set; }
         public IAttribute Attribute { get; set; }
@@ -123,7 +122,6 @@ namespace Seyren.System.Units
         [SerializeField]
         protected UnitStatus _unitStatus;
         protected Unit damageSource;
-        public Modification modification;
 
         event GameEventHandler<IUnit, TakeDamageEventArgs> IUnit.OnDamaged
         {
