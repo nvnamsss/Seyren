@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DSA
+namespace Algorithms
 {
     public interface ISortable32 {
         int Weight(); 

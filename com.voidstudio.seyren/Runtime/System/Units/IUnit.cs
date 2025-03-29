@@ -17,18 +17,23 @@ namespace Seyren.System.Units
         Structure,
     }
 
+    /*
+    Unit will manage its stte, its action, its ability, its modification, its attribute, its resistance, its on hit effect
+    It will decide how to move, how to look, how to damage, how to cast ability, how to kill, how to die
+
+    */
     public interface IUnit : IObject
     {
-        event GameEventHandler<IUnit, MovedEventArgs> OnMoved;
-        /// <summary>
-        /// Determine unit is going to die
-        /// </summary>
-        event GameEventHandler<IUnit, UnitDyingEventArgs> OnDying;
-        /// <summary>
-        /// Determine unit is killed by some one
-        /// </summary>
-        event GameEventHandler<IUnit, UnitDiedEventArgs> OnDied;
-        event GameEventHandler<IUnit, TakeDamageEventArgs> OnDamaged;
+        // event GameEventHandler<IUnit, MovedEventArgs> OnMoved;
+        // /// <summary>
+        // /// Determine unit is going to die
+        // /// </summary>
+        // event GameEventHandler<IUnit, UnitDyingEventArgs> OnDying;
+        // /// <summary>
+        // /// Determine unit is killed by some one
+        // /// </summary>
+        // event GameEventHandler<IUnit, UnitDiedEventArgs> OnDied;
+        // event GameEventHandler<IUnit, TakeDamageEventArgs> OnDamaged;
         
         /// <summary>
         /// Unit ID to determint the type of unit

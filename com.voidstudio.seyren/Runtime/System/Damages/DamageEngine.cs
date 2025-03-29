@@ -48,7 +48,7 @@ namespace Seyren.System.Damages
             };
             
             // Exit if target is invulnerable
-            if ((target.ObjectStatus & ObjectStatus.Invulnerable) == ObjectStatus.Invulnerable)
+            if ((target.ObjectStatus | ObjectStatus.Invulnerable) != target.ObjectStatus)
             {
                 Debug.Log($"Target {target} is invulnerable, no damage applied");
                 return damage;

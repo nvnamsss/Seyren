@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Seyren.System.Items;
-using Seyren.System.Inventories;
 using UnityEngine;
 
 // public class InventoryManager : MonoBehaviour

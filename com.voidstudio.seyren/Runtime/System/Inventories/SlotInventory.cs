@@ -1,5 +1,5 @@
-namespace Seyren.System.Inventories {
-    public class SlotInventory {
+// namespace Seyren.System.Inventories {
+//     public class SlotInventory {
         
-    }
-}
+//     }
+// }

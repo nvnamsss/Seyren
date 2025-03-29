@@ -154,7 +154,7 @@ namespace Seyren.System.Abilities
             return Condition(unit, target);
         }
 
-        public Error CanCast(Unit by, Vector3 target)
+        public Error CanCast(IUnit by, Vector3 target)
         {
             if ((Targeting | TargetingType.PointTarget) != Targeting)
             {

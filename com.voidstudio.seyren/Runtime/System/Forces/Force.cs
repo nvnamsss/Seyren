@@ -10,6 +10,8 @@ namespace Seyren.System.Forces
     [Serializable]
     public class Force
     {
+        public static Force None = new Force("None");
+        
         public static List<Force> Forces { get; } = new List<Force>();
         /// <summary>
         /// Name of Force, Name is Unique

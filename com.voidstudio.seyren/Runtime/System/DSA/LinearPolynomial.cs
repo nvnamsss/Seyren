@@ -1,4 +1,4 @@
-namespace DSA
+namespace Algorithms
 {
     internal class LinearPolynomial
     {

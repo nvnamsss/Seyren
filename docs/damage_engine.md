@@ -1,3 +1,5 @@
+# Damage Engine
+
 ```mermaid
 flowchart TD
     A[Damage Source] --> B[Create Damage Event]
@@ -16,4 +18,18 @@ flowchart TD
     style A fill:#ff9999
     style CD fill:#99ff99
     style N fill:#9999ff
+```
+
+# Damage Flow
+```mermaid
+flowchart LR
+    U[Unit] --> A[Do action]
+    A --> |Add action to queue| Universe[Universe]
+    Universe --> |Process action| Universe
+    Universe --> |Completed actions| TriggerEffect[Trigger effect of Action]
+    TriggerEffect --> |Deal Damage| DA[Damage Engine]
+    DA --> CD[Calculate Damage]
+    CD --> |Call method| Damage[target.InflictDamage]
+    Damage --> |Trigger Event| Universe
+
 ```

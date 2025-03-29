@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DSA
+namespace Algorithms
 {
     public interface IStorage<T> where T: IComparable
     {

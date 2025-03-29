@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 namespace Seyren.System.Generics
 {
     public class Error {
+        public static Error None = new Error("No error.");
+        
         private string error;
         public Error(string error) {
             this.error = error;
