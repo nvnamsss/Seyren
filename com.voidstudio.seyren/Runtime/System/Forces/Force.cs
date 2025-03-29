@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,8 @@ namespace Seyren.System.Forces
     public class Force
     {
         public static Force None = new Force("None");
+        public static Force Force1 = new Force("Force1");
+        public static Force Force2 = new Force("Force2");
         
         public static List<Force> Forces { get; } = new List<Force>();
         /// <summary>
@@ -18,18 +21,26 @@ namespace Seyren.System.Forces
         /// </summary>
         public string Name;
         public Dictionary<string, Force> Alliances;
-        public Dictionary<string, Force> Enemies;
+        // public Dictionary<string, Force> Enemies;
 
         Force(string name)
         {
             Name = name;
             Alliances = new Dictionary<string, Force>();
-            Enemies = new Dictionary<string, Force>();
+            // Enemies = new Dictionary<string, Force>();
+        }
+
+        Force(string name, Dictionary<string, Force> alliances, Dictionary<string, Force> enemies)
+        {
+            Name = name;
+            Alliances = alliances;
+            // Enemies = enemies;
         }
 
         public bool IsEnemy(Force force)
         {
-            return Enemies.ContainsKey(force.Name);
+            if (force == this) return false;
+            return !Alliances.ContainsKey(force.Name);
         }
 
         public bool MakeAlliance(Force force)
@@ -39,7 +50,7 @@ namespace Seyren.System.Forces
             if (!Alliances.ContainsKey(force.Name) && force != this)
             {
                 Alliances.Add(force.Name, force);
-                Enemies.Remove(force.Name);
+                // Enemies.Remove(force.Name);
                 force.MakeAlliance(this);
 
                 return true;
@@ -52,12 +63,9 @@ namespace Seyren.System.Forces
         {
             //if (force == null) return false;
 
-            if (!Enemies.ContainsKey(force.Name) && force != this)
+            if (Alliances.ContainsKey(force.Name) && force != this)
             {
-                Enemies.Add(force.Name, force);
                 Alliances.Remove(force.Name);
-                force.MakeEnemy(this);
-
                 return true;
             }
 

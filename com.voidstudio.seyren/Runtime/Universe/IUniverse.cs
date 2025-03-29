@@ -88,5 +88,11 @@ namespace Seyren.Universe
             Space.AddUnit(unit);
         }
 
+        public virtual void KillUnit(IUnit unit) {
+            Space.RemoveUnit(unit);
+            OnUnitDied?.Invoke(unit);
+            // change state to dead
+        }
+
     }
 }

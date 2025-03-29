@@ -46,7 +46,7 @@ namespace Seyren.System.Units
 
         
         IUnit Owner { get; }
-        Force Force { get; }
+        Force Force { get; set; }
         // State State { get; }
         // ActionCollection Actions {get;}
         // Modification Modification { get; }
