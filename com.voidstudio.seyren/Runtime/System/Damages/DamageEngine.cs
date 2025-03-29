@@ -1,3 +1,4 @@
+using Seyren.System.Generics;
 using Seyren.System.Units;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,8 @@ namespace Seyren.System.Damages
     public static class DamageEngine
     {
         // Events for damage system hooks
-        public static event EventHandler<DamageEventArgs> OnDamageCreated;
+        public static event GameEventHandler<Damage> OnDamageCreated;
+        public static event GameEventHandler<Damage> OnInflictedDamage;
         public static event EventHandler<DamageEventArgs> OnPreHitModifiersApplied;
         public static event EventHandler<DamageEventArgs> OnDamageCalculated;
         public static event EventHandler<DamageEventArgs> OnFirstPhaseEffects;
@@ -46,6 +48,8 @@ namespace Seyren.System.Damages
                 DamageType = type,
                 TriggerType = triggerType
             };
+
+            OnDamageCreated?.Invoke(damage);
             
             // Exit if target is invulnerable
             if ((target.ObjectStatus | ObjectStatus.Invulnerable) != target.ObjectStatus)
@@ -61,6 +65,7 @@ namespace Seyren.System.Damages
 
             // Apply damage to target
             target.InflictDamage(damage);
+            OnInflictedDamage?.Invoke(damage);
 
             if (damage.TriggerOnHitEffect) {
                 TriggerOnHitEffects(target, source.GetOnHitEffects());

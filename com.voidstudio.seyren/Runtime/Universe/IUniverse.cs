@@ -1,9 +1,12 @@
 using System;
+using Seyren.System.Damages;
+using Seyren.System.Generics;
 using Seyren.System.Units;
 using UnityEngine;
 
 namespace Seyren.Universe
 {
+
     // Todo: IUniverse now becomes an abstract class with minimum implementation
     public interface IUniverse
     {
@@ -35,6 +38,9 @@ namespace Seyren.Universe
     public abstract class Universe
     {
         // List event here
+        public event GameEventHandler<IUnit, Damage> OnUnitTookDamage;
+        public event GameEventHandler<IUnit> OnUnitDied;
+        public event GameEventHandler<IUnit> OnUnitCreated;
 
         public ITime Time { get; }
         public ISpace Space { get; }
@@ -48,6 +54,10 @@ namespace Seyren.Universe
         public void Initialize()
         {
             Time.OnTick += loop;
+            DamageEngine.OnInflictedDamage += (damage) =>
+            {
+                OnUnitTookDamage?.Invoke(damage.Target, damage);
+            };
         }
 
         /*
@@ -63,5 +73,20 @@ namespace Seyren.Universe
         {
             Loop();
         }
+
+        /// <summary>
+        /// Creates a new unit in the universe at the specified location and rotation.
+        /// </summary>
+        /// <param name="unitID">The type identifier for the unit</param>
+        /// <param name="location">The spawn position of the unit</param>
+        /// <param name="rotation">The initial rotation of the unit</param>
+        /// <returns>The created unit instance</returns>
+        public virtual void CreateUnit(IUnit unit)
+        {
+            OnUnitCreated?.Invoke(unit);
+
+            Space.AddUnit(unit);
+        }
+
     }
 }
