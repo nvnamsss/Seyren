@@ -135,5 +135,16 @@ The framework follows a modular, event-driven architecture with clear separation
 - **Unit Layer**: Entity management and state
 - **Infrastructure Layer**: Utilities and technical services
 
+## Contributing
 
+1. Fork the repository
+2. Create a feature branch
+3. Submit a pull request
 
+## License
+
+[Your License Here]
+
+## Support
+
+[Contact Information/Support Details]
