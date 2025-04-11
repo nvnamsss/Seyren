@@ -2,7 +2,7 @@
 
 namespace Seyren.System.Damages
 {
-    public struct Damage
+    public class Damage
     {
         public IUnit Source { get; set; }
         public IUnit Target { get; set; }
