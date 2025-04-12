@@ -30,6 +30,9 @@ flowchart LR
     TriggerEffect --> |Deal Damage| DA[Damage Engine]
     DA --> CD[Calculate Damage]
     CD --> |Call method| Damage[target.InflictDamage]
+
+    Damage --> |Call method| Formula
+    Formula --> |Calculate effective damage based on armor|
     Damage --> |Trigger Event| Universe
 
 ```

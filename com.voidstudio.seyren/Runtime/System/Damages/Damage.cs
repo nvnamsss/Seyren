@@ -21,6 +21,7 @@ namespace Seyren.System.Damages
         public float MagicPenetrationFlat;
         public bool TriggerOnHitEffect;
 
+
         public float FinalDamage()
         {
             if (Evaded) return 0;
