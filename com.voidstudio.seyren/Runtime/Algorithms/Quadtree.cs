@@ -10,7 +10,7 @@ namespace Seyren.Algorithms.Spatial
     /// Representation the tree data structure in which each internal node has exactly four children
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class QuadTree<T> where T : ICoordinate
+    public class QuadTree<T> where T : ICoordinate, IObject
     {
         /// <summary>
         /// Max item can contains
@@ -94,7 +94,7 @@ namespace Seyren.Algorithms.Spatial
             QuadTree<T> candidate = ChooseLeaf(item);
             for (int loop = candidate.Items.Count - 1; loop > 0; loop--)
             {
-                if (candidate.Items[loop].Equals(item))
+                if (candidate.Items[loop].ID == item.ID)
                 {
                     candidate.Items.RemoveAt(loop);
                 }

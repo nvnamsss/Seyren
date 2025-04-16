@@ -34,6 +34,7 @@ namespace Seyren.System.Units
 
     public interface IObject : ICoordinate
     {
+        string ID { get; }
         ObjectStatus ObjectStatus {get;set;}
     }
 }

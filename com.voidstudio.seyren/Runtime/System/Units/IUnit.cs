@@ -38,7 +38,7 @@ namespace Seyren.System.Units
         /// <summary>
         /// Unit ID to determint the type of unit
         /// </summary>
-        string UnitID { get; }
+        // string UnitID { get; } 
         /// <summary>
         /// Reference ID to determine the instance id of unit
         /// </summary>
