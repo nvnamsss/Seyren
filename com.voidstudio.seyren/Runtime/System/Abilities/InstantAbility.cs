@@ -1,33 +1,33 @@
-﻿using Seyren.System.Generics;
-using Seyren.System.Units;
-using System.Collections;
-using UnityEngine;
+﻿// using Seyren.System.Generics;
+// using Seyren.System.Units;
+// using System.Collections;
+// using UnityEngine;
 
-namespace Seyren.System.Abilities
-{
-    public abstract class InstantAbility : Ability
-    {
-        public event GameEventHandler<InstantAbility> Casted;
+// namespace Seyren.System.Abilities
+// {
+//     public abstract class InstantAbility : Ability
+//     {
+//         public event GameEventHandler<InstantAbility> Casted;
 
-        protected abstract void DoCastAbility();
-        public InstantAbility(float cooldown, int level) : base(1)
-        {
-            Cooldown = cooldown;
-            CastType = CastType.Instant;
-        }
+//         protected abstract void DoCastAbility();
+//         public InstantAbility(float cooldown, int level) : base(1)
+//         {
+//             Cooldown = cooldown;
+//             CastType = CastType.Instant;
+//         }
         
         
-        // public override bool Cast()
-        // {
-        //     if (!Condition())
-        //     {
-        //         return false;
-        //     }
+//         // public override bool Cast()
+//         // {
+//         //     if (!Condition())
+//         //     {
+//         //         return false;
+//         //     }
 
-        //     Casted?.Invoke(this);
-        //     DoCastAbility();
-        //     return true;
-        // }
+//         //     Casted?.Invoke(this);
+//         //     DoCastAbility();
+//         //     return true;
+//         // }
 
-    }
-}
+//     }
+// }

@@ -1,4 +1,5 @@
 using System;
+using Seyren.System.Abilities;
 using Seyren.System.Damages;
 using Seyren.System.Generics;
 using Seyren.System.Units;
@@ -44,6 +45,7 @@ namespace Seyren.Universe
 
         public ITime Time { get; }
         public ISpace Space { get; }
+        public IAbilitySystem AbilitySystem { get; set; }
 
         public Universe(ITime time, ISpace space)
         {

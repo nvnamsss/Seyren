@@ -5,16 +5,13 @@ namespace Seyren.System.Abilities
 {
     public class AbilityData
     {
-        public string ID { get; set; }
-
-        public IUnit Source { get; set; }
-
-        public IUnit Target { get; set; }
-
-        public Vector3? Location { get; set; }
-
-        public Vector3? VectorStart { get; set; }
-        public Vector3? VectorEnd { get; set; }
+        public int level;
+        public IUnit caster;
+        public IUnit target;
+        public Vector3? location;
+        // vector start and end for ability that has a line effect
+        public Vector3? start;
+        public Vector3? end;
     }
 
 }
