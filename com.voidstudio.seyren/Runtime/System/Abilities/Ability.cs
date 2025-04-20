@@ -1,12 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Collections;
-using Seyren.System.Actions;
-using Seyren.System.Units;
+﻿using Seyren.System.Units;
 using Seyren.System.Generics;
 using UnityEngine;
 using System;
-using Seyren.Universe;
 using UnityEngine.EventSystems;
+using Seyren.Universe;
 
 namespace Seyren.System.Abilities
 {
@@ -52,6 +49,7 @@ namespace Seyren.System.Abilities
 
     public abstract class Ability
     {
+        public Universe.Universe universe;
         public static Error ErrorCooldown { get; } = new Error("ability is cooldownling");
         public static Error ErrorCondition { get; } = new Error("condition is not satisfying");
         public static Error ErrorCannotNoTarget { get; } = new Error("targeting must be no target");
@@ -83,91 +81,18 @@ namespace Seyren.System.Abilities
         }
         protected long nextCooldown;
         public float ManaCost { get; set; }
-        // public int Level
-        // {
-        //     get
-        //     {
-        //         return _level;
-        //     }
-        //     set
-        //     {
-        //         if (value < 0)
-        //         {
-        //             return;
-        //         }
 
-        //         _level = value;
-        //     }
-        // }
 
-        // protected int _level;
-
-        public Ability()
+        public Ability(Universe.Universe universe)
         {
+            this.universe = universe;
             // _level = level;
         }
 
         // protected AbilityTarget abilityTarget;
 
         public abstract Error Cast(AbilityData data);
-        // public virtual Error Cast(IUnit by)
-        // {
-        //     abilityTarget = AbilityTarget.NoTarget(by);
-        //     onCast();
-        //     nextCooldown = DateTimeOffset.Now.ToUnixTimeMilliseconds() + (long)(Cooldown * 1000);
-        //     return null;
-        // }
-        // public virtual Error Cast(IUnit by, IUnit target)
-        // {
-        //     Debug.Log("Cast");
-        //     abilityTarget = AbilityTarget.UnitTarget(by, target);
-        //     onCast();
-        //     nextCooldown = DateTimeOffset.Now.ToUnixTimeMilliseconds() + (long)(Cooldown * 1000);
 
-        //     return null;
-        // }
-
-        // public virtual Error Cast(IUnit by, Vector3 location)
-        // {
-        //     Debug.Log("Cast");
-        //     abilityTarget = AbilityTarget.PointTarget(by, location);
-        //     onCast();
-        //     nextCooldown = DateTimeOffset.Now.ToUnixTimeMilliseconds() + (long)(Cooldown * 1000);
-
-        //     return null;
-        // }
-
-        // public Error CanCast(IUnit by)
-        // {
-        //     if (Targeting != TargetingType.NoTarget)
-        //     {
-        //         return ErrorCannotCastOnSelf;
-        //     }
-
-        //     if (CooldownRemaining > 0) return ErrorCooldown;
-        //     return Condition(by);
-        // }
-
-        // public Error CanCast(IUnit unit, IUnit target)
-        // {
-        //     if ((Targeting | TargetingType.UnitTarget) != Targeting)
-        //     {
-        //         return ErrorCannotCastOnSelf;
-        //     }
-
-        //     if (CooldownRemaining > 0) return ErrorCooldown;
-        //     return Condition(unit, target);
-        // }
-
-        // public Error CanCast(IUnit by, Vector3 target)
-        // {
-        //     if ((Targeting | TargetingType.PointTarget) != Targeting)
-        //     {
-        //         return ErrorCannotCastOnSelf;
-        //     }
-        //     if (CooldownRemaining > 0) return ErrorCooldown;
-        //     return Condition(by, target);
-        // }
 
         protected abstract void onCast();
         // protected abstract void onCast(Unit by);
