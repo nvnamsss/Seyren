@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Seyren.System.Generics;
 using Seyren.System.Units;
 using Seyren.Universe;
 
@@ -11,11 +12,12 @@ namespace Seyren.System.Abilities
         Ability GetAbility(string name);
         Ability GetAbility(int id);
         List<Ability> GetAbilities();
-        bool CastAbility(string id, AbilityData data);
+        Error CastAbility(string id, AbilityData data);
     }
 
     public class AbilitySystem : IAbilitySystem
     {
+        public static Error AbilityNotFound = new Error("ability not found.");
         Dictionary<string, Ability> abilities;
         List<Ability> hotAbilities;
         
@@ -32,17 +34,15 @@ namespace Seyren.System.Abilities
             hotAbilities.Add(ability);
         }
 
-        public bool CastAbility(string id, AbilityData data)
+        public Error CastAbility(string id, AbilityData data)
         {
             if (!abilities.ContainsKey(id.ToString()))
             {
-                return false;
+                return AbilityNotFound;
             }
 
             Ability ability = abilities[id.ToString()];
-            ability.Cast(data);
-
-            return true;
+            return ability.Cast(data);
         }
 
         public List<Ability> GetAbilities()
