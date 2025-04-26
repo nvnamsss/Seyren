@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Seyren.Universe
 
-{   
+{
     /// <summary>
     /// Represents a space where units can be managed and queried.
     /// This interface provides functionality to add, remove, and retrieve units within a defined spatial area.
@@ -17,10 +17,11 @@ namespace Seyren.Universe
     /// </remarks>
     public interface ISpace
     {
-        
+
         bool AddUnit(IUnit unit);
         bool RemoveUnit(IUnit unit);
         List<IUnit> GetUnitsInRange(Vector3 location, float radius);
+        List<IUnit> GetUnitsInRectangle(Vector3 location, Vector3 size, Quaternion rotation);
         IUnit GetUnit(string unitID);
     }
 }

@@ -87,7 +87,7 @@ namespace Seyren.System.Abilities
         /// <summary>
         /// Target position if applicable
         /// </summary>
-        public Vector3? targetPosition;
+        public Vector3? location;
         
         /// <summary>
         /// Target unit if applicable
@@ -118,12 +118,12 @@ namespace Seyren.System.Abilities
     /// <summary>
     /// Abstract base class for abilities with multiple phases
     /// </summary>
-    public abstract class PhaseAbility : Ability
+    public abstract class PhaseAbility<T> : Ability where T : PhaseAbilityInstance
     {
         /// <summary>
         /// List of active ability instances
         /// </summary>
-        protected List<PhaseAbilityInstance> instances = new List<PhaseAbilityInstance>();
+        protected List<T> instances = new List<T>();
         
         /// <summary>
         /// Definition of phases for this ability
@@ -141,49 +141,49 @@ namespace Seyren.System.Abilities
         protected abstract void DefinePhases();
 
         /// <summary>
-        /// Initialize a new phase in the given instance
-        /// </summary>
-        /// <param name="instance">The ability instance</param>
-        /// <param name="phase">The phase to initialize</param>
-        protected abstract void InitializePhase(PhaseAbilityInstance instance, AbilityPhase phase);
-
-        /// <summary>
         /// Update logic for a specific phase
         /// </summary>
         /// <param name="instance">The ability instance</param>
         /// <param name="phaseState">The current phase state</param>
         /// <param name="time">Game time information</param>
-        protected abstract void UpdatePhase(PhaseAbilityInstance instance, PhaseState phaseState, ITime time);
+        protected abstract void UpdatePhase(T instance, PhaseState phaseState, ITime time);
 
         /// <summary>
         /// Called when a phase completes
         /// </summary>
         /// <param name="instance">The ability instance</param>
         /// <param name="phaseState">The completed phase state</param>
-        protected abstract void CompletePhase(PhaseAbilityInstance instance, PhaseState phaseState);
+        protected abstract void CompletePhase(T instance, PhaseState phaseState);
 
+        protected abstract void onAllPhasesComplete(T instance);
         /// <summary>
         /// Get the next phase after the current one
         /// </summary>
         /// <param name="instance">The ability instance</param>
         /// <param name="currentPhase">The current phase</param>
         /// <returns>The next phase or null if there are no more phases</returns>
-        protected abstract AbilityPhase GetNextPhase(PhaseAbilityInstance instance, AbilityPhase currentPhase);
+        protected virtual AbilityPhase GetNextPhase(T instance, AbilityPhase currentPhase)
+        {
+            int idx = currentPhase.phaseId + 1;
+            if (idx < phaseDefinitions.Count)
+                return phaseDefinitions[idx];
+            return null;
+        }
 
         /// <summary>
         /// Advance the instance to the next phase
         /// </summary>
         /// <param name="instance">The ability instance</param>
         /// <returns>True if advanced to a new phase, false if there are no more phases</returns>
-        protected virtual bool AdvanceToNextPhase(PhaseAbilityInstance instance)
+        protected virtual bool NextPhase(T instance)
         {
-            if (instance.currentPhase == null || instance.currentPhase.phase == null)
+            // check if next phase is available
+            if (instance.currentPhase.phase.phaseId == phaseDefinitions.Count - 1)
+            {
                 return false;
+            }
             
             AbilityPhase nextPhase = GetNextPhase(instance, instance.currentPhase.phase);
-            if (nextPhase == null)
-                return false;
-            
             // Complete current phase
             CompletePhase(instance, instance.currentPhase);
             
@@ -201,21 +201,20 @@ namespace Seyren.System.Abilities
                 var instance = instances[i];
                 
                 // Skip inactive instances
-                if (!instance.active || instance.currentPhase == null)
+                if (!instance.active)
                 {
                     instances.RemoveAt(i);
-                    i--;
+                    --i;
                     continue;
+                }
+
+                if (instance.currentPhase == null)
+                {
+                    // Initialize the first phase if not already done
+                    instance.currentPhase = new PhaseState(phaseDefinitions[0]);
                 }
                 
                 var phaseState = instance.currentPhase;
-                
-                // Initialize phase if needed
-                if (!phaseState.initialized)
-                {
-                    InitializePhase(instance, phaseState.phase);
-                    phaseState.initialized = true;
-                }
                 
                 // Update phase
                 UpdatePhase(instance, phaseState, time);
@@ -227,9 +226,10 @@ namespace Seyren.System.Abilities
                 if (phaseState.phase.duration > 0 && phaseState.elapsedTime >= phaseState.phase.duration)
                 {
                     // Try to advance to next phase
-                    if (!AdvanceToNextPhase(instance))
+                    if (!NextPhase(instance))
                     {
                         // No more phases, deactivate instance
+                        onAllPhasesComplete(instance);
                         instance.active = false;
                     }
                 }
