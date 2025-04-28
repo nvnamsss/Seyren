@@ -47,7 +47,7 @@ namespace Seyren.System.Abilities
         }
     }
 
-    public abstract class Ability
+    public abstract class Ability : ILoop
     {
         public Universe.Universe universe;
         public static Error ErrorCooldown { get; } = new Error("ability is cooldownling");

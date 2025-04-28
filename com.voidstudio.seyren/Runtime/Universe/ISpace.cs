@@ -23,5 +23,6 @@ namespace Seyren.Universe
         List<IUnit> GetUnitsInRange(Vector3 location, float radius);
         List<IUnit> GetUnitsInRectangle(Vector3 location, Vector3 size, Quaternion rotation);
         IUnit GetUnit(string unitID);
+        IEnumerable<IUnit> GetUnits();
     }
 }

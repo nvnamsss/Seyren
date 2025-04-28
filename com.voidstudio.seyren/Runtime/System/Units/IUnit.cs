@@ -6,15 +6,18 @@ using Seyren.System.Damages;
 using Seyren.System.Forces;
 using Seyren.System.Generics;
 using Seyren.System.States;
+using Seyren.Universe;
 using UnityEngine;
 
 namespace Seyren.System.Units
 {
-    public enum UnitType {
+    public enum UnitType
+    {
         Enemy,
         Hero,
         Neutral,
         Structure,
+        Minion,
     }
 
     /*
@@ -22,7 +25,7 @@ namespace Seyren.System.Units
     It will decide how to move, how to look, how to damage, how to cast ability, how to kill, how to die
 
     */
-    public interface IUnit : IObject
+    public interface IUnit : IObject, ILoop
     {
         // event GameEventHandler<IUnit, MovedEventArgs> OnMoved;
         // /// <summary>
