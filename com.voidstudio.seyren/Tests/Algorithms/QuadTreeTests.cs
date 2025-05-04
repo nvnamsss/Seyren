@@ -12,11 +12,18 @@ namespace Seyren.Tests.Algorithms
         public Vector3 Location { get; set; }
         public Vector3 Size { get; set; }
 
-        public Quaternion Rotation => throw new global::System.NotImplementedException();
+        public Quaternion Rotation => Quaternion.identity; // Simple default implementation
 
-        public ObjectStatus ObjectStatus { get => throw new global::System.NotImplementedException(); set => throw new global::System.NotImplementedException(); }
+        public ObjectStatus ObjectStatus { 
+            get => _objectStatus; 
+            set => _objectStatus = value; 
+        }
 
+        public bool IsActive =>true;
+        
         private string id;
+        private ObjectStatus _objectStatus = ObjectStatus.None; // Default to active
+
         public TestItem(Vector3 location, Vector3 size)
         {
             // format: test_uuid
