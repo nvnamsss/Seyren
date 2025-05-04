@@ -37,7 +37,7 @@ namespace Seyren.System.Units
         // /// </summary>
         // event GameEventHandler<IUnit, UnitDiedEventArgs> OnDied;
         // event GameEventHandler<IUnit, TakeDamageEventArgs> OnDamaged;
-        
+
         /// <summary>
         /// Unit ID to determint the type of unit
         /// </summary>
@@ -47,7 +47,7 @@ namespace Seyren.System.Units
         /// </summary>
         string ReferenceID { get; }
 
-        
+
         IUnit Owner { get; }
         Force Force { get; set; }
         // State State { get; }
@@ -66,5 +66,6 @@ namespace Seyren.System.Units
         List<IOnHitEffect> GetOnHitEffects();
         void InflictDamage(Damage damage);
         bool IsImmune();
+        string UnitType { get; }
     }
 }
