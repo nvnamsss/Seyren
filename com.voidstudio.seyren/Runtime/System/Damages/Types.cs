@@ -28,10 +28,11 @@ namespace Seyren.System.Damages
     {
         None = 0,
         PrePassive = 1,
-        Critical = 2,
-        Evasion = 4,
-        Reduction = 8,
-        PostPassive = 16,
+        Critical = 1 << 1,
+        Evasion = 1 << 2,
+        Reduction = 1 << 3,
+        PostPassive = 1 << 4,
+        DamageOverTime = 1 << 5,
         All = ~0,
     }
 
