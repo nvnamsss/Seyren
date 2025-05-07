@@ -2,7 +2,31 @@
 // using Seyren.System.Units;
 // using UnityEngine;
 
-// namespace Seyren.System.Items
+using Seyren.System.Units;
+
+namespace Seyren.System.Items
+{
+    public class UseItemData
+    {
+        public IUnit user;
+        public IUnit targetUnit;
+        public IObject targetObject;
+    }
+
+    public interface IItem
+    {
+        string ID { get; set; }
+        string Name { get; set; }
+        string Description { get; set; }
+        int Count { get; set; }
+        // Size of the item in the inventory grid
+        int Width { get; set; }
+        // Size of the item in the inventory grid
+        int Height { get; set; }
+        void Use(UseItemData data);
+    }
+}
+
 // {
 //     public interface IItem
 //     {

@@ -1,7 +1,16 @@
 // using System.Collections.Generic;
 // using Seyren.System.Items;
 
-// namespace Seyren.System.Inventories
+using System.Collections.Generic;
+
+namespace Seyren.System.Inventories
+{
+    public class MultiCellInventory
+    {
+        private int[][] cells;
+    }
+}
+
 // {
 
 //     public class MultiCellInventory
