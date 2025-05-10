@@ -8,7 +8,7 @@ namespace Seyren.Projectiles
     public class CommonProjectile : IProjectile
     {
         public GameObject gameObject;
-        public Vector3 location;
+        private Vector3 location;
         public Quaternion rotation;
         public Vector3 direction;
         public float speed = 10f;
@@ -31,15 +31,17 @@ namespace Seyren.Projectiles
         public bool IsActive => isActive;
         private bool isActive = false;
 
-        public Action<CommonProjectile> onHit;
+        public Action<CommonProjectile> onTick;
 
-        public CommonProjectile(Vector3 location, Vector3 direction, float speed, float lifeTime)
+        public CommonProjectile(GameObject gameObject, Vector3 direction, float speed, float lifeTime)
         {
-            this.location = location;
+            this.gameObject = gameObject;
+            this.location = gameObject.transform.position;
             this.direction = direction.normalized;
             this.speed = speed;
             this.lifeTime = lifeTime;
             this.rotation = Quaternion.LookRotation(this.direction);
+            gameObject.transform.rotation = rotation;
             isActive = true;
         }
 
@@ -54,21 +56,15 @@ namespace Seyren.Projectiles
             }
 
             location += direction * speed * time.DeltaTime;
-            rotation = Quaternion.LookRotation(direction);
-
             if (gameObject != null)
             {
                 gameObject.transform.position = location;
-                gameObject.transform.rotation = rotation;
             }
-
-            // Optionally: check for collision/hit and invoke onHit
+            onTick?.Invoke(this);
         }
 
         public void Revoke()
         {
-            _objectStatus = ObjectStatus.None;
-            if (gameObject != null) UnityEngine.Object.Destroy(gameObject);
             isActive = false;
         }
     }
