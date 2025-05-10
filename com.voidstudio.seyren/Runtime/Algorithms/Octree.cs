@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using Seyren.System.Generics;
+using Seyren.System.Common;
 using Seyren.System.Units;
 
 namespace Seyren.Algorithms.Spatial

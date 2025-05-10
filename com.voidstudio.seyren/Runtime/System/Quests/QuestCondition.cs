@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using Seyren.System.Generics;
+using Seyren.System.Common;
 using UnityEngine;
 
 namespace Seyren.System.Quests

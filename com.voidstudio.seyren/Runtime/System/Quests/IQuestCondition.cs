@@ -1,4 +1,4 @@
-﻿using Seyren.System.Generics;
+﻿using Seyren.System.Common;
 
 namespace Seyren.System.Quests
 {

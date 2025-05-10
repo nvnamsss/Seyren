@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Seyren.System.Generics
+namespace Seyren.System.Common
 {
     public class CancelableEventArgs : EventArgs
     {

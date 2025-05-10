@@ -1,4 +1,4 @@
-﻿using Seyren.System.Generics;
+﻿using Seyren.System.Common;
 using System;
 using System.Collections;
 using System.Collections.Generic;

@@ -1,7 +1,7 @@
 using System;
 using Seyren.System.Abilities;
 using Seyren.System.Damages;
-using Seyren.System.Generics;
+using Seyren.System.Common;
 using Seyren.System.Units;
 using UnityEngine;
 

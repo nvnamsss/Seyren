@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Seyren.System.Quests
+namespace Seyren.System.Common
 {
     /* Its called hierarchy thus must have tree in there
          * and of course its non-balance
@@ -16,9 +16,9 @@ namespace Seyren.System.Quests
          * Should it easily to balance depend on Size??? Seem no need
          * Should I apply balance to this tree?
     */
-         /// <summary>
-         /// Represents Condition as a hierachy, a condtion could be condition for another condition
-         /// </summary>
+    /// <summary>
+    /// Represents Condition as a hierachy, a condtion could be condition for another condition
+    /// </summary>
     public class HierarchyCondition
     {
         public delegate void UnlockHandler(HierarchyCondition sender);
@@ -115,7 +115,7 @@ namespace Seyren.System.Quests
             {
                 return false;
             }
-            
+
             if (UnlockCondition == null)
             {
 #if UNITY_EDITOR
@@ -149,7 +149,7 @@ namespace Seyren.System.Quests
         /// Determine condition to unlock itself
         /// </summary>
         public UnlockConditionHandler UnlockCondition;
-        public TAttactor Attactor { get; }    
+        public TAttactor Attactor { get; }
         /// <summary>
         /// Demetermine if this condition is satisfied
         /// </summary>

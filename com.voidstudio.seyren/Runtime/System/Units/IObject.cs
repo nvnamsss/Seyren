@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Seyren.System.Actions;
 using Seyren.System.Damages;
-using Seyren.System.Generics;
+using Seyren.System.Common;
 using UnityEngine;
 
 namespace Seyren.System.Units
@@ -25,8 +25,6 @@ namespace Seyren.System.Units
         List<IAttachable> Attachments { get; set; }
         Quaternion Rotation { get; set; }
         float ZIndex { get; set; }
-
-        Action Action { get; set; }
 
         void Update();
     }

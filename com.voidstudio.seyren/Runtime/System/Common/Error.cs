@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Seyren.System.Generics
+namespace Seyren.System.Common
 {
     public class Error {
         public static Error None = new Error("No error.");

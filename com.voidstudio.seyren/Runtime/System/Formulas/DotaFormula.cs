@@ -1,6 +1,6 @@
 using System;
 
-namespace Labs.System.Formulas
+namespace Seyren.System.Formulas
 {
     public static class DotaFormula
     {

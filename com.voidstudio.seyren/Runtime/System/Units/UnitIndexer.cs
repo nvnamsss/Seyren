@@ -1,6 +1,6 @@
 // using System.Collections.Concurrent;
 // using System.Collections.Generic;
-// using Seyren.System.Generics;
+// using Seyren.System.Common;
 // using UnityEngine;
 
 // namespace Seyren.System.Units

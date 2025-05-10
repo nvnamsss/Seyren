@@ -4,7 +4,7 @@ using Seyren.System.Abilities;
 using Seyren.System.Actions;
 using Seyren.System.Damages;
 using Seyren.System.Forces;
-using Seyren.System.Generics;
+using Seyren.System.Common;
 using Seyren.System.States;
 using Seyren.Universe;
 using UnityEngine;
@@ -47,7 +47,7 @@ namespace Seyren.System.Units
         /// </summary>
         string ReferenceID { get; }
 
-
+        IAttribute Attribute { get; }
         IUnit Owner { get; }
         Force Force { get; set; }
         // State State { get; }
@@ -67,5 +67,6 @@ namespace Seyren.System.Units
         void InflictDamage(Damage damage);
         bool IsImmune();
         string UnitType { get; }
+        ActionQueue ActionQueue { get; }
     }
 }

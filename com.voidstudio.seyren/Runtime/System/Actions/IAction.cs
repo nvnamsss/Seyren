@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Seyren.System.Generics;
+using Seyren.System.Common;
+using Seyren.Universe;
 
 namespace Seyren.System.Actions
 {
@@ -18,7 +19,7 @@ namespace Seyren.System.Actions
     during run time, if action is broken or violate the constraint then nothing happen.
     action may contains running time indicate the time an action needed to complete,
     */
-    public interface IAction
+    public interface IAction : ILoop
     {
         event GameEventHandler<IAction> ActionStart;
         event GameEventHandler<IAction> ActionBroke;
@@ -31,12 +32,11 @@ namespace Seyren.System.Actions
         /// Start action
         /// </summary>
         // IEnumerable<IThing> Do(params object[] obj);
+        string ID { get; }
         int ActionType { get; }
         bool IsCompleted { get; }
-        bool IsAffectedBy(int actionType);
-        bool Break();
-        Error Constraint(IAction action);
-        Error Run();
+        void Start();
+        void Stop();
     }
 
     public interface IThing

@@ -1,7 +1,7 @@
 ﻿// using Seyren.System.Damages;
 // using Seyren.System.Forces;
 // using UnityEngine;
-// using Seyren.System.Generics;
+// using Seyren.System.Common;
 // using Seyren.System.States;
 // using Seyren.System.Actions;
 

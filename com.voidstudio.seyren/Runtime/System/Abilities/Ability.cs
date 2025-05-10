@@ -1,5 +1,5 @@
 ﻿using Seyren.System.Units;
-using Seyren.System.Generics;
+using Seyren.System.Common;
 using UnityEngine;
 using System;
 using UnityEngine.EventSystems;
