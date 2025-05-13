@@ -53,6 +53,11 @@ namespace Seyren.System.Actions
             if (queue.Count > 0)
             {
                 IAction action = queue.Peek();
+                if (!action.IsStarted)
+                {
+                    action.Start();
+                }
+                
                 action.Loop(time);
             }
         }

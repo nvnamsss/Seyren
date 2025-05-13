@@ -35,6 +35,7 @@ namespace Seyren.System.Actions
         string ID { get; }
         int ActionType { get; }
         bool IsCompleted { get; }
+        bool IsStarted { get; }
         void Start();
         void Stop();
     }

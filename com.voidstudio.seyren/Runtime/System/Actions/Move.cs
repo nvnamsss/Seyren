@@ -15,8 +15,12 @@ namespace Seyren.System.Actions
         public bool IsCompleted => completed;
 
         public string ID => id;
+
+        public bool IsStarted => started;
+
         private string id;
         private bool completed;
+        private bool started;
 
         public event GameEventHandler<IAction> ActionStart;
         public event GameEventHandler<IAction> ActionBroke;
@@ -29,6 +33,8 @@ namespace Seyren.System.Actions
             this.unit = unit;
             this.target = target;
             this.id = Sys.Guid.NewGuid().ToString();
+            this.completed = false;
+            this.started = false;
         }
 
         public void Loop(ITime time)
@@ -54,6 +60,7 @@ namespace Seyren.System.Actions
 
         public void Start()
         {
+            started = true;
         }
 
         public void Stop()

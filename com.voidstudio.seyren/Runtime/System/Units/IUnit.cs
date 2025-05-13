@@ -45,7 +45,7 @@ namespace Seyren.System.Units
         /// <summary>
         /// Reference ID to determine the instance id of unit
         /// </summary>
-        string ReferenceID { get; }
+        // string ReferenceID { get; }
 
         IAttribute Attribute { get; }
         IUnit Owner { get; }
