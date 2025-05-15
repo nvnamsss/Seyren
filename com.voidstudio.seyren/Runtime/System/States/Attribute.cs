@@ -111,6 +111,7 @@ namespace Seyren.System.States
         public const string CAST_RANGE = "CastRange";
         public const string MOVEMENT_SPEED = "MovementSpeed";
         public const string ATTACK_SPEED = "AttackSpeed";
+        public const string TURN_RATE = "TurnRate";
     }
     public interface IAttribute
     {
