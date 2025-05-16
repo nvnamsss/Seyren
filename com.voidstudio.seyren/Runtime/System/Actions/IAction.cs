@@ -21,9 +21,9 @@ namespace Seyren.System.Actions
     */
     public interface IAction : ILoop
     {
-        event GameEventHandler<IAction> ActionStart;
-        event GameEventHandler<IAction> ActionBroke;
-        event GameEventHandler<IAction> ActionEnd;
+        event GameEventHandler<IAction> OnStarted;
+        event GameEventHandler<IAction> OnStopped;
+        event GameEventHandler<IAction> OnCompleted;
         /// <summary>
         /// Condition to play action
         /// </summary>
@@ -40,8 +40,4 @@ namespace Seyren.System.Actions
         void Stop();
     }
 
-    public interface IThing
-    {
-        void Do(params object[] obj);
-    }
 }

@@ -137,3 +137,8 @@ The framework follows a modular, event-driven architecture with clear separation
 
 
 
+### NavMesh
+- Use high acceleration for instant speed.
+- Angular speed controls turning.
+- Disable Auto Braking for non-physics movement.
+- Move units manually via desired velocity.

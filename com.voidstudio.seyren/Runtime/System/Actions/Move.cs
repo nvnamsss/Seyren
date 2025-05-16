@@ -22,9 +22,9 @@ namespace Seyren.System.Actions
         private bool completed;
         private bool started;
 
-        public event GameEventHandler<IAction> ActionStart;
-        public event GameEventHandler<IAction> ActionBroke;
-        public event GameEventHandler<IAction> ActionEnd;
+        public event GameEventHandler<IAction> OnStarted;
+        public event GameEventHandler<IAction> OnStopped;
+        public event GameEventHandler<IAction> OnCompleted;
         private IUnit unit;
         private Vector3 target;
 
@@ -71,7 +71,7 @@ namespace Seyren.System.Actions
         private void onComplete()
         {
             completed = true;
-            ActionEnd?.Invoke(this);
+            OnCompleted?.Invoke(this);
         }
     }
 }

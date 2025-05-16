@@ -41,6 +41,11 @@ namespace Seyren.Cinematic
         public float p1 = 0;
         public float p2 = 0;
         public string camera_model = "OPENCV";
+        
+        // Camera noise feature
+        public bool enablePositionNoise = false;
+        public float noiseAmount = 0.1f;
+        public float noiseRange = 2;
 
         [Serializable]
         public class Frame
@@ -87,9 +92,11 @@ namespace Seyren.Cinematic
             }
             if (!Directory.Exists(saveFolder))
                 Directory.CreateDirectory(saveFolder);
+                
+            // Initialize random generator with seed for consistent noise
 
             Capture360();
-        }
+        }   
 
         public void Capture360()
         {
@@ -103,6 +110,20 @@ namespace Seyren.Cinematic
                 float angle = i * angleStep;
                 Quaternion rot = Quaternion.Euler(0, angle, 0);
                 Vector3 pos = target.position + rot * offset;
+                
+                // Apply position noise if enabled
+                if (enablePositionNoise)
+                {
+                    // Create a random offset in all directions
+                    Vector3 noise = new Vector3(
+                        UnityEngine.Random.Range(-noiseRange, noiseRange) * noiseAmount,
+                        UnityEngine.Random.Range(-noiseRange, noiseRange) * noiseAmount,
+                        UnityEngine.Random.Range(-noiseRange, noiseRange) * noiseAmount
+                    );
+                    Debug.Log($"Camera360: Adding noise {noise} to position {pos}");
+                    pos += noise;
+                }
+                
                 cam.transform.position = pos;
                 cam.transform.LookAt(target);
 
