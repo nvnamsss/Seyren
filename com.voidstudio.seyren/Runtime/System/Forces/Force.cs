@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,65 @@ namespace Seyren.System.Forces
         public static Force None = new Force("None");
         public static Force Force1 = new Force("Force1");
         public static Force Force2 = new Force("Force2");
+
+        // Lock object for thread safety
+        private static readonly object syncLock = new object();
+        
+        private static Dictionary<string, Force> forces = new Dictionary<string, Force>
+        {
+            { "None", None },
+            { "Force1", Force1 },
+            { "Force2", Force2 }
+        };
+
+        public static Force Get(string name)
+        {
+            lock (syncLock)
+            {
+                if (forces.ContainsKey(name))
+                {
+                    return forces[name];
+                }
+
+                return None;
+            }
+        }
+
+        public static Force Create(string name)
+        {
+            lock (syncLock)
+            {
+                if (forces.ContainsKey(name))
+                {
+                    UnityEngine.Debug.LogWarning($"[Force] - Force with name '{name}' already exists. Returning existing force.");
+                    return forces[name];
+                }
+
+                Force newForce = new Force(name);
+                forces[name] = newForce;
+                Forces.Add(newForce);
+
+                // Automatically make alliances with all existing forces
+                foreach (var force in Forces)
+                {
+                    if (force != newForce)
+                    {
+                        newForce.MakeAlliance(force);
+                    }
+                }
+
+                return newForce;
+            }
+        }
+
+        public static Force[] List()
+        {
+            lock (syncLock)
+            {
+                return forces.Values.ToArray();
+            }
+        }
+        
         
         public static List<Force> Forces { get; } = new List<Force>();
         /// <summary>
@@ -47,13 +107,16 @@ namespace Seyren.System.Forces
         {
             //if (force == null) return false;
 
-            if (!Alliances.ContainsKey(force.Name) && force != this)
+            lock (syncLock)
             {
-                Alliances.Add(force.Name, force);
-                // Enemies.Remove(force.Name);
-                force.MakeAlliance(this);
+                if (!Alliances.ContainsKey(force.Name) && force != this)
+                {
+                    Alliances.Add(force.Name, force);
+                    // Enemies.Remove(force.Name);
+                    force.MakeAlliance(this);
 
-                return true;
+                    return true;
+                }
             }
 
             return false;
@@ -63,10 +126,13 @@ namespace Seyren.System.Forces
         {
             //if (force == null) return false;
 
-            if (Alliances.ContainsKey(force.Name) && force != this)
+            lock (syncLock)
             {
-                Alliances.Remove(force.Name);
-                return true;
+                if (Alliances.ContainsKey(force.Name) && force != this)
+                {
+                    Alliances.Remove(force.Name);
+                    return true;
+                }
             }
 
             return false;
@@ -76,26 +142,6 @@ namespace Seyren.System.Forces
             return a.Force.IsEnemy(b.Force);
         }
         
-        public static Force CreateForce(string name)
-        {
-            Force force = new Force(name);
-            int index = Forces.IndexOf(force);
-            if (index >= 0)
-            {
-                UnityEngine.Debug.LogWarning("[Force] - Name of new force is existed");
-                return Forces[index];
-            }
-
-            Forces.Add(force);
-
-            for (int loop = 0; loop < Forces.Count; loop++)
-            {
-                force.MakeAlliance(Forces[loop]);
-            }
-
-            return force;
-        }
-
         public static bool operator ==(Force lhs, Force rhs)
         {
             return lhs.Name == rhs.Name;

@@ -49,7 +49,7 @@ namespace Seyren.System.Forces
                 }
             }
 
-            force = Force.CreateForce(forceName);
+            force = Force.Create(forceName);
             //for (int loop = 0; loop < Alliance.Count; loop++)
             //{
             //    force.MakeAlliance(Alliance[loop].force);

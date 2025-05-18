@@ -31,13 +31,104 @@ namespace Seyren.System.States
     }
 
     [Serializable]
-    public struct BaseFloat
+    public class BaseFloat
     {
         public static BaseFloat Zero = new BaseFloat(0, 0);
         public float Base;
-        public float Incr;
+        public float Incr => incr;
         public float Total => Base + Incr;
-
+        private Dictionary<string, float> bonuses = new Dictionary<string, float>();
+        private object _lock = new object();
+        public float this[string key]
+        {
+            get
+            {
+                if (bonuses.TryGetValue(key, out float value))
+                {
+                    return value;
+                }
+                return 0f;
+            }
+            set
+            {
+                bonuses[key] = value;
+            }
+        }
+        private float incr = 0;
+        
+        /// <summary>
+        /// Adds a bonus with the specified key
+        /// </summary>
+        /// <param name="key">Unique identifier for the bonus</param>
+        /// <param name="value">Value of the bonus</param>
+        /// <returns>The total value after adding the bonus</returns>
+        public float AddBonus(string key, float value)
+        {
+            bonuses[key] = value;
+            CalculateIncr();
+            return Total;
+        }
+        
+        /// <summary>
+        /// Removes a bonus with the specified key
+        /// </summary>
+        /// <param name="key">Unique identifier for the bonus</param>
+        /// <returns>The total value after removing the bonus</returns>
+        public float RemoveBonus(string key)
+        {
+            if (bonuses.ContainsKey(key))
+            {
+                bonuses.Remove(key);
+                CalculateIncr();
+            }
+            return Total;
+        }
+        
+        /// <summary>
+        /// Check if a bonus exists
+        /// </summary>
+        /// <param name="key">Unique identifier for the bonus</param>
+        /// <returns>True if the bonus exists</returns>
+        public bool HasBonus(string key)
+        {
+            return bonuses.ContainsKey(key);
+        }
+        
+        /// <summary>
+        /// Get all bonus keys
+        /// </summary>
+        /// <returns>Array of all bonus keys</returns>
+        public string[] GetBonusKeys()
+        {
+            string[] keys = new string[bonuses.Count];
+            bonuses.Keys.CopyTo(keys, 0);
+            return keys;
+        }
+        
+        /// <summary>
+        /// Clear all bonuses
+        /// </summary>
+        /// <returns>The total value after clearing all bonuses</returns>
+        public float ClearBonuses()
+        {
+            bonuses.Clear();
+            CalculateIncr();
+            return Total;
+        }
+        
+        /// <summary>
+        /// Recalculates the total increment value from all bonuses
+        /// </summary>
+        private void CalculateIncr()
+        {
+            float totalBonus = 0f;
+            foreach (var bonus in bonuses.Values)
+            {
+                totalBonus += bonus;
+            }
+            incr = totalBonus;
+        }
+        
         public BaseFloat(float baseValue) : this(baseValue, 0)
         {
 
@@ -46,31 +137,31 @@ namespace Seyren.System.States
         public BaseFloat(float baseValue, float increasedValue)
         {
             Base = baseValue;
-            Incr = increasedValue;
+            incr = increasedValue;
         }
 
         public float Amplify(float percent)
         {
-            Incr = Base * percent / 100;
+            incr = Base * percent / 100;
             return Total;
         }
 
         public float Increase(float value)
         {
-            Incr += value;
+            incr += value;
             return Total;
         }
 
         public static BaseFloat operator +(BaseFloat lhs, BaseFloat rhs)
         {
             lhs.Base += rhs.Base;
-            lhs.Incr += rhs.Incr;
+            lhs.incr += rhs.Incr;
             return lhs;
         }
         public static BaseFloat operator -(BaseFloat lhs, BaseFloat rhs)
         {
             lhs.Base -= rhs.Base;
-            lhs.Incr -= rhs.Incr;
+            lhs.incr -= rhs.Incr;
             return lhs;
         }
 
@@ -97,6 +188,8 @@ namespace Seyren.System.States
         public const string M_DAMAGE_AMPLIFIED = "MDamageAmplified";
         public const string MAX_HP = "MaxHp";
         public const string MAX_MP = "MaxMp";
+        public const string CUR_HP = "CurHp";
+        public const string CUR_MP = "CurMp";
         public const string HP_REGEN = "HpRegen";
         public const string MP_REGEN = "MpRegen";
         public const string SHIELD_REGEN = "ShieldRegen";
@@ -127,6 +220,8 @@ namespace Seyren.System.States
         void SetInt(string name, int val);
         void IncreaseFloat(string name, float val);
         void IncreaseInt(string name, int val);
+
+        public float this[string key]{ get; set; }
     }
 
     

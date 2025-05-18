@@ -4,7 +4,7 @@ using Seyren.System.Units;
 using Seyren.Universe;
 using UnityEditor.Graphs;
 using UnityEngine;
-using Sys = global::System;
+using System;
 
 namespace Seyren.System.Actions
 {
@@ -32,7 +32,7 @@ namespace Seyren.System.Actions
         {
             this.unit = unit;
             this.target = target;
-            this.id = Sys.Guid.NewGuid().ToString();
+            this.id = Guid.NewGuid().ToString();
             this.completed = false;
             this.started = false;
         }

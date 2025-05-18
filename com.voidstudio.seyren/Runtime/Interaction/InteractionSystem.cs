@@ -15,10 +15,9 @@ namespace Seyren.Interaction
         public static InteractionSystem Instance
         {
             get
-            {
-                if (_instance == null)
+            {                if (_instance == null)
                 {
-                    _instance = FindObjectOfType<InteractionSystem>();
+                    _instance = FindAnyObjectByType<InteractionSystem>();
                     if (_instance == null)
                     {
                         var go = new GameObject("InteractionSystem");
