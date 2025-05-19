@@ -11,6 +11,7 @@ namespace Seyren.Projectiles
     /// </summary>
     public class TargetProjectile : IProjectile
     {
+        public static float InfiniteLifetime = -1;
         public GameObject gameObject;
         private Vector3 location;
         private Vector3 startPosition;
@@ -57,14 +58,14 @@ namespace Seyren.Projectiles
         /// <param name="lifeTime">Maximum lifetime</param>
         /// <param name="arcRate">Arc intensity (0=straight line, 1=full arc)</param>
         /// <param name="arcHeight">Maximum height of the arc</param>
-        public TargetProjectile(GameObject gameObject, Vector3 targetPosition, float speed, float lifeTime, float arcRate = 0f, float arcHeight = 2f)
+        public TargetProjectile(GameObject gameObject, Vector3 targetPosition, float speed, float lifeTime = -1, float arcRate = 0f, float arcHeight = 2f)
         {
             this.gameObject = gameObject;
             this.startPosition = gameObject.transform.position;
             this.location = this.startPosition;
             this.targetPosition = targetPosition;
             this.speed = speed;
-            this.lifeTime = lifeTime;
+            this.lifeTime = lifeTime < 0 ? float.MaxValue : lifeTime; // Allow infinite lifetime if negative
             this.initialLifeTime = lifeTime;
             this.arcRate = Mathf.Clamp01(arcRate);
             this.arcHeight = arcHeight;
