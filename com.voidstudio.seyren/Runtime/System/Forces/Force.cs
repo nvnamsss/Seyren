@@ -28,9 +28,14 @@ namespace Seyren.System.Forces
 
         public static Force Get(string name)
         {
+            if (string.IsNullOrEmpty(name))
+            {
+                return None;
+            }
+            
             lock (syncLock)
             {
-                if (forces.ContainsKey(name))
+                if (forces != null && forces.ContainsKey(name))
                 {
                     return forces[name];
                 }
@@ -144,6 +149,15 @@ namespace Seyren.System.Forces
         
         public static bool operator ==(Force lhs, Force rhs)
         {
+            if (ReferenceEquals(lhs, null) && ReferenceEquals(rhs, null))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(lhs, null) || ReferenceEquals(rhs, null))
+            {
+                return false;
+            }
             return lhs.Name == rhs.Name;
         }
 
