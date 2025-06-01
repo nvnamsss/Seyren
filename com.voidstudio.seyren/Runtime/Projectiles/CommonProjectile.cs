@@ -39,6 +39,8 @@ namespace Seyren.Projectiles
 
         public Action<CommonProjectile> onTick;
 
+        public event Action<IProjectile> OnCompleted;
+
         public CommonProjectile(GameObject gameObject, Vector3 direction, float speed, float lifeTime)
         {
             this.gameObject = gameObject;
@@ -66,7 +68,7 @@ namespace Seyren.Projectiles
             if (lifeTime <= 0f)
             {
                 if (gameObject != null) UnityEngine.Object.Destroy(gameObject);
-                isActive = false;
+                Revoke();
                 return;
             }
 
@@ -121,6 +123,7 @@ namespace Seyren.Projectiles
         public void Revoke()
         {
             isActive = false;
+            OnCompleted?.Invoke(this);
         }
     }
 }

@@ -33,6 +33,9 @@ namespace Seyren.Projectiles
 
         public Action<HomingProjectile> onHit; // Callback invoked on hit
 
+
+        public event Action<IProjectile> OnCompleted;
+
         public HomingProjectile(IUnit target, GameObject prefab, float speed, float lifeTime)
         {
             gameObject = prefab;
@@ -42,6 +45,7 @@ namespace Seyren.Projectiles
             this.speed = speed;
             this.lifeTime = lifeTime;
             isActive = true;
+            // Trigger OnStart event after initialization
         }
 
         public void Loop(ITime time)
@@ -49,7 +53,7 @@ namespace Seyren.Projectiles
             if (target == null)
             {
                 if (gameObject != null) UnityEngine.Object.Destroy(gameObject);
-                isActive = false;
+                Revoke();
                 return;
             }
 
@@ -57,7 +61,7 @@ namespace Seyren.Projectiles
             if (lifeTime <= 0f)
             {
                 if (gameObject != null) UnityEngine.Object.Destroy(gameObject);
-                isActive = false;
+                Revoke();
                 return;
             }
 
@@ -77,6 +81,7 @@ namespace Seyren.Projectiles
                     gameObject.transform.rotation = rotation;
                 }
                 onHit?.Invoke(this);
+                Revoke();
                 return;
             }
 
@@ -93,6 +98,7 @@ namespace Seyren.Projectiles
         public void Revoke()
         {
             isActive = false;
+            OnCompleted?.Invoke(this);
         }
     }
 }

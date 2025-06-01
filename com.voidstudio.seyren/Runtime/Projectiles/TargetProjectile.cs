@@ -49,6 +49,8 @@ namespace Seyren.Projectiles
         public Action<TargetProjectile> onTick;
         public Action<TargetProjectile> onTargetReached;
 
+        public event Action<IProjectile> OnCompleted;
+
         /// <summary>
         /// Creates a projectile that will travel to a target location.
         /// </summary>
@@ -90,8 +92,7 @@ namespace Seyren.Projectiles
             lifeTime -= time.DeltaTime;
             if (lifeTime <= 0f)
             {
-                if (gameObject != null) UnityEngine.Object.Destroy(gameObject);
-                isActive = false;
+                Revoke();
                 return;
             }
 
@@ -150,6 +151,7 @@ namespace Seyren.Projectiles
         public void Revoke()
         {
             isActive = false;
+            OnCompleted?.Invoke(this);
         }
         
         /// <summary>

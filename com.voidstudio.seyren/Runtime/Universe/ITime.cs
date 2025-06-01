@@ -4,6 +4,7 @@ namespace Seyren.Universe {
     public interface ILoop
     {
         public void Loop(ITime time);
+        // public void Loop(ITime time, ISpace space);
     }
     
     public interface ITime

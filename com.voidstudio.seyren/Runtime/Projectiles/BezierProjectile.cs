@@ -35,6 +35,8 @@ namespace Seyren.Projectiles
         public Quaternion Rotation => _rotation;
         public Action<BezierProjectile> onTick;
 
+        public event Action<IProjectile> OnCompleted;
+
         /// <summary>
         /// Creates a new Bezier projectile
         /// </summary>
@@ -119,12 +121,7 @@ namespace Seyren.Projectiles
         public void Revoke()
         {
             _isActive = false;
-            
-            // Clean up the visual representation
-            if (_projectileObject != null)
-            {
-                UnityEngine.Object.Destroy(_projectileObject);
-            }
+            OnCompleted?.Invoke(this);
         }
         
         /// <summary>
