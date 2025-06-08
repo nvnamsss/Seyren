@@ -52,7 +52,6 @@ namespace Seyren.Projectiles
         {
             if (target == null)
             {
-                if (gameObject != null) UnityEngine.Object.Destroy(gameObject);
                 Revoke();
                 return;
             }
@@ -60,7 +59,6 @@ namespace Seyren.Projectiles
             lifeTime -= time.DeltaTime;
             if (lifeTime <= 0f)
             {
-                if (gameObject != null) UnityEngine.Object.Destroy(gameObject);
                 Revoke();
                 return;
             }

@@ -21,8 +21,7 @@ namespace Seyren.Projectiles
         private Vector3[] _controlPoints;
         private float _currentTime;
         private float _totalTime;
-        private GameObject _projectileObject;
-        private Action<BezierProjectile> _onComplete;
+        public GameObject projectileObject;
 
         public string Type { get => _type; set => _type = value; }
         public float Speed { get => _speed; set => _speed = value; }
@@ -51,9 +50,9 @@ namespace Seyren.Projectiles
         /// <param name="onComplete">Action to call when projectile completes its path</param>
         public BezierProjectile(GameObject gameObject, Vector3 startPoint, Vector3 controlPoint1, 
                                Vector3 controlPoint2, Vector3 endPoint, float speed, float lifeTime,
-                               Action<BezierProjectile> onComplete = null)
+                               Action<IProjectile> onComplete = null)
         {
-            _projectileObject = gameObject;
+            projectileObject = gameObject;
             _speed = speed;
             _lifeTime = lifeTime;
             _isActive = true;
@@ -67,7 +66,7 @@ namespace Seyren.Projectiles
             
             // Calculate total time based on path length and speed
             _totalTime = EstimatePathLength() / speed;
-            _onComplete = onComplete;
+            OnCompleted += onComplete;
         }
 
 
@@ -101,16 +100,15 @@ namespace Seyren.Projectiles
             }
 
             // Update visual representation
-            if (_projectileObject != null)
+            if (projectileObject != null)
             {
-                _projectileObject.transform.position = _location;
-                _projectileObject.transform.rotation = _rotation;
+                projectileObject.transform.position = _location;
+                projectileObject.transform.rotation = _rotation;
             }
 
             // Check if we've reached the end of the path
             if (t >= 1.0f)
             {
-                _onComplete?.Invoke(this);
                 Revoke();
             }
 
@@ -122,6 +120,10 @@ namespace Seyren.Projectiles
         {
             _isActive = false;
             OnCompleted?.Invoke(this);
+            if (projectileObject != null)
+            {
+                GameObject.Destroy(projectileObject);
+            }
         }
         
         /// <summary>

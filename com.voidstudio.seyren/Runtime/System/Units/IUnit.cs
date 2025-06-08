@@ -56,6 +56,12 @@ namespace Seyren.System.Units
         // States.IAttribute Attribute { get;set; }
 
         // Error Kill(IUnit by);
+        
+        /// <summary>
+        /// Move the unit to a specific location
+        /// </summary>
+        /// <param name="location"></param>
+        /// <returns></returns>
         Error Move(Vector3 location);
         Error Look(Quaternion quaternion);
         // Error DamageTarget(Damage damage);
