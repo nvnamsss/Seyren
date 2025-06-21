@@ -23,6 +23,9 @@ namespace Seyren.Projectiles
         public Vector3 Size { get => _size; set => _size = value; }
 
         public Quaternion Rotation => _rotation;
+
+        public Vector3 Forward => throw new NotImplementedException();
+
         private string _type = "Instant";
         private float _speed = 0f; // Instant hit, speed is for interface compatibility
         private float _lifeTime = 0.1f; // Very short lifetime as hitscan is instant

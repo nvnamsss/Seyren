@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Seyren.Algorithms;
 using Seyren.System.Units;
+using Unity.VisualScripting.YamlDotNet.Core;
 using UnityEngine;
 
 namespace Seyren.Universe
@@ -33,6 +34,7 @@ namespace Seyren.Universe
         public Vector3 Size { get; set; }
 
         public Quaternion Rotation => throw new NotImplementedException();
+        public Vector3 Forward => throw new NotImplementedException();
         Vector3 location;
         float maxDistanceFOV;
         float lerpDensity;
@@ -86,6 +88,7 @@ namespace Seyren.Universe
         public Vector3 Size { get; set; }
 
         public Quaternion Rotation => throw new NotImplementedException();
+        public Vector3 Forward => throw new NotImplementedException();
         Vector3 location;
         public Bush(Vector3 location, Vector3 size)
         {
@@ -138,6 +141,7 @@ namespace Seyren.Universe
         public Vector3 Size { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public Quaternion Rotation => throw new NotImplementedException();
+        public Vector3 Forward => throw new NotImplementedException();
 
         public AreaSight(Vector3 location, int radius)
         {
@@ -197,6 +201,7 @@ namespace Seyren.Universe
         public Vector3 Size { get => throw new global::System.NotImplementedException(); set => throw new global::System.NotImplementedException(); }
 
         public Quaternion Rotation => throw new global::System.NotImplementedException();
+        public Vector3 Forward => throw new global::System.NotImplementedException();
         int reveal;
         List<Doodad> doodads;
         Vector3 location;

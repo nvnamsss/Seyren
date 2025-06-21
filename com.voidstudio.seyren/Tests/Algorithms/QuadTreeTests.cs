@@ -14,6 +14,8 @@ namespace Seyren.Tests.Algorithms
 
         public Quaternion Rotation => Quaternion.identity; // Simple default implementation
 
+        public Vector3 Forward => Rotation * Vector3.forward; // Added implementation for Forward property
+
         public ObjectStatus ObjectStatus { 
             get => _objectStatus; 
             set => _objectStatus = value; 

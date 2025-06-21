@@ -17,6 +17,7 @@ namespace Seyren.System.Units
         Vector3 Location { get; }
         Vector3 Size { get; set; }
         Quaternion Rotation { get; }
+        Vector3 Forward { get; }
     }
     
     public interface IAttachable

@@ -32,6 +32,9 @@ namespace Seyren.Projectiles
         public Vector3 Location => _location;
         public Vector3 Size { get => _size; set => _size = value; }
         public Quaternion Rotation => _rotation;
+
+        public Vector3 Forward => throw new NotImplementedException();
+
         public Action<BezierProjectile> onTick;
 
         public event Action<IProjectile> OnCompleted;

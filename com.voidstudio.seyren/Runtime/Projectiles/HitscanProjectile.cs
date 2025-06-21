@@ -29,6 +29,7 @@ namespace Seyren.Projectiles
         public ObjectStatus ObjectStatus { get => _objectStatus; set => _objectStatus = value; }
         public Vector3 Location => location;
         public Vector3 Size { get => _size; set => _size = value; }
+        public Vector3 Forward => direction.normalized;
         public Quaternion Rotation => rotation;
         public bool IsActive { get; private set; }
 

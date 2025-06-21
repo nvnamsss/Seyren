@@ -52,17 +52,22 @@ namespace Seyren.System.Abilities
 
         public Ability GetAbility(string name)
         {
-            throw new global::System.NotImplementedException();
+            if (abilities.ContainsKey(name))
+            {
+                return abilities[name];
+            }
+            return null;
         }
 
         public Ability GetAbility(int id)
         {
-            throw new global::System.NotImplementedException();
+            return hotAbilities[id];
         }
 
         public void RemoveAbility(Ability ability)
         {
-            throw new global::System.NotImplementedException();
+            abilities.Remove(ability.id);
+            hotAbilities.Remove(ability);
         }
 
     }

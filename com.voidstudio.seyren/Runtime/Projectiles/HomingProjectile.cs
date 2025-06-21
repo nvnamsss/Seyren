@@ -29,6 +29,9 @@ namespace Seyren.Projectiles
         public Quaternion Rotation => rotation;
 
         public bool IsActive => isActive;
+
+        public Vector3 Forward => throw new NotImplementedException();
+
         private bool isActive = false;
 
         public Action<HomingProjectile> onHit; // Callback invoked on hit
