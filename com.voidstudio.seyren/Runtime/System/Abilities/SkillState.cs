@@ -1,122 +1,94 @@
 using System;
+using Seyren.State;
 using UnityEngine;
 
 namespace Seyren.Abilities
 {
     /// <summary>
-    /// Interface for different skill states
-    /// </summary>
-    public interface ISkillState
-    {
-        /// <summary>
-        /// Attempt to unlock the skill
-        /// </summary>
-        /// <returns>True if the unlock was successful</returns>
-        bool TryUnlock();
-        
-        /// <summary>
-        /// Check if the skill can be unlocked
-        /// </summary>
-        /// <returns>True if the skill can be unlocked</returns>
-        bool CanUnlock();
-        
-        /// <summary>
-        /// Get the display name for this state
-        /// </summary>
-        string GetStateName();
-        
-        /// <summary>
-        /// Process a notification that a prerequisite skill has been unlocked
-        /// </summary>
-        /// <param name="prerequisiteId">ID of the prerequisite that was unlocked</param>
-        void OnPrerequisiteUnlocked(string prerequisiteId);
-    }
-    
-    /// <summary>
     /// Represents the locked state of a skill (prerequisites not met)
     /// </summary>
-    public class LockedSkillState : ISkillState
+    public class LockedSkillState : IState
     {
-        private readonly SkillNode skill;
+        private readonly ISkillNode skill;
         private string _name = "Locked";
-        
-        public LockedSkillState(SkillNode skill)
+
+        public string ID => _name;
+
+        public LockedSkillState(ISkillNode skill)
         {
             this.skill = skill;
         }
-        
-        public bool TryUnlock()
+
+        public void Enter()
         {
-            // Cannot unlock while in locked state
-            return false;
         }
-        
-        public bool CanUnlock()
+
+        public void Update()
         {
-            return false;
         }
-        
-        public string GetStateName()
+
+        public void Exit()
         {
-            return _name;
         }
-        
-        public void OnPrerequisiteUnlocked(string prerequisiteId)
+
+        public bool CanTransitionTo(IState nextState)
         {
-            // Mark prerequisite as met
-            skill.SetPrerequisiteMet(prerequisiteId);
-            
-            // Check if all prerequisites are now met, if so transition to Unlockable state
-            if (skill.IsUnlockable())
+            if (nextState is UnlockedSkillState || nextState is UnlockableSkillState)
             {
-                skill.TransitionToState(new UnlockableSkillState(skill));
+                // Transition to unlocked or unlockable state if conditions are met
+                return true;
             }
+            return false;
         }
     }
     
     /// <summary>
     /// Represents the unlockable state of a skill (prerequisites met but skill not unlocked yet)
     /// </summary>
-    public class UnlockableSkillState : ISkillState
+    public class UnlockableSkillState : IState
     {
-        private readonly SkillNode skill;
-        
-        public UnlockableSkillState(SkillNode skill)
+        private readonly ISkillNode skill;
+        private string _name = "Unlockable";
+
+        public UnlockableSkillState(ISkillNode skill)
         {
             this.skill = skill;
         }
-        
-        public bool TryUnlock()
+
+        public string ID => _name;
+
+        public bool CanTransitionTo(IState nextState)
         {
-            // Check if all unlock conditions are satisfied
-            if (skill.CheckUnlockConditions())
+            if (nextState is UnlockedSkillState)
             {
-                skill.TransitionToState(new UnlockedSkillState(skill));
+                // Can transition to unlocked state if the player activates the skill
                 return true;
             }
             return false;
         }
-        
-        public bool CanUnlock()
+
+        public void Enter()
         {
-            return skill.CheckUnlockConditions();
+            // Logic for entering unlockable state
+            // For example, highlight the skill as available for unlocking
         }
-        
-        public string GetStateName()
+
+        public void Exit()
         {
-            return "Unlockable";
+            // Logic for exiting unlockable state
         }
-        
-        public void OnPrerequisiteUnlocked(string prerequisiteId)
+
+        public void Update()
         {
-            // Already unlockable, nothing to do here
+            // Check for any runtime conditions that might be relevant
+            // for an unlockable skill (e.g., player proximity, etc.)
         }
     }
     
     /// <summary>
     /// Represents the unlocked state of a skill
     /// </summary>
-    public class UnlockedSkillState : ISkillState
+    public class UnlockedSkillState : IState
     {
         private readonly SkillNode skill;
         
@@ -124,26 +96,27 @@ namespace Seyren.Abilities
         {
             this.skill = skill;
         }
-        
-        public bool TryUnlock()
+
+        public string ID => "Unlocked";
+
+        public bool CanTransitionTo(IState nextState)
         {
-            // Already unlocked
-            return true;
+            return false; // Cannot transition from unlocked state
         }
-        
-        public bool CanUnlock()
+
+        public void Enter()
         {
-            return false; // Already unlocked
+            // Logic for entering the unlocked state
         }
-        
-        public string GetStateName()
+
+        public void Exit()
         {
-            return "Unlocked";
+            // Logic for exiting the unlocked state
         }
-        
-        public void OnPrerequisiteUnlocked(string prerequisiteId)
+
+        public void Update()
         {
-            // Already unlocked, nothing to do here
+            throw new NotImplementedException();
         }
     }
 }
