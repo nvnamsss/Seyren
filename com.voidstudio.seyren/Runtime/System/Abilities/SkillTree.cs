@@ -52,7 +52,6 @@ namespace Seyren.Abilities
         public int Level => level;
         private int level;
 
-        
 
         // hardcoded for now, can be extended to support different costs per skill
         public ICost IncreaseLevelCost => new SimpleCost(SkillPointsResourceId, 1);
@@ -214,16 +213,17 @@ namespace Seyren.Abilities
     {
         private Dictionary<string, ISkillNode> skills = new Dictionary<string, ISkillNode>();
         private IUnlockContext unlockContext;
-        private ISkillNode root;
         public event Action<ISkillNode> OnSkillUnlocked;
         // Store edges from a node to its children
         // This can be used to traverse the tree or find dependencies
         private Dictionary<string, List<ISkillNode>> edges = new Dictionary<string, List<ISkillNode>>();
 
-        public SkillTree()
+        public SkillTree(List<ISkillNode> initialSkills)
         {
-            // this.root = root;
-            Initialize();
+            foreach (ISkillNode skill in initialSkills)
+            {
+                AddSkill(skill);
+            }
         }
 
         public SkillTree WithContext(IUnlockContext context)
@@ -259,6 +259,22 @@ namespace Seyren.Abilities
         }
 
         /// <summary>
+        /// Add a skill to the skill tree
+        /// </summary>
+        public void AddSkill(ISkillNode skill)
+        {
+            if (!skills.ContainsKey(skill.Id))
+            {
+                skills.Add(skill.Id, skill);
+                skill.OnUnlocked += OnSkillUnlockedInternal;
+            }
+            else
+            {
+                Debug.LogWarning($"Skill with ID {skill.Id} already exists in the skill tree");
+            }
+        }
+
+        /// <summary>
         /// Get a skill by its ID
         /// </summary>
         public ISkillNode GetSkill(string skillId)
@@ -277,6 +293,11 @@ namespace Seyren.Abilities
         {
             if (skills.TryGetValue(skillId, out ISkillNode skill))
             {
+                if (!skill.IsUnlockable)
+                {
+                    return false;
+                }
+                
                 bool success = unlockContext.PaymentProcessor.ProcessPayment(cost: skill.UnlockCost);
                 if (!success)
                 {
@@ -356,24 +377,15 @@ namespace Seyren.Abilities
             OnSkillUnlocked?.Invoke(skill);
         }
 
-        /// <summary>
-        /// Add a skill to the skill tree
-        /// </summary>
-        private void AddSkill(ISkillNode skill)
-        {
-            if (!skills.ContainsKey(skill.Id))
-            {
-                skills.Add(skill.Id, skill);
-                skill.OnUnlocked += OnSkillUnlockedInternal;
-            }
-            else
-            {
-                Debug.LogWarning($"Skill with ID {skill.Id} already exists in the skill tree");
-            }
-        }
+
 
         private void onSkillNodeUnlocked(ISkillNode skill)
         {
+            if (!skill.IsUnlocked)
+            {
+                return;
+            }
+
             // Notify all dependent skills that this skill has been unlocked
             if (edges.TryGetValue(skill.Id, out List<ISkillNode> dependents))
             {

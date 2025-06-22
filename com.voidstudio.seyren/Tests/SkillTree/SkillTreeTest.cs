@@ -35,14 +35,26 @@ namespace Seyren.Tests.Abilities
             SkillNode skillC = new SkillNode("skillC", "Skill C", 1);
 
             // Connect parent-child relationships
-            rootSkill.AddChildSkill(skillA);
-            rootSkill.AddChildSkill(skillB);
-            skillA.AddChildSkill(skillC);
-            skillB.AddChildSkill(skillC);
+            // rootSkill.AddChildSkill(skillA);
+            // rootSkill.AddChildSkill(skillB);
+            // skillA.AddChildSkill(skillC);
+            // skillB.AddChildSkill(skillC);
+            skillC.AddPrerequisite(skillA.Id);
+            skillC.AddPrerequisite(skillB.Id);
+            skillA.AddPrerequisite(rootSkill.Id);
+            skillB.AddPrerequisite(rootSkill.Id);
+            
+            List<ISkillNode> skills = new List<ISkillNode>
+            {
+                rootSkill,
+                skillA,
+                skillB,
+                skillC
+            };
 
             // Create the skill tree
-            skillTree = new SkillTree(rootSkill).WithContext(ctx);
-
+            skillTree = new SkillTree(skills).WithContext(ctx);
+            skillTree.Initialize();
             // provide resource
             resourceManager.AddResource(SkillNode.SkillPointsResourceId, 10);
         }
