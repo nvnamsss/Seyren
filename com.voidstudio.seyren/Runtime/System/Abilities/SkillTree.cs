@@ -4,12 +4,16 @@ using System.Linq;
 using PlasticPipe.PlasticProtocol.Messages;
 using Seyren.Payment;
 using Seyren.State;
+using Unity.Profiling;
 using UnityEngine;
 
 namespace Seyren.Abilities
 {
     public interface ISkillNode
     {
+        event Action<ISkillNode> OnUnlocked;
+        event Action<ISkillNode> OnStateChanged;
+        event Action<ISkillNode> OnUpdated;
         string Id { get; }
         string Name { get; }
         string Description { get; }
@@ -21,10 +25,8 @@ namespace Seyren.Abilities
         void DecreaseLevel();
         bool Unlock(IUnlockContext ctx);
         void UnlockPrerequisite(string id);
-        event Action<ISkillNode> OnUnlocked;
-        event Action<ISkillNode> OnStateChanged;
-        event Action<ISkillNode> OnUpdated;
-        List<ISkillNode> Childrens { get; }
+        void AddPrerequisite(string skillId);
+        IReadOnlyList<string> PrerequisiteIds { get; }
         ICost IncreaseLevelCost { get; }
         ICost UnlockCost { get; }
     }
@@ -50,12 +52,14 @@ namespace Seyren.Abilities
         public int Level => level;
         private int level;
 
-        public List<ISkillNode> Childrens => dependentSkills;
+        
 
         // hardcoded for now, can be extended to support different costs per skill
         public ICost IncreaseLevelCost => new SimpleCost(SkillPointsResourceId, 1);
         // hardcoded for now, can be extended to support different costs per skill
         public ICost UnlockCost => new SimpleCost(SkillPointsResourceId, 1);
+
+        public IReadOnlyList<string> PrerequisiteIds => prerequisites.AsReadOnly();
 
         public event Action<ISkillNode> OnUnlocked;
         public event Action<ISkillNode> OnStateChanged;
@@ -73,48 +77,39 @@ namespace Seyren.Abilities
         // Strategy pattern implementation
         private IUnlockCondition unlockCondition;
 
-        public SkillNode(string id, string name, int level, List<string> prerequisites = null)
+        public SkillNode(string id, string name, int level, bool unlockable = false)
         {
             this.id = id;
             this.name = name;
             this.level = level;
-            this.prerequisites = prerequisites ?? new List<string>();
             this.prerequisiteStatus = new Dictionary<string, bool>();
-
-            foreach (var prereq in this.prerequisites)
-            {
-                prerequisiteStatus[prereq] = false; // Initialize all prerequisites as not met
-            }
-
-            // Initialize with default unlock condition (no additional conditions)
-            this.unlockCondition = null;
+            this.prerequisites = new List<string>();
 
             // Start in the Locked state by default
-            this.currentState = prerequisites.Count == 0
-                ? (IState)new UnlockableSkillState(this)
+            this.currentState = unlockable
+                ? new UnlockableSkillState(this)
                 : new LockedSkillState(this);
-            OnStateChanged += onStateChanged;
+            // OnStateChanged += onStateChanged;
         }   
 
-        public void AddChildSkill(ISkillNode childSkill)
+        public ISkillNode WithUnlockCondition(IUnlockCondition condition)
         {
-            if (dependentSkills.Contains(childSkill))
+            this.unlockCondition = condition;
+            return this;
+        }
+        
+        public void AddPrerequisite(string skillId)
+        {
+            if (prerequisiteStatus.ContainsKey(skillId))
             {
-                Debug.LogWarning($"Child skill {childSkill.Id} already exists for skill {this.id}");
+                Debug.LogWarning($"Prerequisite {skillId} already exists for skill {this.id}");
                 return;
             }
 
-            dependentSkills.Add(childSkill);
+            prerequisiteStatus.Add(skillId, false); // Initialize prerequisite status
+            prerequisites.Add(skillId);
         }
 
-        /// <summary>
-        /// Check if all unlock conditions are satisfied
-        /// </summary>
-        public bool CheckUnlockConditions()
-        {
-            // If there's no specific condition, default to true
-            return unlockCondition == null || unlockCondition.IsSatisfied(null);
-        }
 
         public bool Unlock(IUnlockContext ctx)
         {
@@ -198,19 +193,19 @@ namespace Seyren.Abilities
             OnUpdated?.Invoke(this);
         }
 
-        private void onStateChanged(ISkillNode skill)
-        {
-            if (!skill.IsUnlocked)
-            {
-                // If the skill is not unlocked, we should not notify dependent skills
-                return;
-            }
+        // private void onStateChanged(ISkillNode skill)
+        // {
+        //     if (!skill.IsUnlocked)
+        //     {
+        //         // If the skill is not unlocked, we should not notify dependent skills
+        //         return;
+        //     }
 
-            for (int i = 0; i < dependentSkills.Count; i++)
-            {
-                dependentSkills[i].UnlockPrerequisite(skill.Id);
-            }
-        }
+        //     for (int i = 0; i < dependentSkills.Count; i++)
+        //     {
+        //         dependentSkills[i].UnlockPrerequisite(skill.Id);
+        //     }
+        // }
     }
     /// <summary>
     /// Manages a collection of skills and their dependencies
@@ -221,31 +216,46 @@ namespace Seyren.Abilities
         private IUnlockContext unlockContext;
         private ISkillNode root;
         public event Action<ISkillNode> OnSkillUnlocked;
+        // Store edges from a node to its children
+        // This can be used to traverse the tree or find dependencies
+        private Dictionary<string, List<ISkillNode>> edges = new Dictionary<string, List<ISkillNode>>();
 
-        public SkillTree(ISkillNode root)
+        public SkillTree()
         {
-            this.root = root;
+            // this.root = root;
             Initialize();
         }
 
-        private void Initialize()
+        public SkillTree WithContext(IUnlockContext context)
         {
-            // iterate through all root using BFS
-            Queue<ISkillNode> queue = new Queue<ISkillNode>();
-            queue.Enqueue(root);
-            while (queue.Count > 0)
-            {
-                ISkillNode current = queue.Dequeue();
-                AddSkill(current);
+            this.unlockContext = context;
+            return this;
+        }
 
-                // Enqueue all dependent skills
-                List<ISkillNode> dependentSkills = current.Childrens;
-                for (int i = 0; i < dependentSkills.Count; i++)
+        public void Initialize()
+        {
+            // iterate through all nodes, build the tree structure
+            foreach (ISkillNode skill in skills.Values)
+            {
+                // If the skill has prerequisites, add them to the edges
+                foreach (string prerequisiteId in skill.PrerequisiteIds)
                 {
-                    queue.Enqueue(dependentSkills[i]);
+                    if (skills.TryGetValue(prerequisiteId, out ISkillNode prerequisiteSkill))
+                    {
+                        if (!edges.ContainsKey(prerequisiteId))
+                        {
+                            edges[prerequisiteId] = new List<ISkillNode>();
+                        }
+                        edges[prerequisiteId].Add(skill);
+                        // register the event
+                        prerequisiteSkill.OnStateChanged += onSkillNodeUnlocked;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Prerequisite skill {prerequisiteId} for skill {skill.Id} not found in the skill tree");
+                    }
                 }
             }
-
         }
 
         /// <summary>
@@ -359,6 +369,18 @@ namespace Seyren.Abilities
             else
             {
                 Debug.LogWarning($"Skill with ID {skill.Id} already exists in the skill tree");
+            }
+        }
+
+        private void onSkillNodeUnlocked(ISkillNode skill)
+        {
+            // Notify all dependent skills that this skill has been unlocked
+            if (edges.TryGetValue(skill.Id, out List<ISkillNode> dependents))
+            {
+                foreach (var dependent in dependents)
+                {
+                    dependent.UnlockPrerequisite(skill.Id);
+                }
             }
         }
     }
