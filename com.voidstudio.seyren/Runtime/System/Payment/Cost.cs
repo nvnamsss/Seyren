@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Seyren.Payment
@@ -59,6 +61,8 @@ namespace Seyren.Payment
         public string ResourceId => resourceId;
         public int Amount => amount;
 
+        private Queue<string> transactionHistory = new Queue<string>();
+
         public SimpleCost(string resourceId, int amount)
         {
             this.resourceId = resourceId;
@@ -72,11 +76,22 @@ namespace Seyren.Payment
 
         public bool Apply(IResourceManager resourceManager)
         {
+            // create a transaction record
+            string transaction = $"{DateTime.Now}: Deducted {amount} of {resourceId}";
+            transactionHistory.Enqueue(transaction);
             return resourceManager.RemoveResource(resourceId, amount);
         }
 
         public void Refund(IResourceManager resourceManager)
         {
+            if (transactionHistory.Count == 0)
+            {
+                Debug.LogWarning("No transaction to refund.");
+                return;
+            }
+            // revert the transaction
+            string transaction = transactionHistory.Dequeue();
+            Debug.Log($"Refunding transaction: {transaction}");
             resourceManager.AddResource(resourceId, amount);
         }
 
