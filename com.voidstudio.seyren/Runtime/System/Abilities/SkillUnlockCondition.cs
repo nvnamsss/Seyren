@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Seyren.Payment;
 using UnityEngine;
 
 namespace Seyren.Abilities
@@ -29,6 +30,7 @@ namespace Seyren.Abilities
         /// Get the skill tree
         /// </summary>
         SkillTree SkillTree { get; }
+        IPaymentProcessor PaymentProcessor { get; }
         
         /// <summary>
         /// Get the current unit level
@@ -54,9 +56,12 @@ namespace Seyren.Abilities
         public SkillTree SkillTree { get; private set; }
         public int UnitLevel { get; private set; }
         private Dictionary<string, int> resources;
+        public IPaymentProcessor PaymentProcessor => paymentProcessor;
+        private IPaymentProcessor paymentProcessor;
         
-        public DefaultUnlockContext(SkillTree skillTree, int unitLevel, Dictionary<string, int> resources = null)
+        public DefaultUnlockContext(IPaymentProcessor paymentProcessor, SkillTree skillTree, int unitLevel, Dictionary<string, int> resources = null)
         {
+            this.paymentProcessor = paymentProcessor;   
             SkillTree = skillTree;
             UnitLevel = unitLevel;
             this.resources = resources ?? new Dictionary<string, int>();
@@ -127,7 +132,7 @@ namespace Seyren.Abilities
         public override bool IsSatisfied(IUnlockContext context)
         {
             return context.IsSkillUnlocked(requiredSkillId) &&
-                   context.SkillTree.GetSkill(requiredSkillId).level >= requiredLevel;
+                   context.SkillTree.GetSkill(requiredSkillId).Level >= requiredLevel;
         }
         
         public override string GetDescription()

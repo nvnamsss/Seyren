@@ -37,9 +37,10 @@ namespace Seyren.Abilities
     /// </summary>
     public class LockedSkillState : ISkillState
     {
-        private readonly Skill skill;
+        private readonly SkillNode skill;
+        private string _name = "Locked";
         
-        public LockedSkillState(Skill skill)
+        public LockedSkillState(SkillNode skill)
         {
             this.skill = skill;
         }
@@ -57,7 +58,7 @@ namespace Seyren.Abilities
         
         public string GetStateName()
         {
-            return "Locked";
+            return _name;
         }
         
         public void OnPrerequisiteUnlocked(string prerequisiteId)
@@ -66,7 +67,7 @@ namespace Seyren.Abilities
             skill.SetPrerequisiteMet(prerequisiteId);
             
             // Check if all prerequisites are now met, if so transition to Unlockable state
-            if (skill.AreAllPrerequisitesMet())
+            if (skill.IsUnlockable())
             {
                 skill.TransitionToState(new UnlockableSkillState(skill));
             }
@@ -78,9 +79,9 @@ namespace Seyren.Abilities
     /// </summary>
     public class UnlockableSkillState : ISkillState
     {
-        private readonly Skill skill;
+        private readonly SkillNode skill;
         
-        public UnlockableSkillState(Skill skill)
+        public UnlockableSkillState(SkillNode skill)
         {
             this.skill = skill;
         }
@@ -91,7 +92,6 @@ namespace Seyren.Abilities
             if (skill.CheckUnlockConditions())
             {
                 skill.TransitionToState(new UnlockedSkillState(skill));
-                skill.NotifyUnlocked();
                 return true;
             }
             return false;
@@ -118,9 +118,9 @@ namespace Seyren.Abilities
     /// </summary>
     public class UnlockedSkillState : ISkillState
     {
-        private readonly Skill skill;
+        private readonly SkillNode skill;
         
-        public UnlockedSkillState(Skill skill)
+        public UnlockedSkillState(SkillNode skill)
         {
             this.skill = skill;
         }
