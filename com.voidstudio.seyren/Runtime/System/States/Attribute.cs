@@ -205,7 +205,9 @@ namespace Seyren.System.States
         public const string MOVEMENT_SPEED = "MovementSpeed";
         public const string ATTACK_SPEED = "AttackSpeed";
         public const string TURN_RATE = "TurnRate";
+        public const string LEVEL = "Level";
     }
+    
     public interface IAttribute
     {
         BaseFloat GetBaseFloat(string name);
@@ -221,7 +223,7 @@ namespace Seyren.System.States
         void IncreaseFloat(string name, float val);
         void IncreaseInt(string name, int val);
 
-        public float this[string key]{ get; set; }
+        public float this[string key] { get; set; }
     }
 
     
