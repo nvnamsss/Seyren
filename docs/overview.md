@@ -9,6 +9,7 @@ flowchart TD
     A[Start] --> B[Initialize]
     B --> C[Main Process]
     C --> D{Decision Point}
+    C --> Visualization[Visualization]
     
     %% Branches
     D -->|Condition 1| E[Universe]
@@ -143,7 +144,7 @@ flowchart TD
     classDef decision fill:#bbf,stroke:#333,stroke-width:2px
     classDef result fill:#bfb,stroke:#333,stroke-width:2px
     
-    class A,B,C,E,F,G,H,I,J,K,L process
+    class A,B,C,E,F,G,H,I,J,K,L,Visualization process
     class D decision
     class M,N,O,P,Q,R result
 ```
