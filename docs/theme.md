@@ -13,8 +13,12 @@ flowchart TD
     D --> F[Match components by name]
     E --> F
     F --> G[Add to components list]
-    G --> H[OnInitialize]
-    H --> I[GetLayout]
+    G --> H[OnInitialized]
+    
+    H -.-> PostInit
+    H --> I
+    I[GetLayout]
+    
     I --> J{Resolution Match?}
     J -->|Yes| K[Use matched layout]
     J -->|No| L[Use default layout]
@@ -51,6 +55,11 @@ flowchart TD
     O
     P
     end
+    
+    subgraph PostInit[Post Initialization]
+        Z1[Load Layout]
+        Z2[Load Theme]
+    end
 ```
 
 ## Theme Implementation Steps
@@ -66,4 +75,5 @@ flowchart TD
 - `UIResolutionConfig`: Contains layout configurations for different resolutions
 - `UIResolutionLayout`: Defines component positions, scales, and states for a specific resolution
 - `ComponentLayout`: Stores position, scale, and active state for a single component
+- `DeviceResolutionMapper`: Maps device names to their screen resolutions
 - `DeviceResolutionMapper`: Maps device names to their screen resolutions
