@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Seyren.System.Units;
 using Seyren.Universe;
-using UnityEngine;
 
 namespace Seyren.System.Damages
 {

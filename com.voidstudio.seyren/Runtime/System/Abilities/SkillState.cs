@@ -1,6 +1,5 @@
 using System;
 using Seyren.State;
-using UnityEngine;
 
 namespace Seyren.Abilities
 {

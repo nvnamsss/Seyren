@@ -1,11 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Seyren.System.Items;
-using Seyren.System.Units;
-using UnityEngine;
-using UnityEngine.UI;
-
-// public class EquipmentManager : MonoBehaviour
+﻿// public class EquipmentManager : MonoBehaviour
 // {
 //     #region  Singleton
 

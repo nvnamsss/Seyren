@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using Seyren.System.Common;
-using Seyren.System.Units;
-using Seyren.Universe;
 
 namespace Seyren.System.Abilities
 {

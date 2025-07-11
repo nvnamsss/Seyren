@@ -1,8 +1,6 @@
 // using System.Collections.Generic;
 // using Seyren.System.Items;
 
-using System.Collections.Generic;
-
 namespace Seyren.System.Inventories
 {
     public class MultiCellInventory

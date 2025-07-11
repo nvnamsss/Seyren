@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Seyren.Abilities;
 using Seyren.Payment;
-using UnityEngine;
-using UnityEngine.TestTools;
 
 namespace Seyren.Tests.Abilities
 {

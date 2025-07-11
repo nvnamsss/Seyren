@@ -1,7 +1,5 @@
 using System;
-using UnityEngine;
 using Seyren.System.Units;
-using Seyren.Universe;
 
 namespace Seyren.System.Damages
 {

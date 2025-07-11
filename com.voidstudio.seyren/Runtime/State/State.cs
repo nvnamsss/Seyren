@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Seyren.State
 {
     public interface IState

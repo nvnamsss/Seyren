@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using PlasticPipe.PlasticProtocol.Messages;
 using Seyren.Payment;
 using Seyren.State;
-using Unity.Profiling;
 using UnityEngine;
 
 namespace Seyren.Abilities

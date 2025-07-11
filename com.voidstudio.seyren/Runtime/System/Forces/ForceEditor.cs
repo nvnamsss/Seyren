@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEditor;
 using UnityEngine;
 
 namespace Seyren.System.Forces
 {
     [ExecuteAlways]
     [CreateAssetMenu(fileName = "New Force", menuName = "Force")]
-    public class ForceEditor : ScriptableObject, ISerializationCallbackReceiver
+    public class ForceEditor : ScriptableObject
     {
         public string forceName = string.Empty;
         public List<ForceEditor> Alliance = new List<ForceEditor>();
@@ -61,55 +56,7 @@ namespace Seyren.System.Forces
             //}
         }
 
-        public void OnBeforeSerialize()
-        {
-            forceName = GetFileName();
-            if (!triggerValidate) return;
 
-            //validate data
-
-            if (Alliance.Contains(this))
-            {
-                RemoveAlliance(this, false, false);
-            }
-
-            if (Enemy.Contains(this))
-            {
-                RemoveEnemy(this, false, false);
-            }
-
-            for (int loop = 0; loop < Alliance.Count; loop++)
-            {
-                if (Alliance[loop] == null) continue;
-
-                if (Enemy.Contains(Alliance[loop]))
-                {
-                    RemoveEnemy(Alliance[loop], false, false);
-                    loop--;
-                }
-            }
-
-            Dictionary<string, ForceEditor> da = new Dictionary<string, ForceEditor>();
-            for (int loop = 0; loop < Alliance.Count; loop++)
-            {
-                if (Alliance[loop] == null) continue;
-                if (!da.ContainsKey(Alliance[loop].forceName))
-                {
-                    da.Add(Alliance[loop].forceName, Alliance[loop]);
-                }
-                else
-                {
-                    RemoveAlliance(Alliance[loop], false, false);
-                }
-            }
-        }
-
-        private string GetFileName()
-        {
-            string assetPath = AssetDatabase.GetAssetPath(GetInstanceID());             
-
-            return Path.GetFileNameWithoutExtension(assetPath);
-        }
         private void Awake()
         {
             Debug.Log("AAA");

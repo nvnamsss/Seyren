@@ -1,5 +1,3 @@
-using UnityEngine;
-
 // namespace Seyren.System.Items{
 //     class ItemPickup: MonoBehaviour{
 

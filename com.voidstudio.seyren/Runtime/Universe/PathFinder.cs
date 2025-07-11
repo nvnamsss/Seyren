@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Seyren.System.Actions;
 using Seyren.System.Units;
 using UnityEngine;

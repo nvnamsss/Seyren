@@ -2,7 +2,7 @@ using UnityEngine;
 using System.IO;
 using System;
 using System.Collections.Generic;
-using Unity.Plastic.Newtonsoft.Json; // Add this
+// using Unity.Plastic.Newtonsoft.Json; // Add this
 
 namespace Seyren.Cinematic
 {
@@ -202,8 +202,8 @@ namespace Seyren.Cinematic
             };
 
             // Use Newtonsoft.Json for serialization
-            string json = JsonConvert.SerializeObject(transforms, Formatting.Indented);
-            File.WriteAllText(Path.Combine(saveFolder, transformsJsonPath), json);
+            // string json = JsonConvert.SerializeObject(transforms, Formatting.Indented);
+            // File.WriteAllText(Path.Combine(saveFolder, transformsJsonPath), json);
 
             Debug.Log($"Camera360: Captured {captureCount} images to {saveFolder} and wrote transforms.json");
         }

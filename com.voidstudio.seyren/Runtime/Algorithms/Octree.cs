@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Collections;
 using Seyren.System.Common;
 using Seyren.System.Units;
 
