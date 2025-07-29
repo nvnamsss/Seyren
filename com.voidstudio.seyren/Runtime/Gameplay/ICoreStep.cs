@@ -6,5 +6,6 @@ namespace Seyren.Gameplay
     public interface ICoreStep
     {
         void Execute(GameContext ctx);
+        bool IsComplete(GameContext ctx);
     }
 }
