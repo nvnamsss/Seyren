@@ -1,12 +1,4 @@
-﻿using Seyren.System.Items;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-
-// namespace Seyren.System.UI.Inventory
+﻿// namespace Seyren.System.UI.Inventory
 // {
 //     class UIInventory: MonoBehaviour
 //     {

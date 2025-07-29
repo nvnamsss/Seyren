@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Seyren.Algorithms;
 using Seyren.System.Units;
-using Unity.VisualScripting.YamlDotNet.Core;
 using UnityEngine;
 
 namespace Seyren.Universe

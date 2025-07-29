@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Seyren.Algorithms;
 
 namespace Seyren.ProceduralGeneration.Items

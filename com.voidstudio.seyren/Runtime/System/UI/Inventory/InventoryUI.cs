@@ -1,8 +1,4 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.UI;
-
-// public class InventoryUI : MonoBehaviour
+﻿// public class InventoryUI : MonoBehaviour
 // {
 //     // Start is called before the first frame update
 

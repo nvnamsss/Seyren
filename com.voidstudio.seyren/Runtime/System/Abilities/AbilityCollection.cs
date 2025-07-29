@@ -142,8 +142,6 @@ namespace Seyren.System.Abilities
             //    }
             //}
 
-
-            count = count + 1;
         }
     }
 }

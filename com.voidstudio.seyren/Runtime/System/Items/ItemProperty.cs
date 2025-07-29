@@ -1,7 +1,3 @@
-using Seyren.System.Units;
-using Seyren.System.Damages;
-using UnityEngine;
-
 // namespace Seyren.System.Items
 // {
 //     public partial class Item : MonoBehaviour, IAttribute

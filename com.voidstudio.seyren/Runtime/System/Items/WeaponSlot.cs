@@ -1,10 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Seyren.System.Items;
-using UnityEngine;
-using UnityEngine.UI;
-
-// public class WeaponSlot : MonoBehaviour
+﻿// public class WeaponSlot : MonoBehaviour
 // {
 //     public Weapon weapon;
 

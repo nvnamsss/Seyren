@@ -2,7 +2,6 @@
 using Seyren.System.Common;
 using UnityEngine;
 using System;
-using UnityEngine.EventSystems;
 using Seyren.Universe;
 
 namespace Seyren.System.Abilities

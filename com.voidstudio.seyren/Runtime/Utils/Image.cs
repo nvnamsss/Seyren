@@ -1,5 +1,4 @@
 ﻿using sd = System.Drawing;
-using si = System.IO;
 namespace Seyren.Utils
 {
     public static class ImageUtils

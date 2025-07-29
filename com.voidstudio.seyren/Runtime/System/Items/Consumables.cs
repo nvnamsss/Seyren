@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-// namespace Seyren.System.Items
+﻿// namespace Seyren.System.Items
 // {
 //     public class Consumables : Item
 //     {

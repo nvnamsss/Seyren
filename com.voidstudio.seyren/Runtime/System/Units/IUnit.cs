@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Seyren.System.Abilities;
 using Seyren.System.Actions;
@@ -8,6 +7,7 @@ using Seyren.System.Common;
 using Seyren.System.States;
 using Seyren.Universe;
 using UnityEngine;
+using Seyren.Payment;
 
 namespace Seyren.System.Units
 {
@@ -56,7 +56,8 @@ namespace Seyren.System.Units
         // States.IAttribute Attribute { get;set; }
 
         // Error Kill(IUnit by);
-        
+        IResourceManager ResourceManager { get; }
+        IPaymentProcessor PaymentProcessor { get; }
         /// <summary>
         /// Move the unit to a specific location
         /// </summary>

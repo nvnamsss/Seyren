@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Seyren.State
 {
     public interface IState
@@ -11,34 +9,25 @@ namespace Seyren.State
         bool CanTransitionTo(IState nextState);
     }
 
-    public abstract class State : IState
+    public abstract class State<T> : IState
     {
         public string Name { get; protected set; }
         public string ID { get; protected set; }
+        protected T owner;
 
-        protected State(string name)
+        protected State(string name, T owner)
         {
             Name = name;
+            this.owner = owner;
+            ID = $"{owner.GetType().Name}.{name}";
         }
 
-        public virtual void Enter()
-        {
-            Debug.Log($"Entering state: {Name}");
-        }
+        public abstract void Enter();
 
-        public virtual void Update()
-        {
-            // Override in derived classes
-        }
+        public abstract void Update();
 
-        public virtual void Exit()
-        {
-            Debug.Log($"Exiting state: {Name}");
-        }
+        public abstract void Exit();
 
-        public virtual bool CanTransitionTo(IState nextState)
-        {
-            return true;
-        }
+        public abstract bool CanTransitionTo(IState nextState);
     }
 }

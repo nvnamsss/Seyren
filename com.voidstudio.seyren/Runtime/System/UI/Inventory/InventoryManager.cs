@@ -1,9 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Seyren.System.Items;
-using UnityEngine;
-
-// public class InventoryManager : MonoBehaviour
+﻿// public class InventoryManager : MonoBehaviour
 // {
 
 //     public static InventoryManager instance;

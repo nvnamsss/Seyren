@@ -1,8 +1,4 @@
-﻿using Seyren.System.Items;
-using UnityEngine;
-using UnityEngine.UI;
-
-// public class ArmorSlot : MonoBehaviour
+﻿// public class ArmorSlot : MonoBehaviour
 // {
 //     public Armor armor;
 
