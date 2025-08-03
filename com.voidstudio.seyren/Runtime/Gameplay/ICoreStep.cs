@@ -7,5 +7,6 @@ namespace Seyren.Gameplay
     {
         void Execute(GameContext ctx);
         bool IsComplete(GameContext ctx);
+        bool CanStart(GameContext ctx);
     }
 }
