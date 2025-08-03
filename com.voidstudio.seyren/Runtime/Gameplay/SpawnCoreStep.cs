@@ -44,7 +44,7 @@ namespace Seyren.Gameplay
         public bool CanStart(GameContext ctx)
         {
             // can start when game is started for 5 seconds
-            return ctx.Time.CurrentTime >= 5f;
+            return ctx.Universe.Time.CurrentTime >= 5f;
         }
     }
 }
