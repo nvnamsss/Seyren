@@ -4,6 +4,7 @@ using Seyren.System.Common;
 using Seyren.System.Units;
 using UnityEngine;
 using Seyren.System.Knockup;
+using Seyren.Gameplay;
 
 namespace Seyren.Universe
 {
@@ -48,6 +49,7 @@ namespace Seyren.Universe
         public IAbilitySystem AbilitySystem { get; set; }
         public KnockupSystem KnockupSystem { get; set; }
         public DamageOverTimeManager DamageOverTimeManager { get; set; }
+        private CoreGameplay gameplay;
 
         public Universe(ITime time, ISpace space)
         {
@@ -77,6 +79,10 @@ namespace Seyren.Universe
         private void loop(ITime time)
         {
             Loop();
+            if (gameplay != null)
+            {
+                gameplay.Loop(time);
+            }
         }
 
         /// <summary>
@@ -93,11 +99,16 @@ namespace Seyren.Universe
             Space.AddUnit(unit);
         }
 
-        public virtual void KillUnit(IUnit unit) {
+        public virtual void KillUnit(IUnit unit)
+        {
             Space.RemoveUnit(unit);
             OnUnitDied?.Invoke(unit);
             // change state to dead
         }
 
+        public virtual void SetGameplay(CoreGameplay gameplay)
+        {
+            this.gameplay = gameplay;
+        }
     }
 }
