@@ -14,12 +14,14 @@ namespace Seyren.Gameplay
         public List<Puzzle> Puzzles { get; set; } = new List<Puzzle>();
         // public List<GameEvent> Events { get; set; } = new List<GameEvent>();
         // public List<ICommand> Input { get; set; } = new List<ICommand>();
-        public ITime Time { get; }
-        public ISpace Space { get; }
-        public GameContext(ITime time, ISpace space)
+        // public ITime Time { get; }
+        //     public ISpace Space { get; }
+        public Universe.Universe Universe { get; }
+        public GameContext(Universe.Universe universe)
         {
-            Time = time;
-            Space = space;
+            // Time = time;
+            // Space = space;
+            Universe = universe;
         }
     }
 }
