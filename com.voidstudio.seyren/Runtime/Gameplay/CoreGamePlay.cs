@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Seyren.System.Common;
 using Seyren.Universe;
+using UnityEngine;
 
 namespace Seyren.Gameplay
 {
@@ -38,6 +39,9 @@ namespace Seyren.Gameplay
 
             if (currentStep.IsComplete(Context))
             {
+                Debug.Log($"Step {currentIndex + 1}/{steps.Count} completed.");
+                // update the last wave time of the game context
+                Context.LastWaveTime = time.CurrentTime;
                 currentIndex++;
                 return;
             }

@@ -16,6 +16,7 @@ namespace Seyren.Gameplay
         // public List<ICommand> Input { get; set; } = new List<ICommand>();
         // public ITime Time { get; }
         //     public ISpace Space { get; }
+        public float LastWaveTime { get; set; }
         public Universe.Universe Universe { get; }
         public GameContext(Universe.Universe universe)
         {

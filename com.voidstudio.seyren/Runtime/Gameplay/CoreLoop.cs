@@ -31,6 +31,8 @@ namespace Seyren.Gameplay
 
             if (currentStep.IsComplete(Context))
             {
+                // update the last wave time of the game context
+                Context.LastWaveTime = time.CurrentTime;
                 currentIndex++;
                 return;
             }
