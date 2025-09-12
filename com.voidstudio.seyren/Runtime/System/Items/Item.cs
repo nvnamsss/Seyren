@@ -6,6 +6,15 @@ using Seyren.System.Units;
 
 namespace Seyren.System.Items
 {
+    public enum Rarity
+    {
+        Common,
+        Uncommon,
+        Rare,
+        Epic,
+        Legendary
+    }
+
     public class UseItemData
     {
         public IUnit user;
@@ -23,6 +32,8 @@ namespace Seyren.System.Items
         int Width { get; set; }
         // Size of the item in the inventory grid
         int Height { get; set; }
+        int Rarity { get; set; }
+        int MaxStack { get; set; }
         void Use(UseItemData data);
     }
 }
