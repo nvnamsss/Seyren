@@ -14,6 +14,49 @@ namespace Seyren.System.Inventory
     // - int Width { get; set; }
     // - int Height { get; set; }
     // - int Rarity { get; set; }
+
+    /// <summary>
+    /// Represents the kind of item being added to inventory
+    /// </summary>
+    public enum ItemKind
+    {
+        /// <summary>
+        /// Item that cannot be stacked (MaxStack = 1)
+        /// </summary>
+        Unique,
+        /// <summary>
+        /// Item that can be stacked (MaxStack > 1)
+        /// </summary>
+        Stackable
+    }
+
+    /// <summary>
+    /// Result returned from AddItem operation providing detailed information about the operation
+    /// </summary>
+    public struct AddItemResult
+    {
+        /// <summary>
+        /// List of new item instances created during the operation
+        /// </summary>
+        public List<IItem> NewItemsCreated { get; set; }
+        
+        /// <summary>
+        /// Total number of items added to the inventory
+        /// </summary>
+        public int TotalAdded { get; set; }
+        
+        /// <summary>
+        /// The kind of item that was added (Unique or Stackable)
+        /// </summary>
+        public ItemKind Kind { get; set; }
+
+        public AddItemResult(List<IItem> newItemsCreated, int totalAdded, ItemKind kind)
+        {
+            NewItemsCreated = newItemsCreated ?? new List<IItem>();
+            TotalAdded = totalAdded;
+            Kind = kind;
+        }
+    }
     // - int MaxStack { get; set; }
     // - void Use(UseItemData data)
 
@@ -153,28 +196,28 @@ namespace Seyren.System.Inventory
         IItemStack[] GetAllSlots();
         
         /// <summary>
-        /// Add items to inventory (auto-stack and find slots)
+        /// Add items to inventory (auto-stack and find slots) with detailed results
         /// </summary>
         /// <param name="item">Item to add</param>
         /// <param name="quantity">Quantity to add</param>
-        /// <returns>Quantity actually added</returns>
-        int AddItem(IItem item, int quantity = 1);
+        /// <returns>Detailed result of the add operation</returns>
+        AddItemResult AddItem(IItem item, int quantity = 1);
         
         /// <summary>
-        /// Remove items from inventory
+        /// Remove items from inventory with detailed results
         /// </summary>
         /// <param name="item">Item to remove</param>
         /// <param name="quantity">Quantity to remove</param>
-        /// <returns>Quantity actually removed</returns>
-        int RemoveItem(IItem item, int quantity = 1);
+        /// <returns>Detailed result of the remove operation</returns>
+        AddItemResult RemoveItem(IItem item, int quantity = 1);
         
         /// <summary>
-        /// Remove items by item ID
+        /// Remove items by item ID with detailed results
         /// </summary>
         /// <param name="itemId">Item ID to remove</param>
         /// <param name="quantity">Quantity to remove</param>
-        /// <returns>Quantity actually removed</returns>
-        int RemoveItem(string itemId, int quantity = 1);
+        /// <returns>Detailed result of the remove operation</returns>
+        AddItemResult RemoveItem(string itemId, int quantity = 1);
         
         /// <summary>
         /// Check if inventory contains specific item
@@ -197,14 +240,14 @@ namespace Seyren.System.Inventory
         /// </summary>
         /// <param name="item">Item to count</param>
         /// <returns>Total quantity of item in inventory</returns>
-        int GetItemCount(IItem item);
+        int GetItemCountByTypeID(IItem item);
         
         /// <summary>
         /// Get total quantity of item by ID
         /// </summary>
         /// <param name="itemId">Item ID to count</param>
         /// <returns>Total quantity of item in inventory</returns>
-        int GetItemCount(string itemId);
+        int GetItemCountByTypeID(string itemId);
         
         /// <summary>
         /// Check if item can be added to inventory

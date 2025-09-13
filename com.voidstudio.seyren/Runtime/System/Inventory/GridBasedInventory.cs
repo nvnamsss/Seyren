@@ -180,10 +180,10 @@ namespace Seyren.System.Inventories
         {
             int row = slotIndex / columns;
             int col = slotIndex % columns;
-            
+
             // Clear current slot first
             RemoveItemAt(row, col);
-            
+
             // Insert new item if provided
             if (itemStack != null && itemStack.Item != null)
             {
@@ -205,38 +205,91 @@ namespace Seyren.System.Inventories
             return slots;
         }
 
-        public int AddItem(IItem item, int quantity = 1)
+        public AddItemResult AddItem(IItem item, int quantity = 1)
         {
-            if (item == null || quantity <= 0) return 0;
+            if (item == null || quantity <= 0) 
+                return new AddItemResult(new List<IItem>(), 0, ItemKind.Unique);
 
-            // Try to stack with existing items first
-            foreach (var existingItem in itemStacks.Keys.ToList())
+            if (item.MaxStack == 1) // Unique item
             {
-                if (existingItem.ID == item.ID && itemStacks[existingItem].Quantity < existingItem.MaxStack)
+                return AddUniqueItem(item);
+            }
+
+            return AddStackableItem(item, quantity);
+        }
+
+        private AddItemResult AddUniqueItem(IItem item)
+        {
+            var newItemsCreated = new List<IItem>();
+            
+            if (InsertItem(item))
+            {
+                newItemsCreated.Add(item);
+                OnItemAdded?.Invoke(item, 1);
+                OnInventoryChanged?.Invoke(this);
+                return new AddItemResult(newItemsCreated, 1, ItemKind.Unique);
+            }
+
+            return new AddItemResult(newItemsCreated, 0, ItemKind.Unique);
+        }
+
+
+        private AddItemResult AddStackableItem(IItem item, int quantity)
+        {
+            if (item == null || quantity <= 0) 
+                return new AddItemResult(new List<IItem>(), 0, ItemKind.Stackable);
+
+            int totalAdded = 0;
+            var newItemsCreated = new List<IItem>();
+            
+            // if item was not existing, create a new instance to avoid modifying original
+            if (!ContainsItemType(item.TypeId))
+            {
+                int canAdd = Math.Min(quantity, item.MaxStack);
+                item.Count = canAdd;
+
+                if (!InsertItem(item))
                 {
-                    var stack = itemStacks[existingItem];
-                    int canAdd = Math.Min(quantity, existingItem.MaxStack - stack.Quantity);
-                    stack.Quantity += canAdd;
-                    quantity -= canAdd;
-                    
-                    OnItemAdded?.Invoke(item, canAdd);
-                    OnInventoryChanged?.Invoke(this);
-                    
-                    if (quantity <= 0) return canAdd;
+                    return new AddItemResult(newItemsCreated, 0, ItemKind.Stackable);
+                }
+
+                newItemsCreated.Add(item);
+                totalAdded += canAdd;
+                quantity -= canAdd;
+            }
+            else
+            {
+                // Try to stack with existing items first
+                foreach (var existingItem in itemStacks.Keys.ToList())
+                {
+                    if (existingItem.TypeId == item.TypeId && itemStacks[existingItem].Quantity < existingItem.MaxStack)
+                    {
+                        var stack = itemStacks[existingItem];
+                        int canAdd = Math.Min(quantity, existingItem.MaxStack - stack.Quantity);
+                        stack.Quantity += canAdd;
+                        quantity -= canAdd;
+                        totalAdded += canAdd;
+
+                        OnItemAdded?.Invoke(item, canAdd);
+                        OnInventoryChanged?.Invoke(this);
+
+                        if (quantity <= 0) 
+                            return new AddItemResult(newItemsCreated, totalAdded, ItemKind.Stackable);
+                    }
                 }
             }
 
             // If we still have quantity to add, try to place new items
-            int totalAdded = 0;
             while (quantity > 0)
             {
-                // Create a copy of the item for placement
-                var newItem = CloneItem(item);
+                IItem newItem = CloneItem(item);
                 int stackSize = Math.Min(quantity, item.MaxStack);
                 newItem.Count = stackSize;
 
                 if (InsertItem(newItem))
                 {
+                    Debug.Log($"Inserted new item {newItem.Name} x{stackSize}");
+                    newItemsCreated.Add(newItem);
                     totalAdded += stackSize;
                     quantity -= stackSize;
                 }
@@ -246,22 +299,26 @@ namespace Seyren.System.Inventories
                 }
             }
 
-            return totalAdded;
+            return new AddItemResult(newItemsCreated, totalAdded, ItemKind.Stackable);
         }
 
-        public int RemoveItem(IItem item, int quantity = 1)
+        public AddItemResult RemoveItem(IItem item, int quantity = 1)
         {
-            if (item == null || quantity <= 0) return 0;
+            if (item == null || quantity <= 0) 
+                return new AddItemResult(new List<IItem>(), 0, ItemKind.Unique);
 
             return RemoveItem(item.ID, quantity);
         }
 
-        public int RemoveItem(string itemId, int quantity = 1)
+        public AddItemResult RemoveItem(string itemId, int quantity = 1)
         {
-            if (string.IsNullOrEmpty(itemId) || quantity <= 0) return 0;
+            if (string.IsNullOrEmpty(itemId) || quantity <= 0) 
+                return new AddItemResult(new List<IItem>(), 0, ItemKind.Unique);
 
             int totalRemoved = 0;
             var itemsToRemove = new List<IItem>();
+            var removedItems = new List<IItem>();
+            ItemKind itemKind = ItemKind.Unique;
 
             foreach (var kvp in itemStacks.ToList())
             {
@@ -270,6 +327,12 @@ namespace Seyren.System.Inventories
                     var stack = kvp.Value;
                     int canRemove = Math.Min(quantity, stack.Quantity);
                     
+                    // Determine item kind from the first matching item
+                    if (totalRemoved == 0)
+                    {
+                        itemKind = kvp.Key.MaxStack > 1 ? ItemKind.Stackable : ItemKind.Unique;
+                    }
+                    
                     stack.Quantity -= canRemove;
                     totalRemoved += canRemove;
                     quantity -= canRemove;
@@ -277,6 +340,7 @@ namespace Seyren.System.Inventories
                     if (stack.Quantity <= 0)
                     {
                         itemsToRemove.Add(kvp.Key);
+                        removedItems.Add(kvp.Key);
                     }
 
                     OnItemRemoved?.Invoke(kvp.Key, canRemove);
@@ -292,31 +356,48 @@ namespace Seyren.System.Inventories
             if (totalRemoved > 0)
                 OnInventoryChanged?.Invoke(this);
 
-            return totalRemoved;
-        }
-
-        public bool ContainsItem(IItem item, int quantity = 1)
+            return new AddItemResult(removedItems, totalRemoved, itemKind);
+        }        public bool ContainsItem(IItem item, int quantity = 1)
         {
             return item != null && ContainsItem(item.ID, quantity);
         }
 
         public bool ContainsItem(string itemId, int quantity = 1)
         {
-            return GetItemCount(itemId) >= quantity;
+            return GetItemCountByItemID(itemId) >= quantity;
         }
 
-        public int GetItemCount(IItem item)
+        public bool ContainsItemType(string itemTypeId)
         {
-            return item != null ? GetItemCount(item.ID) : 0;
+            return itemStacks.Where(kvp => kvp.Key.TypeId == itemTypeId).Any();
         }
 
-        public int GetItemCount(string itemId)
+        public bool ContainsItemID(string itemId)
+        {
+            return itemStacks.Where(kvp => kvp.Key.ID == itemId).Any();
+        }
+
+        public int GetItemCountByTypeID(IItem item)
+        {
+            return item != null ? GetItemCountByTypeID(item.TypeId) : 0;
+        }
+
+        public int GetItemCountByTypeID(string itemTypeId)
+        {
+            if (string.IsNullOrEmpty(itemTypeId)) return 0;
+
+            return itemStacks.Where(kvp => kvp.Key.TypeId == itemTypeId)
+                           .Sum(kvp => kvp.Value.Quantity);
+        }
+
+        public int GetItemCountByItemID(string itemId)
         {
             if (string.IsNullOrEmpty(itemId)) return 0;
 
             return itemStacks.Where(kvp => kvp.Key.ID == itemId)
                            .Sum(kvp => kvp.Value.Quantity);
         }
+
 
         public bool CanAddItem(IItem item, int quantity = 1)
         {
@@ -338,7 +419,7 @@ namespace Seyren.System.Inventories
             // Check if we can place new items for remaining quantity
             quantity -= remainingSpace;
             int slotsNeeded = Mathf.CeilToInt((float)quantity / item.MaxStack);
-            
+
             // Estimate available slots (this is approximate for grid-based inventory)
             return slotsNeeded <= GetAvailableSlots(item);
         }
@@ -356,7 +437,7 @@ namespace Seyren.System.Inventories
             var item = itemStacks.Keys.FirstOrDefault(i => i.ID == itemId);
             return FindItemSlot(item);
         }
-
+        
         public int[] FindAllItemSlots(IItem item)
         {
             if (item == null) return new int[0];
@@ -364,7 +445,7 @@ namespace Seyren.System.Inventories
             var slots = new List<int>();
             foreach (var kvp in itemStacks)
             {
-                if (kvp.Key.ID == item.ID)
+                if (kvp.Key.TypeId == item.TypeId)
                 {
                     var pos = itemPositions[kvp.Key];
                     slots.Add(pos.Row * columns + pos.Column);
@@ -404,10 +485,10 @@ namespace Seyren.System.Inventories
         {
             var itemA = GetSlot(slotA);
             var itemB = GetSlot(slotB);
-            
+
             SetSlot(slotA, null);
             SetSlot(slotB, null);
-            
+
             if (itemB != null) SetSlot(slotA, itemB);
             if (itemA != null) SetSlot(slotB, itemA);
         }
@@ -426,10 +507,10 @@ namespace Seyren.System.Inventories
                 var newStack = new ItemStack(fromStack.Item, moveQuantity);
                 SetSlot(toSlot, newStack);
                 fromStack.RemoveItems(moveQuantity);
-                
+
                 if (fromStack.IsEmpty)
                     SetSlot(fromSlot, null);
-                
+
                 return moveQuantity;
             }
             else if (toStack.Item.ID == fromStack.Item.ID)
@@ -437,10 +518,10 @@ namespace Seyren.System.Inventories
                 // Stack items
                 int actualMoved = toStack.AddItems(fromStack.Item, moveQuantity);
                 fromStack.RemoveItems(actualMoved);
-                
+
                 if (fromStack.IsEmpty)
                     SetSlot(fromSlot, null);
-                
+
                 return actualMoved;
             }
 
@@ -544,7 +625,7 @@ namespace Seyren.System.Inventories
         public void LoadInventoryData(InventoryData data)
         {
             Clear();
-            
+
             if (data?.slots != null)
             {
                 foreach (var slot in data.slots)
@@ -603,7 +684,7 @@ namespace Seyren.System.Inventories
         {
             // Note: In a real implementation, you'd need proper item cloning
             // This is a simplified placeholder
-            return original;
+            return original.Clone();
         }
         #endregion
 
@@ -630,7 +711,7 @@ namespace Seyren.System.Inventories
             public int AddItems(IItem item, int quantity)
             {
                 if (!CanAddItems(item, quantity)) return 0;
-                
+
                 int actualAdded = Math.Min(quantity, RemainingSpace);
                 Quantity += actualAdded;
                 return actualAdded;
@@ -656,127 +737,3 @@ namespace Seyren.System.Inventories
         #endregion
     }
 }
-
-// {
-
-//     public class MultiCellInventory
-//     {
-//         struct Cell
-//         {
-//             public int Row;
-//             public int Column;
-//             public Cell(int row, int column)
-//             {
-//                 this.Row = row;
-//                 this.Column = column;
-//             }
-//         }
-
-//         public int rows;
-//         public int columns;
-//         private ICellItem[][] cells;
-//         private Dictionary<ICellItem, Cell> items;
-//         public MultiCellInventory(int rows, int columns)
-//         {
-//             this.rows = rows;
-//             this.columns = columns;
-//             items = new Dictionary<ICellItem, Cell>();
-//             cells = new ICellItem[rows][];
-//             for (int loop = 0; loop < rows; loop++)
-//             {
-//                 cells[loop] = new ICellItem[columns];
-//             }
-//         }
-
-//         public bool Insert(ICellItem item)
-//         {
-//             // how to find the first free item in O(1) or O(log(n)) instead of (O(n))
-//             for (int loop = 0; loop < rows; loop++)
-//             {
-//                 for (int loop2 = 0; loop2 < columns; loop2++)
-//                 {
-//                     if (CanInsert(item, loop, loop2))
-//                     {
-//                         return Insert(item, loop, loop2);
-//                     }
-//                 }
-//             }
-
-//             return false;
-//         }
-
-//         public bool Insert(ICellItem item, int row, int column)
-//         {
-//             if (!CanInsert(item, row, column)) return false;
-//             for (int loop = 0; loop < item.Width; loop++)
-//             {
-//                 for (int loop2 = 0; loop2  < item.Height; loop2 ++)
-//                 {
-//                     cells[row + loop][column + loop2] = item;
-//                 }
-//             }
-
-//             items.Add(item, new Cell(row, column));
-//             return true;
-//         }
-
-//         public bool CanInsert(ICellItem item, int row, int column)
-//         {
-//             if (row < 0 || row >= rows || column < 0 || column >= columns) return false;
-
-//             for (int loop = 0; loop < item.Width; loop++)
-//             {
-//                 if (cells[row + loop][column] != null) return false;
-//             }
-
-//             for (int loop = 0; loop < item.Height; loop++)
-//             {
-//                 if (cells[row][column + loop] != null) return false;
-//             }
-
-//             return true;
-//         }
-
-//         public bool Remove(int row, int column)
-//         {
-//             ICellItem item = GetItem(row, column);
-//             if (item == null) return false;
-//             Cell c = items[item];
-//             for (int loop = 0; loop < item.Width; loop++)
-//             {
-//                 cells[c.Row + loop] = null;
-//             }
-
-//             for (int loop = 0; loop < item.Height; loop++)
-//             {
-//                 cells[c.Column + loop] = null;
-//             }
-
-//             items.Remove(item);
-//             return true;
-//         }
-
-//         public ICellItem GetItem(int row, int column)
-//         {
-//             if (row >= rows || column >= columns) return null;
-
-//             return cells[row][column];
-//         }
-
-//         public int GetRowOf(ICellItem item) {
-//             if (item == null || !items.ContainsKey(item)) {
-//                 return -1;
-//             }
-
-//             return items[item].Row;
-//         }
-
-//         public int GetColumnOf(ICellItem item) {
-//             if (item == null || !items.ContainsKey(item)) {
-//                 return -1;
-//             }
-
-//             return items[item].Column;
-//         }
-//     }
-// }
