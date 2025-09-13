@@ -24,10 +24,10 @@ namespace Seyren.Tests.System
             inventory = new GridBasedInventory(10, 8); // 10x8 grid
             
             // Create test items
-            smallItem = new MockItem("small_item", "Small Item", 1, 1, 1, 1); // 1x1, non-stackable
-            largeItem = new MockItem("large_item", "Large Item", 2, 3, 1, 1); // 2x3, non-stackable  
-            stackableItem = new MockItem("stackable_item", "Stackable Item", 1, 1, 50, 10); // 1x1, max stack 50
-            nonStackableItem = new MockItem("non_stackable", "Non-Stackable", 1, 1, 1, 1); // 1x1, non-stackable
+            smallItem = new MockItem("small_item_001", "Small Item", 1, 1, 1, 1, "small_item"); // 1x1, non-stackable
+            largeItem = new MockItem("large_item_001", "Large Item", 2, 3, 1, 1, "large_item"); // 2x3, non-stackable  
+            stackableItem = new MockItem("stackable_item_001", "Stackable Item", 1, 1, 50, 10, "stackable_item"); // 1x1, max stack 50
+            nonStackableItem = new MockItem("non_stackable_001", "Non-Stackable", 1, 1, 1, 1, "non_stackable"); // 1x1, non-stackable
         }
 
         [TearDown]
@@ -630,8 +630,11 @@ namespace Seyren.Tests.System
             inventory.InsertItemAt(largeItem, 2, 2);
             inventory.AddItem(smallItem, 1);
 
+            int initialCount = inventory.GetItemCountByTypeID(stackableItem.TypeId);
+
+
             // Verify initial state
-            Assert.AreEqual(45, inventory.GetItemCountByTypeID(stackableItem.TypeId));
+            Assert.AreEqual(45, initialCount);
             Assert.AreEqual(largeItem, inventory.GetItemAt(2, 2));
             Assert.AreEqual(1, inventory.GetItemCountByTypeID(smallItem.TypeId));
 
@@ -703,9 +706,10 @@ namespace Seyren.Tests.System
         public int Rarity { get; set; }
         public int MaxStack { get; set; }
 
-        public MockItem(string id, string name, int width, int height, int maxStack, int count)
+        public MockItem(string id, string name, int width, int height, int maxStack, int count, string typeId = null)
         {
             ID = id;
+            TypeId = typeId ?? id; // Use ID as TypeId if not provided
             Name = name;
             Description = $"Mock item: {name}";
             Width = width;
@@ -713,7 +717,6 @@ namespace Seyren.Tests.System
             MaxStack = maxStack;
             Count = count;
             Rarity = 1;
-            TypeId = "test_item"; // Default type for testing
         }
 
         public void Use(UseItemData data)
@@ -727,11 +730,10 @@ namespace Seyren.Tests.System
         /// <returns>A new IItem instance with the same properties but unique ID</returns>
         public IItem Clone()
         {
-            return new MockItem(Guid.NewGuid().ToString(), Name, Width, Height, MaxStack, Count)
+            return new MockItem(Guid.NewGuid().ToString(), Name, Width, Height, MaxStack, Count, TypeId)
             {
                 Description = this.Description,
-                Rarity = this.Rarity,
-                TypeId = this.TypeId
+                Rarity = this.Rarity
             };
         }
     }
