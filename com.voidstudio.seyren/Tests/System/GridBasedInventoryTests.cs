@@ -598,20 +598,19 @@ namespace Seyren.Tests.System
             // Arrange
             bool inventoryFull = false;
             inventory.OnInventoryFull += (inv) => inventoryFull = true;
+
+            int w = inventory.Columns;
+            int h = inventory.Rows;
             
             // Fill inventory to capacity
-            for (int r = 0; r < 10; r++)
+            for (int r = 0; r < h; r++)
             {
-                for (int c = 0; c < 7; c++) // Leave one slot
+                for (int c = 0; c < w; c++)
                 {
                     var item = new MockItem($"filler_{r}_{c}", "Filler", 1, 1, 1, 1);
                     inventory.InsertItemAt(item, r, c);
                 }
             }
-
-            // Act - Add final item to fill inventory
-            var finalItem = new MockItem("final", "Final", 1, 1, 1, 1);
-            inventory.InsertItemAt(finalItem, 9, 7);
 
             // Assert
             Assert.IsTrue(inventoryFull);
