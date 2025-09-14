@@ -206,38 +206,34 @@ namespace Seyren.System.Inventories
             {
                 return new AddItemResult(new List<IItem>(), 0, ItemKind.Unique);
             }
-
-            InsertItem(item);
-            
-            return new AddItemResult(new List<IItem> { item }, 1, item.MaxStack == 1 ? ItemKind.Unique : ItemKind.Stackable);
-        }
-
-        public AddItemResult RemoveItem(IItem item)
-        {
-            if (item == null || item.Count <= 0) 
-                return new AddItemResult(new List<IItem>(), 0, ItemKind.Unique);
-
-            return RemoveItem(item.ID);
+            ItemKind kind = item.MaxStack == 1 ? ItemKind.Unique : ItemKind.Stackable;
+            if (InsertItem(item)) {
+                return new AddItemResult(new List<IItem> { item }, 1, kind);
+            }
+            return new AddItemResult(new List<IItem> { item }, 1, kind);
         }
 
         public AddItemResult RemoveItem(string itemId)
         {
-            if (string.IsNullOrEmpty(itemId)) 
+            if (string.IsNullOrEmpty(itemId))
+            {
                 return new AddItemResult(new List<IItem>(), 0, ItemKind.Unique);
+            }
+            
+            IItem item = GetItemByID(itemId);
+            if (item == null)
+            {
+                return new AddItemResult(new List<IItem>(), 0, ItemKind.Unique);
+            }
 
             int totalRemoved = 0;
             var removedItems = new List<IItem>();
             ItemKind itemKind = ItemKind.Unique;
-            IItem item = GetItemByID(itemId);
             RemoveItemCompletely(item);
 
             return new AddItemResult(removedItems, totalRemoved, itemKind);
         }
 
-        public bool ContainsItem(IItem item)
-        {
-            return item != null && ContainsItem(item.ID, item.Count);
-        }
 
         public bool ContainsItem(string itemId)
         {
