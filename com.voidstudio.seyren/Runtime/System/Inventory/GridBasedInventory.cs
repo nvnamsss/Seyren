@@ -207,10 +207,76 @@ namespace Seyren.System.Inventories
                 return new AddItemResult(new List<IItem>(), 0, ItemKind.Unique);
             }
             ItemKind kind = item.MaxStack == 1 ? ItemKind.Unique : ItemKind.Stackable;
-            if (InsertItem(item)) {
-                return new AddItemResult(new List<IItem> { item }, 1, kind);
+            if (InsertItem(item))
+            {
+                return new AddItemResult(new List<IItem> { item }, item.Count, kind);
             }
-            return new AddItemResult(new List<IItem> { item }, 1, kind);
+            return new AddItemResult(new List<IItem> { item }, item.Count, kind);
+        }
+        
+                private AddItemResult AddUniqueItem(IItem item)
+        {
+            var newItemsCreated = new List<IItem>();
+            
+            if (InsertItem(item))
+            {
+                newItemsCreated.Add(item);
+                OnItemAdded?.Invoke(item, 1);
+                OnInventoryChanged?.Invoke(this);
+                return new AddItemResult(newItemsCreated, 1, ItemKind.Unique);
+            }
+
+            return new AddItemResult(newItemsCreated, 0, ItemKind.Unique);
+        }
+
+
+        private AddItemResult AddStackableItem(IItem item, int quantity)
+        {
+            if (item == null || quantity <= 0) 
+                return new AddItemResult(new List<IItem>(), 0, ItemKind.Stackable);
+
+            int totalAdded = 0;
+            var newItemsCreated = new List<IItem>();
+            
+            // Try to stack with existing items first
+            foreach (var existingItem in itemPositions.Keys.ToList())
+            {
+                if (existingItem.TypeId == item.TypeId && existingItem.Count < existingItem.MaxStack)
+                {
+                    int canAdd = Math.Min(quantity, existingItem.MaxStack - existingItem.Count);
+                    existingItem.Count += canAdd;
+                    quantity -= canAdd;
+                    totalAdded += canAdd;
+
+                    OnItemAdded?.Invoke(item, canAdd);
+                    OnInventoryChanged?.Invoke(this);
+
+                    if (quantity <= 0) 
+                        return new AddItemResult(newItemsCreated, totalAdded, ItemKind.Stackable);
+                }
+            }
+
+            // If we still have quantity to add, try to place new items
+            while (quantity > 0)
+            {
+                IItem newItem = CloneItem(item);
+                int stackSize = Math.Min(quantity, item.MaxStack);
+                newItem.Count = stackSize;
+
+                if (InsertItem(newItem))
+                {
+                    Debug.Log($"Inserted new item {newItem.Name} x{stackSize}");
+                    newItemsCreated.Add(newItem);
+                    totalAdded += stackSize;
+                    quantity -= stackSize;
+                }
+                else
+                {
+                    break; // No more space
+                }
+            }
+
+            return new AddItemResult(newItemsCreated, totalAdded, ItemKind.Stackable);
         }
 
         public AddItemResult RemoveItem(string itemId)
