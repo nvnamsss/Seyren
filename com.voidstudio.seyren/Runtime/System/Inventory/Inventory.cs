@@ -39,20 +39,26 @@ namespace Seyren.System.Inventory
         /// List of new item instances created during the operation
         /// </summary>
         public List<IItem> NewItemsCreated { get; set; }
-        
+
+        /// <summary>
+        /// List of existing items that were merged into (i.e., their count increased)
+        /// </summary>
+        public List<IItem> MergedIntoExisting { get; set; }
+
         /// <summary>
         /// Total number of items added to the inventory
         /// </summary>
         public int TotalAdded { get; set; }
-        
+
         /// <summary>
         /// The kind of item that was added (Unique or Stackable)
         /// </summary>
         public ItemKind Kind { get; set; }
 
-        public AddItemResult(List<IItem> newItemsCreated, int totalAdded, ItemKind kind)
+        public AddItemResult(List<IItem> newItemsCreated, int totalAdded, ItemKind kind, List<IItem> mergedIntoExisting = null)
         {
             NewItemsCreated = newItemsCreated ?? new List<IItem>();
+            MergedIntoExisting = mergedIntoExisting ?? new List<IItem>();
             TotalAdded = totalAdded;
             Kind = kind;
         }
@@ -60,70 +66,7 @@ namespace Seyren.System.Inventory
     // - int MaxStack { get; set; }
     // - void Use(UseItemData data)
 
-    /// <summary>
-    /// Represents a stack of items in an inventory slot
-    /// </summary>
-    public interface IItemStack
-    {
-        /// <summary>
-        /// The item type in this stack
-        /// </summary>
-        IItem Item { get; }
-        
-        /// <summary>
-        /// Current quantity in this stack
-        /// </summary>
-        int Quantity { get; set; }
-        
-        /// <summary>
-        /// Whether this stack is empty
-        /// </summary>
-        bool IsEmpty { get; }
-        
-        /// <summary>
-        /// Whether this stack is at maximum capacity
-        /// </summary>
-        bool IsFull { get; }
-        
-        /// <summary>
-        /// Remaining space in this stack
-        /// </summary>
-        int RemainingSpace { get; }
-        
-        /// <summary>
-        /// Check if items can be added to this stack
-        /// </summary>
-        /// <param name="item">Item to check</param>
-        /// <param name="quantity">Quantity to add</param>
-        /// <returns>True if items can be added</returns>
-        bool CanAddItems(IItem item, int quantity);
-        
-        /// <summary>
-        /// Add items to this stack
-        /// </summary>
-        /// <param name="item">Item to add</param>
-        /// <param name="quantity">Quantity to add</param>
-        /// <returns>Quantity actually added</returns>
-        int AddItems(IItem item, int quantity);
-        
-        /// <summary>
-        /// Remove items from this stack
-        /// </summary>
-        /// <param name="quantity">Quantity to remove</param>
-        /// <returns>Quantity actually removed</returns>
-        int RemoveItems(int quantity);
-        
-        /// <summary>
-        /// Clear this stack completely
-        /// </summary>
-        void Clear();
-        
-        /// <summary>
-        /// Clone this item stack
-        /// </summary>
-        /// <returns>New item stack with same contents</returns>
-        IItemStack Clone();
-    }
+
 
     /// <summary>
     /// Main inventory interface for managing items
@@ -176,64 +119,45 @@ namespace Seyren.System.Inventory
         bool IsEmpty { get; }
         
         /// <summary>
-        /// Get item stack at specific slot
+        /// Get item at specific slot
         /// </summary>
         /// <param name="slotIndex">Slot index</param>
-        /// <returns>Item stack at slot, or null if empty</returns>
-        IItemStack GetSlot(int slotIndex);
+        /// <returns>Item at slot, or null if empty</returns>
+        IItem GetSlot(int slotIndex);
         
         /// <summary>
-        /// Set item stack at specific slot
+        /// Set item at specific slot
         /// </summary>
         /// <param name="slotIndex">Slot index</param>
-        /// <param name="itemStack">Item stack to set</param>
-        void SetSlot(int slotIndex, IItemStack itemStack);
+        /// <param name="item">Item to set</param>
+        void SetSlot(int slotIndex, IItem item);
         
         /// <summary>
-        /// Get all item stacks in inventory
+        /// Get all items in inventory
         /// </summary>
-        /// <returns>Array of all item stacks</returns>
-        IItemStack[] GetAllSlots();
+        /// <returns>Array of all items</returns>
+        IItem[] GetAllSlots();
         
         /// <summary>
         /// Add items to inventory (auto-stack and find slots) with detailed results
         /// </summary>
-        /// <param name="item">Item to add</param>
-        /// <param name="quantity">Quantity to add</param>
+        /// <param name="item">Item to add (uses item.Count for quantity)</param>
         /// <returns>Detailed result of the add operation</returns>
-        AddItemResult AddItem(IItem item, int quantity = 1);
+        AddItemResult AddItem(IItem item);
         
         /// <summary>
-        /// Remove items from inventory with detailed results
-        /// </summary>
-        /// <param name="item">Item to remove</param>
-        /// <param name="quantity">Quantity to remove</param>
-        /// <returns>Detailed result of the remove operation</returns>
-        AddItemResult RemoveItem(IItem item, int quantity = 1);
-        
-        /// <summary>
-        /// Remove items by item ID with detailed results
+        /// Remove all items by item ID with detailed results
         /// </summary>
         /// <param name="itemId">Item ID to remove</param>
-        /// <param name="quantity">Quantity to remove</param>
         /// <returns>Detailed result of the remove operation</returns>
-        AddItemResult RemoveItem(string itemId, int quantity = 1);
-        
-        /// <summary>
-        /// Check if inventory contains specific item
-        /// </summary>
-        /// <param name="item">Item to check</param>
-        /// <param name="quantity">Required quantity</param>
-        /// <returns>True if inventory contains enough of the item</returns>
-        bool ContainsItem(IItem item, int quantity = 1);
+        AddItemResult RemoveItem(string itemId);
         
         /// <summary>
         /// Check if inventory contains item by ID
         /// </summary>
         /// <param name="itemId">Item ID to check</param>
-        /// <param name="quantity">Required quantity</param>
-        /// <returns>True if inventory contains enough of the item</returns>
-        bool ContainsItem(string itemId, int quantity = 1);
+        /// <returns>True if inventory contains the item</returns>
+        bool ContainsItem(string itemId);
         
         /// <summary>
         /// Get total quantity of specific item
@@ -252,10 +176,9 @@ namespace Seyren.System.Inventory
         /// <summary>
         /// Check if item can be added to inventory
         /// </summary>
-        /// <param name="item">Item to check</param>
-        /// <param name="quantity">Quantity to add</param>
+        /// <param name="item">Item to check (uses item.Count for quantity)</param>
         /// <returns>True if item can be added</returns>
-        bool CanAddItem(IItem item, int quantity = 1);
+        bool CanAddItem(IItem item);
         
         /// <summary>
         /// Find first slot containing specific item
@@ -272,11 +195,11 @@ namespace Seyren.System.Inventory
         int FindItemSlot(string itemId);
         
         /// <summary>
-        /// Find all slots containing specific item
+        /// Find all slots containing items of specific type
         /// </summary>
-        /// <param name="item">Item to find</param>
+        /// <param name="itemTypeId">Item type ID to find</param>
         /// <returns>Array of slot indices</returns>
-        int[] FindAllItemSlots(IItem item);
+        int[] FindAllItemSlots(string itemTypeId);
         
         /// <summary>
         /// Find first empty slot
@@ -328,7 +251,7 @@ namespace Seyren.System.Inventory
         /// </summary>
         /// <param name="rarity">Rarity level to filter by</param>
         /// <returns>List of items with specified rarity</returns>
-        List<IItemStack> GetItemsByRarity(int rarity);
+        List<IItem> GetItemsByRarity(int rarity);
         
         /// <summary>
         /// Sort inventory by specified criteria

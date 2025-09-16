@@ -224,8 +224,12 @@ namespace Seyren.Tests.System
         [Test]
         public void AddItem_SingleItem_AddsSuccessfully()
         {
+            // Arrange
+            var item = smallItem.Clone();
+            item.Count = 1;
+
             // Act
-            int added = inventory.AddItem(smallItem, 1).TotalAdded;
+            int added = inventory.AddItem(item).TotalAdded;
 
             // Assert
             Assert.AreEqual(1, added);
@@ -236,9 +240,15 @@ namespace Seyren.Tests.System
         [Test]
         public void AddItem_StackableItems_StacksCorrectly()
         {
+            // Arrange
+            var item1 = stackableItem.Clone();
+            item1.Count = 10;
+            var item2 = stackableItem.Clone();
+            item2.Count = 15;
+
             // Act
-            int firstAdd = inventory.AddItem(stackableItem, 10).TotalAdded;
-            int secondAdd = inventory.AddItem(stackableItem, 15).TotalAdded;
+            int firstAdd = inventory.AddItem(item1).TotalAdded;
+            int secondAdd = inventory.AddItem(item2).TotalAdded;
 
             // Assert
             Assert.AreEqual(10, firstAdd);
@@ -253,8 +263,13 @@ namespace Seyren.Tests.System
         public void AddItem_StackableItemsExceedingMaxStack_CreatesMultipleStacks()
         {
             int numberOfStacks = 75;
+            
+            // Arrange
+            var item = stackableItem.Clone();
+            item.Count = numberOfStacks;
+            
             // Act - Try to add more than max stack size
-            int added = inventory.AddItem(stackableItem, numberOfStacks).TotalAdded; // Max stack is 50
+            int added = inventory.AddItem(item).TotalAdded; // Max stack is 50
             int currentCount = inventory.GetItemCountByTypeID(stackableItem.TypeId);
             // Assert
             Assert.AreEqual(numberOfStacks, added);
@@ -284,52 +299,62 @@ namespace Seyren.Tests.System
             //     }
             // }
 
+            // Arrange
+            var largeItemToAdd = largeItem.Clone();
+            largeItemToAdd.Count = 1;
+
             // Act
-            int added = inventory.AddItem(largeItem, 1).TotalAdded;
+            int added = inventory.AddItem(largeItemToAdd).TotalAdded;
 
             // Assert
             Assert.AreEqual(0, added);
         }
 
         [Test]
-        public void RemoveItem_ExistingItem_RemovesCorrectQuantity()
+        public void RemoveItem_ExistingItem_RemovesAllItems()
         {
             // Arrange
-            inventory.AddItem(stackableItem, 30);
+            var item = stackableItem.Clone();
+            item.Count = 30;
+            inventory.AddItem(item);
 
             // Act
-            AddItemResult result = inventory.RemoveItem(stackableItem, 10);
+            AddItemResult result = inventory.RemoveItem(stackableItem.ID);
 
             // Assert
-            Assert.AreEqual(10, result.TotalAdded);
-            Assert.AreEqual(20, inventory.GetItemCountByTypeID(stackableItem.TypeId));
+            Assert.AreEqual(30, result.TotalAdded); // All items removed
+            Assert.AreEqual(0, inventory.GetItemCountByTypeID(stackableItem.TypeId)); // None left
             Assert.AreEqual(ItemKind.Stackable, result.Kind);
         }
 
         [Test]
-        public void RemoveItem_ByItemId_RemovesCorrectQuantity()
+        public void RemoveItem_ByItemId_RemovesAllItems()
         {
             // Arrange
-            inventory.AddItem(stackableItem, 20);
+            IItem item = stackableItem.Clone();
+            item.Count = 20;
+            inventory.AddItem(item);
 
             // Act
-            AddItemResult result = inventory.RemoveItem(stackableItem.ID, 5);
-            int currentCount = inventory.GetItemCountByTypeID(stackableItem.TypeId);
+            AddItemResult result = inventory.RemoveItem(item.ID);
+            int currentCount = inventory.GetItemCountByTypeID(item.TypeId);
 
             // Assert
-            Assert.AreEqual(5, result.TotalAdded);
-            Assert.AreEqual(15, currentCount);
+            Assert.AreEqual(20, result.TotalAdded); // All items removed
+            Assert.AreEqual(0, currentCount); // None left
             Assert.AreEqual(ItemKind.Stackable, result.Kind);
         }
 
         [Test]
-        public void RemoveItem_MoreThanAvailable_RemovesAllAvailable()
+        public void RemoveItem_RemovesAllAvailable()
         {
             // Arrange
-            inventory.AddItem(stackableItem, 15);
+            var item = stackableItem.Clone();
+            item.Count = 15;
+            inventory.AddItem(item);
 
             // Act
-            var result = inventory.RemoveItem(stackableItem, 20);
+            var result = inventory.RemoveItem(stackableItem.ID);
 
             // Assert
             Assert.AreEqual(15, result.TotalAdded);
@@ -342,28 +367,36 @@ namespace Seyren.Tests.System
         public void ContainsItem_ExistingItem_ReturnsTrue()
         {
             // Arrange
-            inventory.AddItem(smallItem, 1);
+            var item = smallItem.Clone();
+            item.Count = 1;
+            inventory.AddItem(item);
 
             // Act & Assert
-            Assert.IsTrue(inventory.ContainsItem(smallItem, 1));
             Assert.IsTrue(inventory.ContainsItem(smallItem.ID, 1));
-            Assert.IsFalse(inventory.ContainsItem(smallItem, 2));
+            Assert.IsTrue(inventory.ContainsItem(smallItem.ID, 1));
+            Assert.IsFalse(inventory.ContainsItem(smallItem.ID, 2));
         }
 
         [Test]
         public void ContainsItem_NonExistentItem_ReturnsFalse()
         {
             // Act & Assert
-            Assert.IsFalse(inventory.ContainsItem(smallItem, 1));
+            Assert.IsFalse(inventory.ContainsItem(smallItem.ID, 1));
             Assert.IsFalse(inventory.ContainsItem("non_existent", 1));
         }
 
         [Test]
         public void CanAddItem_HasSpace_ReturnsTrue()
         {
+            // Arrange
+            var smallItemToAdd = smallItem.Clone();
+            smallItemToAdd.Count = 1;
+            var stackableItemToAdd = stackableItem.Clone();
+            stackableItemToAdd.Count = 100;
+
             // Act & Assert
-            Assert.IsTrue(inventory.CanAddItem(smallItem, 1));
-            Assert.IsTrue(inventory.CanAddItem(stackableItem, 100));
+            Assert.IsTrue(inventory.CanAddItem(smallItemToAdd));
+            Assert.IsTrue(inventory.CanAddItem(stackableItemToAdd));
         }
 
         [Test]
@@ -379,8 +412,12 @@ namespace Seyren.Tests.System
                 }
             }
 
+            // Arrange
+            var smallItemToAdd = smallItem.Clone();
+            smallItemToAdd.Count = 1;
+
             // Act & Assert
-            Assert.IsFalse(inventory.CanAddItem(smallItem, 1));
+            Assert.IsFalse(inventory.CanAddItem(smallItemToAdd));
         }
 
         [Test]
@@ -421,10 +458,12 @@ namespace Seyren.Tests.System
         public void FindAllItemSlots_MultipleStacks_ReturnsAllSlots()
         {
             // Arrange
-            inventory.AddItem(stackableItem, 75); // Creates 2 stacks
+            var item = stackableItem.Clone();
+            item.Count = 75;
+            inventory.AddItem(item); // Creates 2 stacks
 
             // Act
-            int[] slots = inventory.FindAllItemSlots(stackableItem);
+            int[] slots = inventory.FindAllItemSlots(stackableItem.TypeId);
 
             // Assert
             Assert.AreEqual(2, slots.Length);
@@ -466,7 +505,7 @@ namespace Seyren.Tests.System
         }
 
         [Test]
-        public void GetSlot_ValidIndex_ReturnsItemStack()
+        public void GetSlot_ValidIndex_ReturnsItem()
         {
             // Arrange
             inventory.InsertItemAt(smallItem, 1, 2);
@@ -476,7 +515,7 @@ namespace Seyren.Tests.System
 
             // Assert
             Assert.IsNotNull(slot);
-            Assert.AreEqual(smallItem, slot.Item);
+            Assert.AreEqual(smallItem, slot);
         }
 
         [Test]
@@ -490,26 +529,27 @@ namespace Seyren.Tests.System
         }
 
         [Test]
-        public void SetSlot_ValidSlot_SetsItemStack()
+        public void SetSlot_ValidSlot_SetsItem()
         {
-            // Arrange
-            var mockStack = new MockItemStack(smallItem, 1);
-
-            // Act
-            inventory.SetSlot(5, mockStack);
+            // Arrange & Act
+            inventory.SetSlot(5, smallItem);
 
             // Assert
-            var retrievedStack = inventory.GetSlot(5);
-            Assert.IsNotNull(retrievedStack);
-            Assert.AreEqual(smallItem, retrievedStack.Item);
+            var retrievedItem = inventory.GetSlot(5);
+            Assert.IsNotNull(retrievedItem);
+            Assert.AreEqual(smallItem, retrievedItem);
         }
 
         [Test]
         public void Clear_InventoryWithItems_ClearsAll()
         {
             // Arrange
-            inventory.AddItem(smallItem, 1);
-            inventory.AddItem(stackableItem, 10);
+            var item1 = smallItem.Clone();
+            item1.Count = 1;
+            var item2 = stackableItem.Clone();
+            item2.Count = 10;
+            inventory.AddItem(item1);
+            inventory.AddItem(item2);
 
             // Act
             inventory.Clear();
@@ -528,9 +568,9 @@ namespace Seyren.Tests.System
             var rareItem = new MockItem("rare", "Rare", 1, 1, 1, 1) { Rarity = 5 };
             var epicItem = new MockItem("epic", "Epic", 1, 1, 1, 1) { Rarity = 10 };
             
-            inventory.AddItem(commonItem, 1);
-            inventory.AddItem(rareItem, 1);
-            inventory.AddItem(epicItem, 1);
+            inventory.AddItem(commonItem);
+            inventory.AddItem(rareItem);
+            inventory.AddItem(epicItem);
 
             // Act
             inventory.SortInventory(InventorySortType.Rarity);
@@ -553,11 +593,14 @@ namespace Seyren.Tests.System
             int addedQuantity = 0;
             inventory.OnItemAdded += (item, quantity) => { addedItem = item; addedQuantity = quantity; };
 
+            var item = smallItem.Clone();
+            item.Count = 1;
+
             // Act
-            inventory.AddItem(smallItem, 1);
+            inventory.AddItem(item);
 
             // Assert
-            Assert.AreEqual(smallItem, addedItem);
+            Assert.AreEqual(smallItem.TypeId, addedItem.TypeId);
             Assert.AreEqual(1, addedQuantity);
         }
 
@@ -565,17 +608,19 @@ namespace Seyren.Tests.System
         public void RemoveItem_TriggersOnItemRemoved()
         {
             // Arrange
-            inventory.AddItem(stackableItem, 10);
+            var item = stackableItem.Clone();
+            item.Count = 10;
+            inventory.AddItem(item);
             IItem removedItem = null;
             int removedQuantity = 0;
             inventory.OnItemRemoved += (item, quantity) => { removedItem = item; removedQuantity = quantity; };
 
             // Act
-            inventory.RemoveItem(stackableItem, 5);
+            inventory.RemoveItem(stackableItem.ID);
 
             // Assert
-            Assert.AreEqual(stackableItem, removedItem);
-            Assert.AreEqual(5, removedQuantity);
+            Assert.AreEqual(stackableItem.TypeId, removedItem.TypeId);
+            Assert.AreEqual(10, removedQuantity); // All items removed
         }
 
         [Test]
@@ -585,8 +630,11 @@ namespace Seyren.Tests.System
             bool inventoryChanged = false;
             inventory.OnInventoryChanged += (inv) => inventoryChanged = true;
 
+            var item = smallItem.Clone();
+            item.Count = 1;
+
             // Act
-            inventory.AddItem(smallItem, 1);
+            inventory.AddItem(item);
 
             // Assert
             Assert.IsTrue(inventoryChanged);
@@ -626,11 +674,15 @@ namespace Seyren.Tests.System
             // Complex scenario: Add items, remove some, check state
             
             // Add various items
-            inventory.AddItem(stackableItem, 45);
+            IItem stackItem = stackableItem.Clone();
+            stackItem.Count = 45;
+            inventory.AddItem(stackItem);
             inventory.InsertItemAt(largeItem, 2, 2);
-            inventory.AddItem(smallItem, 1);
+            IItem smallItemToAdd = smallItem.Clone();
+            smallItemToAdd.Count = 1;
+            inventory.AddItem(smallItemToAdd);
 
-            int initialCount = inventory.GetItemCountByTypeID(stackableItem.TypeId);
+            int initialCount = inventory.GetItemCountByTypeID(stackItem.TypeId);
 
 
             // Verify initial state
@@ -639,11 +691,11 @@ namespace Seyren.Tests.System
             Assert.AreEqual(1, inventory.GetItemCountByTypeID(smallItem.TypeId));
 
             // Remove some items
-            inventory.RemoveItem(stackableItem, 20);
+            inventory.RemoveItem(stackItem.ID); // This removes all stackable items
             inventory.RemoveItemAt(2, 2);
 
             // Verify final state
-            Assert.AreEqual(25, inventory.GetItemCountByTypeID(stackableItem.TypeId));
+            Assert.AreEqual(45, inventory.GetItemCountByTypeID(stackableItem.TypeId)); // All removed
             Assert.IsNull(inventory.GetItemAt(2, 2));
             Assert.AreEqual(1, inventory.GetItemCountByTypeID(smallItem.TypeId));
         }
@@ -658,7 +710,7 @@ namespace Seyren.Tests.System
             for (int i = 0; i < itemsToAdd; i++)
             {
                 var item = new MockItem($"stress_item_{i}", $"Stress Item {i}", 1, 1, 1, 1);
-                int added = inventory.AddItem(item, 1).TotalAdded;
+                int added = inventory.AddItem(item).TotalAdded;
                 addedCount += added;
             }
 
@@ -676,8 +728,8 @@ namespace Seyren.Tests.System
             var item2 = new MockItem("potion_002", "Health Potion", 1, 1, 50, 15) { TypeId = "health_potion" };
 
             // Act
-            int added1 = inventory.AddItem(item1, 10).TotalAdded;
-            int added2 = inventory.AddItem(item2, 15).TotalAdded;
+            int added1 = inventory.AddItem(item1).TotalAdded;
+            int added2 = inventory.AddItem(item2).TotalAdded;
 
             // Assert - Should stack because they have same TypeId
             Assert.AreEqual(10, added1);
@@ -738,54 +790,7 @@ namespace Seyren.Tests.System
         }
     }
 
-    /// <summary>
-    /// Mock implementation of IItemStack for testing
-    /// </summary>
-    public class MockItemStack : IItemStack
-    {
-        public IItem Item { get; private set; }
-        public int Quantity { get; set; }
-        public bool IsEmpty => Quantity <= 0;
-        public bool IsFull => Quantity >= Item.MaxStack;
-        public int RemainingSpace => Item.MaxStack - Quantity;
 
-        public MockItemStack(IItem item, int quantity)
-        {
-            Item = item;
-            Quantity = quantity;
-        }
-
-        public bool CanAddItems(IItem item, int quantity)
-        {
-            return item.ID == Item.ID && RemainingSpace >= quantity;
-        }
-
-        public int AddItems(IItem item, int quantity)
-        {
-            if (!CanAddItems(item, quantity)) return 0;
-            
-            int actualAdded = Math.Min(quantity, RemainingSpace);
-            Quantity += actualAdded;
-            return actualAdded;
-        }
-
-        public int RemoveItems(int quantity)
-        {
-            int actualRemoved = Math.Min(quantity, Quantity);
-            Quantity -= actualRemoved;
-            return actualRemoved;
-        }
-
-        public void Clear()
-        {
-            Quantity = 0;
-        }
-
-        public IItemStack Clone()
-        {
-            return new MockItemStack(Item, Quantity);
-        }
-    }
 
     #endregion
 }

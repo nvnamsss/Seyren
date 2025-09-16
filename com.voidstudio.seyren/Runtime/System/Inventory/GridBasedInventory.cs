@@ -206,12 +206,17 @@ namespace Seyren.System.Inventories
             {
                 return new AddItemResult(new List<IItem>(), 0, ItemKind.Unique);
             }
+
             ItemKind kind = item.MaxStack == 1 ? ItemKind.Unique : ItemKind.Stackable;
-            if (InsertItem(item))
+            
+            if (kind == ItemKind.Unique)
             {
-                return new AddItemResult(new List<IItem> { item }, item.Count, kind);
+                return AddUniqueItem(item);
             }
-            return new AddItemResult(new List<IItem> { item }, item.Count, kind);
+            else
+            {
+                return AddStackableItem(item, item.Count);
+            }
         }
         
                 private AddItemResult AddUniqueItem(IItem item)
@@ -237,6 +242,7 @@ namespace Seyren.System.Inventories
 
             int totalAdded = 0;
             var newItemsCreated = new List<IItem>();
+            var mergedIntoExisting = new List<IItem>();
             
             // Try to stack with existing items first
             foreach (var existingItem in itemPositions.Keys.ToList())
@@ -247,12 +253,22 @@ namespace Seyren.System.Inventories
                     existingItem.Count += canAdd;
                     quantity -= canAdd;
                     totalAdded += canAdd;
+                    
+                    // Track that this existing item was merged into
+                    if (!mergedIntoExisting.Contains(existingItem))
+                    {
+                        mergedIntoExisting.Add(existingItem);
+                    }
 
                     OnItemAdded?.Invoke(item, canAdd);
                     OnInventoryChanged?.Invoke(this);
 
                     if (quantity <= 0) 
-                        return new AddItemResult(newItemsCreated, totalAdded, ItemKind.Stackable);
+                    {
+                        // Set the added item's count to 0 since it was fully merged
+                        item.Count = 0;
+                        return new AddItemResult(newItemsCreated, totalAdded, ItemKind.Stackable, mergedIntoExisting);
+                    }
                 }
             }
 
@@ -276,7 +292,10 @@ namespace Seyren.System.Inventories
                 }
             }
 
-            return new AddItemResult(newItemsCreated, totalAdded, ItemKind.Stackable);
+            // Set the added item's count to remaining quantity (0 if fully processed)
+            item.Count = quantity;
+
+            return new AddItemResult(newItemsCreated, totalAdded, ItemKind.Stackable, mergedIntoExisting);
         }
 
         public AddItemResult RemoveItem(string itemId)
@@ -292,7 +311,7 @@ namespace Seyren.System.Inventories
                 return new AddItemResult(new List<IItem>(), 0, ItemKind.Unique);
             }
 
-            int totalRemoved = 0;
+            int totalRemoved = item.Count;
             var removedItems = new List<IItem>();
             ItemKind itemKind = ItemKind.Unique;
             RemoveItemCompletely(item);
