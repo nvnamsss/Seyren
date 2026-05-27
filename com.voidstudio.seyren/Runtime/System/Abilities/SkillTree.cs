@@ -261,6 +261,30 @@ namespace Seyren.Abilities
             exclusions[whenSkillId].Add(blockSkillId);
         }
 
+        /// <summary>
+        /// Register a level-gated prerequisite: <paramref name="dependentSkillId"/> becomes
+        /// unlockable only when <paramref name="prereqSkillId"/> reaches
+        /// <paramref name="requiredLevel"/>.
+        /// Call after Initialize(). The structural edge is registered for graph rendering but
+        /// normal state-propagation is bypassed; the level handler triggers the unlock.
+        /// </summary>
+        public void AddLevelPrerequisite(string dependentSkillId, string prereqSkillId, int requiredLevel)
+        {
+            if (!skills.TryGetValue(dependentSkillId, out var dependent)) return;
+            if (!skills.TryGetValue(prereqSkillId,    out var prereq))    return;
+
+            // Register the structural edge so the UI renders the connection line.
+            // Called after Initialize() so this edge is NOT auto-propagated by onSkillNodeUnlocked.
+            dependent.AddPrerequisite(prereqSkillId);
+
+            // Trigger the unlock gate whenever the prereq skill's level changes.
+            prereq.OnUpdated += _ =>
+            {
+                if (prereq.Level >= requiredLevel)
+                    dependent.UnlockPrerequisite(prereqSkillId);
+            };
+        }
+
         public void Initialize()
         {
             // iterate through all nodes, build the tree structure
