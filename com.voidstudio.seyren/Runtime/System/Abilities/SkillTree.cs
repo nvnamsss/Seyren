@@ -19,9 +19,11 @@ namespace Seyren.Abilities
 
         bool IsUnlocked { get; }
         bool IsUnlockable { get; }
+        bool IsBlocked { get; }
         void IncreaseLevel();
         void DecreaseLevel();
         bool Unlock(IUnlockContext ctx);
+        void Block();
         void UnlockPrerequisite(string id);
         void AddPrerequisite(string skillId);
         IReadOnlyList<string> PrerequisiteIds { get; }
@@ -36,7 +38,10 @@ namespace Seyren.Abilities
     {
         public static string SkillPointsResourceId = "SkillPoints";
         public bool IsUnlocked => currentState is UnlockedSkillState;
-        public bool IsUnlockable => currentState is UnlockableSkillState;
+        public bool IsUnlockable => !isBlocked && currentState is UnlockableSkillState;
+        public bool IsBlocked => isBlocked;
+
+        private bool isBlocked;
 
         public string Id => id;
         private string id;
@@ -110,7 +115,7 @@ namespace Seyren.Abilities
 
         public bool Unlock(IUnlockContext ctx)
         {
-            if (currentState is LockedSkillState)
+            if (currentState is LockedSkillState || isBlocked)
             {
                 return false;
             }
@@ -118,6 +123,17 @@ namespace Seyren.Abilities
             TransitionToState(new UnlockedSkillState(this));
             OnUnlocked?.Invoke(this);
             return true;
+        }
+
+        /// <summary>
+        /// Permanently block this skill (mutually exclusive with another that was already unlocked).
+        /// Has no effect if the skill is already unlocked.
+        /// </summary>
+        public void Block()
+        {
+            if (isBlocked || IsUnlocked) return;
+            isBlocked = true;
+            OnStateChanged?.Invoke(this);
         }
 
         /// <summary>
@@ -212,9 +228,12 @@ namespace Seyren.Abilities
         private Dictionary<string, ISkillNode> skills = new Dictionary<string, ISkillNode>();
         private IUnlockContext unlockContext;
         public event Action<ISkillNode> OnSkillUnlocked;
+        public event Action<ISkillNode> OnSkillBlocked;
         // Store edges from a node to its children
         // This can be used to traverse the tree or find dependencies
         private Dictionary<string, List<ISkillNode>> edges = new Dictionary<string, List<ISkillNode>>();
+        // Mutual-exclusion map: when key skill is unlocked, block all listed skill IDs.
+        private Dictionary<string, List<string>> exclusions = new Dictionary<string, List<string>>();
 
         public SkillTree(List<ISkillNode> initialSkills)
         {
@@ -228,6 +247,18 @@ namespace Seyren.Abilities
         {
             this.unlockContext = context;
             return this;
+        }
+
+        /// <summary>
+        /// Register a mutual-exclusion pair: when <paramref name="whenSkillId"/> is unlocked,
+        /// <paramref name="blockSkillId"/> is permanently blocked.
+        /// Call after constructing the tree and before any skills are unlocked.
+        /// </summary>
+        public void AddExclusion(string whenSkillId, string blockSkillId)
+        {
+            if (!exclusions.ContainsKey(whenSkillId))
+                exclusions[whenSkillId] = new List<string>();
+            exclusions[whenSkillId].Add(blockSkillId);
         }
 
         public void Initialize()
@@ -390,6 +421,19 @@ namespace Seyren.Abilities
                 foreach (var dependent in dependents)
                 {
                     dependent.UnlockPrerequisite(skill.Id);
+                }
+            }
+
+            // Block all mutually exclusive skills
+            if (exclusions.TryGetValue(skill.Id, out List<string> blocked))
+            {
+                foreach (var blockedId in blocked)
+                {
+                    if (skills.TryGetValue(blockedId, out ISkillNode blockedSkill))
+                    {
+                        blockedSkill.Block();
+                        OnSkillBlocked?.Invoke(blockedSkill);
+                    }
                 }
             }
         }
