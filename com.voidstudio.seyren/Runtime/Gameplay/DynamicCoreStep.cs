@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace Seyren.Gameplay
 {
@@ -38,7 +39,8 @@ namespace Seyren.Gameplay
 
         public bool IsComplete(GameContext ctx)
         {
-            return _isCompleteCondition?.Invoke(ctx) ?? _hasExecuted;
+            bool completed = _isCompleteCondition?.Invoke(ctx) ?? _hasExecuted;
+            return completed;
         }
     }
 }

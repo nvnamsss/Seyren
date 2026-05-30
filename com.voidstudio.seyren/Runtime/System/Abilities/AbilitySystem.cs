@@ -5,12 +5,13 @@ namespace Seyren.System.Abilities
 {
     public interface IAbilitySystem
     {
+        event GameEventHandler<string, IAbilityInstance> OnAbilityCast;
         void AddAbility(Ability ability);
         void RemoveAbility(Ability ability);
         Ability GetAbility(string name);
         Ability GetAbility(int id);
         List<Ability> GetAbilities();
-        Error CastAbility(string id, AbilityData data);
+        (IAbilityInstance instance, Error error) CastAbility(string id, AbilityData data);
     }
 
     public class AbilitySystem : IAbilitySystem
@@ -18,6 +19,8 @@ namespace Seyren.System.Abilities
         public static Error AbilityNotFound = new Error("ability not found.");
         Dictionary<string, Ability> abilities;
         List<Ability> hotAbilities;
+
+        public event GameEventHandler<string, IAbilityInstance> OnAbilityCast;
         
         public AbilitySystem()
         {
@@ -32,15 +35,20 @@ namespace Seyren.System.Abilities
             hotAbilities.Add(ability);
         }
 
-        public Error CastAbility(string id, AbilityData data)
+        public (IAbilityInstance instance, Error error) CastAbility(string id, AbilityData data)
         {
             if (!abilities.ContainsKey(id.ToString()))
             {
-                return AbilityNotFound;
+                return (null, AbilityNotFound);
             }
 
             Ability ability = abilities[id.ToString()];
-            return ability.Cast(data);
+            var (instance, error) = ability.Cast(data);
+            if (error == null)
+            {
+                OnAbilityCast?.Invoke(id, instance);
+            }
+            return (instance, error);
         }
 
         public List<Ability> GetAbilities()

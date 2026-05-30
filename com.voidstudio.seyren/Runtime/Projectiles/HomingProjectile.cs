@@ -7,6 +7,7 @@ namespace Seyren.Projectiles
 {
     public class HomingProjectile : IProjectile
     {
+        public float InfLifeTime = float.MaxValue;
         public GameObject gameObject;
         public Vector3 location;
         public Quaternion rotation;

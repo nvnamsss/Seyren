@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Seyren.System.States
 {
@@ -10,21 +11,67 @@ namespace Seyren.System.States
 
         public int Base;
         public int Incr;
-        public int Total => Base + Incr;
+        public int Floor { get; set; } = int.MinValue;
+        public int Ceiling { get; set; } = int.MaxValue;
+        public int Total => UnityEngine.Mathf.Clamp(Base + Incr, Floor, Ceiling);
+        
         public BaseInt(int b, int i)
         {
             Base = b;
             Incr = i;
         }
 
+        public BaseInt(int b, int i, int floor, int ceiling)
+        {
+            Base = b;
+            Incr = i;
+            Floor = floor;
+            Ceiling = ceiling;
+        }
+
         public int Amplify(float percent)
         {
-
             return Total;
         }
 
         public int Increase(int value)
         {
+            Incr += value;
+            return Total;
+        }
+
+        /// <summary>
+        /// Sets the floor (minimum) value for this attribute
+        /// </summary>
+        /// <param name="minValue">Minimum allowed value</param>
+        /// <returns>Current total value after applying constraints</returns>
+        public int SetFloor(int minValue)
+        {
+            Floor = minValue;
+            return Total;
+        }
+
+        /// <summary>
+        /// Sets the ceiling (maximum) value for this attribute
+        /// </summary>
+        /// <param name="maxValue">Maximum allowed value</param>
+        /// <returns>Current total value after applying constraints</returns>
+        public int SetCeiling(int maxValue)
+        {
+            Ceiling = maxValue;
+            return Total;
+        }
+
+        /// <summary>
+        /// Sets both floor and ceiling values
+        /// </summary>
+        /// <param name="minValue">Minimum allowed value</param>
+        /// <param name="maxValue">Maximum allowed value</param>
+        /// <returns>Current total value after applying constraints</returns>
+        public int SetRange(int minValue, int maxValue)
+        {
+            Floor = minValue;
+            Ceiling = maxValue;
             return Total;
         }
     }
@@ -35,7 +82,9 @@ namespace Seyren.System.States
         public static BaseFloat Zero = new BaseFloat(0, 0);
         public float Base;
         public float Incr => incr;
-        public float Total => Base + Incr;
+        public float Floor { get; set; } = float.MinValue;
+        public float Ceiling { get; set; } = float.MaxValue;
+        public float Total => UnityEngine.Mathf.Clamp(Base + Incr, Floor, Ceiling);
         private Dictionary<string, float> bonuses = new Dictionary<string, float>();
         private object _lock = new object();
         public float this[string key]
@@ -139,6 +188,14 @@ namespace Seyren.System.States
             incr = increasedValue;
         }
 
+        public BaseFloat(float baseValue, float increasedValue, float floor, float ceiling)
+        {
+            Base = baseValue;
+            incr = increasedValue;
+            Floor = floor;
+            Ceiling = ceiling;
+        }
+
         public float Amplify(float percent)
         {
             incr = Base * percent / 100;
@@ -148,6 +205,41 @@ namespace Seyren.System.States
         public float Increase(float value)
         {
             incr += value;
+            return Total;
+        }
+
+        /// <summary>
+        /// Sets the floor (minimum) value for this attribute
+        /// </summary>
+        /// <param name="minValue">Minimum allowed value</param>
+        /// <returns>Current total value after applying constraints</returns>
+        public float SetFloor(float minValue)
+        {
+            Floor = minValue;
+            return Total;
+        }
+
+        /// <summary>
+        /// Sets the ceiling (maximum) value for this attribute
+        /// </summary>
+        /// <param name="maxValue">Maximum allowed value</param>
+        /// <returns>Current total value after applying constraints</returns>
+        public float SetCeiling(float maxValue)
+        {
+            Ceiling = maxValue;
+            return Total;
+        }
+
+        /// <summary>
+        /// Sets both floor and ceiling values
+        /// </summary>
+        /// <param name="minValue">Minimum allowed value</param>
+        /// <param name="maxValue">Maximum allowed value</param>
+        /// <returns>Current total value after applying constraints</returns>
+        public float SetRange(float minValue, float maxValue)
+        {
+            Floor = minValue;
+            Ceiling = maxValue;
             return Total;
         }
 
@@ -284,6 +376,372 @@ namespace Seyren.System.States
         void IncreaseInt(string name, int val);
 
         public float this[string key] { get; set; }
+    }
+
+    /// <summary>
+    /// Warcraft 3-style attribute implementation with primary attributes affecting secondary stats
+    /// </summary>
+    [Serializable]
+    public class Warcraft3Attribute : IAttribute
+    {
+        #region Primary Attributes
+        [SerializeField] private BaseFloat _strength = new BaseFloat(10);
+        [SerializeField] private BaseFloat _agility = new BaseFloat(10);
+        [SerializeField] private BaseFloat _intelligence = new BaseFloat(10);
+        #endregion
+
+        #region Combat Attributes
+        [SerializeField] private BaseFloat _attackDamage = new BaseFloat(0);
+        [SerializeField] private BaseFloat _armor = new BaseFloat(0);
+        [SerializeField] private BaseFloat _attackSpeed = new BaseFloat(1.0f);
+        [SerializeField] private BaseFloat _magicResistance = new BaseFloat(0);
+        #endregion
+
+        #region Health & Mana
+        [SerializeField] private BaseFloat _maxHp = new BaseFloat(100);
+        [SerializeField] private BaseFloat _maxMp = new BaseFloat(100);
+        [SerializeField] private BaseFloat _hpRegen = new BaseFloat(0.25f);
+        [SerializeField] private BaseFloat _mpRegen = new BaseFloat(0.01f);
+        #endregion
+
+        #region Movement & Utility
+        [SerializeField] private BaseFloat _movementSpeed = new BaseFloat(300);
+        [SerializeField] private BaseFloat _attackRange = new BaseFloat(128);
+        [SerializeField] private BaseFloat _castRange = new BaseFloat(600);
+        [SerializeField] private BaseFloat _turnRate = new BaseFloat(0.6f);
+        #endregion
+
+        #region Current Values (not affected by bonuses)
+        public float CurrentHp { get; set; }
+        public float CurrentMp { get; set; }
+        public int Level { get; set; } = 1;
+        #endregion
+
+        public Warcraft3Attribute(float str = 10, float agi = 10, float intel = 10)
+        {
+            _strength = new BaseFloat(str);
+            _agility = new BaseFloat(agi);
+            _intelligence = new BaseFloat(intel);
+
+            // Initialize current values based on max values
+            CurrentHp = GetMaxHp();
+            CurrentMp = GetMaxMp();
+        }
+
+        #region Primary Attribute Properties with WC3 Bonuses
+        public float Strength => _strength.Total;
+        public float Agility => _agility.Total;
+        public float Intelligence => _intelligence.Total;
+
+        /// <summary>
+        /// Total attack damage including strength bonus (1 damage per strength)
+        /// </summary>
+        public float AttackDamage => _attackDamage.Total + Strength;
+
+        /// <summary>
+        /// Total armor including agility bonus (1 armor per 7 agility)
+        /// </summary>
+        public float Armor => _armor.Total + (Agility / 7f);
+
+        /// <summary>
+        /// Maximum HP including strength bonus (19 HP per strength)
+        /// </summary>
+        public float GetMaxHp() => _maxHp.Total + (Strength * 19f);
+
+        /// <summary>
+        /// Maximum MP including intelligence bonus (13 MP per intelligence)
+        /// </summary>
+        public float GetMaxMp() => _maxMp.Total + (Intelligence * 13f);
+
+        /// <summary>
+        /// HP regeneration including strength bonus (0.03 HP/sec per strength)
+        /// </summary>
+        public float HpRegen => _hpRegen.Total + (Strength * 0.03f);
+
+        /// <summary>
+        /// MP regeneration including intelligence bonus (0.04 MP/sec per intelligence)
+        /// </summary>
+        public float MpRegen => _mpRegen.Total + (Intelligence * 0.04f);
+
+        /// <summary>
+        /// Attack speed including agility bonus (2% IAS per agility)
+        /// </summary>
+        public float AttackSpeed => _attackSpeed.Total + (Agility * 0.02f);
+
+        /// <summary>
+        /// Movement speed (can be modified by items/spells)
+        /// </summary>
+        public float MovementSpeed => _movementSpeed.Total;
+
+        /// <summary>
+        /// Magic resistance (can be modified by items/spells)
+        /// </summary>
+        public float MagicResistance => _magicResistance.Total;
+
+        /// <summary>
+        /// Attack range (can be modified by items/spells)
+        /// </summary>
+        public float AttackRange => _attackRange.Total;
+
+        /// <summary>
+        /// Cast range (can be modified by items/spells)
+        /// </summary>
+        public float CastRange => _castRange.Total;
+
+        /// <summary>
+        /// Turn rate (can be modified by items/spells)
+        /// </summary>
+        public float TurnRate => _turnRate.Total;
+        #endregion
+
+        #region IAttribute Implementation
+        public BaseFloat GetBaseFloat(string name)
+        {
+            return name switch
+            {
+                AttributeName.STRENGTH => _strength,
+                AttributeName.AGILITY => _agility,
+                AttributeName.INTELLIGENT => _intelligence,
+                AttributeName.ATTACK_DAMAGE => _attackDamage,
+                AttributeName.DEFENSE => _armor,
+                AttributeName.ATTACK_SPEED => _attackSpeed,
+                AttributeName.M_ARMOR => _magicResistance,
+                AttributeName.MAX_HP => _maxHp,
+                AttributeName.MAX_MP => _maxMp,
+                AttributeName.HP_REGEN => _hpRegen,
+                AttributeName.MP_REGEN => _mpRegen,
+                AttributeName.MOVEMENT_SPEED => _movementSpeed,
+                AttributeName.ATTACK_RANGE => _attackRange,
+                AttributeName.CAST_RANGE => _castRange,
+                AttributeName.TURN_RATE => _turnRate,
+                _ => BaseFloat.Zero
+            };
+        }
+
+        public BaseInt GetBaseInt(string name)
+        {
+            return name switch
+            {
+                AttributeName.LEVEL => new BaseInt(Level, 0),
+                _ => BaseInt.Zero
+            };
+        }
+
+        public BaseFloat AddBaseFloat(string name, float val)
+        {
+            var baseFloat = GetBaseFloat(name);
+            if (!baseFloat.Equals(BaseFloat.Zero))
+            {
+                baseFloat.Increase(val);
+            }
+            return baseFloat;
+        }
+
+        public BaseInt AddBaseInt(string name, int val)
+        {
+            if (name == AttributeName.LEVEL)
+            {
+                Level += val;
+                return new BaseInt(Level, 0);
+            }
+            return BaseInt.Zero;
+        }
+
+        public BaseFloat SetBaseFloat(string name, float val)
+        {
+            var baseFloat = GetBaseFloat(name);
+            if (!baseFloat.Equals(BaseFloat.Zero))
+            {
+                baseFloat.Base = val;
+            }
+            return baseFloat;
+        }
+
+        public BaseInt SetBaseInt(string name, int val)
+        {
+            if (name == AttributeName.LEVEL)
+            {
+                Level = val;
+                return new BaseInt(Level, 0);
+            }
+            return BaseInt.Zero;
+        }
+
+        public float GetFloat(string name)
+        {
+            return name switch
+            {
+                AttributeName.CUR_HP => CurrentHp,
+                AttributeName.CUR_MP => CurrentMp,
+                AttributeName.STRENGTH => Strength,
+                AttributeName.AGILITY => Agility,
+                AttributeName.INTELLIGENT => Intelligence,
+                AttributeName.ATTACK_DAMAGE => AttackDamage,
+                AttributeName.DEFENSE => Armor,
+                AttributeName.ATTACK_SPEED => AttackSpeed,
+                AttributeName.M_ARMOR => MagicResistance,
+                AttributeName.MAX_HP => GetMaxHp(),
+                AttributeName.MAX_MP => GetMaxMp(),
+                AttributeName.HP_REGEN => HpRegen,
+                AttributeName.MP_REGEN => MpRegen,
+                AttributeName.MOVEMENT_SPEED => MovementSpeed,
+                AttributeName.ATTACK_RANGE => AttackRange,
+                AttributeName.CAST_RANGE => CastRange,
+                AttributeName.TURN_RATE => TurnRate,
+                _ => 0f
+            };
+        }
+
+        public int GetInt(string name)
+        {
+            return name switch
+            {
+                AttributeName.LEVEL => Level,
+                _ => (int)GetFloat(name)
+            };
+        }
+
+        public void SetFloat(string name, float val)
+        {
+            switch (name)
+            {
+                case AttributeName.CUR_HP:
+                    CurrentHp = UnityEngine.Mathf.Clamp(val, 0, GetMaxHp());
+                    break;
+                case AttributeName.CUR_MP:
+                    CurrentMp = UnityEngine.Mathf.Clamp(val, 0, GetMaxMp());
+                    break;
+                default:
+                    SetBaseFloat(name, val);
+                    break;
+            }
+        }
+
+        public void SetInt(string name, int val)
+        {
+            if (name == AttributeName.LEVEL)
+            {
+                Level = val;
+            }
+            else
+            {
+                SetFloat(name, val);
+            }
+        }
+
+        public void IncreaseFloat(string name, float val)
+        {
+            switch (name)
+            {
+                case AttributeName.CUR_HP:
+                    CurrentHp = UnityEngine.Mathf.Clamp(CurrentHp + val, 0, GetMaxHp());
+                    break;
+                case AttributeName.CUR_MP:
+                    CurrentMp = UnityEngine.Mathf.Clamp(CurrentMp + val, 0, GetMaxMp());
+                    break;
+                default:
+                    AddBaseFloat(name, val);
+                    break;
+            }
+        }
+
+        public void IncreaseInt(string name, int val)
+        {
+            if (name == AttributeName.LEVEL)
+            {
+                Level += val;
+            }
+            else
+            {
+                IncreaseFloat(name, val);
+            }
+        }
+
+        public float this[string key]
+        {
+            get => GetFloat(key);
+            set => SetFloat(key, value);
+        }
+
+        #endregion
+
+        #region Warcraft 3 Specific Methods
+
+        /// <summary>
+        /// Levels up the hero, increasing primary attributes based on hero type
+        /// </summary>
+        /// <param name="strGain">Strength gain per level</param>
+        /// <param name="agiGain">Agility gain per level</param>
+        /// <param name="intGain">Intelligence gain per level</param>
+        public void LevelUp(float strGain = 2f, float agiGain = 2f, float intGain = 2f)
+        {
+            Level++;
+            _strength.Base += strGain;
+            _agility.Base += agiGain;
+            _intelligence.Base += intGain;
+
+            // Heal to full when leveling up (WC3 behavior)
+            CurrentHp = GetMaxHp();
+            CurrentMp = GetMaxMp();
+        }
+
+        /// <summary>
+        /// Calculates damage reduction based on armor (WC3 formula)
+        /// </summary>
+        /// <returns>Damage reduction percentage (0-1)</returns>
+        public float GetDamageReduction()
+        {
+            float armor = Armor;
+            if (armor >= 0)
+            {
+                return armor / (armor + 100f);
+            }
+            else
+            {
+                return armor / (100f - armor);
+            }
+        }
+
+        /// <summary>
+        /// Calculates magic damage reduction based on magic resistance
+        /// </summary>
+        /// <returns>Magic damage reduction percentage (0-1)</returns>
+        public float GetMagicDamageReduction()
+        {
+            return UnityEngine.Mathf.Clamp01(MagicResistance / 100f);
+        }
+
+        /// <summary>
+        /// Gets the attack cooldown in seconds based on attack speed
+        /// </summary>
+        /// <param name="baseAttackTime">Base attack time (default 1.6 seconds for most units)</param>
+        /// <returns>Attack cooldown in seconds</returns>
+        public float GetAttackCooldown(float baseAttackTime = 1.6f)
+        {
+            return baseAttackTime / (1f + AttackSpeed);
+        }
+
+        /// <summary>
+        /// Checks if the unit is at full health
+        /// </summary>
+        public bool IsAtFullHealth() => CurrentHp >= GetMaxHp();
+
+        /// <summary>
+        /// Checks if the unit is at full mana
+        /// </summary>
+        public bool IsAtFullMana() => CurrentMp >= GetMaxMp();
+
+        /// <summary>
+        /// Gets health percentage (0-1)
+        /// </summary>
+        public float GetHealthPercentage() => CurrentHp / GetMaxHp();
+
+        /// <summary>
+        /// Gets mana percentage (0-1)
+        /// </summary>
+        public float GetManaPercentage() => CurrentMp / GetMaxMp();
+
+        #endregion
     }
 
     
