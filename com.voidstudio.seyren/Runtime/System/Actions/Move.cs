@@ -44,7 +44,7 @@ namespace Seyren.System.Actions
             Vector3 path = target - currentPosition;
             float speed = unit.Attribute.GetBaseFloat(AttributeName.MOVEMENT_SPEED).Total;
             // move the unit along the path
-            unit.Move(currentPosition + path.normalized * speed * Time.deltaTime);
+            unit.Move(currentPosition + path.normalized * speed * time.DeltaTime);
             // check if the unit has reached the target
             if (Vector3.Distance(currentPosition, target) < 0.1f)
             {
@@ -54,6 +54,8 @@ namespace Seyren.System.Actions
 
         public Error RunCondition()
         {
+            if ((unit.ObjectStatus & ObjectStatus.Airborne) != 0)
+                return new Error("Unit is airborne and cannot move.");
             return Error.None;
         }
 

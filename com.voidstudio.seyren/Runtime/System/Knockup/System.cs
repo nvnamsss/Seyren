@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Seyren.System.Common;
 using Seyren.System.Units;
 using Seyren.Universe;
 using UnityEngine;
@@ -42,6 +44,11 @@ namespace Seyren.System.Knockup
 
     public class KnockupSystem : ILoop
     {
+        public static Seyren.System.Common.ISeyrenLogger DefaultLogger { get; set; }
+
+        public event Action<IUnit> OnKnockupStarted;
+        public event Action<IUnit> OnKnockupEnded;
+
         private Dictionary<string, KnockupInstance> targets = new Dictionary<string, KnockupInstance>();
         private IKnockupMotion defaultKnockupMotion;
 
@@ -59,7 +66,7 @@ namespace Seyren.System.Knockup
         {
             if (target == null || height <= 0 || duration <= 0)
             {
-                Debug.LogWarning("Invalid parameters for knockup");
+                DefaultLogger?.Warn("Invalid parameters for knockup");
                 return;
             }
 
@@ -73,6 +80,9 @@ namespace Seyren.System.Knockup
             {
                 targets.Add(target.ID, new KnockupInstance(new KnockupData(target, height, duration), defaultKnockupMotion));
             }
+
+            target.ObjectStatus |= ObjectStatus.Airborne;
+            OnKnockupStarted?.Invoke(target);
         }
 
         public void RemoveKnockup(IUnit target)
@@ -90,6 +100,8 @@ namespace Seyren.System.Knockup
             // move the target back to its original position
             Vector3 currentPosition = data.target.Location;
             data.target.Move(new Vector3(currentPosition.x, currentPosition.y - data.currentHeight, currentPosition.z));
+            data.target.ObjectStatus &= ~ObjectStatus.Airborne;
+            OnKnockupEnded?.Invoke(data.target);
         }
 
         public void Loop(ITime time)
@@ -110,13 +122,12 @@ namespace Seyren.System.Knockup
                 {
                     toRemove.Add(instance.data.target.ID);
                 }
-
-                // TODO: restrict the target during the knockup
-                // TODO: apply visual effects
             }
 
             foreach (string id in toRemove)
             {
+                KnockupInstance instance = targets[id];
+                Reset(instance.data);
                 targets.Remove(id);
             }
         }

@@ -2,7 +2,6 @@ using Seyren.System.Common;
 using Seyren.System.Units;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Seyren.System.Damages
 {
@@ -24,6 +23,8 @@ namespace Seyren.System.Damages
     /// </summary>
     public static class DamageEngine
     {
+        public static ISeyrenLogger Logger { get; set; }
+
         // Events for damage system hooks
         public static event GameEventHandler<Damage> OnDamageCreated;
         public static event GameEventHandler<Damage> OnInflictedDamage;
@@ -54,7 +55,7 @@ namespace Seyren.System.Damages
             // Exit if target is invulnerable
             if ((target.ObjectStatus | ObjectStatus.Invulnerable) != target.ObjectStatus)
             {
-                Debug.Log($"Target {target} is invulnerable, no damage applied");
+                Logger?.Log($"Target {target} is invulnerable, no damage applied");
                 return damage;
             }
 

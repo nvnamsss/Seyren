@@ -6,17 +6,23 @@ using UnityEngine;
 
 namespace Seyren.System.Abilities.Common
 {
-    public class ChainLightningInstance : AbilityInstance
+    public class ChainLightningInstance : IAbilityInstance
     {
+        public IUnit Caster { get; }
+        public float AliveTime { get; private set; }
+        public bool IsActive { get; private set; } = true;
+
         public IUnit currentUnit;
         public Dictionary<string, IUnit> hitUnits;
 
         public ChainLightningInstance(IUnit caster, Vector3? location, IUnit targetUnit)
         {
-            this.caster = caster;
-            this.location = location;
-            this.targetUnit = targetUnit;
+            Caster = caster;
         }
+
+        public void Tick(float deltaTime) { AliveTime += deltaTime; }
+
+        public void Cancel() { IsActive = false; }
     }
 
     public class ChainLightning : Ability
@@ -25,7 +31,7 @@ namespace Seyren.System.Abilities.Common
         {
         }
 
-        public override Error Cast(AbilityData data)
+        public override (IAbilityInstance instance, Error error) Cast(AbilityData data)
         {
             throw new global::System.NotImplementedException();
         }

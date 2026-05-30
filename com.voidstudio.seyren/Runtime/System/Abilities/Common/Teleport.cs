@@ -23,12 +23,12 @@ namespace Seyren.System.Abilities.Common
         {
         }
 
-        public override Error Cast(AbilityData data)
+        public override (IAbilityInstance instance, Error error) Cast(AbilityData data)
         {
             Vector3 targetLocation = data.location ?? data.target.Location;
             TeleportInstance instance = new TeleportInstance(data.caster, targetLocation);
             instances.Add(instance);
-            return Error.None;
+            return (null, Error.None);
         }
 
         protected override void CompletePhase(TeleportInstance instance, PhaseState phaseState)

@@ -4,6 +4,7 @@ namespace Seyren.System.Units
     {
         None = 0,
         Hidden = 1 >> 1,
-        Invulnerable = 1 >> 2,   
+        Invulnerable = 1 >> 2,
+        Airborne = 1 << 3,
     }
 }

@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
+using Seyren.System.Common;
 
 namespace Seyren.State
 {
     public class StateMachine
     {
+        public static ISeyrenLogger DefaultLogger { get; set; }
+
         private IState _currentState;
         private Dictionary<Type, IState> _states;
         
@@ -22,7 +24,7 @@ namespace Seyren.State
             var stateType = typeof(T);
             if (_states.ContainsKey(stateType))
             {
-                Debug.LogWarning($"State {stateType.Name} is already registered.");
+                DefaultLogger?.Warn($"State {stateType.Name} is already registered.");
                 return;
             }
             
@@ -52,7 +54,7 @@ namespace Seyren.State
         {
             if (!_states.TryGetValue(stateType, out var newState))
             {
-                Debug.LogError($"State {stateType.Name} is not registered.");
+                DefaultLogger?.Error($"State {stateType.Name} is not registered.");
                 return false;
             }
 
@@ -63,19 +65,19 @@ namespace Seyren.State
         {
             if (newState == null)
             {
-                Debug.LogError("Cannot change to null state.");
+                DefaultLogger?.Error("Cannot change to null state.");
                 return false;
             }
 
             if (_currentState == newState)
             {
-                Debug.LogWarning("Already in the requested state.");
+                DefaultLogger?.Warn("Already in the requested state.");
                 return false;
             }
 
             if (_currentState != null && !_currentState.CanTransitionTo(newState))
             {
-                Debug.LogWarning($"Cannot transition from {_currentState.GetType().Name} to {newState.GetType().Name}");
+                DefaultLogger?.Warn($"Cannot transition from {_currentState.GetType().Name} to {newState.GetType().Name}");
                 return false;
             }
 

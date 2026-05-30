@@ -68,6 +68,12 @@ namespace Seyren.System.Abilities
         public string abilityName;
 
         /// <summary>
+        /// How long the cast window lasts (in seconds) before the ability fires.
+        /// 0 means instant cast. Override in subclasses to declare a cast bar duration.
+        /// </summary>
+        public virtual float CastDuration { get; protected set; } = 0f;
+
+        /// <summary>
         /// Time between every process for cooldown of an ability <br></br>
         /// </summary>
         // public float CooldownInterval { get; set; }
@@ -90,7 +96,7 @@ namespace Seyren.System.Abilities
 
         // protected AbilityTarget abilityTarget;
 
-        public abstract Error Cast(AbilityData data);
+        public abstract (IAbilityInstance instance, Error error) Cast(AbilityData data);
 
 
         protected abstract void onCast();
