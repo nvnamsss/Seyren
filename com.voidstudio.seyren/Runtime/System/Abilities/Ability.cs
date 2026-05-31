@@ -96,7 +96,7 @@ namespace Seyren.System.Abilities
 
         // protected AbilityTarget abilityTarget;
 
-        public abstract (IAbilityInstance instance, Error error) Cast(AbilityData data);
+        public abstract (IAbilityInstance instance, Error error) Cast(AbilityContext data);
 
 
         protected abstract void onCast();

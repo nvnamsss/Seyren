@@ -23,7 +23,7 @@ namespace Seyren.System.Abilities.Common
         {
         }
 
-        public override (IAbilityInstance instance, Error error) Cast(AbilityData data)
+        public override (IAbilityInstance instance, Error error) Cast(AbilityContext data)
         {
             Vector3 targetLocation = data.location ?? data.target.Location;
             TeleportInstance instance = new TeleportInstance(data.caster, targetLocation);

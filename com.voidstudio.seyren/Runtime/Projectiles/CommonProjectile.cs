@@ -126,6 +126,7 @@ namespace Seyren.Projectiles
         public void Revoke()
         {
             isActive = false;
+            if (gameObject != null) UnityEngine.Object.Destroy(gameObject);
             OnCompleted?.Invoke(this);
         }
     }

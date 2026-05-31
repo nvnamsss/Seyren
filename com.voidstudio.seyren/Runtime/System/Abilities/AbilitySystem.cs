@@ -11,7 +11,7 @@ namespace Seyren.System.Abilities
         Ability GetAbility(string name);
         Ability GetAbility(int id);
         List<Ability> GetAbilities();
-        (IAbilityInstance instance, Error error) CastAbility(string id, AbilityData data);
+        (IAbilityInstance instance, Error error) CastAbility(string id, AbilityContext data);
     }
 
     public class AbilitySystem : IAbilitySystem
@@ -35,7 +35,7 @@ namespace Seyren.System.Abilities
             hotAbilities.Add(ability);
         }
 
-        public (IAbilityInstance instance, Error error) CastAbility(string id, AbilityData data)
+        public (IAbilityInstance instance, Error error) CastAbility(string id, AbilityContext data)
         {
             if (!abilities.ContainsKey(id.ToString()))
             {
